@@ -1,0 +1,18 @@
+
+<h1><i class="fas fa-list"></i> Latest spots</h1>
+<table>
+    <thead>
+        <tr>
+            <th class="grow">Title</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    <% for (let spot of spots) { %>
+        <tr>
+            <td><a href="/spots/<%= spot.uuid %>"><%= spot.title %></a></td>
+            <td><a href="/spots/<%= spot.uuid %>"><i class="fas fa-eye"></i></a></td>
+        </tr>
+    <% } %>
+    </tbody>
+</table>

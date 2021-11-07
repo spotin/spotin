@@ -1,0 +1,35 @@
+<h1><i class="fas fa-edit"></i> Sign up</h1>
+<form action="/users/signup" method="post">
+    <label for="username">
+        Username
+        <% if (errors.username) { %>
+        <span class="error">(at least 3 lowercase alphanumeric characters)</span>
+        <input type="text" name="username" id="username" placeholder="Username" value="<%= values.username %>" aria-invalid="true">
+        <% } else { %>
+        <input type="text" name="username" id="username" placeholder="Username" value="<%= values.username %>">
+        <% } %>
+    </label>
+    
+    <label for="email">
+        Email
+        <% if (errors.email) { %>
+        <span class="error">(well formed email)</span>
+        <input type="text" name="email" id="email" placeholder="Email" value="<%= values.email %>" aria-invalid="true">
+        <% } else { %>
+        <input type="text" name="email" id="email" placeholder="Email" value="<%= values.email %>">
+        <% } %>
+    </label>
+    
+    <label for="password">
+        Password
+        <% if (errors.password) { %>
+        <span class="error">(at least 8 characters)</span>
+        <input type="password" name="password" id="password" placeholder="Password" aria-invalid="true">
+        <% } else { %>
+        <input type="password" name="password" id="password" placeholder="Password">
+        <% } %>
+    </label>
+    
+    <button type="submit"><i class="fas fa-edit"></i> Sign up</button>
+</form>
+<%- include ../partials/social %>

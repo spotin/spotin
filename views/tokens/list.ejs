@@ -1,0 +1,30 @@
+
+<h1><i class="fas fa-key"></i> Your API keys</h1>
+<p> The API keys enable you to publish spots from other platform with a REST API.
+    The <a href="/swagger-ui/" rel="noreferrer" target="_blank"> <i class="fas fa-book"></i> documentation</a>
+    of the API will help you throughout this integration.
+</p>
+<p>
+    
+</p>
+<table>
+    <thead>
+    <tr>
+        <th class="grow">Name</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (let token of tokens) { %>
+    <tr>
+        <td><a href="/tokens/<%= token.uuid %>"><%= token.name %></a></td>
+        <td>
+            <a href="/tokens/<%= token.uuid %>/delete">
+                <i class="fas fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
+<a href="/tokens/create" role="button"><i class="fas fa-plus-circle"></i> New API key</a>

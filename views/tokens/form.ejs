@@ -1,0 +1,13 @@
+<h2><i class="fas fa-key"></i> New API key</h2>
+<form action="/tokens/create" method="POST">
+    <fieldset>
+        <label for="name">Name</label> 
+        <% if (errors.name) { %>
+        <span class="error">The name field cannot be empty</span>
+        <input name="name" id="name" placeholder="Name" value="<%= values.name %>" aria-invalid="true">
+        <% } else { %>
+        <input name="name" id="name" placeholder="Name" value="<%= values.name %>">
+        <% } %>
+    </fieldset>
+    <button type="submit"><i class="fas fa-save"></i> New API key</button>
+</form>

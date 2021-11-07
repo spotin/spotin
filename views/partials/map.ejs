@@ -1,0 +1,57 @@
+<div id="map"></div>
+<script>
+    // Fetch geojson
+    fetch('features.geojson')
+        .then(response => response.json())
+        .then(data => {
+            if (data.features.length == 0) {
+                // Create the map
+                const map = new maplibregl.Map({
+                    container: "map",
+                    style: 'https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json',
+                    center: [8.2275, 46.8182],
+                    zoom: 8
+                });
+            } else {
+                // Calculate bounds
+                const coordinates = data.features.map(feature => feature.geometry.coordinates);
+                const bounds = coordinates.reduce(function (bounds, coord) {
+                    return bounds.extend(coord);
+                }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+
+                // Create the map
+                const map = new maplibregl.Map({
+                    container: "map",
+                    style: 'https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json',
+                    center: bounds.getCenter().toArray(),
+                    zoom: 14
+                });
+
+                // Fit bounds
+                if ( data.features.length > 1) {
+                    map.fitBounds(bounds, {
+                        padding: document.body.clientWidth /10,
+                        duration: 0
+                    });
+                }
+
+                // Add markers
+                for (const feature of data.features) {
+
+                    // create the html content
+                    let content = '';
+                    if (feature.properties.title) content += `<h1>${feature.properties.title}</h1>`;
+                    if (feature.properties.description) content += `<p>${feature.properties.description}</p>`;
+                    if (feature.properties.redirection) content += `<p><a href="${feature.properties.redirection}" target="_blank">More</a></p>`;
+
+                    // create the popup
+                    const popup = new maplibregl.Popup().setHTML(content);
+                    
+                    // make a marker for each feature and add to the map
+                    new maplibregl.Marker({
+                        color: "#e53935",
+                    }).setPopup(popup).setLngLat(feature.geometry.coordinates).addTo(map);
+                }
+            }
+        });
+</script>
