@@ -37,10 +37,10 @@ router.post("/signup", async function (req, res) {
       password: req.body.password,
       validate_email: utils.hashToken(token),
     });
-    utils.validateEmail(req.body.email, token);
+    //utils.validateEmail(req.body.email, token);
     await req.flash(
       "success",
-      "Welcome to SpotIn! Please, check your email and confirm your address before loggin in."
+      "Thank you for joining our waiting list! We will reach out soon."
     );
     res.redirect("/users/login");
   } catch (error) {
