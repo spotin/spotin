@@ -3,8 +3,8 @@
     <hgroup class="head">
         <h1 class="title"><%= spot.title %></h1>
         <h2 class="uuid">
-            <% if (spot.redirect) { %>
-            <i class="fas fa-external-link-alt"></i> <a href="<%= spot.redirect %>" target="_blank" rel="noreferrer"><%= spot.redirect %></a>
+            <% if (spot.redirection) { %>
+            <i class="fas fa-external-link-alt"></i> <a href="<%= spot.redirect %>" target="_blank" rel="noreferrer"><%= spot.redirection %></a>
             <% } else { %>
             <i class="fas fa-link"></i> <a href="/spots/<%= spot.uuid %>"><%= spot.uuid %></a>
             <% } %>
@@ -22,6 +22,7 @@
     <% } %>
     <% if (spot.coordinates) { %>
     <div class='map'
+            data-timestamp="<%= spot.timestamp %>"
             data-longitude="<%= spot.coordinates.coordinates[0] %>"
             data-latitude="<%= spot.coordinates.coordinates[1] %>"></div>
     <% } %>

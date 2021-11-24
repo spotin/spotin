@@ -1,7 +1,7 @@
 <div id="map"></div>
 <script>
     // Fetch geojson
-    fetch('features.geojson')
+    fetch('map.geojson')
         .then(response => response.json())
         .then(data => {
             if (data.features.length == 0) {
@@ -49,7 +49,8 @@
                     
                     // make a marker for each feature and add to the map
                     new maplibregl.Marker({
-                        color: "#e53935",
+                        color: feature.properties.timestamp === null ? "#E53935": "#0080FF",
+                        symbol: feature.properties.timestamp === null ? 'circle' : 'watch'
                     }).setPopup(popup).setLngLat(feature.geometry.coordinates).addTo(map);
                 }
             }

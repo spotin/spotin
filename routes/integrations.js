@@ -5,20 +5,22 @@ let errors = require("../utils/errors");
 let middlewares = require("../utils/middlewares");
 let router = express.Router();
 let { User, Spot } = require("../models");
+let { Op } = require("sequelize");
 
-router.get(
-  "/integration",
+router.get("/",
   middlewares.isAuthenticated,
   async function (req, res, next) {
-    res.render("maps/integration", {
+    console.log(req)
+    res.render("integrations/index", {
       title: "Integrate spots",
     });
   }
 );
 
-router.get("/users/:username/features", async function (req, res, next) {
+router.get("/:username/map.html", async function (req, res, next) {
+  console.log(req.params)
   try {
-    res.render("maps/map", {
+    res.render("integrations/map", {
       layout: false,
     });
   } catch (error) {
@@ -27,13 +29,12 @@ router.get("/users/:username/features", async function (req, res, next) {
 });
 
 router.get(
-  "/users/:username/features.geojson",
+  "/:username/map.geojson",
   async function (req, res, next) {
     try {
       const spots = await Spot.findAll({
         where: {
           UserUsername: req.params.username,
-          referenced: true,
         },
       });
       const features = spots.map((spot) => {
@@ -44,8 +45,7 @@ router.get(
             title: spot.title,
             redirection: spot.redirection,
             description: spot.description,
-            "marker-symbol": "venue-map-icon-blue",
-            colour: "black",
+            timestamp: spot.timestamp,
           },
           geometry: {
             type: "Point",
@@ -66,48 +66,41 @@ router.get(
   }
 );
 
-router.get("/spots/:spotUuid/features", async function (req, res, next) {
+router.get("/:username/permanent.html", async function (req, res, next) {
   try {
-    res.render("maps/map", {
+    const spots = await Spot.findAll({
+      where: {
+        UserUsername: req.params.username,
+        timestamp: { [Op.eq]: null }
+      },
+      order: [["created_at", "ASC"]],
+    });
+    res.render("integrations/list", {
       layout: false,
+      spots: spots,
     });
   } catch (error) {
     next(error);
   }
 });
 
-router.get(
-  "/spots/:spotUuid/features.geojson",
-  async function (req, res, next) {
-    try {
-      const spot = await Spot.findByPk(req.params.spotUuid);
-      res.json({
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            properties: {
-              uuid: spot.uuid,
-              title: spot.title,
-              redirection: spot.redirection,
-              description: spot.description,
-              "marker-symbol": "venue-map-icon-blue",
-              colour: "black",
-            },
-            geometry: {
-              type: "Point",
-              coordinates: [
-                spot.coordinates.coordinates[0],
-                spot.coordinates.coordinates[1],
-              ],
-            },
-          },
-        ],
-      });
-    } catch (error) {
-      next(error);
-    }
+
+router.get("/:username/ponctual.html", async function (req, res, next) {
+  try {
+    const spots = await Spot.findAll({
+      where: {
+        UserUsername: req.params.username,
+        timestamp: { [Op.not]: null }
+      },
+      order: [["timestamp", "ASC"]],
+    });
+    res.render("integrations/list", {
+      layout: false,
+      spots: spots,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 module.exports = router;

@@ -23,7 +23,7 @@ let indexRouter = require("./routes/index");
 let usersRouter = require("./routes/users");
 let tokensRouter = require("./routes/tokens");
 let spotsRouter = require("./routes/spots");
-let mapsRouter = require("./routes/maps");
+let integrationsRouter = require("./routes/integrations");
 let { User } = require("./models");
 
 let app = express();
@@ -95,6 +95,7 @@ passport.use(
   )
 );
 
+/*
 app.get(
   "/auth/github",
   passport.authenticate("github", { scope: ["user:email"] })
@@ -108,6 +109,7 @@ app.get(
     res.redirect("/");
   }
 );
+*/
 
 app.use(
   session({
@@ -167,7 +169,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/tokens", tokensRouter);
 app.use("/spots", spotsRouter);
-app.use("/maps", mapsRouter);
+app.use("/integrations", integrationsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
