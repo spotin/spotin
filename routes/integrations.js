@@ -10,7 +10,6 @@ let { Op } = require("sequelize");
 router.get("/",
   middlewares.isAuthenticated,
   async function (req, res, next) {
-    console.log(req)
     res.render("integrations/index", {
       title: "Integrate spots",
     });
@@ -18,7 +17,6 @@ router.get("/",
 );
 
 router.get("/:username/map.html", async function (req, res, next) {
-  console.log(req.params)
   try {
     res.render("integrations/map", {
       layout: false,
@@ -29,7 +27,7 @@ router.get("/:username/map.html", async function (req, res, next) {
 });
 
 router.get(
-  "/:username/map.geojson",
+  "/:username/spots.geojson",
   async function (req, res, next) {
     try {
       const spots = await Spot.findAll({
@@ -46,6 +44,7 @@ router.get(
             redirection: spot.redirection,
             description: spot.description,
             timestamp: spot.timestamp,
+            color: spot.timestamp == null ? '#8FDE0D' : '#00C3FF'
           },
           geometry: {
             type: "Point",
@@ -57,8 +56,11 @@ router.get(
         };
       });
       res.json({
-        type: "FeatureCollection",
-        features: features,
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: features,
+        }
       });
     } catch (error) {
       next(error);
