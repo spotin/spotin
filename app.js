@@ -28,6 +28,9 @@ let { User } = require("./models");
 
 let app = express();
 
+// backend server port
+app.set('port', process.env.PORT || 3000);
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -82,18 +85,37 @@ passport.deserializeUser(function (user, done) {
 });
 
 // Github Auth
-passport.use(
-  new GitHubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID, //"clientID",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET, //"clientSecret",
-      callbackURL: process.env.GITHUB_CALLBACK_URL, //"http://127.0.0.1:3000/auth/github/callback"
-    },
-    function (accessToken, refreshToken, profile, done) {
-      done(null, profile);
-    }
+if (process.env.GITHUB_CLIENT_ID) {
+  passport.use(
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID, //"clientID",
+        clientSecret: process.env.GITHUB_CLIENT_SECRET, //"clientSecret",
+        callbackURL: process.env.GITHUB_CALLBACK_URL, //"http://127.0.0.1:3000/auth/github/callback"
+      },
+      function (accessToken, refreshToken, profile, done) {
+        done(null, profile);
+      }
+    )
+  );
+} else {
+  passport.use(
+    new LocalStrategy(
+      function(username, password, done) {
+        User.findOne({ username: username }, function(err, user) {
+          if (err) { return done(err); }
+          if (!user) {
+            return done(null, false, { message: 'Incorrect username.' });
+          }
+          if (!user.validPassword(password)) {
+            return done(null, false, { message: 'Incorrect password.' });
+          }
+          return done(null, user);
+        });
+      }
+    )
   )
-);
+}
 
 /*
 app.get(
