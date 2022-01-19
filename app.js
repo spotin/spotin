@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(middlewares.cleanPostParameters);
 //app.use(middlewares.setResponseVariables);
 
-// passport authentication
+// Default: password authentication
 passport.use(
   new LocalStrategy(
     {
@@ -84,54 +84,38 @@ passport.deserializeUser(function (user, done) {
   done(null, JSON.parse(user));
 });
 
-// Github Auth
+// Optional: override with GitHub-based authentication
 if (process.env.GITHUB_CLIENT_ID) {
   passport.use(
     new GitHubStrategy(
       {
-        clientID: process.env.GITHUB_CLIENT_ID, //"clientID",
-        clientSecret: process.env.GITHUB_CLIENT_SECRET, //"clientSecret",
-        callbackURL: process.env.GITHUB_CALLBACK_URL, //"http://127.0.0.1:3000/auth/github/callback"
+        clientID: process.env.GITHUB_CLIENT_ID,
+        // e.g.: "clientID",
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        // e.g.: "clientSecret",
+        callbackURL: process.env.GITHUB_CALLBACK_URL,
+        // e.g.: "http://127.0.0.1:3000/auth/github/callback"
       },
       function (accessToken, refreshToken, profile, done) {
         done(null, profile);
       }
     )
   );
-} else {
-  passport.use(
-    new LocalStrategy(
-      function(username, password, done) {
-        User.findOne({ username: username }, function(err, user) {
-          if (err) { return done(err); }
-          if (!user) {
-            return done(null, false, { message: 'Incorrect username.' });
-          }
-          if (!user.validPassword(password)) {
-            return done(null, false, { message: 'Incorrect password.' });
-          }
-          return done(null, user);
-        });
-      }
-    )
-  )
+
+  app.get(
+    "/auth/github",
+    passport.authenticate("github", { scope: ["user:email"] })
+  );
+
+  app.get(
+    "/auth/github/callback",
+    passport.authenticate("github", { failureRedirect: "/login" }),
+    function (req, res) {
+      // Successful authentication, redirect home.
+      res.redirect("/");
+    }
+  );
 }
-
-/*
-app.get(
-  "/auth/github",
-  passport.authenticate("github", { scope: ["user:email"] })
-);
-
-app.get(
-  "/auth/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect("/");
-  }
-);
-*/
 
 app.use(
   session({
