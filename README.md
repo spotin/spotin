@@ -17,7 +17,6 @@ The following prerequisites must be filled to run this service:
 ```sh
 # Start a Postgres server with Docker
 docker run \
-    --name spotin \
     --publish 5432:5432 \
     -e POSTGRES_DB=spotin \
     -e POSTGRES_USER=spotin \

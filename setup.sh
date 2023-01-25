@@ -1,7 +1,6 @@
 echo "Starting a Postgres server with Docker ..."
 
 docker run \
-  --name spotin \
   --publish 5432:5432 \
   -e POSTGRES_DB=spotin \
   -e POSTGRES_USER=spotin \
@@ -21,8 +20,7 @@ npx \
 
 echo "Writing a default .env file ..."
 
-touch .env
-echo "APP_SESSION_SECRET=ch@ng3me!plz" >> .env
+cp .env.defaults .env
 
 echo "Starting the server with:"
 echo "  npm start"
