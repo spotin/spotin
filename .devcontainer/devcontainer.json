@@ -2,6 +2,7 @@
 	"name": "SpotIn Development Container",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers-contrib/features/mkdocs:2": {}
 	}
 }

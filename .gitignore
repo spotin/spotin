@@ -1,3 +1,13 @@
+## Material for MkDocs
+
+# Cache
+.cache
+
+# Output directory
+public
+
+## Misc
+
 # Logs
 logs
 *.log

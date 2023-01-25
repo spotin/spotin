@@ -1,0 +1,58 @@
+repo_name: SpotIn/SpotIn
+site_name: SpotIn Documentation
+site_author: SpotIn contributors
+theme:
+  language: en
+  icon:
+    logo: material/map-marker
+    repo: fontawesome/brands/git-alt
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.indexes
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - toc.follow
+plugins:
+  - search
+  - social
+  - tags
+  - git-revision-date-localized:
+      type: datetime
+      fallback_to_build_date: true
+extra:
+  social:
+    - icon: material/github
+      link: https://github.com/spotin/spotin
+      name: SpotIn on GitHub
+copyright: Copyright &copy; 2022 - 2023 BeeScreens
+nav:
+  - Home: index.md
+  - Tutorials:
+    - tutorials/index.md
+  - How-to guides:
+    - how-to-guides/index.md
+  - Reference:
+    - reference/index.md
+  - Explanation:
+    - explanation/index.md
