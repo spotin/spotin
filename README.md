@@ -15,13 +15,11 @@ The following prerequisites must be filled to run this service:
 ## Set up the service
 
 ```sh
+# Create a dev file
+cp .env.defaults .env
+
 # Start a Postgres server with Docker
-docker run \
-    --publish 5432:5432 \
-    -e POSTGRES_DB=spotin \
-    -e POSTGRES_USER=spotin \
-    -e POSTGRES_PASSWORD=spotin \
-    -d postgis/postgis:latest
+docker-compose up -d
 
 # Install the dependencies
 npm install
@@ -31,18 +29,22 @@ npx sequelize-cli db:migrate
 
 # Seed the database for development purpose
 npx sequelize-cli db:seed:all
-
-# Create a dev file
-cp .env.defaults .env
 ```
 
 ## Start the service in development mode
 
 ```sh
-npm watch
+npm run watch
 ```
 
 ## Start the service in production mode
+
 ```sh
 npm start
+```
+
+## Stop the database server
+
+```sh
+docker-compose down
 ```
