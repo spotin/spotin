@@ -1,0 +1,12 @@
+services:
+  run:
+    image: postgis/postgis:latest
+    container_name: spotin
+    env_file:
+      - .env
+    ports:
+      - '${RDS_PORT}:${RDS_PORT}'
+    environment:
+      - POSTGRES_DB=${RDS_DB_NAME}
+      - POSTGRES_USER=${RDS_USERNAME}
+      - POSTGRES_PASSWORD=${RDS_PASSWORD}
