@@ -11,7 +11,8 @@ docker run \
 echo "Installing nodejs requirements ..."
 
 npm install 
-  npx \
+
+npx \
   sequelize-cli \
   db:migrate \
   db:migrate:undo \
@@ -28,4 +29,3 @@ echo "  npm start"
 echo "Access the application at: http://localhost:3000"
 
 npm start
-
