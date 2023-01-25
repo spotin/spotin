@@ -26,13 +26,11 @@ docker run \
 # Install the dependencies
 npm install
 
-# Populate the database
-npx \
-    sequelize-cli \
-    db:migrate \
-    db:migrate:undo \
-    db:migrate:undo:all \
-    db:seed:all
+# Run the migrations
+npx sequelize-cli db:migrate
+
+# Seed the database for development purpose
+npx sequelize-cli db:seed:all
 
 # Create a dev file
 cp .env.defaults .env
