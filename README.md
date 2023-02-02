@@ -18,6 +18,13 @@ The following prerequisites must be filled to run this service:
 # Create a dev file
 cp .env.defaults .env
 
+# Setting the environment variables to access the database (must be done each time you want to run the app)
+export RDS_DB_NAME=spotin
+export RDS_USERNAME=spotin
+export RDS_PASSWORD=spotin
+export RDS_HOSTNAME=localhost
+export RDS_PORT=5432
+
 # Start a Postgres server with Docker
 docker-compose up -d
 
