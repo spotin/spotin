@@ -5,7 +5,33 @@ site_author: SpotIn contributors
 site_description: >-
   Documentation website for SpotIn - Spots that take place in the virtual or in the physical world.
 copyright: Copyright &copy; 2022 - 2023 SpotIn
-
+nav:
+  - Home:
+      - Overview: index.md
+      - Tutorials: tutorials/index.md
+      - How-to guides: how-to-guides/index.md
+      - Reference: reference/index.md
+      - Explanations: explanations/index.md
+  - Tutorials:
+      - Overview: tutorials/index.md
+      - Install and configure Visual Studio Code: tutorials/install-and-configure-visual-studio-code/index.md
+      - Install and configure Docker: tutorials/install-and-configure-docker/index.md
+      - Install and configure Dev Containers: tutorials/install-and-configure-dev-containers/index.md
+  - How-to guides:
+      - Overview: how-to-guides/index.md
+      - How to use GitHub: how-to-guides/how-to-use-github/index.md
+      - How to use Material for MkDocs: how-to-guides/how-to-use-material-for-mkdocs/index.md
+  - Reference:
+      - reference/index.md
+  - Explanations:
+      - Overview: explanations/index.md
+      - About this documentation: explanations/about-this-documentation/index.md
+      - About Dev Containers: explanations/about-dev-containers/index.md
+      - About Docker: explanations/about-docker/index.md
+      - About Git: explanations/about-git/index.md
+      - About Markdown: explanations/about-markdown/index.md
+      - About Material for MkDocs: explanations/about-material-for-mkdocs/index.md
+      - About Visual Studio Code: explanations/about-visual-studio-code/index.md
 theme:
   language: en
   icon:
@@ -101,20 +127,3 @@ extra_javascript:
   - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-
-nav:
-  - Home:
-      - Overview: index.md
-      - Tutorials: tutorials/index.md
-      - How-to guides: how-to-guides/index.md
-      - Reference: reference/index.md
-      - Explanations: explanations/index.md
-  - Tutorials:
-      - Overview: tutorials/index.md
-  - How-to guides:
-      - Overview: how-to-guides/index.md
-  - Reference:
-      - reference/index.md
-  - Explanations:
-      - Overview: explanations/index.md
-

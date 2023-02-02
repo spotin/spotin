@@ -4,7 +4,7 @@ on:
   # Runs on pushes targeting the default branch
   push:
     # TODO: Remove `dev` branch when the deployment process is understood by the team
-    # branches: ["main", "dev"]
+    branches: ["main", "dev"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
