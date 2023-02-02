@@ -1,18 +1,25 @@
-# Welcome to MkDocs
+# Home
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+## Introduction
 
-## Commands
+Welcome to the SpotIn Documentation website!
 
-* `pip install mkdocs-git-revision-date-localized-plugin` - Add **git-revision-date-localized** plugin
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+This documentation is based on the [Diátaxis Documentation Framework](./explanations/about-this-documentation/index.md).
 
-## Project layout
+The documentation is separated in the following axes:
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+- [Tutorials](./tutorials/index.md)
+- [How-to guides](./how-to-guides/index.md)
+- [Reference](./reference/index.md)
+- [Explanations](./explanations/index.md)
+
+## Getting started
+
+Don't know where to start? Check these first!
+
+- About SpotIn - TODO
+- [Install and configure Visual Studio Code](tutorials/install-and-configure-visual-studio-code/index.md)
+- [Install and configure Docker](tutorials/install-and-configure-docker/index.md)
+- [Install and configure Dev Containers](tutorials/install-and-configure-dev-containers/index.md)
+- How to contribute to SpotIn - TODO
+- [About this documentation](./explanations/about-this-documentation/index.md)

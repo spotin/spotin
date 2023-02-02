@@ -32,14 +32,41 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - uses: actions/setup-python@v4
         with:
-          submodules: recursive
+          python-version: 3.x
+      
+      - uses: actions/cache@v2
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+      
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
+      
+      - name: Install Material for MkDocs dependencies
+        run: |
+          apt install --yes \
+            libcairo2-dev \
+            libfreetype6-dev \
+            libffi-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libz-dev
+          pip install \
+            cairosvg \
+            mkdocs-material \
+            mkdocs-minify-plugin \
+            mkdocs-git-revision-date-localized-plugin \
+            mkdocs-glightbox \
+            pillow
+      
       - name: Build Material for MkDocs
         run: |
           mkdocs build --site-dir public
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
