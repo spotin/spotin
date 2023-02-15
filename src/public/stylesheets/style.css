@@ -1,0 +1,97 @@
+@import url("https://css.gg/trash.css");
+
+.trash {
+    color: #e53935;
+}
+
+.error {
+    color: #e53935;
+}
+
+.trash:hover {
+    color: rgb(229, 57, 53);
+}
+
+/* Red Light scheme (Default) */
+/* Can be forced with data-theme="light" */
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+    --primary: #e53935;
+    --primary-hover: #d32f2f;
+    --primary-focus: rgba(229, 57, 53, 0.125);
+    --primary-inverse: #fff;
+}
+
+/* Red Dark scheme (Auto) */
+/* Automatically enabled if user has Dark mode enabled */
+@media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary: #e53935;
+        --primary-hover: #f44336;
+        --primary-focus: rgba(229, 57, 53, 0.25);
+        --primary-inverse: #fff;
+    }
+}
+
+/* Red Dark scheme (Forced) */
+/* Enabled if forced with data-theme="dark" */
+[data-theme="dark"] {
+    --primary: #e53935;
+    --primary-hover: #f44336;
+    --primary-focus: rgba(229, 57, 53, 0.25);
+    --primary-inverse: #fff;
+}
+
+/* Red (Common styles) */
+:root {
+    --form-element-active-border-color: var(--primary);
+    --form-element-focus-color: var(--primary-focus);
+    --switch-color: var(--primary-inverse);
+    --switch-checked-background-color: var(--primary);
+}
+
+body {
+    margin-top: 10px;
+}
+
+.grow {
+    width: 100%;
+}
+
+.resource .qrcode {
+    float: right;
+}
+
+.resource .head {
+    min-height: 128px;
+}
+
+.resource .map {
+    height: 400px;
+}
+
+.flash {
+    margin-bottom: var(--typography-spacing-vertical);
+    padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
+    border: solid var(--border-width);
+    border-radius: var(--border-radius);
+}
+
+.flash.info {
+    color: #3734e5;
+    border-color: #3734e5;
+}
+
+.flash.success {
+    color: #9a9835;
+    border-color: #9a9835;
+}
+
+.flash.error {
+    color: #e53935;
+    border-color: #e53935;
+}
+
+#keyword {
+    color: #e53935;
+}
