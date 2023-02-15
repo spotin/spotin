@@ -1,0 +1,9 @@
+{
+	"editor.renderWhitespace": "all",
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"eslint.packageManager": "npm",
+	"files.insertFinalNewline": true,
+}

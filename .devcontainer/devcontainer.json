@@ -18,7 +18,9 @@
 		"vscode": {
 			"extensions": [
 				"ronnidc.nunjucks",
-				"Prisma.prisma"
+				"Prisma.prisma",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode"
 			]
 		}
 	}

@@ -1,0 +1,10 @@
+services:
+  run:
+    image: postgis/postgis:latest
+    container_name: media
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=media
+      - POSTGRES_USER=media
+      - POSTGRES_PASSWORD=media
