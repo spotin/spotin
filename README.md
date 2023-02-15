@@ -8,43 +8,54 @@ SpotIn is a place for registering spots. Spots can take place in the virtual or 
 
 The following prerequisites must be filled to run this service:
 
-[Node.js](https://nodejs.org/) must be installed.
-
 [Docker](https://docs.docker.com/get-docker/) must be installed.
 
-## Set up the service
+[Visual Studio Code](https://code.visualstudio.com/download) must be installed
 
-```sh
-# Create a dev file
-cp .env.defaults .env
+## Installation
 
-# Start a Postgres server with Docker
-docker-compose up -d
+Open this folder in Visual Studio Code, and open it in a dev contianer
 
-# Install the dependencies
-npm install
-
-# Run the migrations
-npx sequelize-cli db:migrate
-
-# Seed the database for development purpose
-npx sequelize-cli db:seed:all
+```bash
+$ npm install
 ```
 
-## Start the service in development mode
+## Running the app
 
-```sh
-npm run watch
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-## Start the service in production mode
+## Test
 
-```sh
-npm start
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
 
-## Stop the database server
+## Support
 
-```sh
-docker-compose down
-```
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](LICENSE).
