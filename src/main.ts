@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as nunjucks from 'nunjucks';
 import { PrismaService } from './prisma/prisma.service';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const IS_PRODUCTION = false;
 
@@ -24,6 +25,15 @@ async function bootstrap() {
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
+
+  const config = new DocumentBuilder()
+    .setTitle('SpotIn API')
+    .setDescription('The SpotIn API description')
+    .setVersion('1.0')
+    .addTag('spots')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('swagger-ui', app, document);
 
   await app.listen(3000);
 }
