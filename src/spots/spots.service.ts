@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSpot } from './types/create-spot-type';
@@ -13,16 +14,15 @@ export class SpotsService {
   }
 
   async createSpot(createSpot: CreateSpot) {
-    return await this.prisma.$queryRawUnsafe<Spot>(
-      'INSERT INTO spots(uuid,title,description,coordinates,timestamp,redirection,referenced) VALUES ($1::uuid, $2, $3, ST_MakePoint($4,$5)::geometry, $6::timestamp, $7, $8);',
-      randomUUID(),
-      createSpot.title,
-      createSpot.description,
-      createSpot.longitude,
-      createSpot.latitude,
-      createSpot.timestamp,
-      createSpot.redirect,
-      createSpot.referenced,
+    return await this.prisma.$queryRaw<Spot[]>(
+      Prisma.sql`INSERT INTO spots(uuid,title,description,coordinates,timestamp,redirection,referenced) VALUES (
+      ${randomUUID()}::uuid,
+      ${createSpot.title},
+      ${createSpot.description},
+      ST_MakePoint(${createSpot.longitude},${createSpot.latitude})::geometry,
+      ${createSpot.timestamp}::timestamp,
+      ${createSpot.redirect},
+      ${createSpot.referenced});`,
     );
   }
 }
