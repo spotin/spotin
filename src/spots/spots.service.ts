@@ -23,7 +23,18 @@ export class SpotsService {
       ${createSpot.timestamp}::timestamp,
       ${createSpot.redirect},
       ${createSpot.referenced}) 
-      RETURNING uuid,title,description,timestamp,ST_AsText(coordinates) as coordinates,redirection,referenced,created_at,updated_at,deleted_at`,
+      RETURNING uuid,
+      title,
+      description,
+      timestamp,
+      ST_X (ST_Transform (coordinates, 4326)) as longitude,
+      ST_Y (ST_Transform (coordinates, 4326)) as latitude,
+      ST_AsText(coordinates) as coordinates,
+      redirection,
+      referenced,
+      created_at,
+      updated_at,
+      deleted_at`,
     );
   }
 }
