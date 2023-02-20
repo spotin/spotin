@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSpot } from './types/create-spot-type';
+import { Spot } from './types/spot.type';
 
 @Injectable()
 export class SpotsService {
@@ -11,16 +13,12 @@ export class SpotsService {
   }
 
   async createSpot(createSpot: CreateSpot) {
-    const newSlideshow = await this.prisma.spots.create({
-      data: {
-        title: createSpot.title,
-        description: createSpot.description,
-        timestamp: createSpot.timestamp,
-        redirection: createSpot.redirection,
-        referenced: createSpot.referenced,
-      },
-    });
-
-    return newSlideshow;
+    return await this.prisma.$queryRawUnsafe<Spot>(
+      'INSERT INTO spots(title, description, redirection, uuid) VALUES ($1, $2, $3, $4::uuid);',
+      createSpot.title,
+      createSpot.description,
+      createSpot.redirection,
+      randomUUID(),
+    );
   }
 }

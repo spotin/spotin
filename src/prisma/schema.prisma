@@ -20,18 +20,20 @@ model spatial_ref_sys {
 }
 
 model spots {
-  uuid          String                   @id @db.Uuid
-  title         String?                  @db.VarChar(255)
+  uuid          String                                @id @default(uuid()) @db.Uuid
+  title         String?                               @db.VarChar(255)
   description   String?
-  coordinates   Unsupported("geometry")?
-  timestamp     DateTime?                @db.Timestamptz(6)
-  redirection   String?                  @db.VarChar(255)
+  coordinates   Unsupported("geometry(Point, 4326)")?
+  timestamp     DateTime?                             @db.Timestamptz(6)
+  redirection   String?                               @db.VarChar(255)
   referenced    Boolean?
-  user_username String?                  @db.VarChar(255)
-  created_at    DateTime                 @db.Timestamptz(6)
-  updated_at    DateTime                 @db.Timestamptz(6)
-  deleted_at    DateTime?                @db.Timestamptz(6)
-  users         users?                   @relation(fields: [user_username], references: [username], onDelete: NoAction, onUpdate: NoAction)
+  user_username String?                               @db.VarChar(255)
+  created_at    DateTime                              @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime                              @default(now()) @db.Timestamptz(6)
+  deleted_at    DateTime?                             @db.Timestamptz(6)
+  users         users?                                @relation(fields: [user_username], references: [username], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([coordinates], name: "spots_idx", type: Gist)
 }
 
 model tokens {
