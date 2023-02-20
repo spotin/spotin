@@ -1,4 +1,4 @@
-export type Spot = {
+export class Spot {
   uuid: string;
   title?: string;
   description?: string;
@@ -10,4 +10,4 @@ export type Spot = {
   created_at: number;
   updated_at: number;
   deleted_at?: number;
-};
+}

@@ -3,15 +3,14 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   NotFoundException,
   Param,
   Patch,
   Post,
 } from '@nestjs/common';
+import { CreateSpotDto } from './dtos/create-spot.dto';
+import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
-import { CreateSpot } from './types/create-spot-type';
-import { UpdateSpot } from './types/update-spot-type';
 
 @Controller('api/spots')
 export class SpotsController {
@@ -36,14 +35,17 @@ export class SpotsController {
   }
 
   @Post()
-  async createSpotApi(@Body() createSpot: CreateSpot) {
+  async createSpotApi(@Body() createSpot: CreateSpotDto) {
     const newSpot = await this.spotsService.createSpot(createSpot);
 
     return newSpot;
   }
 
   @Patch(':id')
-  async updateSpotApi(@Param('id') id: string, @Body() updateSpot: UpdateSpot) {
+  async updateSpotApi(
+    @Param('id') id: string,
+    @Body() updateSpot: UpdateSpotDto,
+  ) {
     try {
       const updatedSpot = await this.spotsService.updateSpot(id, updateSpot);
 

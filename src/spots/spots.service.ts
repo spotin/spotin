@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateSpot } from './types/create-spot-type';
-import { Spot } from './types/spot.type';
-import { UpdateSpot } from './types/update-spot-type';
+import { CreateSpotDto } from './dtos/create-spot.dto';
+import { Spot } from './dtos/spot.dto';
+import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 
 @Injectable()
 export class SpotsService {
@@ -30,7 +30,7 @@ export class SpotsService {
     );
   }
 
-  async createSpot(createSpot: CreateSpot) {
+  async createSpot(createSpot: CreateSpotDto) {
     return await this.prisma.$queryRaw<Spot[]>(
       Prisma.sql`INSERT INTO spots(uuid,title,description,coordinates,timestamp,redirection,referenced) VALUES (
       ${randomUUID()}::uuid,
@@ -54,7 +54,7 @@ export class SpotsService {
     );
   }
 
-  async updateSpot(spotId: string, updateSpot: UpdateSpot) {
+  async updateSpot(spotId: string, updateSpot: UpdateSpotDto) {
     const [spot] = await this.getSpot(spotId);
 
     return await this.prisma.$queryRaw<Spot[]>(
