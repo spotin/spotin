@@ -14,11 +14,15 @@ export class SpotsService {
 
   async createSpot(createSpot: CreateSpot) {
     return await this.prisma.$queryRawUnsafe<Spot>(
-      'INSERT INTO spots(title, description, redirection, uuid) VALUES ($1, $2, $3, $4::uuid);',
+      'INSERT INTO spots(uuid,title,description,coordinates,timestamp,redirection,referenced) VALUES ($1::uuid, $2, $3, ST_MakePoint($4,$5)::geometry, $6::timestamp, $7, $8);',
+      randomUUID(),
       createSpot.title,
       createSpot.description,
-      createSpot.redirection,
-      randomUUID(),
+      createSpot.longitude,
+      createSpot.latitude,
+      createSpot.timestamp,
+      createSpot.redirect,
+      createSpot.referenced,
     );
   }
 }
