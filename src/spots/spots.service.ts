@@ -85,4 +85,21 @@ export class SpotsService {
       deleted_at`,
     );
   }
+
+  async deleteSpot(spotId: string) {
+    return await this.prisma.$queryRaw<Spot[]>(
+      Prisma.sql`DELETE FROM spots WHERE uuid = ${spotId}::uuid
+      RETURNING uuid,
+      title,
+      description,
+      timestamp,
+      ST_X (ST_Transform (coordinates, 4326)) as longitude,
+      ST_Y (ST_Transform (coordinates, 4326)) as latitude,
+      redirection,
+      referenced,
+      created_at,
+      updated_at,
+      deleted_at`,
+    );
+  }
 }

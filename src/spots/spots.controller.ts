@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
   Patch,
@@ -13,44 +15,50 @@ import { UpdateSpot } from './types/update-spot-type';
 
 @Controller('api/spots')
 export class SpotsController {
-  constructor(private readonly spotService: SpotsService) {}
+  constructor(private readonly spotsService: SpotsService) {}
 
   @Get()
-  async getSpotApi() {
-    const slideshows = await this.spotService.getSpots();
+  async getSpotsApi() {
+    const Spots = await this.spotsService.getSpots();
 
-    return slideshows;
+    return Spots;
   }
 
   @Get(':uuid')
-  async getSlideshowApi(@Param('uuid') uuid: string) {
-    const slideshow = await this.spotService.getSpot(uuid);
+  async getSpotApi(@Param('uuid') uuid: string) {
+    const Spot = await this.spotsService.getSpot(uuid);
 
-    if (!slideshow) {
+    if (!Spot) {
       throw new NotFoundException();
     }
 
-    return slideshow;
+    return Spot;
   }
 
   @Post()
   async createSpotApi(@Body() createSpot: CreateSpot) {
-    const newSlideshow = await this.spotService.createSpot(createSpot);
+    const newSpot = await this.spotsService.createSpot(createSpot);
 
-    return newSlideshow;
+    return newSpot;
   }
 
   @Patch(':id')
-  async updateSlideshowApi(
-    @Param('id') id: string,
-    @Body() updateSpot: UpdateSpot,
-  ) {
-    // try {
-    const updatedSlideshow = await this.spotService.updateSpot(id, updateSpot);
+  async updateSpotApi(@Param('id') id: string, @Body() updateSpot: UpdateSpot) {
+    try {
+      const updatedSpot = await this.spotsService.updateSpot(id, updateSpot);
 
-    return updatedSlideshow;
-    // } catch (error) {
-    //   throw new NotFoundException();
-    // }
+      return updatedSpot;
+    } catch (error) {
+      throw new NotFoundException();
+    }
+  }
+
+  @Delete(':id')
+  async deleteSpotApi(@Param('id') id: string) {
+    const deletedSpots = await this.spotsService.deleteSpot(id);
+    if (deletedSpots.length === 0) {
+      throw new NotFoundException();
+    }
+    return deletedSpots;
   }
 }
