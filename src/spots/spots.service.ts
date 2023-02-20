@@ -62,12 +62,27 @@ export class SpotsService {
       title = ${updateSpot.title ?? spot.title},
       description = ${updateSpot.description ?? spot.description},
       timestamp = ${updateSpot.timestamp ?? spot.timestamp}::timestamp,
+      coordinates = ST_MakePoint(
+        ${updateSpot.longitude},
+        ${updateSpot.latitude}
+        )::geometry,
       redirection = ${updateSpot.redirect ?? spot.redirect},
       referenced = ${updateSpot.referenced ?? spot.referenced},
       created_at = ${updateSpot.created_at ?? spot.created_at},
       updated_at = ${updateSpot.updated_at ?? spot.updated_at},
       deleted_at = ${updateSpot.deleted_at ?? spot.deleted_at}
-      WHERE uuid = ${spotId}::uuid`,
+      WHERE uuid = ${spotId}::uuid
+      RETURNING uuid,
+      title,
+      description,
+      timestamp,
+      ST_X (ST_Transform (coordinates, 4326)) as longitude,
+      ST_Y (ST_Transform (coordinates, 4326)) as latitude,
+      redirection,
+      referenced,
+      created_at,
+      updated_at,
+      deleted_at`,
     );
   }
 }
