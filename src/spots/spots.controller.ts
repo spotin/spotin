@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { SpotsService } from './spots.service';
 import { CreateSpot } from './types/create-spot-type';
 
@@ -11,6 +18,17 @@ export class SpotsController {
     const slideshows = await this.spotService.getSpots();
 
     return slideshows;
+  }
+
+  @Get(':uuid')
+  async getSlideshowApi(@Param('uuid') uuid: string) {
+    const slideshow = await this.spotService.getSpot(uuid);
+
+    if (!slideshow) {
+      throw new NotFoundException();
+    }
+
+    return slideshow;
   }
 
   @Post()

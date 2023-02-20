@@ -13,6 +13,16 @@ export class SpotsService {
     return await this.prisma.spots.findMany();
   }
 
+  async getSpot(spotId: string) {
+    return await this.prisma.spots.findFirst({
+      where: {
+        uuid: {
+          equals: spotId,
+        },
+      },
+    });
+  }
+
   async createSpot(createSpot: CreateSpot) {
     return await this.prisma.$queryRaw<Spot[]>(
       Prisma.sql`INSERT INTO spots(uuid,title,description,coordinates,timestamp,redirection,referenced) VALUES (

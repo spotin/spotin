@@ -50,3 +50,34 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+```sh
+curl -X 'POST' \
+  'http://localhost:3000/api/spots' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "description": "string",
+  "latitude": 0,
+  "longitude": 0,
+  "redirect": "string",
+  "referenced": true,
+  "timestamp": "2023-02-20T14:31:10.811Z",
+  "title": "string",
+  "uuid": "string"
+}'
+
+
+curl \
+	http://localhost:3000/api/spots \
+	-X GET \
+	-v
+
+	3a56f851-b189-4cc0-84fa-c7cb38ae456d
+
+	curl \
+	http://localhost:3000/api/spots/3a56f851-b189-4cc0-84fa-c7cb38ae456d \
+	-X GET \
+	-v
+
+```
