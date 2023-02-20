@@ -14,13 +14,19 @@ export class SpotsService {
   }
 
   async getSpot(spotId: string) {
-    return await this.prisma.spots.findFirst({
-      where: {
-        uuid: {
-          equals: spotId,
-        },
-      },
-    });
+    return await this.prisma.$queryRaw<Spot[]>(
+      Prisma.sql`SELECT uuid,
+      title,
+      description,
+      timestamp,
+      ST_X (ST_Transform (coordinates, 4326)) as longitude,
+      ST_Y (ST_Transform (coordinates, 4326)) as latitude,
+      redirection,
+      referenced,
+      created_at,
+      updated_at,
+      deleted_at FROM spots WHERE uuid = ${spotId}::uuid`,
+    );
   }
 
   async createSpot(createSpot: CreateSpot) {
@@ -39,7 +45,6 @@ export class SpotsService {
       timestamp,
       ST_X (ST_Transform (coordinates, 4326)) as longitude,
       ST_Y (ST_Transform (coordinates, 4326)) as latitude,
-      ST_AsText(coordinates) as coordinates,
       redirection,
       referenced,
       created_at,
