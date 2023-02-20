@@ -67,17 +67,13 @@ curl -X 'POST' \
   "uuid": "string"
 }'
 
-
 curl \
 	http://localhost:3000/api/spots \
 	-X GET \
 	-v
 
-	3a56f851-b189-4cc0-84fa-c7cb38ae456d
-
-	curl \
-	http://localhost:3000/api/spots/3a56f851-b189-4cc0-84fa-c7cb38ae456d \
-	-X GET \
-	-v
-
+curl \
+http://localhost:3000/api/spots/<uuid> \
+-X GET \
+-v
 ```
