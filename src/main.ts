@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as nunjucks from 'nunjucks';
+import { PrismaService } from './prisma/prisma.service';
 
 const IS_PRODUCTION = false;
 
@@ -20,6 +21,9 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, 'views'));
   app.useStaticAssets(join(__dirname, 'public'));
   app.setViewEngine('njk');
+
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
 
   await app.listen(3000);
 }

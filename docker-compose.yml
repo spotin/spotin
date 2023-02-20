@@ -1,10 +1,10 @@
 services:
   run:
     image: postgis/postgis:latest
-    container_name: media
+    container_name: spotin
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB=media
-      - POSTGRES_USER=media
-      - POSTGRES_PASSWORD=media
+      - POSTGRES_DB=spotin
+      - POSTGRES_USER=spotin
+      - POSTGRES_PASSWORD=spotin
