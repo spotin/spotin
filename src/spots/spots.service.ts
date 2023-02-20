@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSpot } from './types/create-spot-type';
 import { Spot } from './types/spot.type';
+import { UpdateSpot } from './types/update-spot-type';
 
 @Injectable()
 export class SpotsService {
@@ -50,6 +51,23 @@ export class SpotsService {
       created_at,
       updated_at,
       deleted_at`,
+    );
+  }
+
+  async updateSpot(spotId: string, updateSpot: UpdateSpot) {
+    const [spot] = await this.getSpot(spotId);
+
+    return await this.prisma.$queryRaw<Spot[]>(
+      Prisma.sql`UPDATE spots SET
+      title = ${updateSpot.title ?? spot.title},
+      description = ${updateSpot.description ?? spot.description},
+      timestamp = ${updateSpot.timestamp ?? spot.timestamp}::timestamp,
+      redirection = ${updateSpot.redirect ?? spot.redirect},
+      referenced = ${updateSpot.referenced ?? spot.referenced},
+      created_at = ${updateSpot.created_at ?? spot.created_at},
+      updated_at = ${updateSpot.updated_at ?? spot.updated_at},
+      deleted_at = ${updateSpot.deleted_at ?? spot.deleted_at}
+      WHERE uuid = ${spotId}::uuid`,
     );
   }
 }
