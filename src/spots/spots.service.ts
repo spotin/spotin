@@ -22,7 +22,8 @@ export class SpotsService {
       ST_MakePoint(${createSpot.longitude},${createSpot.latitude})::geometry,
       ${createSpot.timestamp}::timestamp,
       ${createSpot.redirect},
-      ${createSpot.referenced});`,
+      ${createSpot.referenced}) 
+      RETURNING uuid,title,description,timestamp,ST_AsText(coordinates) as coordinates,redirection,referenced,created_at,updated_at,deleted_at`,
     );
   }
 }
