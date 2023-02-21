@@ -10,10 +10,12 @@ import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 export class SpotsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  /** List spots */
   async getSpots() {
     return await this.prisma.spots.findMany();
   }
 
+  /** Read a spot by id */
   async getSpot(spotId: string) {
     return await this.prisma.$queryRaw<Spot[]>(
       Prisma.sql`SELECT uuid,
@@ -30,6 +32,7 @@ export class SpotsService {
     );
   }
 
+  /** Create a new spot */
   async createSpot(createSpot: CreateSpotDto) {
     return await this.prisma.$queryRaw<Spot[]>(
       Prisma.sql`INSERT INTO spots(uuid,title,description,coordinates,timestamp,redirection,referenced) VALUES (
@@ -54,6 +57,7 @@ export class SpotsService {
     );
   }
 
+  /** Update a spot by id */
   async updateSpot(spotId: string, updateSpot: UpdateSpotDto) {
     const [spot] = await this.getSpot(spotId);
 
@@ -68,9 +72,7 @@ export class SpotsService {
         )::geometry,
       redirection = ${updateSpot.redirect ?? spot.redirect},
       referenced = ${updateSpot.referenced ?? spot.referenced},
-      created_at = ${updateSpot.created_at ?? spot.created_at},
-      updated_at = ${updateSpot.updated_at ?? spot.updated_at},
-      deleted_at = ${updateSpot.deleted_at ?? spot.deleted_at}
+      updated_at = CURRENT_TIMESTAMP
       WHERE uuid = ${spotId}::uuid
       RETURNING uuid,
       title,
@@ -86,6 +88,7 @@ export class SpotsService {
     );
   }
 
+  /** Delete a spot by id */
   async deleteSpot(spotId: string) {
     return await this.prisma.$queryRaw<Spot[]>(
       Prisma.sql`DELETE FROM spots WHERE uuid = ${spotId}::uuid

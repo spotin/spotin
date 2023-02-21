@@ -8,10 +8,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateSpotDto } from './dtos/create-spot.dto';
 import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
 
+@ApiTags('spots')
 @Controller('api/spots')
 export class SpotsController {
   constructor(private readonly spotsService: SpotsService) {}
@@ -41,13 +43,13 @@ export class SpotsController {
     return newSpot;
   }
 
-  @Patch(':id')
+  @Patch(':uuid')
   async updateSpotApi(
-    @Param('id') id: string,
+    @Param('uuid') uuid: string,
     @Body() updateSpot: UpdateSpotDto,
   ) {
     try {
-      const updatedSpot = await this.spotsService.updateSpot(id, updateSpot);
+      const updatedSpot = await this.spotsService.updateSpot(uuid, updateSpot);
 
       return updatedSpot;
     } catch (error) {
@@ -55,9 +57,9 @@ export class SpotsController {
     }
   }
 
-  @Delete(':id')
-  async deleteSpotApi(@Param('id') id: string) {
-    const deletedSpots = await this.spotsService.deleteSpot(id);
+  @Delete(':uuid')
+  async deleteSpotApi(@Param('uuid') uuid: string) {
+    const deletedSpots = await this.spotsService.deleteSpot(uuid);
     if (deletedSpots.length === 0) {
       throw new NotFoundException();
     }
