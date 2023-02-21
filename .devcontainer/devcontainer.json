@@ -1,27 +1,26 @@
 {
-	"name": "SpotIn Development Container",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
-	"runArgs": ["-p=5432:5432", "-p=3000:3000"],
-	"remoteUser": "node",
-	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-			"moby": true,
-			"azureDnsAutoDetection": true,
-			"version": "latest",
-			"dockerDashComposeVersion": "v1"
-		}
-	},
-	"postCreateCommand": "./.devcontainer/npm-global-without-sudo.sh && npm install -g npm@9.4.2",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ronnidc.nunjucks",
-				"Prisma.prisma",
-				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode"
-			]
-		}
-	}
+  "name": "SpotIn Development Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "node",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": true,
+      "azureDnsAutoDetection": true,
+      "version": "latest",
+      "dockerDashComposeVersion": "v1"
+    }
+  },
+  "postCreateCommand": "./.devcontainer/npm-global-without-sudo.sh && npm install -g npm@9.4.2",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ronnidc.nunjucks",
+        "Prisma.prisma",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
 }
