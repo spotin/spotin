@@ -1,16 +1,29 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Res,
+  UseFilters,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local/local-auth.guard';
+import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 
 @ApiTags('auth')
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post('login')
-  async login(@Request() req: any) {
-    return this.authService.login(req.user);
+  @UseFilters(new UnauthorizedExceptionFilter())
+  @Post('users/login')
+  async login(@Request() req: any, @Res() res: Response) {
+    const { access_token } = await this.authService.login(req.user);
+    return res
+      .cookie('access_token', access_token, { httpOnly: true })
+      .redirect('/spots/list');
   }
 }

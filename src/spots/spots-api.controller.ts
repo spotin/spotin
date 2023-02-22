@@ -15,7 +15,7 @@ import { SpotsService } from './spots.service';
 
 @ApiTags('spots')
 @Controller('api/spots')
-export class SpotsController {
+export class SpotsApiController {
   constructor(private readonly spotsService: SpotsService) {}
 
   @Get()
