@@ -5,6 +5,7 @@ import { join } from 'path';
 import * as nunjucks from 'nunjucks';
 import { PrismaService } from './prisma/prisma.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 const IS_PRODUCTION = false;
 
@@ -34,6 +35,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger-ui', app, document);
+
+  app.use(cookieParser());
 
   await app.listen(3000);
 }
