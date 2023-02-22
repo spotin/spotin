@@ -51,7 +51,6 @@ export class SpotsViewsController {
   }
 
   @Get(':uuid/redirect')
-  // @Render('spots/[uuid]')
   async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
     const [{ redirection }] = await this.spotsService.getSpot(uuid);
 
