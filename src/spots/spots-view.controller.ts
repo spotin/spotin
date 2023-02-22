@@ -33,6 +33,14 @@ export class SpotsViewsController {
     return { spots };
   }
 
+  @Get(':uuid/delete')
+  @Render('spots/list')
+  async deleteSpotApi(@Param('uuid') uuid: string) {
+    await this.spotsService.deleteSpot(uuid);
+    const spots = await this.spotsService.getSpots();
+    return { spots };
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get(':uuid')
   @UseFilters(new UnauthorizedExceptionFilter())
