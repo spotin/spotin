@@ -4,6 +4,7 @@
     "dockerfile": "Dockerfile"
   },
   "remoteUser": "node",
+  "runArgs": ["-p=3000:3000"],
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "moby": true,

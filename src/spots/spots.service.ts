@@ -41,7 +41,7 @@ export class SpotsService {
       ${createSpot.description},
       ST_MakePoint(${createSpot.longitude},${createSpot.latitude})::geometry,
       ${createSpot.timestamp}::timestamp,
-      ${createSpot.redirect},
+      ${createSpot.redirection},
       ${createSpot.referenced}) 
       RETURNING uuid,
       title,
@@ -70,7 +70,7 @@ export class SpotsService {
         ${updateSpot.longitude},
         ${updateSpot.latitude}
         )::geometry,
-      redirection = ${updateSpot.redirect ?? spot.redirect},
+      redirection = ${updateSpot.redirection ?? spot.redirection},
       referenced = ${updateSpot.referenced ?? spot.referenced},
       updated_at = CURRENT_TIMESTAMP
       WHERE uuid = ${spotId}::uuid

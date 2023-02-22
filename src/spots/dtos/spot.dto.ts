@@ -48,7 +48,7 @@ export class Spot {
     required: false,
     type: String,
   })
-  redirect?: string;
+  redirection?: string;
 
   @ApiProperty({
     description: 'Set if the spot will be referenced on the website',

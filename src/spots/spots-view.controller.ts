@@ -2,14 +2,16 @@ import {
   Get,
   Controller,
   Render,
-  Post,
   UseGuards,
   Param,
   UseFilters,
+  Res,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth-guards';
 import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 import { SpotsService } from './spots.service';
+import * as qrcode from 'qrcode';
+import { Response } from 'express';
 
 @Controller('spots')
 export class SpotsViewsController {
@@ -27,9 +29,34 @@ export class SpotsViewsController {
   @UseGuards(JwtAuthGuard)
   @Get(':uuid')
   @UseFilters(new UnauthorizedExceptionFilter())
-  @Render('spots/[uuid]')
-  async getSpot(@Param('uuid') uuid: string) {
+  async getSpot(@Res() res: Response, @Param('uuid') uuid: string) {
     const [spot] = await this.spotsService.getSpot(uuid);
-    return { spot };
+
+    const redirection = `http://192.168.1.183:3000/spots/${spot.uuid}/redirect`;
+
+    if (redirection) {
+      qrcode
+        .toDataURL(redirection)
+        .then((url) => {
+          res.render('spots/[uuid]', {
+            title: 'Spot',
+            spot: spot,
+            qrcode: url,
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }
+
+  @Get(':uuid/redirect')
+  // @Render('spots/[uuid]')
+  async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
+    const [{ redirection }] = await this.spotsService.getSpot(uuid);
+
+    if (redirection) {
+      res.redirect(redirection);
+    }
   }
 }
