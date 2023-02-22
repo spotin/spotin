@@ -26,6 +26,13 @@ export class SpotsViewsController {
     return { spots };
   }
 
+  @Get('latest')
+  @Render('spots/latest')
+  async getLatestSpots() {
+    const spots = await this.spotsService.getSpots();
+    return { spots };
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get(':uuid')
   @UseFilters(new UnauthorizedExceptionFilter())
@@ -47,15 +54,6 @@ export class SpotsViewsController {
         .catch((err) => {
           console.error(err);
         });
-    }
-  }
-
-  @Get(':uuid/redirect')
-  async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
-    const [{ redirection }] = await this.spotsService.getSpot(uuid);
-
-    if (redirection) {
-      res.redirect(redirection);
     }
   }
 }

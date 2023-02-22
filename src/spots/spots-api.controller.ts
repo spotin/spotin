@@ -7,11 +7,13 @@ import {
   Param,
   Patch,
   Post,
+  Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateSpotDto } from './dtos/create-spot.dto';
 import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
+import { Response } from 'express';
 
 @ApiTags('spots')
 @Controller('api/spots')
@@ -34,6 +36,15 @@ export class SpotsApiController {
     }
 
     return Spot;
+  }
+
+  @Get(':uuid/redirect')
+  async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
+    const [{ redirection }] = await this.spotsService.getSpot(uuid);
+
+    if (redirection) {
+      res.redirect(redirection);
+    }
   }
 
   @Post()
