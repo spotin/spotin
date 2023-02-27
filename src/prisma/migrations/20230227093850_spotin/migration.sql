@@ -1,16 +1,9 @@
 -- CreateTable
-CREATE TABLE "SequelizeMeta" (
-    "name" VARCHAR(255) NOT NULL,
-
-    CONSTRAINT "SequelizeMeta_pkey" PRIMARY KEY ("name")
-);
-
--- CreateTable
 CREATE TABLE "spots" (
     "uuid" UUID NOT NULL,
     "title" VARCHAR(255),
     "description" TEXT,
-    "coordinates" geometry(Point, 4326),
+    "coordinates" extensions.geometry(Point, 4326),
     "timestamp" TIMESTAMPTZ(6),
     "redirection" VARCHAR(255),
     "referenced" BOOLEAN,

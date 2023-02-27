@@ -1,6 +1,6 @@
 services:
   run:
-    image: postgis/postgis:latest
+    image: supabase/postgres
     container_name: spotin
     ports:
       - 5432:5432
