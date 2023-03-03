@@ -13,14 +13,14 @@
       "dockerDashComposeVersion": "v1"
     }
   },
-  "postCreateCommand": "./.devcontainer/npm-global-without-sudo.sh && npm install -g npm@9.4.2",
   "customizations": {
     "vscode": {
       "extensions": [
         "ronnidc.nunjucks",
         "Prisma.prisma",
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "ms-vsliveshare.vsliveshare"
       ]
     }
   }
