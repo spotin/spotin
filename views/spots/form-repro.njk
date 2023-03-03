@@ -53,11 +53,6 @@
         Referenced
         <input id="referenced" type="checkbox" name="referenced" role="switch" value="true" {{ ' checked' if values.referenced else '' }} />
     </label>
-
-    <label for="configured">
-        Configured
-        <input id="configured" type="checkbox" name="configured" role="switch" value="true" {{ ' checked' if values.configured else '' }} />
-    </label>
     
     <br>
 
@@ -70,7 +65,7 @@
     async function postData(url = "", data) {
         // Default options are marked with *
         const response = await fetch(url, {
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            method: "PATCH", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             credentials: "same-origin", // include, *same-origin, omit
@@ -94,13 +89,14 @@
 
         event.preventDefault();
         const createSpotDto = {
+            id: spot.id,
             title,
             description,
             longitude: longitude !== '' ? parseInt(longitude, 10) : undefined,
             latitude: latitude !== '' ? parseInt(latitude, 10) : undefined,
             redirection,
             referenced: referenced === "true",
-            configured: false,
+            configured: "true",
         }
 
         postData("/api/spots", createSpotDto).then((data) => {

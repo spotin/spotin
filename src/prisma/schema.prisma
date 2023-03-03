@@ -13,7 +13,6 @@ model Spot {
   description String?
   latitude    Float?    @db.DoublePrecision
   longitude   Float?    @db.DoublePrecision
-  timestamp   DateTime? @db.Timestamptz(6)
   redirection String?   @db.VarChar(255)
   referenced  Boolean   @default(false)
   configured  Boolean   @default(true)

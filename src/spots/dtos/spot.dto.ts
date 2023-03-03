@@ -44,11 +44,6 @@ export class SpotDto implements Spot {
   @Max(180)
   longitude: number | null;
 
-  // TODO
-  @ApiPropertyOptional()
-  @IsDateString()
-  timestamp: Date | null;
-
   // Redirection when the QR code is accessed
   @ApiPropertyOptional()
   @IsString()

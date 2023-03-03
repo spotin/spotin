@@ -5,7 +5,6 @@ CREATE TABLE "spots" (
     "description" TEXT,
     "latitude" DOUBLE PRECISION,
     "longitude" DOUBLE PRECISION,
-    "timestamp" TIMESTAMPTZ(6),
     "redirection" VARCHAR(255),
     "referenced" BOOLEAN NOT NULL DEFAULT false,
     "configured" BOOLEAN NOT NULL DEFAULT true,
