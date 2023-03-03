@@ -15,7 +15,7 @@ import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
 import { Response } from 'express';
 
-@ApiTags('spots')
+@ApiTags('Spots')
 @Controller('api/spots')
 export class SpotsApiController {
   constructor(private readonly spotsService: SpotsService) {}
@@ -40,10 +40,10 @@ export class SpotsApiController {
 
   @Get(':uuid/redirect')
   async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
-    const [{ redirection }] = await this.spotsService.getSpot(uuid);
+    const spot = await this.spotsService.getSpot(uuid);
 
-    if (redirection) {
-      res.redirect(redirection);
+    if (spot?.redirection) {
+      res.redirect(spot.redirection);
     }
   }
 
@@ -70,10 +70,10 @@ export class SpotsApiController {
 
   @Delete(':uuid')
   async deleteSpotApi(@Param('uuid') uuid: string) {
-    const deletedSpots = await this.spotsService.deleteSpot(uuid);
-    if (deletedSpots.length === 0) {
+    try {
+      await this.spotsService.deleteSpot(uuid);
+    } catch {
       throw new NotFoundException();
     }
-    return deletedSpots;
   }
 }
