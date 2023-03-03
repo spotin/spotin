@@ -24,7 +24,6 @@ export class SpotsService {
 
     return slideshow;
   }
-
   /** Create a new spot */
   async createSpot(createSpot: CreateSpotDto) {
     const newSpot = await this.prisma.spot.create({

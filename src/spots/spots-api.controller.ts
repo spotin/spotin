@@ -9,7 +9,15 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { SpotDto } from './dtos/spot.dto';
 import { CreateSpotDto } from './dtos/create-spot.dto';
 import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
@@ -21,13 +29,36 @@ export class SpotsApiController {
   constructor(private readonly spotsService: SpotsService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get the spots',
+    description: 'Get the spots.',
+    operationId: 'getSpotsApi',
+  })
+  @ApiOkResponse({
+    description: 'Spots have been successfully retrieved.',
+    type: [SpotDto],
+  })
   async getSpotsApi() {
     const Spots = await this.spotsService.getSpots();
 
     return Spots;
   }
 
-  @Get(':uuid')
+  // @Get(':uuid')
+  // @ApiOperation({
+  //   summary: 'Create a new user',
+  //   description: 'Create a new user.',
+  //   operationId: 'create',
+  // })
+  // @ApiBody({
+  //   description: "The user's details.",
+  //   type: () => CreateUserDto,
+  // })
+  // @ApiCreatedResponse({
+  //   description: 'User has been successfully created.',
+  //   type: () => UserDto,
+  // })
+  // @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
   async getSpotApi(@Param('uuid') uuid: string) {
     const Spot = await this.spotsService.getSpot(uuid);
 

@@ -1,55 +1,57 @@
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import {
+  IsBoolean,
+  IsDateString,
+  IsNumber,
+  IsString,
+  IsUUID,
+  Min,
+  Max,
+} from 'class-validator';
 import { Spot } from '@prisma/client';
 
 export class SpotDto implements Spot {
-  @ApiProperty({
-    description: 'Identification of the spot',
-    required: true,
-    type: String,
-    format: 'uuid',
-  })
+  // Identification of the spot
+  @ApiProperty({ format: 'uuid' })
+  @IsUUID()
   id: string;
 
-  @ApiProperty({
-    description: 'Title of the spot',
-    required: false,
-    type: String,
-  })
+  // Title of the spot
+  @ApiPropertyOptional()
+  @IsString()
   title: string | null;
 
-  @ApiProperty({
-    description: 'Description of the spot',
-    required: false,
-    type: String,
-  })
+  // Description of the spot
+  @ApiPropertyOptional()
+  @IsString()
   description: string | null;
 
-  @ApiProperty({
-    description: 'Latitude of the position of the spot',
-    required: false,
-    type: Number,
-  })
+  // Latitude of the position of the spot
+  @ApiPropertyOptional()
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
   latitude: number | null;
 
-  @ApiProperty({
-    description: 'Longitude of the position of the spot',
-    required: false,
-    type: Number,
-  })
+  // Longitude of the position of the spot
+  @ApiPropertyOptional()
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
   longitude: number | null;
 
-  @ApiProperty({
-    description: 'TODO',
-    required: false,
-    type: Date,
-  })
+  // TODO
+  @ApiPropertyOptional()
+  @IsDateString()
   timestamp: Date | null;
 
-  @ApiProperty({
-    description: 'Redirection when the QR code is accessed',
-    required: false,
-    type: String,
-  })
+  // Redirection when the QR code is accessed
+  @ApiPropertyOptional()
+  @IsString()
   redirection: string | null;
 
   // @ApiProperty({
@@ -66,38 +68,25 @@ export class SpotDto implements Spot {
   // })
   // userId: string | null;
 
-  @ApiProperty({
-    description: 'Set if the spot will be referenced on the website',
-    required: false,
-    type: Boolean,
-  })
+  // Set if the spot will be referenced on the website
+  @ApiPropertyOptional({ default: false })
+  @IsBoolean()
   referenced: boolean;
 
-  @ApiProperty({
-    description: 'Set if the spot is already configured or not',
-    required: true,
-    type: Boolean,
-  })
+  // Set if the spot is already configured or not
+  @ApiPropertyOptional({ default: true })
+  @IsBoolean()
   configured: boolean;
 
-  @ApiProperty({
-    description: 'Date when the spot was created',
-    required: true,
-    type: Number,
-  })
+  // Date when the spot was created
+  @IsDateString()
   createdAt: Date;
 
-  @ApiProperty({
-    description: 'Date when the spot was updated',
-    required: true,
-    type: Number,
-  })
+  // Date when the spot was updated
+  @IsDateString()
   updatedAt: Date;
 
-  @ApiProperty({
-    description: 'Date when the spot was deleted',
-    required: false,
-    type: Number,
-  })
+  // Date when the spot was deleted
+  @IsDateString()
   deletedAt: Date | null;
 }

@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
@@ -12,16 +13,22 @@ const IS_PRODUCTION = false;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
   const opts: nunjucks.ConfigureOptions = {
     express: app,
     autoescape: true,
     watch: !IS_PRODUCTION,
     noCache: !IS_PRODUCTION,
   };
-  nunjucks.configure(join(__dirname, 'views'), opts);
+  nunjucks.configure(join(__dirname, '..', 'views'), opts);
 
-  app.setBaseViewsDir(join(__dirname, 'views'));
-  app.useStaticAssets(join(__dirname, 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setViewEngine('njk');
 
   const prismaService = app.get(PrismaService);
@@ -31,10 +38,18 @@ async function bootstrap() {
     .setTitle('SpotIn API')
     .setDescription('The SpotIn API description')
     .setVersion('1.0')
-    .addTag('spots')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger-ui', app, document);
+
+  SwaggerModule.setup('swagger-ui', app, document, {
+    swaggerOptions: {
+      showExtensions: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+      persistAuthorization: true,
+    },
+  });
 
   app.use(cookieParser());
 

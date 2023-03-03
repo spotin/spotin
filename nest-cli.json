@@ -4,14 +4,16 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "assets": [
-      "**/*.css",
-      "**/*.njk",
-      "**/*.js",
-      "**/*.prisma",
-      "**/*.sql",
-      "**/*.toml"
-    ],
-    "watchAssets": true
+    "assets": ["**/*.prisma", "**/*.sql", "**/*.toml"],
+    "watchAssets": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "classValidatorShim": true,
+          "introspectComments": true
+        }
+      }
+    ]
   }
 }
