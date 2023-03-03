@@ -7,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SequelizeMeta {
-  name String @id @db.VarChar(255)
-}
-
 model spatial_ref_sys {
   srid      Int     @id
   auth_name String? @db.VarChar(256)
