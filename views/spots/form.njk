@@ -78,6 +78,22 @@
 <script>
     const form = document.querySelector("form");
 
+
+    async function postData(url = "", data) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
     form.addEventListener("submit", (event) => {
         const title = document.getElementById("title").value;
         const description = document.getElementById("description").value;
@@ -88,40 +104,23 @@
         const referenced = document.getElementById("referenced").value;
         const configured = document.getElementById("configured").value;
 
+
+        event.preventDefault();
         const createSpotDto = {
             title,
             description,
-            timestamp: new Date(timestamp),
-            longitude: parseInt(longitude, 10),
-            latitude: parseInt(latitude, 10),
+            timestamp: timestamp !== '' ? new Date(timestamp) : undefined,
+            longitude: longitude !== '' ? parseInt(longitude, 10) : undefined,
+            latitude: latitude !== '' ? parseInt(latitude, 10) : undefined,
             redirection,
             referenced: referenced === "true",
             configured: configured === "true",
         }
 
-        const urlEncodedDataPairs = [];
-
-        // Turn the data object into an array of URL-encoded key/value pairs.
-        for (const [name, value] of Object.entries(createSpotDto)) {
-            urlEncodedDataPairs.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-        }
-
-        // Combine the pairs into a single string and replace all %-encoded spaces to
-        // the '+' character; matches the behavior of browser form submissions.
-        const urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
-
-
-        const XHR = new XMLHttpRequest();
-
-        // Set up our request
-        XHR.open('POST', '/api/spots');
-
-        // Add the required HTTP header for form data POST requests
-        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        // Finally, send our data.
-        XHR.send(urlEncodedData);
+        postData("/api/spots", createSpotDto).then((data) => {
+            console.log(data); // JSON data parsed by `data.json()` call
+        });
     });
-    
+
 </script>
 {% endblock %}
