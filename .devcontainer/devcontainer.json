@@ -1,17 +1,9 @@
 {
   "name": "SpotIn Development Container",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
-  "remoteUser": "node",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
   "runArgs": ["-p=3000:3000"],
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "moby": true,
-      "azureDnsAutoDetection": true,
-      "version": "latest",
-      "dockerDashComposeVersion": "v1"
-    }
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
   "customizations": {
     "vscode": {

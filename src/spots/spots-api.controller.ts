@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
   Patch,
@@ -16,12 +17,16 @@ import {
   ApiOperation,
   ApiOkResponse,
   ApiTags,
+  ApiParam,
+  ApiNotFoundResponse,
+  ApiNoContentResponse,
 } from '@nestjs/swagger';
 import { SpotDto } from './dtos/spot.dto';
 import { CreateSpotDto } from './dtos/create-spot.dto';
 import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
 import { Response } from 'express';
+import { MissingOrIncorrectFieldsResponse } from '../common/openapi/responses';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -44,32 +49,52 @@ export class SpotsApiController {
     return Spots;
   }
 
-  // @Get(':uuid')
-  // @ApiOperation({
-  //   summary: 'Create a new user',
-  //   description: 'Create a new user.',
-  //   operationId: 'create',
-  // })
-  // @ApiBody({
-  //   description: "The user's details.",
-  //   type: () => CreateUserDto,
-  // })
-  // @ApiCreatedResponse({
-  //   description: 'User has been successfully created.',
-  //   type: () => UserDto,
-  // })
-  // @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
-  async getSpotApi(@Param('uuid') uuid: string) {
-    const Spot = await this.spotsService.getSpot(uuid);
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get the specified spot',
+    description: 'Get the specified spot.',
+    operationId: 'getSpotApi',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Spot has been successfully retrieved.',
+    type: SpotDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
+  async getSpotApi(@Param('id') id: string) {
+    const spot = await this.spotsService.getSpot(id);
 
-    if (!Spot) {
+    if (!spot) {
       throw new NotFoundException();
     }
 
-    return Spot;
+    return spot;
   }
 
-  @Get(':uuid/redirect')
+  @Get(':id/redirect')
+  @ApiOperation({
+    summary: 'Redirect to the link specified by the spot',
+    description: 'Redirect to the link specified by the spot.',
+    operationId: 'getSpotRedirection',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirection success.',
+    type: SpotDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
   async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
     const spot = await this.spotsService.getSpot(uuid);
 
@@ -79,19 +104,55 @@ export class SpotsApiController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new spot',
+    description: 'Create a new spot.',
+    operationId: 'createSpotApi',
+  })
+  @ApiBody({
+    description: "The spot's details.",
+    type: CreateSpotDto,
+  })
+  @ApiCreatedResponse({
+    description: 'Spot has been successfully created.',
+    type: SpotDto,
+  })
+  @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
   async createSpotApi(@Body() createSpot: CreateSpotDto) {
     const newSpot = await this.spotsService.createSpot(createSpot);
 
     return newSpot;
   }
 
-  @Patch(':uuid')
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update the specified spot',
+    description: 'Update the specified spot.',
+    operationId: 'updateSpotApi',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiBody({
+    description: "The spot's details.",
+    type: UpdateSpotDto,
+  })
+  @ApiOkResponse({
+    description: 'Spot has been successfully updated.',
+    type: SpotDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
+  @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
   async updateSpotApi(
-    @Param('uuid') uuid: string,
+    @Param('id') id: string,
     @Body() updateSpot: UpdateSpotDto,
   ) {
     try {
-      const updatedSpot = await this.spotsService.updateSpot(uuid, updateSpot);
+      const updatedSpot = await this.spotsService.updateSpot(id, updateSpot);
 
       return updatedSpot;
     } catch (error) {
@@ -99,10 +160,27 @@ export class SpotsApiController {
     }
   }
 
-  @Delete(':uuid')
-  async deleteSpotApi(@Param('uuid') uuid: string) {
+  @Delete(':id')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'Delete the specified spot',
+    description: 'Delete the specified spot.',
+    operationId: 'deleteSpotApi',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiNoContentResponse({
+    description: 'Spot has been successfully deleted.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
+  async deleteSpotApi(@Param('id') id: string) {
     try {
-      await this.spotsService.deleteSpot(uuid);
+      await this.spotsService.deleteSpot(id);
     } catch {
       throw new NotFoundException();
     }

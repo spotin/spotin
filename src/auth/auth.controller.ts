@@ -13,13 +13,13 @@ import { LocalAuthGuard } from './local/local-auth.guard';
 import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 
 @ApiTags('Auth')
-@Controller()
+@Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @UseFilters(new UnauthorizedExceptionFilter())
-  @Post('users/login')
+  @Post('login')
   async login(@Request() req: any, @Res() res: Response) {
     const { access_token } = await this.authService.login(req.user);
     return res

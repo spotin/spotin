@@ -37,12 +37,12 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('SpotIn API')
     .setDescription('The SpotIn API description')
-    .setVersion('1.0')
+    .setVersion(process.env.npm_package_version as string)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('swagger-ui', app, document, {
+  SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
       showExtensions: true,
       tagsSorter: 'alpha',
