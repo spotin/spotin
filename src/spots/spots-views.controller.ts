@@ -59,16 +59,6 @@ export class SpotsViewsController {
     return { action: '/spots/create' };
   }
 
-  @Post('create')
-  async createSpotForm(
-    @Body() createSpot: CreateSpotDto,
-    @Res() res: Response,
-  ) {
-    console.log(createSpot);
-    await this.spotsService.createSpot(createSpot);
-    res.render('spots/list');
-  }
-
   // @Post(':uuid/edit')
   // async patchSpot(
   //   @Res() res: Response,
