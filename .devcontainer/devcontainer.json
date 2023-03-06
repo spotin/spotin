@@ -8,12 +8,13 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ronnidc.nunjucks",
-        "Prisma.prisma",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "ms-vsliveshare.vsliveshare"
-      ]
+		"ronnidc.nunjucks",
+		"Prisma.prisma",
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"ms-vsliveshare.vsliveshare",
+		"ms-azuretools.vscode-docker"
+	]
     }
   }
 }
