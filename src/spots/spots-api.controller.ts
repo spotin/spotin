@@ -98,6 +98,10 @@ export class SpotsApiController {
   async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
     const spot = await this.spotsService.getSpot(uuid);
 
+    if (spot?.configured) {
+      res.redirect('/spots/edit');
+    }
+
     if (spot?.redirection) {
       res.redirect(spot.redirection);
     }
