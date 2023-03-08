@@ -44,6 +44,10 @@ npm run start:dev
 npm run start:prod
 ```
 
+## Access the documentation
+
+The API documentation is on <http://localhost:3000/api>.
+
 ## Test
 
 ```bash
