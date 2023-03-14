@@ -8,8 +8,6 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
     "start:debug": "npm run prisma:migrate:dev && nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -19,7 +17,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:migrate:dev": "prisma migrate dev --name spotin --schema src/prisma/schema.prisma",
-    "prisma:generate:dev": "prisma generate --schema src/prisma/schema.prisma"
+    "prisma:generate:dev": "prisma generate --schema src/prisma/schema.prisma",
+    "prisma:migrate:prod": "prisma migrate dev --name spotin --schema dist/prisma/schema.prisma",
+    "prisma:generate:prod": "prisma generate --schema dist/prisma/schema.prisma",
+    "dev": "npm run prisma:migrate:dev && nest start --watch",
+    "start": "npm run prisma:migrate:prod && node dist/main"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

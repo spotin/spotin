@@ -60,3 +60,11 @@ npm run test:e2e
 # test coverage
 npm run test:cov
 ```
+
+## docker
+
+```bash
+docker compose build
+
+docker compose up
+```

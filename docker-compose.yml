@@ -1,10 +1,17 @@
 services:
-  run:
+  database:
     image: postgis/postgis
-    container_name: spotin
     ports:
       - 5432:5432
     environment:
       - POSTGRES_DB=spotin
       - POSTGRES_USER=spotin
       - POSTGRES_PASSWORD=spotin
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgresql://spotin:spotin@database:5432/spotin
