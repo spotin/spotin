@@ -1,6 +1,9 @@
-# compiled output
+# Compiled output
 /dist
 /node_modules
+
+# Environment file
+.env
 
 ## Let's Encrypt
 acme.json

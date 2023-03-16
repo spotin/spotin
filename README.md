@@ -24,11 +24,9 @@ Open this folder in Visual Studio Code, and open it in a dev contianer
 ```bash
 npm install
 
-docker-compose up -d
+cp .env.default .env
 
-npx prisma migrate dev --schema src/prisma/schema.prisma
-
-npx prisma generate --schema src/prisma/schema.prisma
+docker-compose up database -d
 ```
 
 ## Running the app
