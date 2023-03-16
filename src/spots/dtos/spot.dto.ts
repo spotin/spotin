@@ -1,8 +1,4 @@
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDateString,
@@ -11,6 +7,7 @@ import {
   IsUUID,
   Min,
   Max,
+  IsOptional,
 } from 'class-validator';
 import { Spot } from '@prisma/client';
 
@@ -22,16 +19,19 @@ export class SpotDto implements Spot {
 
   // Title of the spot
   @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
   title: string | null;
 
   // Description of the spot
   @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
   description: string | null;
 
   // Latitude of the position of the spot
   @ApiPropertyOptional()
+  @IsOptional()
   @IsNumber()
   @Min(-90)
   @Max(90)
@@ -39,6 +39,7 @@ export class SpotDto implements Spot {
 
   // Longitude of the position of the spot
   @ApiPropertyOptional()
+  @IsOptional()
   @IsNumber()
   @Min(-180)
   @Max(180)
@@ -46,6 +47,7 @@ export class SpotDto implements Spot {
 
   // Redirection when the QR code is accessed
   @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
   redirection: string | null;
 
@@ -65,11 +67,13 @@ export class SpotDto implements Spot {
 
   // Set if the spot will be referenced on the website
   @ApiPropertyOptional({ default: false })
+  @IsOptional()
   @IsBoolean()
   referenced: boolean;
 
   // Set if the spot is already configured or not
   @ApiPropertyOptional({ default: true })
+  @IsOptional()
   @IsBoolean()
   configured: boolean;
 
