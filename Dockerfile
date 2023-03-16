@@ -19,13 +19,13 @@ FROM node:18-alpine as production
 
 WORKDIR /app
 
+# Copy built application from stage 1
+COPY --from=build /app/dist ./dist
+
 # Install production dependencies
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-RUN npm install --production
-
-# Copy built application from stage 1
-COPY --from=build /app/dist ./dist
+RUN npm install --omit=dev
 
 COPY views views
 COPY public public
