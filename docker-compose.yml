@@ -17,6 +17,8 @@ services:
       - 3000:3000
     environment:
       DATABASE_URL: postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${DATABASE_NAME}
+    depends_on:
+      - database
 
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
@@ -47,6 +49,3 @@ services:
       - traefik.http.routers.traefik-external-https.service=api@internal
       - traefik.http.routers.traefik-external-https.tls=true
       - traefik.http.routers.traefik-external-https.tls.certresolver=letsencrypt
-
-
-
