@@ -12,4 +12,4 @@ http:
     spotin:
       loadBalancer:
         servers:
-          - url: 'http://changeme:8080'
+          - url: 'http://changeme:3000'

@@ -8,6 +8,7 @@ services:
       - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+
   application:
     build:
       context: .
@@ -16,6 +17,7 @@ services:
       - 3000:3000
     environment:
       DATABASE_URL: postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${DATABASE_NAME}
+
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
     restart: unless-stopped
