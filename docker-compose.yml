@@ -1,7 +1,7 @@
 services:
   database:
     container_name: ${DATABASE_SERVICE}
-    image: postgis/postgis
+    image: postgis/postgis:${POSTGIS_IMAGE_VERSION:-latest}
     ports:
       - 5432:5432
     environment:
@@ -22,7 +22,6 @@ services:
     labels:
       # Traefik
       - traefik.enable=true
-      - traefik.docker.network=reverse-proxy
       # Middlewares
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
@@ -42,6 +41,20 @@ services:
 
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
+    command:
+      - --log.level=ERROR
+      - --api=true
+      #
+      - --providers.docker=true
+      - --providers.docker.watch=true
+      - --providers.docker.exposedByDefault=false
+      #
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      #
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.email=info@spotin.ch
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json
     restart: unless-stopped
     ports:
       - 80:80
@@ -49,11 +62,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./acme.json:/etc/traefik/acme.json
-      - ./traefik.yaml:/etc/traefik/traefik.yaml
     labels:
       # Traefik
       - traefik.enable=true
-      - traefik.docker.network=reverse-proxy
       # Middlewares
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
