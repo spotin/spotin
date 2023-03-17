@@ -1,7 +1,7 @@
 services:
   database:
     container_name: ${DATABASE_SERVICE}
-    image: postgis/postgis
+    image: postgis/postgis:${POSTGIS_IMAGE_VERSION:-latest}
     ports:
       - 5432:5432
     environment:
@@ -22,6 +22,20 @@ services:
 
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
+    command:
+      - --log.level=ERROR
+      - --api=true
+      #
+      - --providers.docker=true
+      - --providers.docker.watch=true
+      - --providers.docker.exposedByDefault=false
+      #
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      #
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.email=info@spotin.ch
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json
     restart: unless-stopped
     ports:
       - 80:80
@@ -38,14 +52,14 @@ services:
       # Middlewares
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
-      # External HTTP
-      - traefik.http.routers.traefik-external-http.rule=Host(`${TRAEFIK_EXTERNAL_FQDN}`)
-      - traefik.http.routers.traefik-external-http.entrypoints=web
-      - traefik.http.routers.traefik-external-http.service=api@internal
-      - traefik.http.routers.traefik-external-http.middlewares=redirect-to-https
-      # External HTTPS
-      - traefik.http.routers.traefik-external-https.rule=Host(`${TRAEFIK_EXTERNAL_FQDN}`)
-      - traefik.http.routers.traefik-external-https.entrypoints=websecure
-      - traefik.http.routers.traefik-external-https.service=api@internal
-      - traefik.http.routers.traefik-external-https.tls=true
-      - traefik.http.routers.traefik-external-https.tls.certresolver=letsencrypt
+      # # HTTP
+      # - traefik.http.routers.traefik-http.rule=Host(`${TRAEFIK_FQDN}`)
+      # - traefik.http.routers.traefik-http.entrypoints=web
+      # - traefik.http.routers.traefik-http.service=api@internal
+      # - traefik.http.routers.traefik-http.middlewares=redirect-to-https
+      # # HTTPS
+      # - traefik.http.routers.traefik-https.rule=Host(`${TRAEFIK_FQDN}`)
+      # - traefik.http.routers.traefik-https.entrypoints=websecure
+      # - traefik.http.routers.traefik-https.service=api@internal
+      # - traefik.http.routers.traefik-https.tls=true
+      # - traefik.http.routers.traefik-https.tls.certresolver=letsencrypt
