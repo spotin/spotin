@@ -21,13 +21,13 @@ FROM node:18-alpine as production
 # Work directory
 WORKDIR /app
 
-# Copy built application from stage 1
-COPY --from=build /app/dist ./dist
-
 # Install production dependencies
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 RUN npm ci --omit=dev
+
+# Copy built application from stage 1
+COPY --from=build /app/dist ./dist
 
 COPY views views
 COPY public public

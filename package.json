@@ -21,7 +21,7 @@
     "prisma:migrate:dev": "prisma migrate dev --name spotin --schema src/prisma/schema.prisma",
     "prisma:generate:dev": "prisma generate --schema src/prisma/schema.prisma",
     "prisma:migrate:prod": "prisma migrate dev --name spotin --schema dist/prisma/schema.prisma",
-    "prisma:generate:prod": "prisma generate --schema dist/prisma/schema.prisma",
+    "prisma:generate:prod": "prisma generate --schema dist/prisma/schema.prisma"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
