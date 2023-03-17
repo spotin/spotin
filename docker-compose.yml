@@ -42,16 +42,17 @@ services:
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
     command:
+      # Global
       - --log.level=ERROR
       - --api=true
-      #
+      # Docker
       - --providers.docker=true
       - --providers.docker.watch=true
       - --providers.docker.exposedByDefault=false
-      #
+      # Entrypoints
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      #
+      # Certificates
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
       - --certificatesresolvers.letsencrypt.acme.email=info@spotin.ch
       - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json
