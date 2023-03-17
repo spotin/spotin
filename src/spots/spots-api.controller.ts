@@ -95,8 +95,8 @@ export class SpotsApiController {
   @ApiNotFoundResponse({
     description: 'Spot has not been found.',
   })
-  async getSpotRedirection(@Res() res: Response, @Param('uuid') uuid: string) {
-    const spot = await this.spotsService.getSpot(uuid);
+  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
+    const spot = await this.spotsService.getSpot(id);
 
     if (spot?.configured) {
       res.redirect('/spots/edit');
