@@ -19,6 +19,26 @@ services:
       DATABASE_URL: postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${DATABASE_NAME}
     depends_on:
       - database
+    labels:
+      # Traefik
+      - traefik.enable=true
+      - traefik.docker.network=reverse-proxy
+      # Middlewares
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
+      # HTTP
+      - traefik.http.routers.application-external-http.rule=Host(`${APPLICATION_EXTERNAL_FQDN}`)
+      - traefik.http.routers.application-external-http.entrypoints=web
+      - traefik.http.routers.application-external-http.middlewares=redirect-to-https
+      - traefik.http.routers.application-external-http.service=application
+      # HTTPS
+      - traefik.http.routers.application-external-https.rule=Host(`${APPLICATION_EXTERNAL_FQDN}`)
+      - traefik.http.routers.application-external-https.entrypoints=websecure
+      - traefik.http.routers.application-external-https.tls=true
+      - traefik.http.routers.application-external-https.tls.certresolver=letsencrypt
+      - traefik.http.routers.application-external-https.service=application
+      # Service
+      - traefik.http.services.application.loadbalancer.server.port=3000
 
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
@@ -30,7 +50,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./acme.json:/etc/traefik/acme.json
       - ./traefik.yaml:/etc/traefik/traefik.yaml
-      - ./traefik-dynamic.yaml:/etc/traefik/traefik-dynamic.yaml
     labels:
       # Traefik
       - traefik.enable=true
@@ -38,14 +57,3 @@ services:
       # Middlewares
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
-      # External HTTP
-      - traefik.http.routers.traefik-external-http.rule=Host(`${TRAEFIK_EXTERNAL_FQDN}`)
-      - traefik.http.routers.traefik-external-http.entrypoints=web
-      - traefik.http.routers.traefik-external-http.service=api@internal
-      - traefik.http.routers.traefik-external-http.middlewares=redirect-to-https
-      # External HTTPS
-      - traefik.http.routers.traefik-external-https.rule=Host(`${TRAEFIK_EXTERNAL_FQDN}`)
-      - traefik.http.routers.traefik-external-https.entrypoints=websecure
-      - traefik.http.routers.traefik-external-https.service=api@internal
-      - traefik.http.routers.traefik-external-https.tls=true
-      - traefik.http.routers.traefik-external-https.tls.certresolver=letsencrypt
