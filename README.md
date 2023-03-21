@@ -26,7 +26,7 @@ npm install
 
 cp .env.default .env
 
-docker-compose up database -d
+docker-compose up -d database
 ```
 
 ## Running the app

@@ -59,16 +59,6 @@ export class SpotsViewsController {
     return { action: '/spots/create' };
   }
 
-  // @Post(':uuid/edit')
-  // async patchSpot(
-  //   @Res() res: Response,
-  //   @Param('uuid') uuid: string,
-  //   @Body() updateSpot: UpdateSpotDto,
-  // ) {
-  //   const updatedSpot = await this.spotsService.updateSpot(uuid, updateSpot);
-
-  //   res.redirect('/spots/list');
-  // }
   @UseGuards(JwtAuthGuard)
   @Get(':uuid')
   @UseFilters(new UnauthorizedExceptionFilter())
@@ -76,7 +66,7 @@ export class SpotsViewsController {
     const spot = await this.spotsService.getSpot(uuid);
 
     if (spot) {
-      const redirection = `http://192.168.1.183:3000/spots/${spot.id}/redirect`;
+      const redirection = `http://192.168.1.192:3000/api/spots/${spot.id}/redirect`;
 
       if (redirection) {
         qrcode
