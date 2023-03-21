@@ -51,19 +51,11 @@ export class SpotDto implements Spot {
   @IsString()
   redirection: string | null;
 
-  // @ApiProperty({
-  //   oneOf: [
-  //     // {
-  //     //   $ref: getSchemaPath('ProjectSubsetDto'),
-  //     // },
-  //     {
-  //       description: 'Id of the user linked to the Spot',
-  //       type: 'string',
-  //       format: 'uuid',
-  //     },
-  //   ],
-  // })
-  // userId: string | null;
+  // User who created the spot
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  userId: string | null;
 
   // Set if the spot will be referenced on the website
   @ApiPropertyOptional({ default: false })
