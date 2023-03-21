@@ -51,14 +51,14 @@
 
     <label for="referenced">
         Referenced
-        <input id="referenced" type="checkbox" name="referenced" role="switch" value="true" {{ ' checked' if values.referenced else '' }} />
+        <input id="referenced" type="checkbox" name="referenced" value="true" {% if values.referenced %}checked{% endif %}>
     </label>
 
     <label for="configured">
         Configured
-        <input id="configured" type="checkbox" name="configured" role="switch" value="true" {{ ' checked' if values.configured else '' }} />
+        <input id="configured" type="checkbox" name="configured" value="true" {% if values.configured %}checked{% endif %}>
     </label>
-    
+
     <br>
 
     <button type="submit"><i class="fas fa-save"></i> Save</button>
@@ -96,19 +96,20 @@
         const longitude = document.getElementById("longitude").value;
         const latitude = document.getElementById("latitude").value;
         const redirection = document.getElementById("redirection").value;
-        const referenced = document.getElementById("referenced").value;
-        const configured = document.getElementById("configured").value;
+        const referenced = document.getElementById("referenced").checked;
+        const configured = document.getElementById("configured").checked;
 
-
+        // Stop the form from submitting since we’re handling that with AJAX.
         event.preventDefault();
+
         const createSpotDto = {
             title,
             description,
             longitude: longitude !== '' ? parseInt(longitude, 10) : undefined,
             latitude: latitude !== '' ? parseInt(latitude, 10) : undefined,
             redirection,
-            referenced: referenced === "true",
-            configured: false,
+            referenced: referenced,
+            configured: configured,
         }
 
         postData(url, createSpotDto).then((data) => {
