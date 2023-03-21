@@ -66,11 +66,19 @@
 <script>
     const form = document.querySelector("form");
 
+    const action = "{{ action }}";
+    let url = "/api/spots";
+
+    const uuid = "{{ uuid }}";
+
+    if(action === 'PATCH') {
+        url = `/api/spots/${uuid}`;
+    }
 
     async function postData(url = "", data) {
         // Default options are marked with *
         const response = await fetch(url, {
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            method: action, // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             credentials: "same-origin", // include, *same-origin, omit
@@ -103,9 +111,7 @@
             configured: false,
         }
 
-        postData("/api/spots", createSpotDto).then((data) => {
-            console.log(data); // JSON data parsed by `data.json()` call
-
+        postData(url, createSpotDto).then((data) => {
             location.replace('/spots/list');
         });
 

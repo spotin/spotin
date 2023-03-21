@@ -50,13 +50,13 @@ export class SpotsViewsController {
   @Render('spots/form')
   async editSpot(@Param('uuid') uuid: string) {
     const spot = await this.spotsService.getSpot(uuid);
-    return { values: spot, action: `${uuid}/edit` };
+    return { values: spot, action: 'PATCH', uuid };
   }
 
   @Get('create')
   @Render('spots/form')
   createSpot() {
-    return { action: '/spots/create' };
+    return { action: 'POST' };
   }
 
   @UseGuards(JwtAuthGuard)
