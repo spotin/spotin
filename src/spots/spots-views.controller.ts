@@ -68,20 +68,18 @@ export class SpotsViewsController {
     if (spot) {
       const redirection = `http://192.168.1.192:3000/api/spots/${spot.id}/redirect`;
 
-      if (redirection) {
-        qrcode
-          .toDataURL(redirection)
-          .then((url) => {
-            res.render('spots/[uuid]', {
-              title: 'Spot',
-              spot: spot,
-              qrcode: url,
-            });
-          })
-          .catch((err) => {
-            console.error(err);
+      qrcode
+        .toDataURL(redirection)
+        .then((url) => {
+          res.render('spots/[uuid]', {
+            title: 'Spot',
+            spot: spot,
+            qrcode: url,
           });
-      }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }
 }
