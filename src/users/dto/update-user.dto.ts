@@ -6,4 +6,5 @@ export class UpdateUserDto extends OmitType(UserDto, [
   'createdAt',
   'updatedAt',
   'deletedAt',
+  'spots',
 ] as const) {}

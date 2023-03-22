@@ -1,13 +1,28 @@
-import { Get, Controller, Render, Post, UseGuards } from '@nestjs/common';
+import { Get, Controller, Render, Post, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from 'src/auth/local/local-auth.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UsersService } from './users.service';
 
 @ApiTags('Views')
-@Controller('users')
+@Controller()
 export class UsersViewsController {
-  @Get('login')
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get('users/login')
   @Render('users/login')
   root() {
     return {};
+  }
+
+  @Get('users/signup')
+  @Render('users/signup')
+  signup() {
+    return {};
+  }
+
+  @Post('users/signup')
+  @Render('users/login')
+  async register(@Body() createUserDto: CreateUserDto) {
+    await this.usersService.create(createUserDto);
   }
 }

@@ -6,8 +6,6 @@ import {
   Param,
   UseFilters,
   Res,
-  Post,
-  Body,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth-guards';
@@ -15,7 +13,6 @@ import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.
 import { SpotsService } from './spots.service';
 import * as qrcode from 'qrcode';
 import { Response } from 'express';
-import { CreateSpotDto } from './dtos/create-spot.dto';
 
 @ApiTags('Views')
 @Controller('spots')
