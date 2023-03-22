@@ -66,6 +66,13 @@
 <script>
     const form = document.querySelector("form");
 
+    navigator.geolocation.getCurrentPosition(position => {
+    const { latitude, longitude } = position.coords;
+    console.log(latitude, longitude);
+    document.getElementById("latitude").value = latitude;
+    document.getElementById("longitude").value = longitude;
+});
+
     const action = "{{ action }}";
     let url = "/api/spots";
 
