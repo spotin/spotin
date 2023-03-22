@@ -26,12 +26,12 @@ services:
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       # HTTP
-      - traefik.http.routers.application-external-http.rule=Host(`${APPLICATION_EXTERNAL_FQDN}`)
+      - traefik.http.routers.application-external-http.rule=Host(`${SPOT_IN_BACKEND_URL}`)
       - traefik.http.routers.application-external-http.entrypoints=web
       - traefik.http.routers.application-external-http.middlewares=redirect-to-https
       - traefik.http.routers.application-external-http.service=application
       # HTTPS
-      - traefik.http.routers.application-external-https.rule=Host(`${APPLICATION_EXTERNAL_FQDN}`)
+      - traefik.http.routers.application-external-https.rule=Host(`${SPOT_IN_BACKEND_URL}`)
       - traefik.http.routers.application-external-https.entrypoints=websecure
       - traefik.http.routers.application-external-https.tls=true
       - traefik.http.routers.application-external-https.tls.certresolver=letsencrypt

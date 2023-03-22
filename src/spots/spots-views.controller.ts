@@ -13,11 +13,15 @@ import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.
 import { SpotsService } from './spots.service';
 import * as qrcode from 'qrcode';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('Views')
 @Controller('spots')
 export class SpotsViewsController {
-  constructor(private readonly spotsService: SpotsService) {}
+  constructor(
+    private readonly spotsService: SpotsService,
+    readonly configService: ConfigService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('list')
@@ -63,7 +67,8 @@ export class SpotsViewsController {
     const spot = await this.spotsService.getSpot(uuid);
 
     if (spot) {
-      const redirection = `http://192.168.1.192:3000/api/spots/${spot.id}/redirect`;
+      const backendUrl = this.configService.get('SPOT_IN_BACKEND_URL');
+      const redirection = `${backendUrl}/api/spots/${spot.id}/redirect`;
 
       qrcode
         .toDataURL(redirection)
