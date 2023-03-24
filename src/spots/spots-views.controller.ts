@@ -39,6 +39,13 @@ export class SpotsViewsController {
     return { spots };
   }
 
+  @Get('govtech')
+  @Render('one-page/index')
+  async getOnePage() {
+    const spots = await this.spotsService.getSpots();
+    return { spots };
+  }
+
   @Get(':uuid/delete')
   @Render('spots/list')
   async deleteSpot(@Param('uuid') uuid: string) {
