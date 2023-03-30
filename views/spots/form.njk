@@ -1,0 +1,129 @@
+{% extends "layout.njk" %}
+
+{% block body %}
+<h2><i class="fas fa-map-marker-alt"></i> {{ title }} </h2>
+<form novalidate>
+    <label for="title">
+        Title
+        {% if errors.title %}
+        <span class="error">(cannot be empty)</span>
+        <input name="title" id="title" placeholder="Title" value="{{ values.title }}" aria-invalid="true">
+        {% else %}
+        <input name="title" id="title" placeholder="Title" value="{{ values.title }}">
+        {% endif %}
+    </label>
+
+    <label for="description">
+        Description
+        <textarea id="description" type="text" name="description" placeholder="Description">{{ values.description }}</textarea>
+    </label>
+
+    <div class="grid">
+        <label for="longitude">
+            Longitude
+            {% if errors.coordinates %}
+            <span class="error">(between -180.0 and 180)</span>
+            <input id="longitude" type="number" name="longitude" placeholder="Longitude"
+                value="{{ values.longitude }}" aria-invalid="true">
+            {% else %}
+                <input id="longitude" type="number" name="longitude" placeholder="Longitude"
+                value="{{ values.longitude }}">
+            {% endif %}
+        </label>
+        <label for="latitude">
+            Latitude
+            {% if errors.coordinates %}
+            <span class="error">(between -90.0 and 90)</span>
+            <input id="latitude" type="number" name="latitude" placeholder="Latitude"
+                value="{{ values.latitude }}" aria-invalid="true">
+            {% else %}
+                <input id="latitude" type="number" name="latitude" placeholder="Latitude"
+                value="{{ values.latitude }}">
+            {% endif %}
+        </label>
+    </div>
+
+    <label for="redirection">
+        Redirection URL
+        <input id="redirection" type="text" name="redirection" placeholder="http(s)://"
+        value="{{ values.redirection }}">
+    </label>
+
+    <label for="referenced">
+        Referenced
+        <input id="referenced" type="checkbox" name="referenced" value="true" {% if values.referenced %}checked{% endif %}>
+    </label>
+
+    <label for="configured">
+        Configured
+        <input id="configured" type="checkbox" name="configured" value="true" {% if values.configured %}checked{% endif %}>
+    </label>
+
+    <br>
+
+    <button type="submit"><i class="fas fa-save"></i> Save</button>
+</form>
+<script>
+    const form = document.querySelector("form");
+
+    navigator.geolocation.getCurrentPosition(position => {
+    const { latitude, longitude } = position.coords;
+    console.log(latitude, longitude);
+    document.getElementById("latitude").value = latitude;
+    document.getElementById("longitude").value = longitude;
+});
+
+    const action = "{{ action }}";
+    let url = "/api/spots";
+
+    const uuid = "{{ uuid }}";
+
+    if(action === 'PATCH') {
+        url = `/api/spots/${uuid}`;
+    }
+
+    async function postData(url = "", data) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: action, // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    form.addEventListener("submit", (event) => {
+        const title = document.getElementById("title").value;
+        const description = document.getElementById("description").value;
+        const longitude = document.getElementById("longitude").value;
+        const latitude = document.getElementById("latitude").value;
+        const redirection = document.getElementById("redirection").value;
+        const referenced = document.getElementById("referenced").checked;
+        const configured = document.getElementById("configured").checked;
+
+        // Stop the form from submitting since we’re handling that with AJAX.
+        event.preventDefault();
+
+        const createSpotDto = {
+            title,
+            description,
+            longitude: longitude !== '' ? longitude : undefined,
+            latitude: latitude !== '' ? latitude : undefined,
+            redirection,
+            referenced: referenced,
+            configured: configured,
+        }
+
+        postData(url, createSpotDto).then((data) => {
+            location.replace('/spots/list');
+        });
+
+    });
+
+</script>
+{% endblock %}

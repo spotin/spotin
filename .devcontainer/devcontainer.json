@@ -1,7 +1,21 @@
 {
-	"name": "SpotIn Development Container",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
-	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
-	}
+  "name": "SpotIn Development Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+  "runArgs": ["-p=3000:3000"],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+		"ronnidc.nunjucks",
+		"Prisma.prisma",
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"ms-vsliveshare.vsliveshare",
+		"ms-azuretools.vscode-docker",
+		"GitHub.copilot"
+	]
+    }
+  }
 }

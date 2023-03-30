@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Spot {
+  id          String    @id @default(uuid())
+  title       String?   @db.VarChar(255)
+  description String?
+  latitude    Float?    @db.DoublePrecision
+  longitude   Float?    @db.DoublePrecision
+  redirection String?   @db.VarChar(255)
+  referenced  Boolean   @default(false)
+  configured  Boolean   @default(true)
+  userId      String?   @map(name: "user_id")
+  createdAt   DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map(name: "updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
+
+  users User? @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map(name: "spots")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  username  String    @unique @db.VarChar(255)
+  email     String?   @db.VarChar(255)
+  password  String?   @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map(name: "updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
+  spots     Spot[]
+
+  @@map(name: "users")
+}

@@ -1,0 +1,25 @@
+{% extends "layout.njk" %}
+
+{% block body %}
+<article class="resource">
+    <img src="{{ qrcode }}" alt="QRCode" class="qrcode">
+    <hgroup class="head">
+        <h1 class="title">{{ spot.title }}</h1>
+        <h2 class="uuid">
+            {% if spot.redirection %}
+            <i class="fas fa-external-link-alt"></i> <a href="{{ spot.redirection }}" target="_blank" rel="noreferrer">{{ spot.redirection }}</a>
+            {% else %}
+            <i class="fas fa-link"></i> <a href="/spots/{{ spot.uuid }}">{{ spot.uuid }}</a>
+            {% endif %}
+        </h2>
+    </hgroup>
+    {% if spot.description %}
+    <p class="description">{{ spot.description }}</p>
+    {% endif %}
+    {% if spot.coordinates %}
+    <div class='map'
+            data-longitude="{{ spot.coordinates.coordinates[0] }}"
+            data-latitude="{{ spot.coordinates.coordinates[1] }}"></div>
+    {% endif %}
+</article>
+{% endblock %}

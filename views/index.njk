@@ -1,0 +1,25 @@
+{% extends "layout.njk" %}
+
+{% block body %}
+<div>
+    <h1><i class="fas fa-map-marker-alt"></i> A registry for <span id="keyword">spots</span></h1>
+    <script>
+        let count = 0;
+        let words = ["events", "signals", "places", "spots"]; 
+        setInterval(function () { 
+            count++;
+            document.getElementById("keyword").innerHTML = words[count % words.length];
+        }, 2000);
+    </script>
+
+    <p><a class="outline" href="/spots/latest" role="button"><i class="fas fa-list"></i> Latest spots</a></p>
+    <p>
+        <b>SpotIn</b> is a place for <b>registering</b> spots. Spots can take place in the
+        <b>virtual</b> or in the <b>physical</b> world. They capture the context and the circumstances that form the
+        setting for an event. Each spot receives a <b>stable Uniform Resource Identifier (URI)</b> that can be
+        used for <b>referencing</b> purposes. Spots can contain arbitrary <b>metadata</b> describing a context and
+        circumstances. Additionally, spots can <b>redirect</b> the user to the original source of information.
+        Once created, spots are searchable by places and by keywords.
+    </p>
+</div>
+{% endblock %}
