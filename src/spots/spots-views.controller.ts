@@ -7,7 +7,13 @@ import {
   UseFilters,
   Res,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth-guards';
 import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 import { SpotsService } from './spots.service';
@@ -27,6 +33,14 @@ export class SpotsViewsController {
   @Get('list')
   @UseFilters(new UnauthorizedExceptionFilter())
   @Render('spots/list')
+  @ApiOperation({
+    summary: 'Render the spots list page',
+    description: 'Render the spots list page.',
+    operationId: 'list',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
   async root() {
     const spots = await this.spotsService.getSpots();
     return { spots };
@@ -34,6 +48,14 @@ export class SpotsViewsController {
 
   @Get('latest')
   @Render('spots/latest')
+  @ApiOperation({
+    summary: 'Render the latest spots page',
+    description: 'Render the latest spots page.',
+    operationId: 'latest',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
   async getLatestSpots() {
     const spots = await this.spotsService.getPublicSpots();
     return { spots };
@@ -41,6 +63,14 @@ export class SpotsViewsController {
 
   @Get('govtech')
   @Render('one-page/index')
+  @ApiOperation({
+    summary: 'Render the one page page',
+    description: 'Render the one page page.',
+    operationId: 'onePage',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
   async getOnePage() {
     const spots = await this.spotsService.getSpots();
     return { spots };
@@ -48,6 +78,22 @@ export class SpotsViewsController {
 
   @Get(':uuid/delete')
   @Render('spots/list')
+  @ApiOperation({
+    summary: 'Render the spots list page while deleting a spot',
+    description: 'Render the spots list page while deleting a spot.',
+    operationId: 'deleteAndList',
+  })
+  @ApiParam({
+    name: 'uuid',
+    description: 'Spot UUID',
+    type: String,
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot not found.',
+  })
   async deleteSpot(@Param('uuid') uuid: string) {
     await this.spotsService.deleteSpot(uuid);
     const spots = await this.spotsService.getSpots();
@@ -56,6 +102,22 @@ export class SpotsViewsController {
 
   @Get(':uuid/edit')
   @Render('spots/form')
+  @ApiOperation({
+    summary: 'Render the spots form page while editing a spot',
+    description: 'Render the spots form page while editing a spot.',
+    operationId: 'editAndForm',
+  })
+  @ApiParam({
+    name: 'uuid',
+    description: 'Spot UUID',
+    type: String,
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot not found.',
+  })
   async editSpot(@Param('uuid') uuid: string) {
     const spot = await this.spotsService.getSpot(uuid);
     return { values: spot, action: 'PATCH', uuid };
@@ -63,6 +125,14 @@ export class SpotsViewsController {
 
   @Get('create')
   @Render('spots/form')
+  @ApiOperation({
+    summary: 'Render the spots form page',
+    description: 'Render the spots form page.',
+    operationId: 'form',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
   createSpot() {
     return { action: 'POST' };
   }
@@ -70,6 +140,22 @@ export class SpotsViewsController {
   @UseGuards(JwtAuthGuard)
   @Get(':uuid')
   @UseFilters(new UnauthorizedExceptionFilter())
+  @ApiOperation({
+    summary: 'Render the spot page',
+    description: 'Render the spot page.',
+    operationId: 'spot',
+  })
+  @ApiParam({
+    name: 'uuid',
+    description: 'Spot UUID',
+    type: String,
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot not found.',
+  })
   async getSpot(@Res() res: Response, @Param('uuid') uuid: string) {
     const spot = await this.spotsService.getSpot(uuid);
 
