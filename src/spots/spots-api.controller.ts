@@ -49,6 +49,22 @@ export class SpotsApiController {
     return Spots;
   }
 
+  @Get('public')
+  @ApiOperation({
+    summary: 'Get the public spots',
+    description: 'Get the public spots.',
+    operationId: 'getPublicSpotsApi',
+  })
+  @ApiOkResponse({
+    description: 'Spots have been successfully retrieved.',
+    type: [SpotDto],
+  })
+  async getPublicSpotsApi() {
+    const Spots = await this.spotsService.getPublicSpots();
+
+    return Spots;
+  }
+
   @Get(':id')
   @ApiOperation({
     summary: 'Get the specified spot',

@@ -35,7 +35,7 @@ export class SpotsViewsController {
   @Get('latest')
   @Render('spots/latest')
   async getLatestSpots() {
-    const spots = await this.spotsService.getSpots();
+    const spots = await this.spotsService.getPublicSpots();
     return { spots };
   }
 

@@ -12,6 +12,15 @@ export class SpotsService {
     return await this.prisma.spot.findMany();
   }
 
+  /** List public spots */
+  async getPublicSpots() {
+    return await this.prisma.spot.findMany({
+      where: {
+        referenced: true,
+      },
+    });
+  }
+
   /** Read a spot by id */
   async getSpot(spotId: string) {
     const slideshow = await this.prisma.spot.findFirst({
