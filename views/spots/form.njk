@@ -112,8 +112,8 @@
         const createSpotDto = {
             title,
             description,
-            longitude: longitude !== '' ? longitude : undefined,
-            latitude: latitude !== '' ? latitude : undefined,
+            longitude: longitude !== '' ? parseFloat(longitude) : undefined,
+            latitude: latitude !== '' ? parseFloat(latitude) : undefined,
             redirection,
             referenced: referenced,
             configured: configured,
