@@ -1,12 +1,81 @@
 services:
-  run:
-    image: postgis/postgis:latest
-    container_name: spotin
+  database:
+    container_name: ${DATABASE_SERVICE}
+    image: postgres:${POSTGRES_IMAGE_VERSION:-latest}
     env_file:
       - .env
     ports:
-      - '${RDS_PORT}:${RDS_PORT}'
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
     environment:
-      - POSTGRES_DB=${RDS_DB_NAME}
-      - POSTGRES_USER=${RDS_USERNAME}
-      - POSTGRES_PASSWORD=${RDS_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      database:
+        condition: service_healthy
+    labels:
+      # Traefik
+      - traefik.enable=true
+      # Middlewares
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
+      # HTTP
+      - traefik.http.routers.application-external-http.rule=Host(`${SPOT_IN_BACKEND_URL}`)
+      - traefik.http.routers.application-external-http.entrypoints=web
+      - traefik.http.routers.application-external-http.middlewares=redirect-to-https
+      - traefik.http.routers.application-external-http.service=application
+      # HTTPS
+      - traefik.http.routers.application-external-https.rule=Host(`${SPOT_IN_BACKEND_URL}`)
+      - traefik.http.routers.application-external-https.entrypoints=websecure
+      - traefik.http.routers.application-external-https.tls=true
+      - traefik.http.routers.application-external-https.tls.certresolver=letsencrypt
+      - traefik.http.routers.application-external-https.service=application
+      # Service
+      - traefik.http.services.application.loadbalancer.server.port=3000
+
+  traefik:
+    env_file:
+      - .env
+    image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
+    command:
+      # Global
+      - --log.level=ERROR
+      - --api=true
+      # Docker
+      - --providers.docker=true
+      - --providers.docker.watch=true
+      - --providers.docker.exposedByDefault=false
+      # Entrypoints
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # Certificates
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.email=info@spotin.ch
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./acme.json:/etc/traefik/acme.json
+    labels:
+      # Traefik
+      - traefik.enable=true
+      # Middlewares
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
