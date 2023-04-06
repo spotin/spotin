@@ -4,6 +4,10 @@
 
 It has a better looking interface than plain MkDocs and offers various features to help organize your documentation with [Markdown](../about-markdown/index.md).
 
+## How and why do we use Material for MkDocs
+
+_TODO_
+
 ## Resources and alternatives
 
 These resources and alternatives are related to the current item (in alphabetical order).

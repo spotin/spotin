@@ -6,7 +6,7 @@ Guaranteeing the integrity of a development environment can be sometimes tricky.
 
 !!! warning
 
-	Make sure to have Visual Studio Code and Docker installed. You can check the [Install and configure Visual Studio Code](../install-and-configure-visual-studio-code/index.md) and [Install and configure Docker](../install-and-configure-docker/index.md) tutorials if needed.
+    Make sure to have Visual Studio Code and Docker installed. You can check the [Install and configure Visual Studio Code](../install-and-configure-visual-studio-code/index.md) and [Install and configure Docker](../install-and-configure-docker/index.md) tutorials if needed.
 
 ### Install the Dev Containers extension
 
@@ -14,13 +14,13 @@ First, you need to find the **Dev Containers** extension in Visual Studio Code, 
 
 !!! quote
 
-	You can browse extensions from within Visual Studio Code. Bring up the **Extensions** view by clicking on the **Extensions** icon in the **Activity Bar** on the left side of **Visual Studio Code** or use the shortcut command: **View > Extensions**.
+    You can browse extensions from within Visual Studio Code. Bring up the **Extensions** view by clicking on the **Extensions** icon in the **Activity Bar** on the left side of **Visual Studio Code** or use the shortcut command: **View > Extensions**.
 
 Once you find it, you can install it.
 
 !!! quote
 
-	To install an extension, select the **Install** button. Once the installation is complete, the **Install** button will change to the **Manage** gear button.
+    To install an extension, select the **Install** button. Once the installation is complete, the **Install** button will change to the **Manage** gear button.
 
 ### Create the working directory
 
@@ -30,7 +30,7 @@ First create an empty folder on your personal computer. Then open Visual Studio 
 
 Open the Visual Studio Code command Palette with **View > Command palette...** and type the **Dev Containers: Add Dev Container Configuration Files...** command and select it.
 
-Select **Show All Definitions..** and type **Node** and select the container configuration template **Node.js** from *csutter*. Select the default image tag (**18** when this tutorial was written). And then click on **OK**. Your working directory should looks like that.
+Select **Show All Definitions..** and type **Node** and select the container configuration template **Node.js** from _csutter_. Select the default image tag (**18** when this tutorial was written). And then click on **OK**. Your working directory should looks like that.
 
 ```
 .

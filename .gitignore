@@ -8,16 +8,16 @@
 .cache
 
 # Output directory
-/mkdocs-output
+.mkdocs
 
 ## Node
 
 # Logs
-/logs
-/*.log
+logs
+*.log
 
 # Dependency directories
-/node_modules
+node_modules
 
 # NestJS build / generated output
 /dist

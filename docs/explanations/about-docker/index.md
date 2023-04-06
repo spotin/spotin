@@ -4,7 +4,11 @@ As the website of [Docker](https://www.docker.com/) mentions:
 
 !!! quote
 
-	Docker is a platform designed to help developers build, share, and run modern applications. We handle the tedious setup, so you can focus on the code.
+    Docker is a platform designed to help developers build, share, and run modern applications. We handle the tedious setup, so you can focus on the code.
+
+## How and why do we use Docker
+
+_TODO_
 
 ## Resources and alternatives
 

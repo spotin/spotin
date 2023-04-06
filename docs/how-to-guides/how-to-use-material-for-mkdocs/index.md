@@ -6,37 +6,37 @@ Install [Material for MkDocs](../../explanations/about-material-for-mkdocs/index
 
 === ":simple-linux: Linux"
 
-	```sh
-	TODO
-	```
+    ```sh
+    TODO
+    ```
 
 === ":simple-apple: macOS"
 
-	```sh
-	# Install Material for MkDocs and all its extensions
-	pip3 install \
-		cairosvg \
-		mkdocs-git-revision-date-localized-plugin \
-		mkdocs-glightbox \
-		mkdocs-material \
-		mkdocs-minify-plugin \
-		pillow
+    ```sh
+    # Install Material for MkDocs and all its extensions
+    pip3 install \
+    	cairosvg \
+    	mkdocs-git-revision-date-localized-plugin \
+    	mkdocs-glightbox \
+    	mkdocs-material \
+    	mkdocs-minify-plugin \
+    	pillow
 
-	# Install Material for MkDocs dependencies
-	brew install \
-		cairo \
-		freetype \
-		libffi \
-		libjpeg \
-		libpng \
-		zlib
-	```
+    # Install Material for MkDocs dependencies
+    brew install \
+    	cairo \
+    	freetype \
+    	libffi \
+    	libjpeg \
+    	libpng \
+    	zlib
+    ```
 
 === ":simple-windows: Windows"
 
-	```sh
-	TODO
-	```
+    ```sh
+    TODO
+    ```
 
 ## Start the website for development
 
@@ -47,7 +47,7 @@ mkdocs serve
 ## Build the website for production
 
 ```sh
-mkdocs build --strict --site-dir public
+mkdocs build
 ```
 
 ## Configuration

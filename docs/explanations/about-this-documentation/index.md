@@ -4,6 +4,10 @@ This documentation is based on the [Diátaxis Documentation Framework](https://d
 
 It intends to help new visitors and/or contributors to understand the project and do commons tasks about it.
 
+## How and why do we use Diátaxis Documentation Framework
+
+_TODO_
+
 ## Resources and alternatives
 
 These resources and alternatives are related to the current item (in alphabetical order).

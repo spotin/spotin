@@ -8,39 +8,39 @@ Visual Studio Code can be installed with the following methods.
 
 === ":simple-linux: Linux"
 
-	You can follow [the official documentation](https://code.visualstudio.com/docs/setup/linux) depending on your Linux distribution.
+    You can follow [the official documentation](https://code.visualstudio.com/docs/setup/linux) depending on your Linux distribution.
 
-	For Debian, you can execute the following commands to install Visual Studio Code.
+    For Debian, you can execute the following commands to install Visual Studio Code.
 
-	```sh
-	# Update the available package lists
-	sudo apt update
+    ```sh
+    # Update the available package lists
+    sudo apt update
 
-	# Install required packages to add Visual Studio Code's repository
-	sudo apt install \
-		ca-certificates \
-		curl \
-		gnupg \
-		lsb-release
+    # Install required packages to add Visual Studio Code's repository
+    sudo apt install \
+    	ca-certificates \
+    	curl \
+    	gnupg \
+    	lsb-release
 
-	# Add Docker's official GPG key
-	sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /etc/apt/keyrings/packages.microsoft.gpg
+    # Add Docker's official GPG key
+    sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /etc/apt/keyrings/packages.microsoft.gpg
 
-	# Set up the repository
-	echo \
-	"deb [arch=$(dpkg --print-architecture) signed-by=signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code \
-	$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+    # Set up the repository
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
 
-	# Update the available package lists
-	sudo apt update
+    # Update the available package lists
+    sudo apt update
 
-	# Install Visual Studio Code
-	sudo apt install code
-	```
+    # Install Visual Studio Code
+    sudo apt install code
+    ```
 
 === ":simple-apple: macOS + :simple-windows: Windows"
 
-	Download and install Visual Studio Code from [the official website](https://code.visualstudio.com/). You can then start Visual Studio Code and you should be good to go.
+    Download and install Visual Studio Code from [the official website](https://code.visualstudio.com/). You can then start Visual Studio Code and you should be good to go.
 
 ## Summary
 

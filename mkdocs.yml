@@ -2,6 +2,7 @@ repo_url: https://github.com/spotin/spotin
 repo_name: spotin/spotin
 site_name: SpotIn Documentation
 site_author: SpotIn contributors
+site_url: https://spotin.github.io/spotin/
 site_description: >-
   Documentation website for SpotIn - Spots that take place in the virtual or in the physical world.
 copyright: Copyright &copy; 2022 - 2023 SpotIn
@@ -29,9 +30,13 @@ nav:
       - About Dev Containers: explanations/about-dev-containers/index.md
       - About Docker: explanations/about-docker/index.md
       - About Git: explanations/about-git/index.md
+      - About GitHub: explanations/about-github/index.md
       - About Markdown: explanations/about-markdown/index.md
       - About Material for MkDocs: explanations/about-material-for-mkdocs/index.md
+      - About Node.js: explanations/about-nodejs/index.md
+      - About npm: explanations/about-npm/index.md
       - About Visual Studio Code: explanations/about-visual-studio-code/index.md
+site_dir: .mkdocs
 theme:
   language: en
   icon:
@@ -58,11 +63,12 @@ theme:
   features:
     - content.code.annotate
     - content.code.copy
+    - content.action.edit
+    - content.action.view
     - navigation.instant
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
-    - navigation.tracking
     - navigation.footer
     - search.suggest
     - search.highlight
@@ -123,7 +129,11 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+extra_css:
+  - stylesheets/extra.css
 extra_javascript:
-  - javascripts/mathjax.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - javascripts/mathjax.js
+  - javascripts/tablesort.js

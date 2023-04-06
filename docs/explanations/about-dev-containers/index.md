@@ -4,9 +4,13 @@ As the website of [Dev Containers](https://marketplace.visualstudio.com/items?it
 
 !!! quote
 
-	The **Dev Containers** extension lets you use a Docker container as a full-featured development environment.
+    The **Dev Containers** extension lets you use a Docker container as a full-featured development environment.
 
 This extension helps you to create and use development containers. Development containers create for you full-featured development environment. So you don't pollute your personal computer with dozen of framework and other software: you need only Visual Studio Code and Docker.
+
+## How and why do we use Dev Containers
+
+_TODO_
 
 ## Resources and alternatives
 

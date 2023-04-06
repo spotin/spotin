@@ -1,6 +1,3 @@
 {
-	"recommendations": [
-		"ms-vscode-remote.remote-containers",
-		"redhat.vscode-yaml"
-	]
+  "recommendations": ["ms-vscode-remote.remote-containers"]
 }
