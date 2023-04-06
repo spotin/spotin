@@ -1,10 +1,10 @@
 import { OmitType } from '@nestjs/swagger';
 import { UserDto } from './user.dto';
 
-export class UpdateUserDto extends OmitType(UserDto, [
+export class CreateUserDto extends OmitType(UserDto, [
   'id',
+  'spots',
   'createdAt',
   'updatedAt',
   'deletedAt',
-  'spots',
 ] as const) {}

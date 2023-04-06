@@ -5,7 +5,6 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller()
 export class AppController {
   @Get()
-  @Render('index')
   @ApiOperation({
     summary: 'Render the main page',
     description: 'Render the main page.',
@@ -14,6 +13,7 @@ export class AppController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
+  @Render('index')
   root() {
     return;
   }

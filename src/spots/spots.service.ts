@@ -1,43 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateSpotDto } from './dtos/create-spot.dto';
-import { UpdateSpotDto } from './dtos/update-spot-type.dto';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class SpotsService {
   constructor(private readonly prisma: PrismaService) {}
 
   /** List spots */
-  async getSpots() {
-    return await this.prisma.spot.findMany();
-  }
-
-  /** List public spots */
-  async getPublicSpots() {
+  async getSpots(user: User) {
     return await this.prisma.spot.findMany({
       where: {
-        referenced: true,
+        userId: {
+          equals: user.id,
+        },
       },
     });
   }
 
   /** Read a spot by id */
-  async getSpot(spotId: string) {
-    const slideshow = await this.prisma.spot.findFirst({
+  async getSpot(spotId: string, user?: User | null) {
+    const spot = await this.prisma.spot.findFirstOrThrow({
       where: {
+        userId: user
+          ? {
+              equals: user.id,
+            }
+          : undefined,
         id: {
           equals: spotId,
         },
       },
     });
 
-    return slideshow;
+    return spot;
   }
+
   /** Create a new spot */
-  async createSpot(createSpot: CreateSpotDto) {
+  async createSpot(createSpot: Prisma.SpotCreateWithoutUsersInput, user: User) {
     const newSpot = await this.prisma.spot.create({
       data: {
         ...createSpot,
+        users: {
+          connect: {
+            id: user.id,
+          },
+        },
       },
     });
 
@@ -45,12 +52,23 @@ export class SpotsService {
   }
 
   /** Update a spot by id */
-  async updateSpot(spotId: string, updateSpot: UpdateSpotDto) {
+  async updateSpot(
+    spotId: string,
+    updateSpot: Prisma.SpotUpdateInput,
+    user: User | null,
+  ) {
     const updatedSpot = await this.prisma.spot.update({
       where: {
         id: spotId,
       },
       data: {
+        users: user
+          ? {
+              connect: {
+                id: user.id,
+              },
+            }
+          : undefined,
         ...updateSpot,
       },
     });
@@ -59,10 +77,26 @@ export class SpotsService {
   }
 
   /** Delete a spot by id */
-  async deleteSpot(spotId: string) {
+  async deleteSpot(spotId: string, user: User) {
+    await this.prisma.spot.findFirstOrThrow({
+      where: {
+        id: spotId,
+        userId: user.id,
+      },
+    });
+
     await this.prisma.spot.delete({
       where: {
         id: spotId,
+      },
+    });
+  }
+
+  /** List public spots */
+  async getPublicSpots() {
+    return await this.prisma.spot.findMany({
+      where: {
+        referenced: true,
       },
     });
   }

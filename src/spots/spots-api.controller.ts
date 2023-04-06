@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -21,12 +20,15 @@ import {
   ApiNotFoundResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
-import { SpotDto } from './dtos/spot.dto';
 import { CreateSpotDto } from './dtos/create-spot.dto';
 import { UpdateSpotDto } from './dtos/update-spot-type.dto';
 import { SpotsService } from './spots.service';
 import { Response } from 'express';
 import { MissingOrIncorrectFieldsResponse } from '../common/openapi/responses';
+import { ReadSpotDto } from './dtos/read-spot.dto';
+import { AuthUser } from '../auth/decorators/auth-user.decorator';
+import { Spot, User } from '@prisma/client';
+import { JwtAuth } from '../auth/jwt/jwt-auth.decorator';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -34,6 +36,7 @@ export class SpotsApiController {
   constructor(private readonly spotsService: SpotsService) {}
 
   @Get()
+  @JwtAuth()
   @ApiOperation({
     summary: 'Get the spots',
     description: 'Get the spots.',
@@ -41,31 +44,18 @@ export class SpotsApiController {
   })
   @ApiOkResponse({
     description: 'Spots have been successfully retrieved.',
-    type: [SpotDto],
+    type: [ReadSpotDto],
   })
-  async getSpotsApi() {
-    const Spots = await this.spotsService.getSpots();
+  async getSpotsApi(@AuthUser() user: User) {
+    const spots = await this.spotsService.getSpots(user);
 
-    return Spots;
-  }
+    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
 
-  @Get('public')
-  @ApiOperation({
-    summary: 'Get the public spots',
-    description: 'Get the public spots.',
-    operationId: 'getPublicSpotsApi',
-  })
-  @ApiOkResponse({
-    description: 'Spots have been successfully retrieved.',
-    type: [SpotDto],
-  })
-  async getPublicSpotsApi() {
-    const Spots = await this.spotsService.getPublicSpots();
-
-    return Spots;
+    return spotsDto;
   }
 
   @Get(':id')
+  @JwtAuth()
   @ApiOperation({
     summary: 'Get the specified spot',
     description: 'Get the specified spot.',
@@ -78,52 +68,19 @@ export class SpotsApiController {
   })
   @ApiOkResponse({
     description: 'Spot has been successfully retrieved.',
-    type: SpotDto,
+    type: ReadSpotDto,
   })
   @ApiNotFoundResponse({
     description: 'Spot has not been found.',
   })
-  async getSpotApi(@Param('id') id: string) {
-    const spot = await this.spotsService.getSpot(id);
+  async getSpotApi(@AuthUser() user: User, @Param('id') id: string) {
+    const spot = await this.spotsService.getSpot(id, user);
 
-    if (!spot) {
-      throw new NotFoundException();
-    }
-
-    return spot;
-  }
-
-  @Get(':id/redirect')
-  @ApiOperation({
-    summary: 'Redirect to the link specified by the spot',
-    description: 'Redirect to the link specified by the spot.',
-    operationId: 'getSpotRedirection',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The spot ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'Redirection success.',
-    type: SpotDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Spot has not been found.',
-  })
-  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
-    const spot = await this.spotsService.getSpot(id);
-
-    if (!spot?.configured) {
-      res.redirect(`/spots/${id}/edit`);
-    }
-
-    if (spot?.redirection) {
-      res.redirect(spot.redirection);
-    }
+    return new ReadSpotDto(spot);
   }
 
   @Post()
+  @JwtAuth()
   @ApiOperation({
     summary: 'Create a new spot',
     description: 'Create a new spot.',
@@ -135,16 +92,20 @@ export class SpotsApiController {
   })
   @ApiCreatedResponse({
     description: 'Spot has been successfully created.',
-    type: SpotDto,
+    type: ReadSpotDto,
   })
   @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
-  async createSpotApi(@Body() createSpot: CreateSpotDto) {
-    const newSpot = await this.spotsService.createSpot(createSpot);
+  async createSpotApi(
+    @AuthUser() user: User,
+    @Body() createSpotDto: CreateSpotDto,
+  ) {
+    const newSpot = await this.spotsService.createSpot(createSpotDto, user);
 
-    return newSpot;
+    return new ReadSpotDto(newSpot);
   }
 
   @Patch(':id')
+  @JwtAuth()
   @ApiOperation({
     summary: 'Update the specified spot',
     description: 'Update the specified spot.',
@@ -161,26 +122,28 @@ export class SpotsApiController {
   })
   @ApiOkResponse({
     description: 'Spot has been successfully updated.',
-    type: SpotDto,
+    type: ReadSpotDto,
   })
   @ApiNotFoundResponse({
     description: 'Spot has not been found.',
   })
   @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
   async updateSpotApi(
+    @AuthUser() user: User,
     @Param('id') id: string,
     @Body() updateSpot: UpdateSpotDto,
   ) {
-    try {
-      const updatedSpot = await this.spotsService.updateSpot(id, updateSpot);
+    const updatedSpot = await this.spotsService.updateSpot(
+      id,
+      updateSpot,
+      user,
+    );
 
-      return updatedSpot;
-    } catch (error) {
-      throw new NotFoundException();
-    }
+    return new ReadSpotDto(updatedSpot);
   }
 
   @Delete(':id')
+  @JwtAuth()
   @HttpCode(204)
   @ApiOperation({
     summary: 'Delete the specified spot',
@@ -198,11 +161,55 @@ export class SpotsApiController {
   @ApiNotFoundResponse({
     description: 'Spot has not been found.',
   })
-  async deleteSpotApi(@Param('id') id: string) {
-    try {
-      await this.spotsService.deleteSpot(id);
-    } catch {
-      throw new NotFoundException();
+  async deleteSpotApi(@AuthUser() user: User, @Param('id') id: string) {
+    await this.spotsService.deleteSpot(id, user);
+  }
+
+  @Get(':id/redirect')
+  @ApiOperation({
+    summary: 'Redirect to the link specified by the spot',
+    description: 'Redirect to the link specified by the spot.',
+    operationId: 'getSpotRedirection',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirection success.',
+    type: ReadSpotDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
+  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
+    const spot = (await this.spotsService.getSpot(id)) as Spot;
+
+    if (!spot.configured) {
+      res.redirect(`/spots/${id}/edit`);
     }
+
+    if (spot?.redirection) {
+      res.redirect(spot.redirection);
+    }
+  }
+
+  @Get('public')
+  @ApiOperation({
+    summary: 'Get the public spots',
+    description: 'Get the public spots.',
+    operationId: 'getPublicSpotsApi',
+  })
+  @ApiOkResponse({
+    description: 'Spots have been successfully retrieved.',
+    type: [ReadSpotDto],
+  })
+  async getPublicSpotsApi() {
+    const spots = await this.spotsService.getPublicSpots();
+
+    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+
+    return spotsDto;
   }
 }

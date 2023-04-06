@@ -1,12 +1,12 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { SpotDto } from './spot.dto';
+import { UserDto } from './user.dto';
 
-export class UpdateSpotDto extends PartialType(
-  OmitType(SpotDto, [
+export class UpdateUserDto extends PartialType(
+  OmitType(UserDto, [
     'id',
-    'userId',
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'spots',
   ] as const),
 ) {}

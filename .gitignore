@@ -20,7 +20,7 @@ logs
 node_modules
 
 # NestJS build / generated output
-/dist
+.nest
 
 ## Traefik
 acme.json

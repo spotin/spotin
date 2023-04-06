@@ -16,12 +16,12 @@ model Spot {
   redirection String?   @db.VarChar(255)
   referenced  Boolean   @default(false)
   configured  Boolean   @default(true)
-  userId      String?   @map(name: "user_id")
+  userId      String    @map(name: "user_id")
   createdAt   DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt   DateTime  @default(now()) @map(name: "updated_at") @db.Timestamptz(6)
   deletedAt   DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
 
-  users User? @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map(name: "spots")
 }
@@ -29,8 +29,9 @@ model Spot {
 model User {
   id        String    @id @default(uuid())
   username  String    @unique @db.VarChar(255)
-  email     String?   @db.VarChar(255)
-  password  String?   @db.VarChar(255)
+  email     String    @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  enabled   Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt DateTime  @default(now()) @map(name: "updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map(name: "deleted_at") @db.Timestamptz(6)

@@ -1,12 +1,4 @@
-import {
-  Get,
-  Controller,
-  Render,
-  UseGuards,
-  Param,
-  UseFilters,
-  Res,
-} from '@nestjs/common';
+import { Get, Controller, Render, Param, Res } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -14,8 +6,6 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth-guards';
-import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 import { SpotsService } from './spots.service';
 import * as qrcode from 'qrcode';
 import { Response } from 'express';
@@ -29,152 +19,88 @@ export class SpotsViewsController {
     readonly configService: ConfigService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Get('list')
-  @UseFilters(new UnauthorizedExceptionFilter())
-  @Render('spots/list')
+  @Get()
   @ApiOperation({
-    summary: 'Render the spots list page',
-    description: 'Render the spots list page.',
-    operationId: 'list',
+    summary: 'Render the spots page',
+    description: 'Render the spots page.',
+    operationId: 'getSpotsView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  async root() {
-    const spots = await this.spotsService.getSpots();
-    return { spots };
-  }
-
-  @Get('latest')
-  @Render('spots/latest')
-  @ApiOperation({
-    summary: 'Render the latest spots page',
-    description: 'Render the latest spots page.',
-    operationId: 'latest',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  async getLatestSpots() {
+  @Render('spots/index')
+  async getSpotsView() {
     const spots = await this.spotsService.getPublicSpots();
     return { spots };
   }
 
-  @Get('govtech')
-  @Render('one-page/index')
+  @Get(':id')
   @ApiOperation({
-    summary: 'Render the one page page',
-    description: 'Render the one page page.',
-    operationId: 'onePage',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  async getOnePage() {
-    const spots = await this.spotsService.getSpots();
-    return { spots };
-  }
-
-  @Get(':uuid/delete')
-  @Render('spots/list')
-  @ApiOperation({
-    summary: 'Render the spots list page while deleting a spot',
-    description: 'Render the spots list page while deleting a spot.',
-    operationId: 'deleteAndList',
+    summary: 'Render the specified spot page',
+    description: 'Render the specified spot page.',
+    operationId: 'getSpotView',
   })
   @ApiParam({
-    name: 'uuid',
-    description: 'Spot UUID',
-    type: String,
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @ApiNotFoundResponse({
-    description: 'Spot not found.',
+    description: 'Spot has not been found. Redirect to `/not-found` page.',
   })
-  async deleteSpot(@Param('uuid') uuid: string) {
-    await this.spotsService.deleteSpot(uuid);
-    const spots = await this.spotsService.getSpots();
-    return { spots };
-  }
+  async getSpotView(@Res() res: Response, @Param('id') id: string) {
+    const spot = await this.spotsService.getSpot(id);
 
-  @Get(':uuid/edit')
-  @Render('spots/form')
-  @ApiOperation({
-    summary: 'Render the spots form page while editing a spot',
-    description: 'Render the spots form page while editing a spot.',
-    operationId: 'editAndForm',
-  })
-  @ApiParam({
-    name: 'uuid',
-    description: 'Spot UUID',
-    type: String,
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @ApiNotFoundResponse({
-    description: 'Spot not found.',
-  })
-  async editSpot(@Param('uuid') uuid: string) {
-    const spot = await this.spotsService.getSpot(uuid);
-    return { values: spot, action: 'PATCH', uuid };
+    if (!spot) {
+      // TODO: Is this what we want?
+      return res.redirect('not-found');
+    }
+
+    const backendUrl = this.configService.get('SPOT_IN_BACKEND_URL');
+    const redirection = `${backendUrl}/api/spots/${spot.id}/redirect`;
+
+    try {
+      const url = await qrcode.toDataURL(redirection);
+      return res.render('spots/[uuid]', {
+        title: 'Spot',
+        spot: spot,
+        qrcode: url,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   @Get('create')
-  @Render('spots/form')
   @ApiOperation({
-    summary: 'Render the spots form page',
-    description: 'Render the spots form page.',
-    operationId: 'form',
+    summary: 'Render the create a new spot page',
+    description: 'Render the create a new spot page.',
+    operationId: 'createSpotView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  createSpot() {
-    return { action: 'POST' };
+  @Render('spots/create')
+  createSpotView() {
+    return;
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':uuid')
-  @UseFilters(new UnauthorizedExceptionFilter())
-  @ApiOperation({
-    summary: 'Render the spot page',
-    description: 'Render the spot page.',
-    operationId: 'spot',
-  })
-  @ApiParam({
-    name: 'uuid',
-    description: 'Spot UUID',
-    type: String,
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @ApiNotFoundResponse({
-    description: 'Spot not found.',
-  })
-  async getSpot(@Res() res: Response, @Param('uuid') uuid: string) {
-    const spot = await this.spotsService.getSpot(uuid);
-
-    if (spot) {
-      const backendUrl = this.configService.get('SPOT_IN_BACKEND_URL');
-      const redirection = `${backendUrl}/api/spots/${spot.id}/redirect`;
-
-      qrcode
-        .toDataURL(redirection)
-        .then((url) => {
-          res.render('spots/[uuid]', {
-            title: 'Spot',
-            spot: spot,
-            qrcode: url,
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }
+  // TODO Should we remove this?
+  // @Get('govtech')
+  // @Render('one-page/index')
+  // @ApiOperation({
+  //   summary: 'Render the one page page',
+  //   description: 'Render the one page page.',
+  //   operationId: 'onePage',
+  // })
+  // @ApiOkResponse({
+  //   description: 'Render successful.',
+  // })
+  // async getOnePage() {
+  //   const spots = await this.spotsService.getSpots();
+  //   return { spots };
+  // }
 }

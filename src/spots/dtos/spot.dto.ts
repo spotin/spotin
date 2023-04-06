@@ -52,22 +52,21 @@ export class SpotDto implements Spot {
   redirection: string | null;
 
   // User who created the spot
-  @ApiPropertyOptional()
-  @IsOptional()
   @IsString()
-  userId: string | null;
+  userId: string;
 
   // Set if the spot will be referenced on the website
   @ApiPropertyOptional({ default: false })
   @IsOptional()
   @IsBoolean()
-  referenced: boolean;
+  referenced = false;
 
   // Set if the spot is already configured or not
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @ApiPropertyOptional({ default: true })
   @IsOptional()
   @IsBoolean()
-  configured: boolean;
+  configured = true;
 
   // Date when the spot was created
   @IsDateString()
