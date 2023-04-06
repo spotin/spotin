@@ -2,20 +2,24 @@
   "name": "SpotIn Development Container",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
   "runArgs": ["-p=3000:3000"],
+  // Execute the post-create.sh script once the container is created
+  "postCreateCommand": "./.devcontainer/post-create.sh",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers-contrib/features/mkdocs:2": {}
   },
   "customizations": {
     "vscode": {
       "extensions": [
-		"ronnidc.nunjucks",
-		"Prisma.prisma",
-		"dbaeumer.vscode-eslint",
-		"esbenp.prettier-vscode",
-		"ms-vsliveshare.vsliveshare",
-		"ms-azuretools.vscode-docker",
-		"GitHub.copilot"
-	]
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "GitHub.copilot",
+        "ms-vsliveshare.vsliveshare",
+        "ms-azuretools.vscode-docker",
+        "Prisma.prisma",
+        "redhat.vscode-yaml",
+        "ronnidc.nunjucks"
+      ]
     }
   }
 }

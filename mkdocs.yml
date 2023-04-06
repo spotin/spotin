@@ -1,0 +1,139 @@
+repo_url: https://github.com/spotin/spotin
+repo_name: spotin/spotin
+site_name: SpotIn Documentation
+site_author: SpotIn contributors
+site_url: https://spotin.github.io/spotin/
+site_description: >-
+  Documentation website for SpotIn - Spots that take place in the virtual or in the physical world.
+copyright: Copyright &copy; 2022 - 2023 SpotIn
+nav:
+  - Home:
+      - Overview: index.md
+      - Tutorials: tutorials/index.md
+      - How-to guides: how-to-guides/index.md
+      - Reference: reference/index.md
+      - Explanations: explanations/index.md
+  - Tutorials:
+      - Overview: tutorials/index.md
+      - Install and configure Visual Studio Code: tutorials/install-and-configure-visual-studio-code/index.md
+      - Install and configure Docker: tutorials/install-and-configure-docker/index.md
+      - Install and configure Dev Containers: tutorials/install-and-configure-dev-containers/index.md
+  - How-to guides:
+      - Overview: how-to-guides/index.md
+      - How to use GitHub: how-to-guides/how-to-use-github/index.md
+      - How to use Material for MkDocs: how-to-guides/how-to-use-material-for-mkdocs/index.md
+  - Reference:
+      - reference/index.md
+  - Explanations:
+      - Overview: explanations/index.md
+      - About this documentation: explanations/about-this-documentation/index.md
+      - About Dev Containers: explanations/about-dev-containers/index.md
+      - About Docker: explanations/about-docker/index.md
+      - About Git: explanations/about-git/index.md
+      - About GitHub: explanations/about-github/index.md
+      - About Markdown: explanations/about-markdown/index.md
+      - About Material for MkDocs: explanations/about-material-for-mkdocs/index.md
+      - About Node.js: explanations/about-nodejs/index.md
+      - About npm: explanations/about-npm/index.md
+      - About Visual Studio Code: explanations/about-visual-studio-code/index.md
+site_dir: .mkdocs
+theme:
+  language: en
+  icon:
+    logo: material/map-marker
+    repo: fontawesome/brands/git-alt
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: red
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.annotate
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - toc.follow
+plugins:
+  - minify:
+      minify_html: true
+  - search
+  - social
+  - tags
+  - git-revision-date-localized:
+      type: datetime
+      fallback_to_build_date: true
+  - glightbox
+extra:
+  social:
+    - icon: material/github
+      link: https://github.com/spotin/spotin
+      name: SpotIn on GitHub
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+      base_path: ["docs"]
+      auto_append:
+        - glossary.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - tables
+  - toc:
+      permalink: true
+extra_css:
+  - stylesheets/extra.css
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - javascripts/mathjax.js
+  - javascripts/tablesort.js
