@@ -7,7 +7,10 @@ import * as Joi from 'joi';
     NestConfigModule.forRoot({
       validationSchema: Joi.object({
         SPOT_IN_BACKEND_URL: Joi.string().required(),
+        SPOT_IN_JWT_SECRET: Joi.string().required(),
+        SPOT_IN_JWT_EXPIRATION_TIME: Joi.string().required(),
       }),
+
       validationOptions: {
         allowUnknown: true,
         abortEarly: false,

@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -7,16 +7,27 @@ import * as nunjucks from 'nunjucks';
 import { PrismaService } from './prisma/prisma.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import { PrismaClientKnownRequestExceptionsFilter } from './prisma/filters/prisma-client-known-request-exceptions.filter';
+import { PrismaClientUnknownRequestExceptionsFilter } from './prisma/filters/prisma-client-unknown-request-exceptions.filter';
+import { PrismaClientValidationExceptionsFilter } from './prisma/filters/prisma-client-validation-exceptions.filter';
 
 const IS_PRODUCTION = false;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  const { httpAdapter } = app.get(HttpAdapterHost);
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
     }),
+  );
+
+  app.useGlobalFilters(
+    new PrismaClientKnownRequestExceptionsFilter(httpAdapter),
+    new PrismaClientUnknownRequestExceptionsFilter(httpAdapter),
+    new PrismaClientValidationExceptionsFilter(httpAdapter),
   );
 
   const opts: nunjucks.ConfigureOptions = {

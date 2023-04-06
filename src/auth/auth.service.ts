@@ -1,6 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import * as argon2 from 'argon2';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
+import { LoginUser } from './types/login-user.type';
+import { JwtAccessToken } from './types/jwt-access-token';
+import { JwtPayload } from './types/jwt-payload';
 
 @Injectable()
 export class AuthService {
@@ -9,19 +14,33 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
+  async validateCredentials({ username, password }: LoginUser): Promise<User> {
+    const user = (await this.usersService.getUserByUsername(username)) as User;
+
+    const passwordsMatch = await argon2.verify(user.password, password);
+
+    if (!user.enabled || !passwordsMatch) {
+      throw new UnauthorizedException();
     }
-    return null;
+
+    return user;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async generateJwtAccessToken(user: User): Promise<JwtAccessToken> {
+    const payload: JwtPayload = { username: user.username, sub: user.id };
+
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async validateJwtPayload({ sub }: JwtPayload): Promise<User> {
+    const user = (await this.usersService.getUser(sub)) as User;
+
+    if (!user.enabled) {
+      throw new UnauthorizedException();
+    }
+
+    return user;
   }
 }

@@ -6,10 +6,10 @@
         <li><a class="contrast" href="/spots/list"><i class="fas fa-map-marker-alt"></i> Spots</a></li>
         <li><a class="contrast" href="/tokens/list"><i class="fas fa-key"></i> API keys</a></li>
         <li><a class="contrast" href="/users/profile"><i class="fas fa-user"></i>  {{user.username}} </a></li>
-        <li><a href="/users/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
         {%  else  %}
-        <li><a href="/users/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
-        <li><a href="/users/signup" class="contrast"><i class="fas fa-edit"></i> Sign up</a></li>
+        <li><a href="/auth/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
+        <li><a href="/auth/signup" class="contrast"><i class="fas fa-edit"></i> Sign up</a></li>
         {% endif %}
     </ul>
 </nav>
