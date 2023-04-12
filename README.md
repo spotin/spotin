@@ -24,7 +24,9 @@ Open this folder in Visual Studio Code, and open it in a dev contianer
 ```bash
 npm install
 
-cp .env.default .env
+cp .env.defaults .env
+
+# change the .env file to your needs, especially the database password, and the JWT secret, the DATABASE_SERVICE and the SPOT_IN_BACKEND_URL.
 
 docker-compose up -d database
 ```
