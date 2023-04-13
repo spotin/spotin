@@ -10,6 +10,8 @@ import { SpotsService } from './spots.service';
 import * as qrcode from 'qrcode';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
+import { User } from '@prisma/client';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -46,6 +48,48 @@ export class SpotsViewsController {
   @Render('spots/form')
   createSpotView() {
     return { action: 'POST' };
+  }
+
+  @Get(':id/delete')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Delete the specified spot and render the list of spots',
+    description: 'Delete the specified spot and render the list of spots.',
+    operationId: 'deleteSpotView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('spots')
+  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
+    console.log(user);
+    await this.spotsService.deleteSpot(id, user);
+    return {};
+  }
+
+  @Get(':id/edit')
+  @ApiOperation({
+    summary: 'Render the edit a spot page',
+    description: 'Render the edit a spot page.',
+    operationId: 'editSpotView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('spots/form')
+  async editSpotView(@Param('id') id: string) {
+    const spot = await this.spotsService.getSpot(id);
+    return { uuid: id, values: spot, action: 'PATCH' };
   }
 
   @Get(':id')
