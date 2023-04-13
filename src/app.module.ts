@@ -7,7 +7,7 @@ import { UsersModule } from '@/users/users.module';
 import { AppController } from '@/app.controller';
 import { ConfigModule } from './config/config.module';
 
-export const AppModuleMetadata = {
+@Module({
   imports: [
     AuthModule,
     ConfigModule,
@@ -27,7 +27,5 @@ export const AppModuleMetadata = {
       inject: [HttpAdapterHost],
     },
   ],
-};
-
-@Module(AppModuleMetadata)
+})
 export class AppModule {}

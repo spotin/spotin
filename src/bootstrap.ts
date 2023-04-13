@@ -7,8 +7,6 @@ import { join } from 'path';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-const isProduction = process.env.NODE_ENV === 'production';
-
 export async function bootstrap(
   app: NestExpressApplication,
 ): Promise<NestExpressApplication> {
@@ -23,9 +21,6 @@ export async function bootstrap(
 
   nunjucks.configure(join(__dirname, '..', 'views'), {
     express: app,
-    autoescape: true,
-    watch: !isProduction,
-    noCache: !isProduction,
   });
 
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
@@ -41,7 +36,6 @@ export async function bootstrap(
     .setVersion(process.env.npm_package_version as string)
     .addCookieAuth('accessToken', {
       type: 'apiKey',
-      bearerFormat: 'jwt',
       in: 'cookie',
       description: 'The cookie containing the access token',
     })
