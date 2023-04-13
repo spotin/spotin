@@ -34,6 +34,20 @@ export class SpotsViewsController {
     return { spots };
   }
 
+  @Get('create')
+  @ApiOperation({
+    summary: 'Render the create a new spot page',
+    description: 'Render the create a new spot page.',
+    operationId: 'createSpotView',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('spots/form')
+  createSpotView() {
+    return { action: 'POST' };
+  }
+
   @Get(':id')
   @ApiOperation({
     summary: 'Render the specified spot page',
@@ -72,19 +86,5 @@ export class SpotsViewsController {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  @Get('create')
-  @ApiOperation({
-    summary: 'Render the create a new spot page',
-    description: 'Render the create a new spot page.',
-    operationId: 'createSpotView',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Render('spots/create')
-  createSpotView() {
-    return;
   }
 }
