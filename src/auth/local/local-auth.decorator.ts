@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { LocalAuthGuard } from './local-auth.guard';
+import { LocalAuthGuard } from '@/auth/local/local-auth.guard';
 
 export const LocalAuth = (
   ...guards: (Function | CanActivate)[]

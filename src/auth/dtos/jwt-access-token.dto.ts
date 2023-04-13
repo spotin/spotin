@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
-import { JwtAccessToken } from '../types/jwt-access-token';
 import { ApiProperty } from '@nestjs/swagger';
+import { JwtAccessToken } from '@/auth/types/jwt-access-token';
 
 export class JwtAccessTokenDto implements JwtAccessToken {
   // The JWT access token to access protected resources

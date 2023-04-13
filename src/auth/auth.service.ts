@@ -1,11 +1,11 @@
 import * as argon2 from 'argon2';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { LoginUser } from './types/login-user.type';
-import { JwtAccessToken } from './types/jwt-access-token';
-import { JwtPayload } from './types/jwt-payload';
+import { UsersService } from '@/users/users.service';
+import { LoginUser } from '@/auth/types/login-user.type';
+import { JwtAccessToken } from '@/auth/types/jwt-access-token';
+import { JwtPayload } from '@/auth/types/jwt-payload';
 
 @Injectable()
 export class AuthService {

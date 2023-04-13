@@ -1,3 +1,4 @@
+import * as qrcode from 'qrcode';
 import { Get, Controller, Render, Param, Res } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -6,12 +7,12 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { SpotsService } from './spots.service';
-import * as qrcode from 'qrcode';
+import { User } from '@prisma/client';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { AuthUser } from 'src/auth/decorators/auth-user.decorator';
-import { User } from '@prisma/client';
+import { SpotsService } from '@/spots/spots.service';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
 @ApiTags('Views')
 @Controller('spots')

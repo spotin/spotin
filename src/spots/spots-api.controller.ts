@@ -6,19 +6,19 @@ import {
   ApiParam,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { CreateSpotDto } from './dtos/create-spot.dto';
-import { UpdateSpotDto } from './dtos/update-spot-type.dto';
-import { SpotsService } from './spots.service';
 import { Response } from 'express';
-import { ReadSpotDto } from './dtos/read-spot.dto';
-import { AuthUser } from '../auth/decorators/auth-user.decorator';
 import { Spot, User } from '@prisma/client';
-import { JwtAuth } from '../auth/jwt/jwt-auth.decorator';
-import { Post } from '../common/decorators/post.decorator';
-import { GetOne } from 'src/common/decorators/get-one.decorator';
-import { GetMany } from 'src/common/decorators/get-many.decorator';
-import { Patch } from 'src/common/decorators/patch.decorator';
-import { Delete } from 'src/common/decorators/delete.decorator';
+import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
+import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
+import { SpotsService } from '@/spots/spots.service';
+import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { Post } from '@/common/decorators/post.decorator';
+import { GetOne } from '@/common/decorators/get-one.decorator';
+import { GetMany } from '@/common/decorators/get-many.decorator';
+import { Patch } from '@/common/decorators/patch.decorator';
+import { Delete } from '@/common/decorators/delete.decorator';
 
 @ApiTags('Spots')
 @Controller('api/spots')

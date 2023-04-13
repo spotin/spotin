@@ -3,18 +3,20 @@ import { Response } from 'express';
 import {
   ApiBody,
   ApiConflictResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { LoginUserDto } from './dtos/login-user.dto';
-import { SignupUserDto } from './dtos/signup-user.dto';
-import { UsersService } from '../users/users.service';
-import { LocalAuth } from './local/local-auth.decorator';
-import { AuthUser } from './decorators/auth-user.decorator';
 import { User } from '@prisma/client';
-import { JwtAccessTokenDto } from './dtos/jwt-access-token.dto';
+import { AuthService } from '@/auth/auth.service';
+import { LoginUserDto } from '@/auth/dtos/login-user.dto';
+import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
+import { UsersService } from '@/users/users.service';
+import { LocalAuth } from '@/auth/local/local-auth.decorator';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { JwtAccessTokenDto } from '@/auth/dtos/jwt-access-token.dto';
+import { JwtAuth } from './jwt/jwt-auth.decorator';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -45,11 +47,33 @@ export class AuthApiController {
 
     res.cookie('accessToken', jwt.accessToken, {
       httpOnly: true,
+      sameSite: true,
       secure: true,
     });
 
     // Return json web token
     return res.json(new JwtAccessTokenDto(jwt));
+  }
+
+  @Post('logout')
+  @JwtAuth()
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'Log out from SpotIn',
+    description: 'Log out from SpotIn.',
+    operationId: 'logout',
+  })
+  @ApiNoContentResponse({
+    description: 'The user has been successfully logged out.',
+  })
+  async logout(@Res() res: Response) {
+    res.cookie('accessToken', '', {
+      httpOnly: true,
+      sameSite: true,
+      secure: true,
+    });
+
+    res.end();
   }
 
   @Post('signup')
