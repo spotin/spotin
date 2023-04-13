@@ -8,15 +8,29 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getUsers() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      include: {
+        spots: true,
+      },
+    });
   }
 
   async getUser(id: string) {
-    return await this.prisma.user.findFirst({ where: { id } });
+    return await this.prisma.user.findFirst({
+      where: { id },
+      include: {
+        spots: true,
+      },
+    });
   }
 
   async getUserByUsername(username: string) {
-    return await this.prisma.user.findFirst({ where: { username } });
+    return await this.prisma.user.findFirst({
+      where: { username },
+      include: {
+        spots: true,
+      },
+    });
   }
 
   async createUser(createUser: Prisma.UserCreateInput) {
@@ -24,6 +38,9 @@ export class UsersService {
       data: {
         ...createUser,
         password: await argon2.hash(createUser.password),
+      },
+      include: {
+        spots: true,
       },
     });
     return newUser;
@@ -35,6 +52,9 @@ export class UsersService {
         id: userId,
       },
       data: updateUser,
+      include: {
+        spots: true,
+      },
     });
   }
 
