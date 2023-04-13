@@ -5,7 +5,7 @@ import {
   ApiForbiddenResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from './jwt-auth-guard';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 export const JwtAuth = (
   ...guards: (Function | CanActivate)[]

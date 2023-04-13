@@ -18,7 +18,7 @@ model Spot {
   configured  Boolean   @default(true)
   userId      String    @map(name: "user_id")
   createdAt   DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
-  updatedAt   DateTime  @default(now()) @map(name: "updated_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
   deletedAt   DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
 
   users User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -33,7 +33,7 @@ model User {
   password  String    @db.VarChar(255)
   enabled   Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @map(name: "updated_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
   spots     Spot[]
 

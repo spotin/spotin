@@ -61,7 +61,7 @@ export class AuthApiController {
   })
   @ApiBody({
     description: "The user's details.",
-    type: () => SignupUserDto,
+    type: SignupUserDto,
   })
   @ApiOkResponse({
     description: 'The user has been successfully signed up.',

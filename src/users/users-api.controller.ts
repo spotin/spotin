@@ -1,45 +1,26 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  NotFoundException,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Body, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import {
-  ApiBody,
-  ApiConflictResponse,
-  ApiCreatedResponse,
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiConflictResponse, ApiTags } from '@nestjs/swagger';
 import { ReadUserDto } from './dtos/read-user.dto';
-import { JwtAuth } from '../auth/jwt/jwt-auth.decorator';
+import { GetMany } from 'src/common/decorators/get-many.decorator';
+import { GetOne } from 'src/common/decorators/get-one.decorator';
+import { Post } from 'src/common/decorators/post.decorator';
+import { Patch } from 'src/common/decorators/patch.decorator';
+import { Delete } from 'src/common/decorators/delete.decorator';
+import { User } from '@prisma/client';
 
 @ApiTags('Users')
 @Controller('api/users')
 export class UsersApiController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  @JwtAuth()
-  @ApiOperation({
+  @GetMany({
+    name: 'Users',
     summary: 'Get the users',
-    description: 'Get the users',
-    operationId: 'findAllUsersApi',
-  })
-  @ApiOkResponse({
-    description: 'Users have been successfully retrieved.',
-    type: [ReadUserDto],
+    operationId: 'getUsersApi',
+    responseType: [ReadUserDto],
   })
   async getUsersApi() {
     const users = await this.usersService.getUsers();
@@ -49,47 +30,24 @@ export class UsersApiController {
     return usersDto;
   }
 
-  @Get(':id')
-  @ApiOperation({
+  @GetOne({
+    name: 'User',
     summary: 'Get the specified user',
-    description: 'Get the specified user.',
-    operationId: 'getUserApi',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The user ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'User has been successfully retrieved.',
-    type: ReadUserDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'User has not been found.',
+    operationId: 'getSpotApi',
+    responseType: ReadUserDto,
   })
   async getUserApi(@Param('id') id: string) {
-    const user = await this.usersService.getUser(id);
-
-    if (!user) {
-      throw new NotFoundException();
-    }
+    const user = (await this.usersService.getUser(id)) as User;
 
     return new ReadUserDto(user);
   }
 
-  @Post()
-  @ApiOperation({
+  @Post({
+    name: 'User',
     summary: 'Create a new user',
-    description: 'Create a new user.',
+    bodyType: CreateUserDto,
+    responseType: ReadUserDto,
     operationId: 'createUserApi',
-  })
-  @ApiBody({
-    description: "The user's details.",
-    type: CreateUserDto,
-  })
-  @ApiCreatedResponse({
-    description: 'User has been successfully created.',
-    type: ReadUserDto,
   })
   @ApiConflictResponse({
     description: 'Another user has the same username.',
@@ -100,30 +58,15 @@ export class UsersApiController {
     return new ReadUserDto(newUser);
   }
 
-  @Patch(':id')
-  @ApiOperation({
+  @Patch({
+    name: 'User',
     summary: 'Update the specified user',
-    description: 'Update the specified user.',
+    bodyType: UpdateUserDto,
+    responseType: ReadUserDto,
     operationId: 'updateUserApi',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The user ID.',
-    format: 'uuid',
-  })
-  @ApiBody({
-    description: "The user's details.",
-    type: UpdateUserDto,
-  })
-  @ApiOkResponse({
-    description: 'User has been successfully updated.',
-    type: ReadUserDto,
   })
   @ApiConflictResponse({
     description: 'Another user has the same username.',
-  })
-  @ApiNotFoundResponse({
-    description: 'User has not been found.',
   })
   async updateUserApi(
     @Param('id') id: string,
@@ -134,23 +77,10 @@ export class UsersApiController {
     return new ReadUserDto(updatedUser);
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  @ApiOperation({
+  @Delete({
+    name: 'User',
     summary: 'Delete the specified user',
-    description: 'Delete the specified user.',
     operationId: 'deleteUserApi',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The id of the user.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'User has been successfully deleted.',
-  })
-  @ApiNotFoundResponse({
-    description: 'User has not been found.',
   })
   async deleteUserApi(@Param('id') id: string) {
     await this.usersService.deleteUser(id);
