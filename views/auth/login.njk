@@ -12,27 +12,28 @@
 <script>
     const form = document.querySelector("form");
 
-    form.addEventListener("submit", async (event) => {
+    async function handleSubmit(event) {
         event.preventDefault();
+        const formData = new FormData(event.target);
+        const username = formData.get('username');
+        const password = formData.get('password');
+        const body = { username, password };
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(body),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            });
+            if (res.status === 200) {
+                window.location.href = '/spots';
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            mode: "cors",
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username,
-                password,
-            }),
-        });
-
-        console.log(response);
-    });
+    form.addEventListener('submit', handleSubmit);
 </script>
 {% endblock %}
