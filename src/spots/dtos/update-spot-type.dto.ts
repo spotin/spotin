@@ -1,5 +1,5 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { SpotDto } from './spot.dto';
+import { SpotDto } from '@/spots/dtos/spot.dto';
 
 export class UpdateSpotDto extends PartialType(
   OmitType(SpotDto, [

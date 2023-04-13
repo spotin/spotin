@@ -8,7 +8,7 @@ import {
   IsUUID,
   MinLength,
 } from 'class-validator';
-import { ReadSpotDto } from 'src/spots/dtos/read-spot.dto';
+import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 
 export class UserDto implements User {
   // Identification of the user

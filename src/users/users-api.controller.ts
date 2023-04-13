@@ -1,15 +1,15 @@
 import { Controller, Body, Param } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
 import { ApiConflictResponse, ApiTags } from '@nestjs/swagger';
-import { ReadUserDto } from './dtos/read-user.dto';
-import { GetMany } from 'src/common/decorators/get-many.decorator';
-import { GetOne } from 'src/common/decorators/get-one.decorator';
-import { Post } from 'src/common/decorators/post.decorator';
-import { Patch } from 'src/common/decorators/patch.decorator';
-import { Delete } from 'src/common/decorators/delete.decorator';
 import { User } from '@prisma/client';
+import { UsersService } from '@/users/users.service';
+import { CreateUserDto } from '@/users/dtos/create-user.dto';
+import { UpdateUserDto } from '@/users/dtos/update-user.dto';
+import { ReadUserDto } from '@/users/dtos/read-user.dto';
+import { GetMany } from '@/common/decorators/get-many.decorator';
+import { GetOne } from '@/common/decorators/get-one.decorator';
+import { Post } from '@/common/decorators/post.decorator';
+import { Patch } from '@/common/decorators/patch.decorator';
+import { Delete } from '@/common/decorators/delete.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')

@@ -1,6 +1,6 @@
 import { OmitType } from '@nestjs/swagger';
-import { UserDto } from './user.dto';
-import { ReadSpotDto } from 'src/spots/dtos/read-spot.dto';
+import { UserDto } from '@/users/dtos/user.dto';
+import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 
 export class ReadUserDto extends OmitType(UserDto, ['password'] as const) {
   constructor(partial: Partial<UserDto>) {

@@ -1,18 +1,24 @@
 import { Module } from '@nestjs/common';
-import { SpotsModule } from './spots/spots.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { AppController } from './app.controller';
-import { ConfigModule } from './config/config.module';
 import { PrismaClientExceptionFilter, PrismaModule } from 'nestjs-prisma';
 import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
+import { SpotsModule } from '@/spots/spots.module';
+import { AuthModule } from '@/auth/auth.module';
+import { UsersModule } from '@/users/users.module';
+import { AppController } from '@/app.controller';
+import { ConfigModule } from './config/config.module';
 
-@Module({
-  imports: [AuthModule, ConfigModule, PrismaModule, SpotsModule, UsersModule],
+export const AppModuleMetadata = {
+  imports: [
+    AuthModule,
+    ConfigModule,
+    PrismaModule.forRoot(),
+    SpotsModule,
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [
-    // Replace with `providePrismaClientExceptionFilter()` once publicetly available
-    // https://nestjs-prisma.dev/docs/exception-filter/
+    // Replace with `providePrismaClientExceptionFilter()` once publicly available
+    // https://nestjs-prisma.dev/docs/exception-filter/#app_filter
     {
       provide: APP_FILTER,
       useFactory: ({ httpAdapter }: HttpAdapterHost) => {
@@ -21,5 +27,7 @@ import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
       inject: [HttpAdapterHost],
     },
   ],
-})
+};
+
+@Module(AppModuleMetadata)
 export class AppModule {}
