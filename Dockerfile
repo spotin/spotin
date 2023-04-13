@@ -29,8 +29,9 @@ RUN npm ci --omit=dev
 # Copy built application from stage 1
 COPY --from=build /app/dist ./dist
 
-COPY views views
+COPY prisma prisma
 COPY public public
+COPY views views
 
 # Set environment variables
 ENV DATABASE_URL=${DATABASE_URL}

@@ -13,15 +13,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "dev": "npm run prisma:migrate:dev && nest start --watch",
-    "build": "npm run prisma:generate:dev && nest build",
-    "start": "npm run prisma:migrate:prod && node .nest/main",
-    "start:debug": "npm run prisma:migrate:dev && nest start --debug --watch",
-    "start:prod": "node .nest/main",
-    "prisma:migrate:dev": "prisma migrate dev --name spotin --schema src/prisma/schema.prisma",
-    "prisma:generate:dev": "prisma generate --schema src/prisma/schema.prisma",
-    "prisma:migrate:prod": "prisma migrate dev --name spotin --schema .nest/prisma/schema.prisma",
-    "prisma:generate:prod": "prisma generate --schema .nest/prisma/schema.prisma"
+    "dev": "npm run prisma:migrate && nest start --watch",
+    "build": "npm run prisma:generate && nest build",
+    "start": "npm run prisma:migrate && node .nest/main",
+    "prisma:migrate": "prisma migrate dev --name spotin",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -37,6 +33,7 @@
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "joi": "^17.9.1",
+    "nestjs-prisma": "^0.20.0",
     "nunjucks": "^3.2.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
