@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersApiController } from './users-api.controller';
 import { UsersViewsController } from './users-views.controller';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { PrismaModule } from 'nestjs-prisma';
 
 @Module({
   imports: [PrismaModule],

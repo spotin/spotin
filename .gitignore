@@ -2,6 +2,17 @@
 # Environment file
 .env
 
+## Linux
+*~
+
+## macOS
+
+# General
+.DS_Store
+
+# Thumbnails
+._*
+
 ## Material for MkDocs
 
 # Cache
@@ -24,3 +35,17 @@ node_modules
 
 ## Traefik
 acme.json
+
+## Windows
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Folder config file
+[Dd]esktop.ini
+
+# Windows shortcuts
+*.lnk
