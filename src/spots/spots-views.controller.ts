@@ -87,20 +87,4 @@ export class SpotsViewsController {
   createSpotView() {
     return;
   }
-
-  // TODO Should we remove this?
-  // @Get('govtech')
-  // @Render('one-page/index')
-  // @ApiOperation({
-  //   summary: 'Render the one page page',
-  //   description: 'Render the one page page.',
-  //   operationId: 'onePage',
-  // })
-  // @ApiOkResponse({
-  //   description: 'Render successful.',
-  // })
-  // async getOnePage() {
-  //   const spots = await this.spotsService.getSpots();
-  //   return { spots };
-  // }
 }
