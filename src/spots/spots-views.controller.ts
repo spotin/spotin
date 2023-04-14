@@ -23,6 +23,7 @@ export class SpotsViewsController {
   ) {}
 
   @Get()
+  @JwtAuth()
   @ApiOperation({
     summary: 'Render the spots page',
     description: 'Render the spots page.',
@@ -32,8 +33,8 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/index')
-  async getSpotsView() {
-    const spots = await this.spotsService.getPublicSpots();
+  async getSpotsView(@AuthUser() user: User) {
+    const spots = await this.spotsService.getSpots(user);
     return { spots };
   }
 
