@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import {
   IsBoolean,
   IsDateString,
   IsEmail,
+  IsEnum,
   IsString,
   IsUUID,
   MinLength,
@@ -31,6 +32,10 @@ export class UserDto implements User {
   @MinLength(8)
   @IsString()
   password: string;
+
+  @ApiProperty({ enum: UserRole })
+  @IsEnum(UserRole)
+  role: UserRole;
 
   // Set if the user is enabled (and have access to the platform)
   @ApiProperty({ default: false })

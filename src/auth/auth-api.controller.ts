@@ -14,9 +14,9 @@ import { LoginUserDto } from '@/auth/dtos/login-user.dto';
 import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
 import { UsersService } from '@/users/users.service';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAccessTokenDto } from '@/auth/dtos/jwt-access-token.dto';
-import { JwtAuth } from './jwt/jwt-auth.decorator';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
 @ApiTags('Auth')
 @Controller('api/auth')

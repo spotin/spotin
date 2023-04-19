@@ -6,17 +6,15 @@ import { User } from '@prisma/client';
 import { JwtPayload } from '@/auth/types/jwt-payload';
 import { AuthService } from '@/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
+import { JWT_SECRET } from '@/config/config.constants';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
-  ) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  constructor(private authService: AuthService, configService: ConfigService) {
     super({
       jwtFromRequest: (request: Request) => request.cookies.accessToken,
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('SPOT_IN_JWT_SECRET'),
+      secretOrKey: configService.get(JWT_SECRET, { infer: true }),
     });
   }
 

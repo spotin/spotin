@@ -4,7 +4,12 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("SPOT_IN_DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 model Spot {
@@ -31,6 +36,7 @@ model User {
   username  String    @unique @db.VarChar(255)
   email     String    @db.VarChar(255)
   password  String    @db.VarChar(255)
+  role      UserRole  @default(USER)
   enabled   Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)

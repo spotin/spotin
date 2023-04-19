@@ -1,6 +1,6 @@
 import { Controller, Body, Param } from '@nestjs/common';
 import { ApiConflictResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
 import { CreateUserDto } from '@/users/dtos/create-user.dto';
 import { UpdateUserDto } from '@/users/dtos/update-user.dto';
@@ -10,6 +10,9 @@ import { GetOne } from '@/common/decorators/get-one.decorator';
 import { Post } from '@/common/decorators/post.decorator';
 import { Patch } from '@/common/decorators/patch.decorator';
 import { Delete } from '@/common/decorators/delete.decorator';
+import { RolesGuard } from '@/auth/guards/roles.guard';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { Roles } from '@/auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -22,6 +25,8 @@ export class UsersApiController {
     operationId: 'getUsersApi',
     responseType: [ReadUserDto],
   })
+  @JwtAuth(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   async getUsersApi() {
     const users = await this.usersService.getUsers();
 
@@ -36,6 +41,8 @@ export class UsersApiController {
     operationId: 'getSpotApi',
     responseType: ReadUserDto,
   })
+  @JwtAuth(RolesGuard)
+  @Roles(UserRole.ADMIN)
   async getUserApi(@Param('id') id: string) {
     const user = (await this.usersService.getUser(id)) as User;
 
@@ -49,6 +56,8 @@ export class UsersApiController {
     responseType: ReadUserDto,
     operationId: 'createUserApi',
   })
+  @JwtAuth(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiConflictResponse({
     description: 'Another user has the same username.',
   })
@@ -65,6 +74,8 @@ export class UsersApiController {
     responseType: ReadUserDto,
     operationId: 'updateUserApi',
   })
+  @JwtAuth(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiConflictResponse({
     description: 'Another user has the same username.',
   })
@@ -82,6 +93,8 @@ export class UsersApiController {
     summary: 'Delete the specified user',
     operationId: 'deleteUserApi',
   })
+  @JwtAuth(RolesGuard)
+  @Roles(UserRole.ADMIN)
   async deleteUserApi(@Param('id') id: string) {
     await this.usersService.deleteUser(id);
   }

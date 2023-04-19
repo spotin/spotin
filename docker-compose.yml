@@ -1,6 +1,5 @@
 services:
   database:
-    container_name: ${DATABASE_SERVICE}
     image: postgres:${POSTGRES_IMAGE_VERSION:-latest}
     env_file:
       - .env
@@ -12,9 +11,9 @@ services:
       timeout: 20s
       retries: 3
     environment:
-      - POSTGRES_DB=${DATABASE_NAME}
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${SPOT_IN_DATABASE_NAME}
+      - POSTGRES_USER=${SPOT_IN_DATABASE_USER}
+      - POSTGRES_PASSWORD=${SPOT_IN_DATABASE_PASSWORD}
 
   application:
     build:
@@ -34,12 +33,12 @@ services:
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       # HTTP
-      - traefik.http.routers.application-external-http.rule=Host(`${SPOT_IN_BACKEND_URL}`)
+      - traefik.http.routers.application-external-http.rule=Host(`${SPOT_IN_FQDN}`)
       - traefik.http.routers.application-external-http.entrypoints=web
       - traefik.http.routers.application-external-http.middlewares=redirect-to-https
       - traefik.http.routers.application-external-http.service=application
       # HTTPS
-      - traefik.http.routers.application-external-https.rule=Host(`${SPOT_IN_BACKEND_URL}`)
+      - traefik.http.routers.application-external-https.rule=Host(`${SPOT_IN_FQDN}`)
       - traefik.http.routers.application-external-https.entrypoints=websecure
       - traefik.http.routers.application-external-https.tls=true
       - traefik.http.routers.application-external-https.tls.certresolver=letsencrypt
