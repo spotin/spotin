@@ -12,13 +12,13 @@ import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Post } from '@/common/decorators/post.decorator';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { Patch } from '@/common/decorators/patch.decorator';
 import { Delete } from '@/common/decorators/delete.decorator';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -77,7 +77,6 @@ export class SpotsApiController {
     responseType: ReadSpotDto,
     operationId: 'updateSpotApi',
   })
-  @JwtAuth()
   async updateSpotApi(
     @AuthUser() user: User,
     @Param('id') id: string,

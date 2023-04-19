@@ -7,11 +7,12 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Spot, User } from '@prisma/client';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
 @ApiTags('Views')
@@ -35,7 +36,13 @@ export class SpotsViewsController {
   @Render('spots/index')
   async getSpotsView(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
-    return { spots };
+
+    return {
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+      spots,
+    };
   }
 
   @Get('create')
@@ -48,8 +55,13 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/form')
-  createSpotView() {
-    return { action: 'POST' };
+  createSpotView(@AuthUser() user: User) {
+    return {
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+      action: 'POST',
+    };
   }
 
   @Get(':id/delete')
@@ -67,11 +79,15 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('spots')
+  @Render('spots/index')
   async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
-    console.log(user);
     await this.spotsService.deleteSpot(id, user);
-    return {};
+
+    return {
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+    };
   }
 
   @Get(':id/edit')
@@ -89,9 +105,17 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/form')
-  async editSpotView(@Param('id') id: string) {
+  async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
-    return { uuid: id, values: spot, action: 'PATCH' };
+
+    return {
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+      uuid: id,
+      values: spot,
+      action: 'PATCH',
+    };
   }
 
   @Get(':id')
@@ -111,20 +135,29 @@ export class SpotsViewsController {
   @ApiNotFoundResponse({
     description: 'Spot has not been found. Redirect to `/not-found` page.',
   })
-  async getSpotView(@Res() res: Response, @Param('id') id: string) {
-    const spot = await this.spotsService.getSpot(id);
+  async getSpotView(
+    @AuthUser() user: User,
+    @Res() res: Response,
+    @Param('id') id: string,
+  ) {
+    let spot: Spot;
 
-    if (!spot) {
-      // TODO: Is this what we want?
-      return res.redirect('not-found');
+    try {
+      spot = await this.spotsService.getSpot(id);
+    } catch (error) {
+      return res.redirect('/not-found');
     }
 
-    const backendUrl = this.configService.get('SPOT_IN_BACKEND_URL');
+    const backendUrl = this.configService.get(FQDN, { infer: true });
     const redirection = `${backendUrl}/api/spots/${spot.id}/redirect`;
 
     try {
       const url = await qrcode.toDataURL(redirection);
+
       return res.render('spots/[uuid]', {
+        username: user?.username,
+        email: user?.email,
+        role: user?.role,
         title: 'Spot',
         spot: spot,
         qrcode: url,

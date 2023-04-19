@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
 import { applyDecorators, Patch as NestPatch } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiConflictResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
 } from '@nestjs/swagger';
-import { MissingOrIncorrectFieldsResponse } from '../openapi/responses';
 
 type PatchDecoratorOptions = {
   path?: string;
@@ -51,6 +52,9 @@ export const Patch = ({
     }),
     ApiNotFoundResponse({
       description: `${name} has not been found.`,
+    }),
+    ApiConflictResponse({
+      description: `Another ${name} is in conflict with this one.`,
     }),
     ApiBadRequestResponse(MissingOrIncorrectFieldsResponse),
   );

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
 import { applyDecorators, Post as NestPost } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { MissingOrIncorrectFieldsResponse } from '../openapi/responses';
 
 type PostDecoratorOptions = {
   path?: string;
@@ -41,6 +42,9 @@ export const Post = ({
     ApiCreatedResponse({
       description: `The ${name} has been successfully created.`,
       type: responseType,
+    }),
+    ApiConflictResponse({
+      description: `Another ${name} is in conflict with this one.`,
     }),
     ApiBadRequestResponse(MissingOrIncorrectFieldsResponse),
   );
