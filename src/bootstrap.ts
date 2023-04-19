@@ -21,6 +21,7 @@ export async function bootstrap(
 
   nunjucks.configure(join(__dirname, '..', 'views'), {
     express: app,
+    watch: process.env.NODE_ENV === 'development',
   });
 
   app.setBaseViewsDir(join(__dirname, '..', 'views'));

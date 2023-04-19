@@ -2,7 +2,7 @@
     <ul><li><strong><a class="contrast" href="/"><i class="fas fa-map"></i> SpotIn</a></strong></li></ul>
     <ul>
         <!-- if is authenticated -->
-        {% if user %}
+        {% if user.username %}
         <li><a class="contrast" href="/spots/list"><i class="fas fa-map-marker-alt"></i> Spots</a></li>
         <li><a class="contrast" href="/tokens/list"><i class="fas fa-key"></i> API keys</a></li>
         <li><a class="contrast" href="/users/profile"><i class="fas fa-user"></i>  {{user.username}} </a></li>

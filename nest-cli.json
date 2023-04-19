@@ -4,8 +4,6 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "assets": ["**/*.prisma", "**/*.sql", "**/*.toml"],
-    "watchAssets": true,
     "plugins": [
       {
         "name": "@nestjs/swagger",

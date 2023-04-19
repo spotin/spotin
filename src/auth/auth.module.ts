@@ -8,6 +8,8 @@ import { LocalStrategy } from '@/auth/local/local.strategy';
 import { JwtStrategy } from '@/auth/jwt/jwt.strategy';
 import { AuthService } from '@/auth/auth.service';
 import { UsersModule } from '@/users/users.module';
+import { JWT_EXPIRATION_TIME, JWT_SECRET } from '@/config/config.constants';
+import { GuestStrategy } from '@/auth/guest/guest.strategy';
 
 @Module({
   imports: [
@@ -15,10 +17,10 @@ import { UsersModule } from '@/users/users.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (config: ConfigService) => ({
-        secret: config.get<string>('SPOT_IN_JWT_SECRET'),
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get(JWT_SECRET, { infer: true }),
         signOptions: {
-          expiresIn: config.get<string>('SPOT_IN_JWT_EXPIRATION_TIME'),
+          expiresIn: configService.get(JWT_EXPIRATION_TIME, { infer: true }),
         },
       }),
     }),

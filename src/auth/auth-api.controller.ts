@@ -14,9 +14,9 @@ import { LoginUserDto } from '@/auth/dtos/login-user.dto';
 import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
 import { UsersService } from '@/users/users.service';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { SpotOwner } from '@/auth/decorators/spot-owner.decorator';
 import { JwtAccessTokenDto } from '@/auth/dtos/jwt-access-token.dto';
-import { JwtAuth } from './jwt/jwt-auth.decorator';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -42,7 +42,7 @@ export class AuthApiController {
     description: 'The user has been successfully logged in.',
     type: JwtAccessTokenDto,
   })
-  async login(@AuthUser() user: User, @Res() res: Response) {
+  async login(@SpotOwner() user: User, @Res() res: Response) {
     const jwt = await this.authService.generateJwtAccessToken(user);
 
     res.cookie('accessToken', jwt.accessToken, {

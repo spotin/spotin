@@ -1,6 +1,6 @@
 import { Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { User } from '@prisma/client';
 import { JwtPayload } from '@/auth/types/jwt-payload';
@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JWT_SECRET } from '@/config/config.constants';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class GuestStrategy extends PassportStrategy(Strategy, 'guest') {
   constructor(private authService: AuthService, configService: ConfigService) {
     super({
       jwtFromRequest: (request: Request) => request.cookies.accessToken,
@@ -18,13 +18,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
+  async validate(payload: JwtPayload): Promise<User | null> {
+    console.log('AHHHHH');
     try {
       const user = await this.authService.validateJwtPayload(payload);
 
       return user;
     } catch (error) {
-      throw new UnauthorizedException();
+      return null;
     }
   }
 }

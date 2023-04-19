@@ -1,6 +1,6 @@
 import { Controller, Body, Param } from '@nestjs/common';
 import { ApiConflictResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
 import { CreateUserDto } from '@/users/dtos/create-user.dto';
 import { UpdateUserDto } from '@/users/dtos/update-user.dto';
@@ -10,9 +10,14 @@ import { GetOne } from '@/common/decorators/get-one.decorator';
 import { Post } from '@/common/decorators/post.decorator';
 import { Patch } from '@/common/decorators/patch.decorator';
 import { Delete } from '@/common/decorators/delete.decorator';
+import { RolesGuard } from '@/auth/guards/roles.guard';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { Roles } from '@/auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
+@JwtAuth(RolesGuard)
+@Roles(UserRole.ADMIN)
 export class UsersApiController {
   constructor(private readonly usersService: UsersService) {}
 
