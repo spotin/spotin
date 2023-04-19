@@ -16,6 +16,8 @@ import { Roles } from '@/auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
+@JwtAuth(RolesGuard)
+@Roles(UserRole.ADMIN)
 export class UsersApiController {
   constructor(private readonly usersService: UsersService) {}
 
