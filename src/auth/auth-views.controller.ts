@@ -38,9 +38,9 @@ export class AuthViewsController {
   @Get('profile')
   @JwtAuth()
   @ApiOperation({
-    summary: 'Render the login page',
-    description: 'Render the login page.',
-    operationId: 'loginView',
+    summary: 'Render the profile page',
+    description: 'Render the profile page.',
+    operationId: 'profileView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
