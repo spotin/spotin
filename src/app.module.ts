@@ -6,6 +6,7 @@ import { AuthModule } from '@/auth/auth.module';
 import { UsersModule } from '@/users/users.module';
 import { AppController } from '@/app.controller';
 import { ConfigModule } from './config/config.module';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ConfigModule } from './config/config.module';
     PrismaModule.forRoot(),
     SpotsModule,
     UsersModule,
+    TokensModule,
   ],
   controllers: [AppController],
   providers: [
