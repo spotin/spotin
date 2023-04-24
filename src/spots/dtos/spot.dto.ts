@@ -78,5 +78,7 @@ export class SpotDto implements Spot {
 
   // Date when the spot was deleted
   @IsDateString()
+  @ApiPropertyOptional()
+  @IsOptional()
   deletedAt: Date | null;
 }
