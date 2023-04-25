@@ -19,9 +19,9 @@
     <tbody>
     {% for token in tokens %}
     <tr>
-        <td><a href="/tokens/{{ token.uuid }}">{{ token.name }}</a></td>
+        <td><a href="/tokens/{{ token.id }}">{{ token.name }}</a></td>
         <td>
-            <a href="/tokens/{{ token.uuid }}/delete">
+            <a href="/tokens/{{ token.id }}/delete">
                 <i class="fas fa-trash"></i>
             </a>
         </td>

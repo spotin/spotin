@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
 import { LoginUser } from '@/auth/types/login-user.type';
-import { JwtAccessToken } from '@/auth/types/jwt-access-token';
+import { Jwt } from '@/auth/types/jwt';
 import { JwtPayload } from '@/auth/types/jwt-payload';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class AuthService {
     return user;
   }
 
-  async generateJwtAccessToken(user: User): Promise<JwtAccessToken> {
+  async generateJwt(user: User): Promise<Jwt> {
     const payload: JwtPayload = {
       sub: user.id,
       username: user.username,
@@ -35,7 +35,7 @@ export class AuthService {
     };
 
     return {
-      accessToken: await this.jwtService.signAsync(payload),
+      jwt: await this.jwtService.signAsync(payload),
     };
   }
 

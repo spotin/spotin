@@ -6,6 +6,8 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
+import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
 
 export async function bootstrap(
   app: NestExpressApplication,
@@ -35,18 +37,22 @@ export async function bootstrap(
     .setTitle('Spot in API')
     .setDescription('The Spot in API description')
     .setVersion(process.env.npm_package_version as string)
-    .addCookieAuth('accessToken', {
-      type: 'apiKey',
-      in: 'cookie',
-      description: 'The cookie containing the access token',
-    })
+    .addCookieAuth(
+      JWT_AUTH_KEY,
+      {
+        type: 'apiKey',
+        in: 'cookie',
+        description: 'The cookie containing the JWT',
+      },
+      JWT_AUTH_KEY,
+    )
     .addApiKey(
       {
         type: 'apiKey',
-        name: 'apiKey',
+        in: 'header',
         description: 'The token to access protected endpoints',
       },
-      'apiKey',
+      TOKEN_AUTH_KEY,
     )
     .build();
 

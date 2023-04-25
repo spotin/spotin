@@ -8,11 +8,13 @@ import { AuthService } from '@/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JWT_SECRET } from '@/config/config.constants';
 
+export const JWT_AUTH_KEY = 'jwt';
+
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy, JWT_AUTH_KEY) {
   constructor(private authService: AuthService, configService: ConfigService) {
     super({
-      jwtFromRequest: (request: Request) => request.cookies.accessToken,
+      jwtFromRequest: (request: Request) => request.cookies.jwt,
       ignoreExpiration: false,
       secretOrKey: configService.get(JWT_SECRET, { infer: true }),
     });
