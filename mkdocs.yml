@@ -1,11 +1,11 @@
 repo_url: https://github.com/spotin/spotin
 repo_name: spotin/spotin
-site_name: SpotIn Documentation
-site_author: SpotIn contributors
+site_name: Spot in Documentation
+site_author: Spot in contributors
 site_url: https://spotin.github.io/spotin/
 site_description: >-
-  Documentation website for SpotIn - Spots that take place in the virtual or in the physical world.
-copyright: Copyright &copy; 2022 - 2023 SpotIn
+  Documentation website for Spot in - Spots that take place in the virtual or in the physical world.
+copyright: Copyright &copy; 2022 - 2023 Spot in
 nav:
   - Home:
       - Overview: index.md
@@ -87,7 +87,7 @@ extra:
   social:
     - icon: material/github
       link: https://github.com/spotin/spotin
-      name: SpotIn on GitHub
+      name: Spot in on GitHub
 markdown_extensions:
   - abbr
   - admonition

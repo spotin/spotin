@@ -30,8 +30,8 @@ export class AuthApiController {
   @LocalAuth()
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Log in to SpotIn with username and password',
-    description: 'Log in to SpotIn with username and password.',
+    summary: 'Log in to Spot in with username and password',
+    description: 'Log in to Spot in with username and password.',
     operationId: 'login',
   })
   @ApiBody({
@@ -59,8 +59,8 @@ export class AuthApiController {
   @JwtAuth()
   @HttpCode(204)
   @ApiOperation({
-    summary: 'Log out from SpotIn',
-    description: 'Log out from SpotIn.',
+    summary: 'Log out from Spot in',
+    description: 'Log out from Spot in.',
     operationId: 'logout',
   })
   @ApiNoContentResponse({
@@ -79,8 +79,8 @@ export class AuthApiController {
   @Post('signup')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Sign up to SpotIn',
-    description: 'Sign up to SpotIn.',
+    summary: 'Sign up to Spot in',
+    description: 'Sign up to Spot in.',
     operationId: 'signup',
   })
   @ApiBody({
