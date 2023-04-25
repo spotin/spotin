@@ -64,6 +64,24 @@ export class SpotsViewsController {
     };
   }
 
+  @Get('latest')
+  @ApiOperation({
+    summary: 'Render the list of public spots page',
+    description: 'Render the list of public spots page.',
+    operationId: 'publicSpotsView',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('spots/latest')
+  async publicSpotsView() {
+    const spots = await this.spotsService.getPublicSpots();
+
+    return {
+      spots,
+    };
+  }
+
   @Get(':id/delete')
   @JwtAuth()
   @ApiOperation({

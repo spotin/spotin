@@ -12,7 +12,7 @@ export async function bootstrap(
 ): Promise<NestExpressApplication> {
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-  // app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
