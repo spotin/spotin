@@ -17,7 +17,7 @@ export class TokenStrategy extends PassportStrategy(
         verify: (err: Error | unknown, verified?: boolean) => void,
       ) => {
         try {
-          await this.authService.validateApiKey(apiKey);
+          await this.authService.validateToken(apiKey);
           verify(null, true);
         } catch (error) {
           verify(null, false);
