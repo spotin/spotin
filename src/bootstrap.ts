@@ -32,8 +32,8 @@ export async function bootstrap(
   await prismaService.enableShutdownHooks(app);
 
   const config = new DocumentBuilder()
-    .setTitle('SpotIn API')
-    .setDescription('The SpotIn API description')
+    .setTitle('Spot in API')
+    .setDescription('The Spot in API description')
     .setVersion(process.env.npm_package_version as string)
     .addCookieAuth('accessToken', {
       type: 'apiKey',
