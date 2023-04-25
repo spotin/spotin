@@ -26,6 +26,51 @@ export class SpotsApiController {
   constructor(private readonly spotsService: SpotsService) {}
 
   @GetMany({
+    path: 'public',
+    name: 'Spots',
+    summary: 'Get the public spots',
+    operationId: 'getPublicSpotsApi',
+    responseType: [ReadSpotDto],
+  })
+  async getPublicSpotsApi() {
+    const spots = await this.spotsService.getPublicSpots();
+
+    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+
+    return spotsDto;
+  }
+
+  @NestGet(':id/redirect')
+  @ApiOperation({
+    summary: 'Redirect to the link specified by the spot',
+    description: 'Redirect to the link specified by the spot.',
+    operationId: 'getSpotRedirection',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirection success.',
+    type: ReadSpotDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
+  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
+    const spot = (await this.spotsService.getSpot(id)) as Spot;
+
+    if (!spot.configured) {
+      res.redirect(`/spots/${id}/edit`);
+    }
+
+    if (spot?.redirection) {
+      res.redirect(spot.redirection);
+    }
+  }
+
+  @GetMany({
     name: 'Spots',
     summary: 'Get the spots',
     operationId: 'getSpotsApi',
@@ -99,50 +144,5 @@ export class SpotsApiController {
   @JwtAuth()
   async deleteSpotApi(@AuthUser() user: User, @Param('id') id: string) {
     await this.spotsService.deleteSpot(id, user);
-  }
-
-  @NestGet(':id/redirect')
-  @ApiOperation({
-    summary: 'Redirect to the link specified by the spot',
-    description: 'Redirect to the link specified by the spot.',
-    operationId: 'getSpotRedirection',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The spot ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'Redirection success.',
-    type: ReadSpotDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Spot has not been found.',
-  })
-  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
-    const spot = (await this.spotsService.getSpot(id)) as Spot;
-
-    if (!spot.configured) {
-      res.redirect(`/spots/${id}/edit`);
-    }
-
-    if (spot?.redirection) {
-      res.redirect(spot.redirection);
-    }
-  }
-
-  @GetMany({
-    path: 'public',
-    name: 'Spots',
-    summary: 'Get the public spots',
-    operationId: 'getPublicSpotsApi',
-    responseType: [ReadSpotDto],
-  })
-  async getPublicSpotsApi() {
-    const spots = await this.spotsService.getPublicSpots();
-
-    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
-
-    return spotsDto;
   }
 }
