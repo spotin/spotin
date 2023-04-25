@@ -1,7 +1,7 @@
-import * as argon2 from 'argon2';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -61,7 +61,10 @@ export class UsersService {
     const newUser = await this.prisma.user.create({
       data: {
         ...createUser,
-        password: await argon2.hash(createUser.password),
+        password: await bcrypt.hashSync(
+          createUser.password,
+          bcrypt.genSaltSync(10),
+        ),
       },
       include: {
         spots: true,

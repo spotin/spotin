@@ -1,4 +1,3 @@
-import * as argon2 from 'argon2';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
@@ -7,6 +6,7 @@ import { LoginUser } from '@/auth/types/login-user.type';
 import { Jwt } from '@/auth/types/jwt';
 import { JwtPayload } from '@/auth/types/jwt-payload';
 import { SpotsService } from '@/spots/spots.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
   async validateCredentials({ username, password }: LoginUser): Promise<User> {
     const user = (await this.usersService.getUserByUsername(username)) as User;
 
-    const passwordsMatch = await argon2.verify(user.password, password);
+    const passwordsMatch = await bcrypt.compareSync(user.password, password);
 
     if (!user.enabled || !passwordsMatch) {
       throw new UnauthorizedException();
