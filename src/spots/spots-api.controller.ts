@@ -19,6 +19,8 @@ import { Patch } from '@/common/decorators/patch.decorator';
 import { Delete } from '@/common/decorators/delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { HybridAuth } from '@/auth/hybrid/hybrid-auth.decorators';
+import { TokenAuth } from '@/auth/token/token-auth.decorator';
+import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -76,7 +78,7 @@ export class SpotsApiController {
     operationId: 'getSpotsApi',
     responseType: [ReadSpotDto],
   })
-  @HybridAuth()
+  @TokenAuth()
   async getSpotsApi(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
