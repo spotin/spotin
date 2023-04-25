@@ -3,6 +3,8 @@ import { OmitType } from '@nestjs/swagger';
 
 export class CreateTokenDto extends OmitType(TokenDto, [
   'id',
+  'hash',
+  'userId',
   'createdAt',
   'updatedAt',
   'deletedAt',

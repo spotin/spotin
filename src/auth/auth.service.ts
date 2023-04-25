@@ -48,4 +48,16 @@ export class AuthService {
 
     return user;
   }
+
+  async validateToken(tokenHash: string) {
+    const user = (await this.usersService.getUserByTokenHash(
+      tokenHash,
+    )) as User;
+
+    if (!user.enabled) {
+      throw new UnauthorizedException();
+    }
+
+    return user;
+  }
 }
