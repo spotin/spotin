@@ -33,6 +33,30 @@ export class UsersService {
     });
   }
 
+  async getUserByTokenHash(tokenHash: string) {
+    const token = await this.prisma.token.findFirst({
+      where: {
+        hash: {
+          equals: tokenHash,
+        },
+      },
+    });
+
+    if (!token) {
+      return null;
+    }
+
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: {
+          equals: token.userId,
+        },
+      },
+    });
+
+    return user;
+  }
+
   async createUser(createUser: Prisma.UserCreateInput) {
     const newUser = await this.prisma.user.create({
       data: {

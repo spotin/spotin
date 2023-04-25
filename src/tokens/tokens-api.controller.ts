@@ -11,6 +11,8 @@ import { GetOne } from '@/common/decorators/get-one.decorator';
 import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import { UpdateTokenDto } from '@/tokens/dto/update-token.dto';
 import { Patch } from '@/common/decorators/patch.decorator';
+import * as crypto from 'crypto';
+import * as argon2 from 'argon2';
 
 @ApiTags('Tokens')
 @Controller('api/tokens')
@@ -57,7 +59,15 @@ export class TokensController {
     @AuthUser() user: User,
     @Body() createTokenDto: CreateTokenDto,
   ) {
-    const token = await this.tokensService.createToken(createTokenDto, user);
+    const hash = crypto
+      .createHash('sha256')
+      .update(crypto.randomBytes(64).toString('base64'))
+      .digest('hex');
+
+    const token = await this.tokensService.createToken(
+      { ...createTokenDto, hash },
+      user,
+    );
 
     return new ReadTokenDto(token);
   }

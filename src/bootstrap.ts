@@ -12,7 +12,7 @@ export async function bootstrap(
 ): Promise<NestExpressApplication> {
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  // app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -40,6 +40,14 @@ export async function bootstrap(
       in: 'cookie',
       description: 'The cookie containing the access token',
     })
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'token',
+        description: 'The token to access protected endpoints',
+      },
+      'token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
