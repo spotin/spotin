@@ -4,20 +4,20 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 
 @Injectable()
-export class TokenStrategy extends PassportStrategy(
+export class ApiKeyStrategy extends PassportStrategy(
   HeaderAPIKeyStrategy,
-  'token',
+  'apiKey',
 ) {
   constructor(private authService: AuthService) {
     super(
-      { header: 'token' },
+      { header: 'apiKey' },
       false,
       async (
-        token: string,
+        apiKey: string,
         verify: (err: Error | unknown, verified?: boolean) => void,
       ) => {
         try {
-          await this.authService.validateToken(token);
+          await this.authService.validateApiKey(apiKey);
           verify(null, true);
         } catch (error) {
           verify(null, false);
