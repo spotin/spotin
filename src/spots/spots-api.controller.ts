@@ -78,7 +78,7 @@ export class SpotsApiController {
     operationId: 'getSpotsApi',
     responseType: [ReadSpotDto],
   })
-  @TokenAuth()
+  @HybridAuth()
   async getSpotsApi(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
