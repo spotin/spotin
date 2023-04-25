@@ -43,10 +43,10 @@ export async function bootstrap(
     .addApiKey(
       {
         type: 'apiKey',
-        name: 'token',
+        name: 'apiKey',
         description: 'The token to access protected endpoints',
       },
-      'token',
+      'apiKey',
     )
     .build();
 

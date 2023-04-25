@@ -12,13 +12,13 @@ import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Post } from '@/common/decorators/post.decorator';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { Patch } from '@/common/decorators/patch.decorator';
 import { Delete } from '@/common/decorators/delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { HybridAuth } from '@/auth/hybrid/hybrid-auth.decorators';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -76,7 +76,7 @@ export class SpotsApiController {
     operationId: 'getSpotsApi',
     responseType: [ReadSpotDto],
   })
-  @JwtAuth()
+  @HybridAuth()
   async getSpotsApi(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
@@ -91,7 +91,7 @@ export class SpotsApiController {
     operationId: 'getSpotApi',
     responseType: ReadSpotDto,
   })
-  @JwtAuth()
+  @HybridAuth()
   async getSpotApi(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id, user);
 
@@ -105,7 +105,7 @@ export class SpotsApiController {
     responseType: ReadSpotDto,
     operationId: 'createSpotApi',
   })
-  @JwtAuth()
+  @HybridAuth()
   async createSpotApi(
     @AuthUser() user: User,
     @Body() createSpotDto: CreateSpotDto,
@@ -141,7 +141,7 @@ export class SpotsApiController {
     summary: 'Delete the specified spot',
     operationId: 'deleteSpotApi',
   })
-  @JwtAuth()
+  @HybridAuth()
   async deleteSpotApi(@AuthUser() user: User, @Param('id') id: string) {
     await this.spotsService.deleteSpot(id, user);
   }

@@ -49,7 +49,7 @@ export class AuthService {
     return user;
   }
 
-  async validateToken(tokenHash: string) {
+  async validateApiKey(tokenHash: string) {
     const user = (await this.usersService.getUserByTokenHash(
       tokenHash,
     )) as User;
