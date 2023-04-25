@@ -3,8 +3,8 @@
     <ul>
         <!-- if is authenticated -->
         {% if username %}
-        <li><a class="contrast" href="/spots/list"><i class="fas fa-map-marker-alt"></i> Spots</a></li>
-        <li><a class="contrast" href="/tokens/list"><i class="fas fa-key"></i> API keys</a></li>
+        <li><a class="contrast" href="/spots"><i class="fas fa-map-marker-alt"></i> Spots</a></li>
+        <li><a class="contrast" href="/tokens"><i class="fas fa-key"></i> API keys</a></li>
         <li><a class="contrast" href="/auth/profile"><i class="fas fa-user"></i>  {{ username }} </a></li>
         <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
         {%  else  %}

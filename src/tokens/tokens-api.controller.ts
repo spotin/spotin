@@ -12,11 +12,10 @@ import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import { UpdateTokenDto } from '@/tokens/dto/update-token.dto';
 import { Patch } from '@/common/decorators/patch.decorator';
 import * as crypto from 'crypto';
-import * as argon2 from 'argon2';
 
 @ApiTags('Tokens')
 @Controller('api/tokens')
-export class TokensController {
+export class TokensApiController {
   constructor(private readonly tokensService: TokensService) {}
 
   @GetMany({
