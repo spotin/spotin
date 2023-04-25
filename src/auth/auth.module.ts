@@ -9,7 +9,7 @@ import { JwtStrategy } from '@/auth/jwt/jwt.strategy';
 import { AuthService } from '@/auth/auth.service';
 import { UsersModule } from '@/users/users.module';
 import { JWT_EXPIRATION_TIME, JWT_SECRET } from '@/config/config.constants';
-import { ApiKeyStrategy } from '@/auth/token/token.strategy';
+import { TokenStrategy } from '@/auth/token/token.strategy';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { ApiKeyStrategy } from '@/auth/token/token.strategy';
     PassportModule,
     UsersModule,
   ],
-  providers: [AuthService, ApiKeyStrategy, JwtStrategy, LocalStrategy],
+  providers: [AuthService, TokenStrategy, JwtStrategy, LocalStrategy],
   controllers: [AuthApiController, AuthViewsController],
   exports: [AuthService],
 })
