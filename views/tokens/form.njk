@@ -2,15 +2,15 @@
 
 {% block body %}
 <h2><i class="fas fa-key"></i> New API key</h2>
-<form action="/tokens/create" method="POST">
+<form action="/api/tokens" method="POST">
     <fieldset>
         <label for="name">Name</label> 
-        {{ if errors.name }}
+        {% if errors.name %}
         <span class="error">The name field cannot be empty</span>
         <input name="name" id="name" placeholder="Name" value="{{ values.name }}" aria-invalid="true">
-        {{ else }}
+        {% else %}
         <input name="name" id="name" placeholder="Name" value="{{ values.name }}">
-        {{ endif }}
+        {% endif %}
     </fieldset>
     <button type="submit"><i class="fas fa-save"></i> New API key</button>
 </form>
@@ -25,7 +25,7 @@
 
         const body = { name };
         try {
-            const res = await fetch('/tokens', {
+            const res = await fetch('/api/tokens', {
                 method: 'POST',
                 body: JSON.stringify(body),
                 headers: {
@@ -33,13 +33,17 @@
                 }
             });
 
-            if (res.status === 200) {
-                window.location.href = '/tokens';
+            const TokenDTO = await res.json();
+
+            if(res.status === 201) {
+                window.location.href = `/tokens/view/${TokenDTO.hash}/${TokenDTO.username}`;
             }
+
         } catch (err) {
             console.error(err);
         }
     }
 
     form.addEventListener('submit', handleSubmit);
+</script>
 {% endblock %}
