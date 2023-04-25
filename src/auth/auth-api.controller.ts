@@ -14,9 +14,10 @@ import { LoginUserDto } from '@/auth/dtos/login-user.dto';
 import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
 import { UsersService } from '@/users/users.service';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
-import { JwtAccessTokenDto } from '@/auth/dtos/jwt-access-token.dto';
+import { JwtDto } from '@/auth/dtos/jwt.dto';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -40,19 +41,19 @@ export class AuthApiController {
   })
   @ApiOkResponse({
     description: 'The user has been successfully logged in.',
-    type: JwtAccessTokenDto,
+    type: JwtDto,
   })
   async login(@AuthUser() user: User, @Res() res: Response) {
-    const jwt = await this.authService.generateJwtAccessToken(user);
+    const jwt = await this.authService.generateJwt(user);
 
-    res.cookie('accessToken', jwt.accessToken, {
+    res.cookie(JWT_AUTH_KEY, jwt.jwt, {
       httpOnly: true,
       sameSite: true,
       secure: true,
     });
 
     // Return json web token
-    return res.json(new JwtAccessTokenDto(jwt));
+    return res.json(new JwtDto(jwt));
   }
 
   @Post('logout')
@@ -67,7 +68,7 @@ export class AuthApiController {
     description: 'The user has been successfully logged out.',
   })
   async logout(@Res() res: Response) {
-    res.cookie('accessToken', '', {
+    res.cookie(JWT_AUTH_KEY, '', {
       httpOnly: true,
       sameSite: true,
       secure: true,

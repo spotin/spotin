@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { JwtOrTokenAuthGuard } from '@/auth/jwt-or-token/jwt-or-token-auth.guard';
+import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
+import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
   ApiCookieAuth,
@@ -6,16 +9,14 @@ import {
   ApiSecurity,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 
-export const JwtAuth = (...guards: (Function | CanActivate)[]) =>
+export const JwtOrTokenAuth = (...guards: (Function | CanActivate)[]) =>
   applyDecorators(
-    UseGuards(JwtAuthGuard, ...guards),
-    ApiSecurity(JWT_AUTH_KEY),
+    UseGuards(JwtOrTokenAuthGuard, ...guards),
     ApiCookieAuth(JWT_AUTH_KEY),
+    ApiSecurity(TOKEN_AUTH_KEY),
     ApiUnauthorizedResponse({
-      description: 'Wrong JWT.',
+      description: 'Wrong JWT or token.',
     }),
     ApiForbiddenResponse({
       description: 'Unsufficient roles or permissions.',

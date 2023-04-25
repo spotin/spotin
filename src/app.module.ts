@@ -18,16 +18,5 @@ import { TokensModule } from './tokens/tokens.module';
     TokensModule,
   ],
   controllers: [AppController],
-  providers: [
-    // Replace with `providePrismaClientExceptionFilter()` once publicly available
-    // https://nestjs-prisma.dev/docs/exception-filter/#app_filter
-    {
-      provide: APP_FILTER,
-      useFactory: ({ httpAdapter }: HttpAdapterHost) => {
-        return new PrismaClientExceptionFilter(httpAdapter);
-      },
-      inject: [HttpAdapterHost],
-    },
-  ],
 })
 export class AppModule {}
