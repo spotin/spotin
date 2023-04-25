@@ -16,10 +16,30 @@
     {% if spot.description %}
     <p class="description">{{ spot.description }}</p>
     {% endif %}
-    {% if spot.coordinates %}
-    <div class='map'
-            data-longitude="{{ spot.coordinates.coordinates[0] }}"
-            data-latitude="{{ spot.coordinates.coordinates[1] }}"></div>
+    {% if spot.latitude and spot.longitude %}
+        <div id='map' style='width: 100%; height: 400px;'></div>
     {% endif %}
 </article>
+<script>
+    // get the spot.coordinates
+    var longitude = '{{ spot.longitude }}';
+    var latitude = '{{ spot.latitude }}';
+
+    if (longitude != '' && latitude != '') {
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
+            center: [longitude, latitude],
+            zoom: 10
+        });
+
+        // add the marker to the map
+        var marker = new maplibregl.Marker({
+            color: "#e53935",
+        })
+        .setLngLat([longitude, latitude])
+        .addTo(map);
+    }
+
+</script>
 {% endblock %}
