@@ -15,6 +15,7 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
+import { JwtOrTokenOrUnconfiguredAuth } from '@/auth/jwt-or-token-unconfigured/jwt-or-token-or-unconfigured-auth.decorators';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -133,6 +134,7 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/form')
+  @JwtOrTokenOrUnconfiguredAuth()
   async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
 
@@ -146,6 +148,36 @@ export class SpotsViewsController {
       values: spotDto,
       action: 'PATCH',
     };
+  }
+
+  @Get(':id/redirect')
+  @ApiOperation({
+    summary: 'Redirect to the link specified by the spot',
+    description: 'Redirect to the link specified by the spot.',
+    operationId: 'getSpotRedirection',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirection success.',
+    type: ReadSpotDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Spot has not been found.',
+  })
+  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
+    const spot = (await this.spotsService.getSpot(id)) as Spot;
+
+    if (!spot.configured) {
+      res.redirect(`/spots/${id}/edit`);
+    }
+
+    if (spot?.redirection) {
+      res.redirect(spot.redirection);
+    }
   }
 
   @Get(':id')
