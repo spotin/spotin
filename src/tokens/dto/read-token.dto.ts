@@ -8,7 +8,7 @@ export class ReadTokenDto extends OmitType(TokenDto, [
   constructor(partial: Partial<TokenDto>) {
     super();
 
-    // Exclude userId property from the object
+    // Exclude userId and hash properties from the object
     delete partial.userId;
     delete partial.hash;
 

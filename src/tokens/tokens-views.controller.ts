@@ -75,7 +75,7 @@ export class TokensViewsController {
     description: 'Render successful.',
   })
   @Render('tokens/index')
-  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
+  async deleteTokenView(@AuthUser() user: User, @Param('id') id: string) {
     await this.tokensService.deleteToken(id);
 
     const tokens = await this.tokensService.getTokens(user);
