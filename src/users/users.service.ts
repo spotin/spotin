@@ -54,8 +54,6 @@ export class UsersService {
       },
     });
 
-    console.log('user', user);
-
     return user;
   }
 
