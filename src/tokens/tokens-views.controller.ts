@@ -1,9 +1,9 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import { TokensService } from '@/tokens/tokens.service';
 import { Controller, Get, Param, Render } from '@nestjs/common';
 import {
-  ApiBody,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -14,7 +14,7 @@ import { User } from '@prisma/client';
 @ApiTags('Views')
 @Controller('tokens')
 export class TokensViewsController {
-  constructor(private readonly tokenService: TokensService) {}
+  constructor(private readonly tokensService: TokensService) {}
 
   @Get()
   @JwtAuth()
@@ -28,13 +28,15 @@ export class TokensViewsController {
   })
   @Render('tokens/index')
   async getTokensView(@AuthUser() user: User) {
-    const tokens = await this.tokenService.getTokens(user);
+    const tokens = await this.tokensService.getTokens(user);
+
+    const tokensDto = tokens.map((token) => new ReadTokenDto(token));
 
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      tokens,
+      tokens: tokensDto,
     };
   }
 
@@ -57,6 +59,37 @@ export class TokensViewsController {
     };
   }
 
+  @Get(':id/delete')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Delete the specified token and render the list of token',
+    description: 'Delete the specified token and render the list of token.',
+    operationId: 'deleteTokenView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The token ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('tokens/index')
+  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
+    await this.tokensService.deleteToken(id);
+
+    const tokens = await this.tokensService.getTokens(user);
+
+    const tokensDto = tokens.map((token) => new ReadTokenDto(token));
+
+    return {
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+      tokens: tokensDto,
+    };
+  }
+
   @Get(':id')
   @ApiOperation({
     summary: 'Render the token page',
@@ -65,7 +98,7 @@ export class TokensViewsController {
   })
   @ApiParam({
     name: 'id',
-    description: 'The spot ID.',
+    description: 'The token ID.',
     format: 'uuid',
   })
   @ApiOkResponse({
@@ -74,13 +107,13 @@ export class TokensViewsController {
   @Render('tokens/view')
   @JwtAuth()
   async tokenView(@AuthUser() user: User, @Param('id') id: string) {
-    const token = await this.tokenService.getToken(id);
+    const token = await this.tokensService.getToken(id, user);
 
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      token: token,
+      token: new ReadTokenDto(token),
     };
   }
 
@@ -90,21 +123,33 @@ export class TokensViewsController {
     description: 'Render the create a new token page.',
     operationId: 'createTokenView',
   })
-  @ApiBody({})
+  @ApiParam({
+    name: 'hash',
+    description: 'The token hash.',
+    format: 'string',
+  })
+  @ApiParam({
+    name: 'name',
+    description: 'The token name.',
+    format: 'string',
+  })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('tokens/view')
   @JwtAuth()
-  viewTokenView(@AuthUser() user: User, @Param() params: any) {
-    console.log(params);
+  viewTokenView(
+    @AuthUser() user: User,
+    @Param('hash') hash: string,
+    @Param('name') name: string,
+  ) {
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
       token: {
-        hash: params.hash,
-        name: params.name,
+        hash: hash,
+        name: name,
       },
     };
   }
