@@ -36,7 +36,7 @@
             const TokenDTO = await res.json();
 
             if(res.status === 201) {
-                window.location.href = `/tokens/view/${TokenDTO.hash}/${TokenDTO.username}`;
+                window.location.href = `/tokens/view/${TokenDTO.hash}/${TokenDTO.name}`;
             }
 
         } catch (err) {

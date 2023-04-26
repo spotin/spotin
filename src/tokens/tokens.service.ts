@@ -18,14 +18,12 @@ export class TokensService {
   }
 
   /** Read a token by id */
-  async getToken(tokenId: string, user?: User) {
+  async getToken(tokenId: string, user: User) {
     const token = await this.prisma.token.findFirstOrThrow({
       where: {
-        userId: user
-          ? {
-              equals: user.id,
-            }
-          : undefined,
+        userId: {
+          equals: user.id,
+        },
         id: {
           equals: tokenId,
         },
@@ -51,19 +49,6 @@ export class TokensService {
       },
     });
     return newToken;
-  }
-
-  /** Update token by id */
-  async updateToken(tokenId: string, updateToken: Prisma.TokenUpdateInput) {
-    const updatedToken = await this.prisma.token.update({
-      where: {
-        id: tokenId,
-      },
-      data: {
-        ...updateToken,
-      },
-    });
-    return updatedToken;
   }
 
   /** Delete a token by id */

@@ -14,6 +14,7 @@ import { SpotsService } from '@/spots/spots.service';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -37,11 +38,13 @@ export class SpotsViewsController {
   async getSpotsView(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
+    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      spots,
+      spots: spotsDto,
     };
   }
 
@@ -101,10 +104,15 @@ export class SpotsViewsController {
   async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
     await this.spotsService.deleteSpot(id, user);
 
+    const spots = await this.spotsService.getSpots(user);
+
+    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
+      spots: spotsDto,
     };
   }
 
