@@ -10,6 +10,9 @@ import { AuthService } from '@/auth/auth.service';
 import { UsersModule } from '@/users/users.module';
 import { JWT_EXPIRATION_TIME, JWT_SECRET } from '@/config/config.constants';
 import { TokenStrategy } from '@/auth/token/token.strategy';
+import { UnconfiguredSpotStrategy } from '@/auth/unconfigured-spot/unconfigured-spot.strategy';
+import { SpotsService } from '@/spots/spots.service';
+import { PrismaModule } from 'nestjs-prisma';
 
 @Module({
   imports: [
@@ -26,8 +29,16 @@ import { TokenStrategy } from '@/auth/token/token.strategy';
     }),
     PassportModule,
     UsersModule,
+    PrismaModule, // TODO: is this needed?
   ],
-  providers: [AuthService, TokenStrategy, JwtStrategy, LocalStrategy],
+  providers: [
+    AuthService,
+    SpotsService,
+    JwtStrategy,
+    LocalStrategy,
+    TokenStrategy,
+    UnconfiguredSpotStrategy,
+  ],
   controllers: [AuthApiController, AuthViewsController],
   exports: [AuthService],
 })
