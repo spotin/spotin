@@ -1,9 +1,14 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { TokenDto } from '@/tokens/dto/token.dto';
 import { TokensService } from '@/tokens/tokens.service';
-import { Body, Controller, Get, Param, Render } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Render } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
 @ApiTags('Views')
@@ -49,6 +54,33 @@ export class TokensViewsController {
       username: user?.username,
       email: user?.email,
       role: user?.role,
+    };
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Render the token page',
+    description: 'Render the token page.',
+    operationId: 'tokenView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('tokens/view')
+  @JwtAuth()
+  async tokenView(@AuthUser() user: User, @Param('id') id: string) {
+    const token = await this.tokenService.getToken(id);
+
+    return {
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+      token: token,
     };
   }
 
