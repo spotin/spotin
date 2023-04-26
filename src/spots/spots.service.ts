@@ -100,4 +100,13 @@ export class SpotsService {
       },
     });
   }
+
+  async getUnconfiguredSpot(spotId: string) {
+    return await this.prisma.spot.findFirstOrThrow({
+      where: {
+        id: spotId,
+        configured: false,
+      },
+    });
+  }
 }

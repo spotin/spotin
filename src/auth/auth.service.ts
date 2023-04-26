@@ -6,12 +6,14 @@ import { UsersService } from '@/users/users.service';
 import { LoginUser } from '@/auth/types/login-user.type';
 import { Jwt } from '@/auth/types/jwt';
 import { JwtPayload } from '@/auth/types/jwt-payload';
+import { SpotsService } from '@/spots/spots.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private spotsService: SpotsService,
   ) {}
 
   async validateCredentials({ username, password }: LoginUser): Promise<User> {
@@ -57,6 +59,19 @@ export class AuthService {
     if (!user.enabled) {
       throw new UnauthorizedException();
     }
+
+    return user;
+  }
+
+  /** Validate a spot by id */
+  async validateSpot(spotId: string) {
+    const spot = await this.spotsService.getUnconfiguredSpot(spotId);
+
+    if (!spot) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.usersService.getUser(spot.userId);
 
     return user;
   }
