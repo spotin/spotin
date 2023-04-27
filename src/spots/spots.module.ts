@@ -9,5 +9,6 @@ import { SpotsViewsController } from '@/spots/spots-views.controller';
   imports: [ConfigModule, PrismaModule],
   providers: [SpotsService],
   controllers: [SpotsApiController, SpotsViewsController],
+  exports: [SpotsService],
 })
 export class SpotsModule {}
