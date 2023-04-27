@@ -27,7 +27,7 @@ COPY package-lock.json package-lock.json
 RUN npm ci --omit=dev
 
 # Copy built application from stage 1
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/.nest ./.nest
 
 COPY prisma prisma
 COPY public public
