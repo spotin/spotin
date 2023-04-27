@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
-import { applyDecorators, Post as NestPost } from '@nestjs/common';
+import { applyDecorators, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -19,7 +19,7 @@ type PostDecoratorOptions = {
   operationId: string;
 };
 
-export const Post = ({
+export const CustomPost = ({
   path,
   name,
   summary,
@@ -29,7 +29,7 @@ export const Post = ({
   operationId,
 }: PostDecoratorOptions) =>
   applyDecorators(
-    NestPost(path ?? ''),
+    Post(path ?? ''),
     ApiOperation({
       summary,
       description: description ?? `${summary}.`,

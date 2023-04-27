@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { applyDecorators, Get as NestGet } from '@nestjs/common';
+import { applyDecorators, Get } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -25,7 +25,7 @@ export const GetOne = ({
   operationId,
 }: GetOneDecoratorOptions) =>
   applyDecorators(
-    NestGet(path ?? ':id'),
+    Get(path ?? ':id'),
     ApiOperation({
       summary,
       description: description ?? `${summary}.`,

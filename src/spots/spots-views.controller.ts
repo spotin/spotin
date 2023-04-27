@@ -80,8 +80,10 @@ export class SpotsViewsController {
   async publicSpotsView() {
     const spots = await this.spotsService.getPublicSpots();
 
+    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+
     return {
-      spots,
+      spots: spotsDto,
     };
   }
 
@@ -134,12 +136,14 @@ export class SpotsViewsController {
   async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
 
+    const spotDto = new ReadSpotDto(spot);
+
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      uuid: id,
-      values: spot,
+      id,
+      values: spotDto,
       action: 'PATCH',
     };
   }
@@ -176,16 +180,17 @@ export class SpotsViewsController {
 
     const backendUrl = this.configService.get(FQDN, { infer: true });
     const redirection = `${backendUrl}/api/spots/${spot.id}/redirect`;
+    const spotDto = new ReadSpotDto(spot);
 
     try {
       const url = await qrcode.toDataURL(redirection);
 
-      return res.render('spots/[uuid]', {
+      return res.render('spots/[id]', {
         username: user?.username,
         email: user?.email,
         role: user?.role,
         title: 'Spot',
-        spot: spot,
+        spot: spotDto,
         qrcode: url,
       });
     } catch (error) {

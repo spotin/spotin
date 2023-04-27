@@ -9,7 +9,7 @@
             {% if spot.redirection %}
             <i class="fas fa-external-link-alt"></i> <a href="{{ spot.redirection }}" target="_blank" rel="noreferrer">{{ spot.redirection }}</a>
             {% else %}
-            <i class="fas fa-link"></i> <a href="/spots/{{ spot.uuid }}">{{ spot.uuid }}</a>
+            <i class="fas fa-link"></i> <a href="/spots/{{ spot.id }}">{{ spot.id }}</a>
             {% endif %}
         </h2>
     </hgroup>

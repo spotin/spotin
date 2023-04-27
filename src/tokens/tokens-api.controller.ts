@@ -1,10 +1,10 @@
 import { Controller, Body, Param } from '@nestjs/common';
-import { Post } from '@/common/decorators/post.decorator';
+import { CustomPost } from '@/common/decorators/custom-post.decorator';
 import { TokensService } from './tokens.service';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetMany } from '@/common/decorators/get-many.decorator';
-import { Delete } from '@/common/decorators/delete.decorator';
+import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { User } from '@prisma/client';
@@ -31,7 +31,7 @@ export class TokensApiController {
     return tokensDto;
   }
 
-  @Post({
+  @CustomPost({
     name: 'Token',
     summary: 'Create a new token',
     bodyType: CreateTokenDto,
@@ -56,7 +56,7 @@ export class TokensApiController {
     return token;
   }
 
-  @Delete({
+  @CustomDelete({
     name: 'Token',
     summary: 'Delete the specified token',
     operationId: 'deleteTokenApi',

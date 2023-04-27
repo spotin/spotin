@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
-import { applyDecorators, Patch as NestPatch } from '@nestjs/common';
+import { applyDecorators, Patch } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -21,7 +21,7 @@ type PatchDecoratorOptions = {
   operationId: string;
 };
 
-export const Patch = ({
+export const CustomPatch = ({
   path,
   name,
   summary,
@@ -31,7 +31,7 @@ export const Patch = ({
   operationId,
 }: PatchDecoratorOptions) =>
   applyDecorators(
-    NestPatch(path ?? ':id'),
+    Patch(path ?? ':id'),
     ApiOperation({
       summary,
       description: description ?? `${summary}.`,
