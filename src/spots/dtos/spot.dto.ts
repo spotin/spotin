@@ -8,6 +8,7 @@ import {
   Min,
   Max,
   IsOptional,
+  IsUrl,
 } from 'class-validator';
 import { Spot } from '@prisma/client';
 
@@ -46,9 +47,9 @@ export class SpotDto implements Spot {
   longitude: number | null;
 
   // Redirection when the QR code is accessed
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ format: 'url' })
   @IsOptional()
-  @IsString()
+  @IsUrl()
   redirection: string | null;
 
   // User who created the spot
