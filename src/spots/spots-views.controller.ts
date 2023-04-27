@@ -15,7 +15,7 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { JwtOrTokenOrUnconfiguredAuth } from '@/auth/jwt-or-token-unconfigured/jwt-or-token-or-unconfigured-auth.decorators';
+import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -134,7 +134,7 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/form')
-  @JwtOrTokenOrUnconfiguredAuth()
+  @JwtOrTokenOrUnconfiguredSpotAuth()
   async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
 
