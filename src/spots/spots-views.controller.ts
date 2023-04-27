@@ -168,7 +168,10 @@ export class SpotsViewsController {
   @ApiNotFoundResponse({
     description: 'Spot has not been found.',
   })
-  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
+  async getSpotRedirection(
+    @Res({ passthrough: true }) res: Response,
+    @Param('id') id: string,
+  ) {
     const spot = (await this.spotsService.getSpot(id)) as Spot;
 
     if (!spot.configured) {

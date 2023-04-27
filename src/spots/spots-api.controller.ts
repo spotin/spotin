@@ -41,36 +41,6 @@ export class SpotsApiController {
     return spotsDto;
   }
 
-  @Get(':id/redirect')
-  @ApiOperation({
-    summary: 'Redirect to the link specified by the spot',
-    description: 'Redirect to the link specified by the spot.',
-    operationId: 'getSpotRedirection',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The spot ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'Redirection success.',
-    type: ReadSpotDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Spot has not been found.',
-  })
-  async getSpotRedirection(@Res() res: Response, @Param('id') id: string) {
-    const spot = (await this.spotsService.getSpot(id)) as Spot;
-
-    if (!spot.configured) {
-      res.redirect(`/spots/${id}/edit`);
-    }
-
-    if (spot?.redirection) {
-      res.redirect(spot.redirection);
-    }
-  }
-
   @GetMany({
     name: 'Spots',
     summary: 'Get the spots',
