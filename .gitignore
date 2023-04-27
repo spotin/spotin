@@ -49,3 +49,6 @@ ehthumbs_vista.db
 
 # Windows shortcuts
 *.lnk
+
+## Docker volumes
+db-data

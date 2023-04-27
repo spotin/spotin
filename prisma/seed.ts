@@ -9,7 +9,7 @@ async function main() {
     update: {},
     create: {
       username: 'admin',
-      email: 'admin@localhost.ch',
+      email: process.env.SPOT_IN_ADMIN_EMAIL as string,
       password: await argon2.hash(process.env.SPOT_IN_ADMIN_PASSWORD as string),
       enabled: true,
       role: UserRole.ADMIN,
