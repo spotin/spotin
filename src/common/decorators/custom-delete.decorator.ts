@@ -1,8 +1,4 @@
-import {
-  applyDecorators,
-  HttpCode,
-  Delete as NestDelete,
-} from '@nestjs/common';
+import { applyDecorators, HttpCode, Delete } from '@nestjs/common';
 import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -18,7 +14,7 @@ type DeleteDecoratorOptions = {
   operationId: string;
 };
 
-export const Delete = ({
+export const CustomDelete = ({
   path,
   name,
   summary,
@@ -26,7 +22,7 @@ export const Delete = ({
   operationId,
 }: DeleteDecoratorOptions) =>
   applyDecorators(
-    NestDelete(path ?? ':id'),
+    Delete(path ?? ':id'),
     HttpCode(204),
     ApiOperation({
       summary,

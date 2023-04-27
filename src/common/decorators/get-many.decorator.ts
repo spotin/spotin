@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { applyDecorators, Get as NestGet } from '@nestjs/common';
+import { applyDecorators, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 type GetManyDecoratorOptions = {
@@ -20,7 +20,7 @@ export const GetMany = ({
   operationId,
 }: GetManyDecoratorOptions) =>
   applyDecorators(
-    NestGet(path ?? ''),
+    Get(path ?? ''),
     ApiOperation({
       summary,
       description: description ?? `${summary}.`,

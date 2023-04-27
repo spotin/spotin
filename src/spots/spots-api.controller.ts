@@ -1,4 +1,4 @@
-import { Body, Controller, Get as NestGet, Param, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Res } from '@nestjs/common';
 import {
   ApiOperation,
   ApiOkResponse,
@@ -12,11 +12,11 @@ import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { Post } from '@/common/decorators/post.decorator';
+import { CustomPost } from '@/common/decorators/custom-post.decorator';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { GetMany } from '@/common/decorators/get-many.decorator';
-import { Patch } from '@/common/decorators/patch.decorator';
-import { Delete } from '@/common/decorators/delete.decorator';
+import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
+import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtOrTokenAuth } from '@/auth/jwt-or-token/jwt-or-token-auth.decorators';
 
@@ -40,7 +40,7 @@ export class SpotsApiController {
     return spotsDto;
   }
 
-  @NestGet(':id/redirect')
+  @Get(':id/redirect')
   @ApiOperation({
     summary: 'Redirect to the link specified by the spot',
     description: 'Redirect to the link specified by the spot.',
@@ -98,7 +98,7 @@ export class SpotsApiController {
     return new ReadSpotDto(spot);
   }
 
-  @Post({
+  @CustomPost({
     name: 'Spot',
     summary: 'Create a new spot',
     bodyType: CreateSpotDto,
@@ -115,7 +115,7 @@ export class SpotsApiController {
     return new ReadSpotDto(newSpot);
   }
 
-  @Patch({
+  @CustomPatch({
     name: 'Spot',
     summary: 'Update the specified spot',
     bodyType: UpdateSpotDto,
@@ -136,7 +136,7 @@ export class SpotsApiController {
     return new ReadSpotDto(updatedSpot);
   }
 
-  @Delete({
+  @CustomDelete({
     name: 'Spot',
     summary: 'Delete the specified spot',
     operationId: 'deleteSpotApi',

@@ -78,10 +78,10 @@
     const action = "{{ action }}";
     let url = "/api/spots";
 
-    const uuid = "{{ uuid }}";
+    const id = "{{ id }}";
 
     if(action === 'PATCH') {
-        url = `/api/spots/${uuid}`;
+        url = `/api/spots/${id}`;
     }
 
     async function postData(url = "", data) {

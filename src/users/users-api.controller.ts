@@ -7,17 +7,15 @@ import { UpdateUserDto } from '@/users/dtos/update-user.dto';
 import { ReadUserDto } from '@/users/dtos/read-user.dto';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { GetOne } from '@/common/decorators/get-one.decorator';
-import { Post } from '@/common/decorators/post.decorator';
-import { Patch } from '@/common/decorators/patch.decorator';
-import { Delete } from '@/common/decorators/delete.decorator';
+import { CustomPost } from '@/common/decorators/custom-post.decorator';
+import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
+import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
-@JwtAuth(RolesGuard)
-@Roles(UserRole.ADMIN)
 export class UsersApiController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -28,7 +26,7 @@ export class UsersApiController {
     responseType: [ReadUserDto],
   })
   @JwtAuth(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
+  @Roles(UserRole.ADMIN)
   async getUsersApi() {
     const users = await this.usersService.getUsers();
 
@@ -51,7 +49,7 @@ export class UsersApiController {
     return new ReadUserDto(user);
   }
 
-  @Post({
+  @CustomPost({
     name: 'User',
     summary: 'Create a new user',
     bodyType: CreateUserDto,
@@ -69,7 +67,7 @@ export class UsersApiController {
     return new ReadUserDto(newUser);
   }
 
-  @Patch({
+  @CustomPatch({
     name: 'User',
     summary: 'Update the specified user',
     bodyType: UpdateUserDto,
@@ -90,7 +88,7 @@ export class UsersApiController {
     return new ReadUserDto(updatedUser);
   }
 
-  @Delete({
+  @CustomDelete({
     name: 'User',
     summary: 'Delete the specified user',
     operationId: 'deleteUserApi',

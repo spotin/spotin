@@ -1,8 +1,8 @@
 {% extends "layout.njk" %}
 
 {% block body %}
-<h1><i class="fas fa-key"></i> Your API keys</h1>
-<p> The API keys enable you to publish spots from other platform with a REST API.
+<h1><i class="fas fa-key"></i> Your tokens</h1>
+<p> The tokens enable you to publish spots from other platform with a REST API.
     The <a href="/api/" rel="noreferrer" target="_blank"> <i class="fas fa-book"></i> documentation</a>
     of the API will help you throughout this integration.
 </p>
@@ -29,5 +29,5 @@
     {% endfor %}
     </tbody>
 </table>
-<a href="/tokens/create" role="button"><i class="fas fa-plus-circle"></i> New API key</a>
+<a href="/tokens/create" role="button"><i class="fas fa-plus-circle"></i> New token</a>
 {% endblock %}
