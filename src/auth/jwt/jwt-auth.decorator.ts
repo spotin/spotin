@@ -3,7 +3,6 @@ import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
   ApiCookieAuth,
   ApiForbiddenResponse,
-  ApiSecurity,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';

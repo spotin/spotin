@@ -12,21 +12,19 @@ export class UnconfiguredSpotStrategy extends PassportStrategy(
   UNCONFIGURED_SPOT_AUTH_KEY,
 ) {
   constructor(private authService: AuthService) {
-    // source https://www.passportjs.org/packages/passport-custom/
     super(
       async (
         request: { params: { id: any } },
-        done: (
-          arg0: null,
-          arg1: boolean | (User & { spots: Spot[] }) | null,
-        ) => void,
+        verify: (err: Error | unknown, verified?: boolean | User) => void,
       ) => {
         try {
           const spotId = request.params.id;
+
           const user = await this.authService.validateSpot(spotId);
-          done(null, user);
+
+          verify(null, user);
         } catch {
-          done(null, false);
+          verify(null, false);
         }
       },
     );

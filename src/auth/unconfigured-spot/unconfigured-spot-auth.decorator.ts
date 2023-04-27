@@ -7,10 +7,10 @@ export const UnconfiguredSpotAuth = (...guards: (Function | CanActivate)[]) =>
   applyDecorators(
     UseGuards(UnconfiguredSpotAuthGuard, ...guards),
     ApiUnauthorizedResponse({
-      description: 'The spot is already configured',
+      description:
+        'The spot is already configured or you are not the owner of the spot.',
     }),
     ApiForbiddenResponse({
-      description:
-        'Unsufficient roles, permissions or the spot is already configured',
+      description: 'Unsufficient roles or permissions.',
     }),
   );

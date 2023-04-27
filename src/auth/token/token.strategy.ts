@@ -2,6 +2,7 @@ import { HeaderAPIKeyStrategy } from 'passport-headerapikey';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
+import { User } from '@prisma/client';
 
 export const TOKEN_AUTH_KEY = 'token';
 
@@ -16,11 +17,12 @@ export class TokenStrategy extends PassportStrategy(
       false,
       async (
         token: string,
-        verify: (err: Error | unknown, verified?: boolean) => void,
+        verify: (err: Error | unknown, verified?: boolean | User) => void,
       ) => {
         try {
-          await this.authService.validateToken(token);
-          verify(null, true);
+          const user = await this.authService.validateToken(token);
+
+          verify(null, user);
         } catch (error) {
           verify(null, false);
         }
