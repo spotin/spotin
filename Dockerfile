@@ -9,8 +9,13 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 RUN npm ci
 
-# Copy source code
-COPY . .
+COPY prisma prisma
+COPY public public
+COPY src src
+COPY views views
+COPY nest-cli.json nest-cli.json
+COPY tsconfig.build.json tsconfig.build.json
+COPY tsconfig.json tsconfig.json
 
 # Build the application
 RUN npm run build
@@ -28,6 +33,9 @@ RUN npm ci --omit=dev
 
 # Copy built application from stage 1
 COPY --from=build /app/.nest ./.nest
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/public ./public
+COPY --from=build /app/views ./views
 
 COPY prisma prisma
 COPY public public
