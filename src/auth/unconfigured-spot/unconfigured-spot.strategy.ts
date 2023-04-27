@@ -1,7 +1,7 @@
 import { AuthService } from '@/auth/auth.service';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { User, Spot } from '@prisma/client';
+import { User, Spot, UserRole } from '@prisma/client';
 import { Strategy } from 'passport-custom';
 
 export const UNCONFIGURED_SPOT_AUTH_KEY = 'unconfigured-spot';
@@ -21,6 +21,11 @@ export class UnconfiguredSpotStrategy extends PassportStrategy(
           const spotId = request.params.id;
 
           const user = await this.authService.validateSpot(spotId);
+
+          // Change the user to a guest user
+          user.username = 'Guest';
+          user.email = 'guest@spotin.ch';
+          user.role = UserRole.GUEST;
 
           verify(null, user);
         } catch {
