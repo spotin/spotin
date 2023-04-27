@@ -8,5 +8,6 @@ import { TokensViewsController } from '@/tokens/tokens-views.controller';
   imports: [PrismaModule],
   controllers: [TokensApiController, TokensViewsController],
   providers: [TokensService],
+  exports: [TokensService],
 })
 export class TokensModule {}
