@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Param, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Res,
+} from '@nestjs/common';
 import {
   ApiOperation,
   ApiOkResponse,
@@ -98,9 +105,13 @@ export class SpotsApiController {
     @Param('id') id: string,
     @Body() updateSpot: UpdateSpotDto,
   ) {
-    if (user.role == UserRole.GUEST) {
+    if (user.role === UserRole.GUEST) {
       updateSpot.configured = true;
       updateSpot.referenced = undefined;
+
+      if (!updateSpot.redirection || updateSpot.redirection === '') {
+        throw new BadRequestException();
+      }
     }
 
     const updatedSpot = await this.spotsService.updateSpot(

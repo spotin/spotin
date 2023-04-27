@@ -74,57 +74,60 @@
 </form>
 <script>
     const form = document.querySelector("form");
-
-    const action = "{{ action }}";
-    let url = "/api/spots";
-
     const id = "{{ id }}";
+    const action = "{{ action }}";
 
-    if(action === 'PATCH') {
+    let url = "/api/spots";
+    if (action === 'PATCH') {
         url = `/api/spots/${id}`;
     }
 
-    async function postData(url = "", data) {
-        // Default options are marked with *
-        const response = await fetch(url, {
-            method: action, // *GET, POST, PUT, DELETE, etc.
-            mode: "cors", // no-cors, *cors, same-origin
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data), // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
-    }
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-    form.addEventListener("submit", (event) => {
+        // Get form values
         const title = document.getElementById("title").value;
         const description = document.getElementById("description").value;
         const longitude = document.getElementById("longitude").value;
         const latitude = document.getElementById("latitude").value;
-        const redirection = document.getElementById("redirection").value;
         const referenced = document.getElementById("referenced").checked;
         const configured = document.getElementById("configured").checked;
+        const redirection = document.getElementById("redirection").value;
 
-        // Stop the form from submitting since we’re handling that with AJAX.
-        event.preventDefault();
-
+        // Create the DTO
         const createSpotDto = {
             title,
             description,
-            longitude: longitude !== '' ? parseFloat(longitude) : undefined,
-            latitude: latitude !== '' ? parseFloat(latitude) : undefined,
-            redirection,
+            longitude: longitude !== '' ? parseFloat(longitude) : null,
+            latitude: latitude !== '' ? parseFloat(latitude) : null,
+            redirection: redirection !== '' ? redirection : null,
             referenced: referenced,
             configured: configured,
         }
 
-        postData(url, createSpotDto).then((data) => {
-            location.replace(`/spots/${id}`);
-        });
+        // Send the DTO to the API
+        try {
+            const response = await fetch(url, {
+                method: action, // *GET, POST, PUT, DELETE, etc.
+                mode: "cors", // no-cors, *cors, same-origin
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, *same-origin, omit
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(createSpotDto), // body data type must match "Content-Type" header
+            });
 
+            const { status } = response;
+
+            if (status == 400) {
+                alert('A field is wrong or missing, please check your input');
+            } else {
+                location.replace(`/spots/${id}`);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     });
 
 </script>
