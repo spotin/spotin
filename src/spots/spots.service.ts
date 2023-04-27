@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User, UserRole } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -18,14 +18,9 @@ export class SpotsService {
   }
 
   /** Read a spot by id */
-  async getSpot(spotId: string, user?: User | null) {
+  async getSpot(spotId: string) {
     const spot = await this.prisma.spot.findFirstOrThrow({
       where: {
-        userId: user
-          ? {
-              equals: user.id,
-            }
-          : undefined,
         id: {
           equals: spotId,
         },

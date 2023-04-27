@@ -7,7 +7,7 @@ import {
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { Response } from 'express';
-import { Spot, User } from '@prisma/client';
+import { Spot, User, UserRole } from '@prisma/client';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
@@ -62,9 +62,8 @@ export class SpotsApiController {
     operationId: 'getSpotApi',
     responseType: ReadSpotDto,
   })
-  @JwtOrTokenAuth()
-  async getSpotApi(@AuthUser() user: User, @Param('id') id: string) {
-    const spot = await this.spotsService.getSpot(id, user);
+  async getSpotApi(@Param('id') id: string) {
+    const spot = await this.spotsService.getSpot(id);
 
     return new ReadSpotDto(spot);
   }
@@ -99,6 +98,11 @@ export class SpotsApiController {
     @Param('id') id: string,
     @Body() updateSpot: UpdateSpotDto,
   ) {
+    if (user.role == UserRole.GUEST) {
+      updateSpot.configured = true;
+      updateSpot.referenced = undefined;
+    }
+
     const updatedSpot = await this.spotsService.updateSpot(
       id,
       updateSpot,
