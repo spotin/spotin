@@ -210,8 +210,8 @@ export class SpotsViewsController {
       return res.redirect('/not-found');
     }
 
-    const backendUrl = this.configService.get(FQDN, { infer: true });
-    const redirection = `${backendUrl}/api/spots/${spot.id}/redirect`;
+    const fqdn = this.configService.get(FQDN, { infer: true });
+    const redirection = `${fqdn}/spots/${spot.id}/redirect`;
     const spotDto = new ReadSpotDto(spot);
 
     try {

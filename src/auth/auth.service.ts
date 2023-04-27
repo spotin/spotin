@@ -66,7 +66,6 @@ export class AuthService {
   async validateSpot(spotId: string) {
     const spot = await this.spotsService.getSpot(spotId);
 
-    // TODO: Check if spot is owned by user. If true, let the authentication going.
     if (spot.configured) {
       throw new UnauthorizedException();
     }
