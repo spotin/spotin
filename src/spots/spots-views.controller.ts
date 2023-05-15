@@ -83,7 +83,9 @@ export class SpotsViewsController {
   async publicSpotsView() {
     const spots = await this.spotsService.getPublicSpots();
 
-    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+    const spotsDto = spots
+      .map((spot) => new ReadSpotDto(spot))
+      .filter((spot) => spot.deletedAt === null);
 
     return {
       spots: spotsDto,
