@@ -39,7 +39,9 @@ export class SpotsViewsController {
   async getSpotsView(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
-    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+    const spotsDto = spots
+      .map((spot) => new ReadSpotDto(spot))
+      .filter((spot) => spot.deletedAt === null);
 
     return {
       username: user?.username,

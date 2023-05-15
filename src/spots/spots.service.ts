@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User, UserRole } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -12,16 +12,16 @@ export class SpotsService {
           // Delete queries
           // Change action to an update
           params.action = 'update';
-          params.args['data'] = { deleted: true };
+          params.args['data'] = { deletedAt: new Date() };
         }
         if (params.action == 'deleteMany') {
           // Delete many queries
           params.action = 'updateMany';
           if (params.args.data != undefined) {
             // set deleted to current time
-            params.args.data['deleted'] = new Date();
+            params.args.data['deletedAt'] = new Date();
           } else {
-            params.args['data'] = { deleted: new Date() };
+            params.args['data'] = { deletedAt: new Date() };
           }
         }
       }
