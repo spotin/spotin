@@ -9,8 +9,11 @@ async function main() {
     update: {},
     create: {
       username: 'admin',
-      email: 'admin@localhost.ch',
-      password: await bcrypt.hashSync('despentes', bcrypt.genSaltSync(10)),
+      email: process.env.SPOT_IN_ADMIN_EMAIL as string,
+      password: await bcrypt.hashSync(
+        process.env.SPOT_IN_ADMIN_PASSWORD as string,
+        bcrypt.genSaltSync(10),
+      ),
       enabled: true,
       role: UserRole.ADMIN,
     },

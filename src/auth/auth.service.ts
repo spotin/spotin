@@ -19,7 +19,7 @@ export class AuthService {
   async validateCredentials({ username, password }: LoginUser): Promise<User> {
     const user = (await this.usersService.getUserByUsername(username)) as User;
 
-    const passwordsMatch = await bcrypt.compareSync(user.password, password);
+    const passwordsMatch = bcrypt.compareSync(password, user.password);
 
     if (!user.enabled || !passwordsMatch) {
       throw new UnauthorizedException();
