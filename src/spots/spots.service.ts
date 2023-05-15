@@ -4,7 +4,30 @@ import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class SpotsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {
+    prisma.$use(async (params, next) => {
+      // Check incoming query type
+      if (params.model == 'Spot') {
+        if (params.action == 'delete') {
+          // Delete queries
+          // Change action to an update
+          params.action = 'update';
+          params.args['data'] = { deleted: true };
+        }
+        if (params.action == 'deleteMany') {
+          // Delete many queries
+          params.action = 'updateMany';
+          if (params.args.data != undefined) {
+            // set deleted to current time
+            params.args.data['deleted'] = new Date();
+          } else {
+            params.args['data'] = { deleted: new Date() };
+          }
+        }
+      }
+      return next(params);
+    });
+  }
 
   /** List spots */
   async getSpots(user: User) {
