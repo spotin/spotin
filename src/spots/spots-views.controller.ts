@@ -24,6 +24,7 @@ import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
+import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -79,6 +80,7 @@ export class SpotsViewsController {
   }
 
   @Get('latest')
+  @JwtOrUnrestrictedAuth()
   @ApiOperation({
     summary: 'Render the list of public spots page',
     description: 'Render the list of public spots page.',
@@ -88,7 +90,7 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/latest')
-  async publicSpotsView() {
+  async publicSpotsView(@AuthUser() user: User) {
     const spots = await this.spotsService.getPublicSpots();
 
     const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
@@ -96,6 +98,9 @@ export class SpotsViewsController {
     return {
       title: 'Latest spots - Spot in',
       spots: spotsDto,
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
     };
   }
 

@@ -1,4 +1,5 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
@@ -7,6 +8,7 @@ import { User } from '@prisma/client';
 @Controller()
 export class AppController {
   @Get()
+  @JwtOrUnrestrictedAuth()
   @ApiOperation({
     summary: 'Render the main page',
     description: 'Render the main page.',
@@ -39,6 +41,7 @@ export class AppController {
   }
 
   @Get('not-found')
+  @JwtOrUnrestrictedAuth()
   @ApiOperation({
     summary: 'Render the not found page',
     description: 'Render the not found page.',

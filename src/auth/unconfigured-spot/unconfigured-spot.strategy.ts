@@ -1,7 +1,7 @@
 import { AuthService } from '@/auth/auth.service';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { User, Spot, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { Strategy } from 'passport-custom';
 
 export const UNCONFIGURED_SPOT_AUTH_KEY = 'unconfigured-spot';
