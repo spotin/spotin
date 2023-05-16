@@ -210,6 +210,8 @@ export class SpotsViewsController {
   }
 
   @Get(':id')
+  @JwtOrUnrestrictedAuth()
+  @UseFilters(UnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the specified spot page',
     description: 'Render the specified spot page.',
