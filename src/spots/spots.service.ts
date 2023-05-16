@@ -4,30 +4,7 @@ import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class SpotsService {
-  constructor(private readonly prisma: PrismaService) {
-    prisma.$use(async (params, next) => {
-      // Check incoming query type
-      if (params.model == 'Spot') {
-        if (params.action == 'delete') {
-          // Delete queries
-          // Change action to an update
-          params.action = 'update';
-          params.args['data'] = { deletedAt: new Date() };
-        }
-        if (params.action == 'deleteMany') {
-          // Delete many queries
-          params.action = 'updateMany';
-          if (params.args.data != undefined) {
-            // set deleted to current time
-            params.args.data['deletedAt'] = new Date();
-          } else {
-            params.args['data'] = { deletedAt: new Date() };
-          }
-        }
-      }
-      return next(params);
-    });
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   /** List spots */
   async getSpots(user: User) {
@@ -35,6 +12,9 @@ export class SpotsService {
       where: {
         userId: {
           equals: user.id,
+        },
+        deletedAt: {
+          equals: null,
         },
       },
     });
@@ -46,6 +26,9 @@ export class SpotsService {
       where: {
         id: {
           equals: spotId,
+        },
+        deletedAt: {
+          equals: null,
         },
       },
     });
@@ -78,6 +61,8 @@ export class SpotsService {
     const updatedSpot = await this.prisma.spot.update({
       where: {
         id: spotId,
+        deletedAt: null,
+        userId: user ? user.id : undefined,
       },
       data: {
         users: user
@@ -96,16 +81,14 @@ export class SpotsService {
 
   /** Delete a spot by id */
   async deleteSpot(spotId: string, user: User) {
-    await this.prisma.spot.findFirstOrThrow({
+    await this.prisma.spot.update({
       where: {
         id: spotId,
         userId: user.id,
+        deletedAt: null,
       },
-    });
-
-    await this.prisma.spot.delete({
-      where: {
-        id: spotId,
+      data: {
+        deletedAt: new Date(),
       },
     });
   }
@@ -115,6 +98,9 @@ export class SpotsService {
     return await this.prisma.spot.findMany({
       where: {
         referenced: true,
+        deletedAt: {
+          equals: null,
+        },
       },
     });
   }
