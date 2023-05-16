@@ -14,6 +14,6 @@ export class UnauthorizedExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
-    response.status(status).redirect('/users/login');
+    response.status(status).redirect('/auth/login');
   }
 }

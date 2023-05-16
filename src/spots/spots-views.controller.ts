@@ -5,8 +5,8 @@ import {
   Render,
   Param,
   Res,
-  HttpCode,
   HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -25,6 +25,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { UnauthorizedExceptionFilter } from '@/common/filters/unauthorized-exception.filter';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -36,6 +37,7 @@ export class SpotsViewsController {
 
   @Get()
   @JwtAuth()
+  @UseFilters(UnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the spots page',
     description: 'Render the spots page.',
@@ -60,6 +62,8 @@ export class SpotsViewsController {
   }
 
   @Get('create')
+  @JwtAuth()
+  @UseFilters(UnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the create a new spot page',
     description: 'Render the create a new spot page.',
@@ -106,6 +110,7 @@ export class SpotsViewsController {
 
   @Get(':id/delete')
   @JwtAuth()
+  @UseFilters(UnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Delete the specified spot and render the list of spots',
     description: 'Delete the specified spot and render the list of spots.',
@@ -136,6 +141,8 @@ export class SpotsViewsController {
   }
 
   @Get(':id/edit')
+  @JwtOrTokenOrUnconfiguredSpotAuth()
+  @UseFilters(UnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the edit a spot page',
     description: 'Render the edit a spot page.',
@@ -150,7 +157,6 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/form')
-  @JwtOrTokenOrUnconfiguredSpotAuth()
   async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
 

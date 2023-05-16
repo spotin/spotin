@@ -1,6 +1,7 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { Controller, Get, Render } from '@nestjs/common';
+import { UnauthorizedExceptionFilter } from '@/common/filters/unauthorized-exception.filter';
+import { Controller, Get, Render, UseFilters } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
@@ -37,6 +38,7 @@ export class AuthViewsController {
 
   @Get('profile')
   @JwtAuth()
+  @UseFilters(UnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the profile page',
     description: 'Render the profile page.',
