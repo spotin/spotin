@@ -15,12 +15,12 @@ services:
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       # HTTP
-      - traefik.http.routers.spotin-http.rule=Host(`${SPOT_IN_FQDN}`, `www.${SPOT_IN_FQDN}`)
+      - traefik.http.routers.spotin-http.rule=Host(`${SPOT_IN_FQDN}`)
       - traefik.http.routers.spotin-http.entrypoints=web
       - traefik.http.routers.spotin-http.middlewares=redirect-to-https
       - traefik.http.routers.spotin-http.service=spotin
       # HTTPS
-      - traefik.http.routers.spotin-https.rule=Host(`${SPOT_IN_FQDN}`, `www.${SPOT_IN_FQDN}`)
+      - traefik.http.routers.spotin-https.rule=Host(`${SPOT_IN_FQDN}`)
       - traefik.http.routers.spotin-https.entrypoints=websecure
       - traefik.http.routers.spotin-https.tls=true
       - traefik.http.routers.spotin-https.tls.certresolver=letsencrypt
