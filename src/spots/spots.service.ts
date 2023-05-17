@@ -65,13 +65,6 @@ export class SpotsService {
         userId: user ? user.id : undefined,
       },
       data: {
-        users: user
-          ? {
-              connect: {
-                id: user.id,
-              },
-            }
-          : undefined,
         ...updateSpot,
       },
     });
