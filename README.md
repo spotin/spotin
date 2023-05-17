@@ -60,4 +60,7 @@ docker compose build --no-cache
 
 # Start the application with Docker
 docker compose up --detach
+
+# Optional: seed the database with some data
+docker compose exec application npm run prisma:seed
 ```
