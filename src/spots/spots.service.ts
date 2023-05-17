@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User, UserRole } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -13,6 +13,9 @@ export class SpotsService {
         userId: {
           equals: user.id,
         },
+        deletedAt: {
+          equals: null,
+        },
       },
     });
   }
@@ -23,6 +26,9 @@ export class SpotsService {
       where: {
         id: {
           equals: spotId,
+        },
+        deletedAt: {
+          equals: null,
         },
       },
     });
@@ -55,15 +61,10 @@ export class SpotsService {
     const updatedSpot = await this.prisma.spot.update({
       where: {
         id: spotId,
+        deletedAt: null,
+        userId: user ? user.id : undefined,
       },
       data: {
-        users: user
-          ? {
-              connect: {
-                id: user.id,
-              },
-            }
-          : undefined,
         ...updateSpot,
       },
     });
@@ -73,16 +74,14 @@ export class SpotsService {
 
   /** Delete a spot by id */
   async deleteSpot(spotId: string, user: User) {
-    await this.prisma.spot.findFirstOrThrow({
+    await this.prisma.spot.update({
       where: {
         id: spotId,
         userId: user.id,
+        deletedAt: null,
       },
-    });
-
-    await this.prisma.spot.delete({
-      where: {
-        id: spotId,
+      data: {
+        deletedAt: new Date(),
       },
     });
   }
@@ -92,6 +91,9 @@ export class SpotsService {
     return await this.prisma.spot.findMany({
       where: {
         referenced: true,
+        deletedAt: {
+          equals: null,
+        },
       },
     });
   }
