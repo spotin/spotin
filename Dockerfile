@@ -1,5 +1,5 @@
 ## First stage: Build the application
-FROM node:18-alpine as build
+FROM node:20-alpine as build
 
 # Work directory
 WORKDIR /app
@@ -24,7 +24,7 @@ COPY tsconfig.json tsconfig.json
 RUN npm run build
 
 ## Second stage: Create the production image
-FROM node:18-alpine as production
+FROM node:20-alpine as production
 
 # Work directory
 WORKDIR /app

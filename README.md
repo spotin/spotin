@@ -50,10 +50,7 @@ cp .env.defaults .env
 # - SPOT_IN_ADMIN_PASSWORD
 # - SPOT_IN_JWT_SECRET
 # - SPOT_IN_JWT_EXPIRATION_TIME
-# - SPOT_IN_DATABASE_NAME
-# - SPOT_IN_DATABASE_USER
-# - SPOT_IN_DATABASE_PASSWORD
-# - SPOT_IN_DATABASE_HOST
+# - SPOT_IN_DATABASE_URL
 
 # Build the application with Docker
 docker compose build --no-cache

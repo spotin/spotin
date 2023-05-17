@@ -1,6 +1,6 @@
 {
   "name": "Spot in Development Container",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
   "runArgs": ["-p=3000:3000"],
   // Execute the post-create.sh script once the container is created
   "postCreateCommand": "./.devcontainer/post-create.sh",
