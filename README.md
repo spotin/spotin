@@ -1,62 +1,63 @@
 # Spot in
 
-## Resources
-
-- [PostGIS - PRisma](https://freddydumont.com/blog/prisma-postgis#installing-postgis)
-- [Prisma - convert query parameter](https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-4#upgrade-path-7)
-
-## Introduction
-
 Spot in is a place for registering spots. Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event. Each spot receives a stable Uniform Resource Identifier (URI) that can be used for referencing purposes. Spots can contain arbitrary metadata describing a context and circumstances. Additionally, spots can redirect the user to the original source of information. Once created, spots are searchable by places and by keywords.
 
 ## Prerequisites
 
 The following prerequisites must be filled to run this service:
 
-[Docker](https://docs.docker.com/get-docker/) must be installed.
+- [Docker](https://docs.docker.com/get-docker/) must be installed.
+- [Docker Compose](https://docs.docker.com/compose/install/) must be installed (it should be installed by default with Docker in most cases).
+- [Visual Studio Code](https://code.visualstudio.com/download) must be installed.
 
-[Visual Studio Code](https://code.visualstudio.com/download) must be installed
+## Start the application for local development
 
-## Installation
-
-Open this folder in Visual Studio Code, and open it in a dev contianer
+Open this folder in Visual Studio Code, and open it in a dev container. In a terminal, run the following commands:
 
 ```bash
+# Install dependencies
 npm install
 
+# Copy the default environment variables file
 cp .env.defaults .env
 
-# change the .env file to your needs, especially the database password, and the JWT secret, the DATABASE_SERVICE and the SPOT_IN_BACKEND_URL.
+# Start the database for local development
+docker compose --file docker-compose.dev.yml up --detach
 
-docker-compose up -d database
+# Run the database migrations
+npm run prisma:migrate
+
+# Seed the database with some data
+npm run prisma:seed
+
+# Start the application in watch mode (changes to the code will be automatically reloaded)
+npm run dev
 ```
 
-## Running the app
+The application should start and be accessible at <http://localhost:3000>. The API documentation is accessible at <http://localhost:3000/api>. You can log in with the credentials defined in the `.env` file (`SPOT_IN_ADMIN_EMAIL` and `SPOT_IN_ADMIN_PASSWORD`).
+
+## Run the application in production with Docker
+
+In a terminal, run the following commands:
 
 ```bash
-# development
-npm run start
+# Copy the default environment variables file
+cp .env.defaults .env
 
-# watch mode
-npm run start:dev
+# Edit the .env file to your needs, especially the following variables:
+# - SPOT_IN_FQDN
+# - SPOT_IN_ADMIN_EMAIL
+# - SPOT_IN_ADMIN_PASSWORD
+# - SPOT_IN_JWT_SECRET
+# - SPOT_IN_JWT_EXPIRATION_TIME
+# - SPOT_IN_DATABASE_NAME
+# - SPOT_IN_DATABASE_USER
+# - SPOT_IN_DATABASE_PASSWORD
+# - SPOT_IN_DATABASE_HOST
 
-# production mode
-npm run start:prod
-```
+# Build the application with Docker
+docker compose build --no-cache
 
-## Access the documentation
-
-The API documentation is on <http://localhost:3000/api>.
-
-## Test
-
-```bash
-# unit tests
-npm run test
-
-# e2e tests
-npm run test:e2e
-
-# test coverage
-npm run test:cov
+# Start the application with Docker
+docker compose up --detach
 ```
