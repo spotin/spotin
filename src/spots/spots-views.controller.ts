@@ -172,9 +172,14 @@ export class SpotsViewsController {
     @Res({ passthrough: true }) res: Response,
     @Param('id') id: string,
   ) {
-    const spot = (await this.spotsService.getSpot(id)) as Spot;
+    let spot;
+    try {
+      spot = (await this.spotsService.getSpot(id)) as Spot;
+    } catch (error) {
+      res.redirect('/');
+    }
 
-    if (!spot.configured) {
+    if (!spot?.configured) {
       res.redirect(`/spots/${id}/edit`);
     }
 
