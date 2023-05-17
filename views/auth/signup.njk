@@ -8,9 +8,9 @@
         Username
         {% if (errors.username) %}
         <span class="error">(at least 3 lowercase alphanumeric characters)</span>
-        <input type="text" name="username" id="username" placeholder="Username" value="{{ values.username }}" aria-invalid="true">
+        <input type="text" name="username" id="username" placeholder="Username" value="{{ values.username }}" aria-invalid="true" autofocus>
         {% else %}
-        <input type="text" name="username" id="username" placeholder="Username" value="{{ values.username }}">
+        <input type="text" name="username" id="username" placeholder="Username" value="{{ values.username }}" autofocus>
         {% endif %}
     </label>
     

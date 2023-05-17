@@ -7,9 +7,9 @@
         Title
         {% if errors.title %}
         <span class="error">(cannot be empty)</span>
-        <input name="title" id="title" placeholder="Title" value="{{ values.title }}" aria-invalid="true">
+        <input name="title" id="title" placeholder="Title" value="{{ values.title }}" aria-invalid="true" autofocus>
         {% else %}
-        <input name="title" id="title" placeholder="Title" value="{{ values.title }}">
+        <input name="title" id="title" placeholder="Title" value="{{ values.title }}" autofocus>
         {% endif %}
     </label>
 
