@@ -1,13 +1,11 @@
 services:
-  database:
+  postgres:
     image: postgres:${POSTGRES_IMAGE_VERSION:-latest}
-    env_file:
-      - .env
-    ports:
-      - 5432:5432
-    volumes:
-      - ./db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${SPOT_IN_DATABASE_NAME}
       - POSTGRES_USER=${SPOT_IN_DATABASE_USER}
       - POSTGRES_PASSWORD=${SPOT_IN_DATABASE_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data

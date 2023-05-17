@@ -3,10 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - 3000:3000
     env_file:
       - .env
+    restart: unless-stopped
+    ports:
+      - 3000:3000
     labels:
       # Traefik
       - traefik.enable=true
@@ -28,8 +29,6 @@ services:
       - traefik.http.services.application.loadbalancer.server.port=3000
 
   traefik:
-    env_file:
-      - .env
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
     command:
       # Global
