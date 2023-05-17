@@ -18,7 +18,7 @@
     {% for spot in spots %}
         <tr>
             <td><a href="/spots/{{ spot.id }}">
-            {% if spot.title != "" %}
+            {% if spot.title != null and spot.title != "" %}
                 {{ spot.title }}
             {% else %}
                 [No title]
