@@ -2,7 +2,8 @@
 
 {% block body %}
 <article class="resource">
-    <img src="{{ qrcode }}" alt="QRCode" class="qrcode">
+    <a href="#" onclick="downloadQRCode()" class="qrcode"><svg class="qrcode">{{ qrcode | safe }}</svg></a>
+
     <hgroup class="head">
         <h1 class="title">{{ spot.title }}</h1>
         <h2 class="uuid">
@@ -41,5 +42,15 @@
         .addTo(map);
     }
 
+    function downloadQRCode() {
+        const svgData = btoa(`{{ qrcode }}`);
+        const link = document.createElement('a');
+        const title = '{{ spot.title }}'
+        const id = '{{ spot.id }}'
+        const name = title != '' ? title : id;
+        link.href = 'data:image/svg+xml;base64,' + svgData;
+        link.download = `${name}.svg`.replace(' ', '_');
+        link.click();
+    }
 </script>
 {% endblock %}
