@@ -62,5 +62,5 @@ docker compose build --no-cache
 docker compose up --detach
 
 # Optional: seed the database with some data
-docker compose exec application npm run prisma:seed
+docker compose exec spotin npm run prisma:seed
 ```

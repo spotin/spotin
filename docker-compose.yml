@@ -1,5 +1,5 @@
 services:
-  application:
+  spotin:
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,18 +15,18 @@ services:
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       # HTTP
-      - traefik.http.routers.application-external-http.rule=Host(`${SPOT_IN_FQDN}`)
-      - traefik.http.routers.application-external-http.entrypoints=web
-      - traefik.http.routers.application-external-http.middlewares=redirect-to-https
-      - traefik.http.routers.application-external-http.service=application
+      - traefik.http.routers.spotin-http.rule=Host(`${SPOT_IN_FQDN}`)
+      - traefik.http.routers.spotin-http.entrypoints=web
+      - traefik.http.routers.spotin-http.middlewares=redirect-to-https
+      - traefik.http.routers.spotin-http.service=spotin
       # HTTPS
-      - traefik.http.routers.application-external-https.rule=Host(`${SPOT_IN_FQDN}`)
-      - traefik.http.routers.application-external-https.entrypoints=websecure
-      - traefik.http.routers.application-external-https.tls=true
-      - traefik.http.routers.application-external-https.tls.certresolver=letsencrypt
-      - traefik.http.routers.application-external-https.service=application
+      - traefik.http.routers.spotin-https.rule=Host(`${SPOT_IN_FQDN}`)
+      - traefik.http.routers.spotin-https.entrypoints=websecure
+      - traefik.http.routers.spotin-https.tls=true
+      - traefik.http.routers.spotin-https.tls.certresolver=letsencrypt
+      - traefik.http.routers.spotin-https.service=spotin
       # Service
-      - traefik.http.services.application.loadbalancer.server.port=3000
+      - traefik.http.services.spotin.loadbalancer.server.port=3000
 
   traefik:
     image: traefik:${TRAEFIK_IMAGE_VERSION:-latest}
