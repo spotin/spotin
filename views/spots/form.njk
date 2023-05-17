@@ -28,17 +28,6 @@
     </button>
 
     <div class="grid">
-        <label for="longitude">
-            Longitude
-            {% if errors.coordinates %}
-            <span class="error">(between -180.0 and 180)</span>
-            <input id="longitude" type="number" name="longitude" placeholder="Longitude"
-                value="{{ values.longitude }}" aria-invalid="true">
-            {% else %}
-                <input id="longitude" type="number" name="longitude" placeholder="Longitude"
-                value="{{ values.longitude }}">
-            {% endif %}
-        </label>
         <label for="latitude">
             Latitude
             {% if errors.coordinates %}
@@ -48,6 +37,17 @@
             {% else %}
                 <input id="latitude" type="number" name="latitude" placeholder="Latitude"
                 value="{{ values.latitude }}">
+            {% endif %}
+        </label>
+        <label for="longitude">
+            Longitude
+            {% if errors.coordinates %}
+            <span class="error">(between -180.0 and 180)</span>
+            <input id="longitude" type="number" name="longitude" placeholder="Longitude"
+                value="{{ values.longitude }}" aria-invalid="true">
+            {% else %}
+                <input id="longitude" type="number" name="longitude" placeholder="Longitude"
+                value="{{ values.longitude }}">
             {% endif %}
         </label>
     </div>
@@ -98,8 +98,8 @@
         const createSpotDto = {
             title,
             description,
-            longitude: longitude !== '' ? parseFloat(longitude) : null,
-            latitude: latitude !== '' ? parseFloat(latitude) : null,
+            longitude: longitude !== '' ? parseFloat(longitude.replace(',', '.')) : null,
+            latitude: latitude !== '' ? parseFloat(latitude.replace(',', '.')) : null,
             redirection: redirection !== '' ? redirection : null,
             referenced: referenced,
             configured: configured,
