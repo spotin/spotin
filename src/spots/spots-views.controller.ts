@@ -218,7 +218,7 @@ export class SpotsViewsController {
     const spotDto = new ReadSpotDto(spot);
 
     try {
-      const url = await qrcode.toDataURL(redirection);
+      const url = await qrcode.toString(redirection, { type: 'svg' });
 
       return res.render('spots/[id]', {
         username: user?.username,
