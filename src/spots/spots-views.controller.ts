@@ -173,6 +173,7 @@ export class SpotsViewsController {
     @Param('id') id: string,
   ) {
     let spot;
+
     try {
       spot = (await this.spotsService.getSpot(id)) as Spot;
     } catch (error) {
@@ -185,6 +186,8 @@ export class SpotsViewsController {
 
     if (spot?.redirection) {
       res.redirect(spot.redirection);
+    } else {
+      res.redirect('/');
     }
   }
 
