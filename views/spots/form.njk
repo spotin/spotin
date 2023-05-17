@@ -98,6 +98,7 @@
         const createSpotDto = {
             title,
             description,
+            // if the user's machine language is not english, the decimal separator is a comma
             longitude: longitude !== '' ? parseFloat(longitude.replace(',', '.')) : null,
             latitude: latitude !== '' ? parseFloat(latitude.replace(',', '.')) : null,
             redirection: redirection !== '' ? redirection : null,
