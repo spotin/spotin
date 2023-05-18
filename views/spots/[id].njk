@@ -2,7 +2,9 @@
 
 {% block body %}
 <article class="resource">
-    <a href="#" onclick="downloadQRCode()" class="qrcode"><svg class="qrcode">{{ qrcode | safe }}</svg></a>
+    <a href="#" onclick="downloadQrCode()" class="qrcode">
+        <svg id="qrcode" width="150px">{{ qrcode | safe }}</svg>
+    </a>
 
     <hgroup class="head">
         <h1 class="title">{{ spot.title }}</h1>
@@ -21,6 +23,7 @@
         <div id='map' style='width: 100%; height: 400px;'></div>
     {% endif %}
 </article>
+
 <script>
     // get the spot.coordinates
     var longitude = '{{ spot.longitude }}';
@@ -42,15 +45,15 @@
         .addTo(map);
     }
 
-    function downloadQRCode() {
-        const svgData = btoa(`{{ qrcode }}`);
-        const link = document.createElement('a');
-        const title = '{{ spot.title }}'
-        const id = '{{ spot.id }}'
-        const name = title != '' ? title : id;
-        link.href = 'data:image/svg+xml;base64,' + svgData;
-        link.download = `${name}.svg`.replace(' ', '_');
-        link.click();
+    function downloadQrCode() {
+        const filename = "{{ spot.title if spot.title else spot.id }}.svg"
+        const qrcode = document.getElementById("qrcode").innerHTML;
+        const blob = new Blob([qrcode.toString()]);
+        const element = document.createElement("a");
+        element.download = filename;
+        element.href = window.URL.createObjectURL(blob);
+        element.click();
+        element.remove();
     }
 </script>
 {% endblock %}
