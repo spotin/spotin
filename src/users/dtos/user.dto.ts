@@ -8,6 +8,7 @@ import {
   IsEnum,
   IsString,
   IsUUID,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -27,6 +28,7 @@ export class UserDto implements User {
    */
   @IsString()
   @MinLength(3)
+  @MaxLength(255)
   username: string;
 
   /**
@@ -34,14 +36,16 @@ export class UserDto implements User {
    */
   @ApiProperty({ format: 'email' })
   @IsEmail()
+  @MaxLength(255)
   email: string;
 
   /**
    * Password of the user
    */
   @ApiProperty({ format: 'password' })
-  @MinLength(8)
   @IsString()
+  @MinLength(8)
+  @MaxLength(255)
   password: string;
 
   /**

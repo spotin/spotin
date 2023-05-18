@@ -9,6 +9,8 @@ import {
   Max,
   IsOptional,
   IsUrl,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 import { Spot } from '@prisma/client';
 
@@ -26,6 +28,8 @@ export class SpotDto implements Spot {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MinLength(1)
+  @MaxLength(255)
   title: string | null;
 
   /**
@@ -34,6 +38,7 @@ export class SpotDto implements Spot {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MinLength(1)
   description: string | null;
 
   /**
@@ -62,6 +67,7 @@ export class SpotDto implements Spot {
   @ApiPropertyOptional({ format: 'url' })
   @IsOptional()
   @IsUrl()
+  @MaxLength(255)
   redirection: string | null;
 
   /**
@@ -73,10 +79,11 @@ export class SpotDto implements Spot {
   /**
    * Set if the spot will be referenced on the website
    */
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @ApiPropertyOptional({ default: false })
   @IsOptional()
   @IsBoolean()
-  referenced = false;
+  referenced: boolean = false;
 
   /**
    * Set if the spot is already configured or not

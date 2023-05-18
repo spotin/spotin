@@ -1,6 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Token } from '@prisma/client';
-import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsDateString,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class TokenDto implements Token {
   /**
@@ -14,6 +21,8 @@ export class TokenDto implements Token {
    * Hash of the token
    */
   @IsString()
+  @MinLength(1)
+  @MaxLength(255)
   hash: string;
 
   /**
@@ -22,7 +31,9 @@ export class TokenDto implements Token {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  name: string | null;
+  @MinLength(1)
+  @MaxLength(255)
+  name: string;
 
   /**
    * User who owns the token
