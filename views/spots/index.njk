@@ -18,11 +18,7 @@
     {% for spot in spots %}
         <tr>
             <td><a href="/spots/{{ spot.id }}">
-            {% if spot.title != "" %}
-                {{ spot.title }}
-            {% else %}
-                [No title]
-            {% endif %}
+            {{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}
             </a></td>
             <td><a href="/spots/{{ spot.id }}"><i class="fas fa-eye"></i></a></td>
             <td><a href="/spots/{{ spot.id }}/edit"><i class="fas fa-pen"></i></a></td>

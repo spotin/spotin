@@ -4,7 +4,7 @@
 <article class="resource">
     <img src="{{ qrcode }}" alt="QRCode" class="qrcode">
     <hgroup class="head">
-        <h1 class="title">{{ spot.title }}</h1>
+        <h1 class="title">{{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}</h1>
         <h2 class="uuid">
             {% if spot.redirection %}
             <i class="fas fa-external-link-alt"></i> <a href="{{ spot.redirection }}" target="_blank" rel="noreferrer">{{ spot.redirection }}</a>
