@@ -1,6 +1,6 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { UnauthorizedExceptionFilter } from '@/common/filters/unauthorized-exception.filter';
+import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
 import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import { TokensService } from '@/tokens/tokens.service';
 import { Controller, Get, Param, Render, UseFilters } from '@nestjs/common';
@@ -19,7 +19,7 @@ export class TokensViewsController {
 
   @Get()
   @JwtAuth()
-  @UseFilters(UnauthorizedExceptionFilter)
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the tokens page',
     description: 'Render the tokens page.',
@@ -45,7 +45,7 @@ export class TokensViewsController {
 
   @Get('create')
   @JwtAuth()
-  @UseFilters(UnauthorizedExceptionFilter)
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the create a new token page',
     description: 'Render the create a new token page.',
@@ -66,7 +66,7 @@ export class TokensViewsController {
 
   @Get(':id/delete')
   @JwtAuth()
-  @UseFilters(UnauthorizedExceptionFilter)
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Delete the specified token and render the list of token',
     description: 'Delete the specified token and render the list of token.',
@@ -98,7 +98,7 @@ export class TokensViewsController {
 
   @Get(':id')
   @JwtAuth()
-  @UseFilters(UnauthorizedExceptionFilter)
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the token page',
     description: 'Render the token page.',
@@ -126,7 +126,7 @@ export class TokensViewsController {
 
   @Get('view/:hash/:name')
   @JwtAuth()
-  @UseFilters(UnauthorizedExceptionFilter)
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the create a new token page',
     description: 'Render the create a new token page.',

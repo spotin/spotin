@@ -1,6 +1,6 @@
 import { HeaderAPIKeyStrategy } from 'passport-headerapikey';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 import { User } from '@prisma/client';
 
@@ -12,21 +12,16 @@ export class TokenStrategy extends PassportStrategy(
   TOKEN_AUTH_KEY,
 ) {
   constructor(private authService: AuthService) {
-    super(
-      { header: TOKEN_AUTH_KEY },
-      false,
-      async (
-        token: string,
-        verify: (err: Error | unknown, verified?: boolean | User) => void,
-      ) => {
-        try {
-          const user = await this.authService.validateToken(token);
+    super({ header: TOKEN_AUTH_KEY }, false);
+  }
 
-          verify(null, user);
-        } catch (error) {
-          verify(null, false);
-        }
-      },
-    );
+  async validate(token: string): Promise<User> {
+    try {
+      const user = await this.authService.validateToken(token);
+
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

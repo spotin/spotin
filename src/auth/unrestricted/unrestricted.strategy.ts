@@ -10,8 +10,10 @@ export class UnrestrictedStrategy extends PassportStrategy(
   UNRESTRICTED_AUTH_KEY,
 ) {
   constructor() {
-    super(async (_: any, verify: (arg0: null, arg1: boolean) => void) => {
-      verify(null, true);
-    });
+    super();
+  }
+
+  async validate(): Promise<boolean> {
+    return true;
   }
 }
