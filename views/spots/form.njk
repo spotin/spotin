@@ -32,10 +32,10 @@
             Latitude (between -90.0 and 90.0)
             {% if errors.coordinates %}
             <span class="error">(between -90.0 and 90.0)</span>
-            <input id="latitude" type="number" step="0.001" name="latitude" lang="en" placeholder="46.818188"
+            <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188"
                 value="{{ values.latitude }}" aria-invalid="true" min="-90" max="90">
             {% else %}
-                <input id="latitude" type="number" step="0.001" name="latitude" lang="en" placeholder="46.818188"
+                <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188"
                 value="{{ values.latitude }}" min="-90" max="90">
             {% endif %}
         </label>
@@ -43,10 +43,10 @@
             Longitude (between -180.0 and 180.0)
             {% if errors.coordinates %}
             <span class="error">(between -180.0 and 180.0)</span>
-            <input id="longitude" type="number" step="0.001" name="longitude" lang="en" placeholder="8.227512"
+            <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227512"
                 value="{{ values.longitude }}" aria-invalid="true" min="-180" max="180">
             {% else %}
-                <input id="longitude" type="number" step="0.001" name="longitude" lang="en" placeholder="8.227511"
+                <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227511"
                 value="{{ values.longitude }}" min="-180" max="180">
             {% endif %}
         </label>
