@@ -1,5 +1,13 @@
 import * as qrcode from 'qrcode';
-import { Get, Controller, Render, Param, Res } from '@nestjs/common';
+import {
+  Get,
+  Controller,
+  Render,
+  Param,
+  Res,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -175,14 +183,18 @@ export class SpotsViewsController {
     @Res({ passthrough: true }) res: Response,
     @Param('id') id: string,
   ) {
-    const spot = (await this.spotsService.getSpot(id)) as Spot;
+    try {
+      const spot = await this.spotsService.getSpot(id);
 
-    if (!spot.configured) {
-      res.redirect(`/spots/${id}/edit`);
-    }
-
-    if (spot?.redirection) {
-      res.redirect(spot.redirection);
+      if (!spot.configured) {
+        res.redirect(`/spots/${id}/edit`);
+      } else if (!spot.redirection) {
+        res.redirect(HttpStatus.TEMPORARY_REDIRECT, `/spots/${id}`);
+      } else {
+        res.redirect(spot.redirection);
+      }
+    } catch (error) {
+      res.redirect('/not-found');
     }
   }
 
