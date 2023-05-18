@@ -2,24 +2,29 @@
 
 {% block body %}
 <div>
-    <h1><i class="fas fa-map-marker-alt"></i> A registry for <span id="keyword">spots</span></h1>
-    <script>
-        let count = 0;
-        let words = ["events", "signals", "places", "spots"]; 
-        setInterval(function () { 
-            count++;
-            document.getElementById("keyword").innerHTML = words[count % words.length];
-        }, 2000);
-    </script>
-
-    <p><a class="outline" href="/spots/latest" role="button"><i class="fas fa-list"></i> Latest spots</a></p>
+    <h1><i class="fas fa-map-marker-alt"></i> The Internet of <span id="keyword">spots</span></h1>
     <p>
-        <b>Spot in</b> is a place for <b>registering</b> spots. Spots can take place in the
-        <b>virtual</b> or in the <b>physical</b> world. They capture the context and the circumstances that form the
-        setting for an event. Each spot receives a <b>stable Uniform Resource Identifier (URI)</b> that can be
-        used for <b>referencing</b> purposes. Spots can contain arbitrary <b>metadata</b> describing a context and
-        circumstances. Additionally, spots can <b>redirect</b> the user to the original source of information.
-        Once created, spots are searchable by places and by keywords.
+        <b>Spot in</b> est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous !
+    </p>
+    <p>
+        <b>Spot in</b> ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im Herzen des Internets der Orte verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkunden, dokumentieren, entdecken, lernen Sie und lassen Sie sich verzaubern!
+    </p>
+    <p>
+        <b>Spot in</b> is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed!
+    </p>
+    <p>
+        <a href="/spots/latest">
+            <button><i class="fas fa-list"></i> View latest spots</button>
+        </a>
     </p>
 </div>
+
+<script>
+    let count = 0;
+    let words = ["places", "spots", "events"]; 
+    setInterval(function () { 
+        count++;
+        document.getElementById("keyword").innerHTML = words[count % words.length];
+    }, 2000);
+</script>
 {% endblock %}

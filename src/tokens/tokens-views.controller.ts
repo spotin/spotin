@@ -33,6 +33,7 @@ export class TokensViewsController {
     const tokensDto = tokens.map((token) => new ReadTokenDto(token));
 
     return {
+      title: 'Tokens - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
@@ -53,6 +54,7 @@ export class TokensViewsController {
   @JwtAuth()
   createTokenView(@AuthUser() user: User) {
     return {
+      title: 'Create a new token - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
