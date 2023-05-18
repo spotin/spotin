@@ -1,4 +1,4 @@
-import { Controller, Post, Res, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, Res, Body, HttpCode, Get } from '@nestjs/common';
 import { Response } from 'express';
 import {
   ApiBody,
@@ -43,20 +43,13 @@ export class AuthApiController {
     description: 'The user has been successfully logged in.',
     type: JwtDto,
   })
-  async login(@AuthUser() user: User, @Res() res: Response) {
+  async login(@AuthUser() user: User) {
     const jwt = await this.authService.generateJwt(user);
 
-    res.cookie(JWT_AUTH_KEY, jwt.jwt, {
-      httpOnly: true,
-      sameSite: true,
-      secure: true,
-    });
-
-    // Return json web token
-    return res.json(new JwtDto(jwt));
+    return new JwtDto(jwt);
   }
 
-  @Post('logout')
+  @Get('logout')
   @JwtAuth()
   @HttpCode(204)
   @ApiOperation({
@@ -67,14 +60,8 @@ export class AuthApiController {
   @ApiNoContentResponse({
     description: 'The user has been successfully logged out.',
   })
-  async logout(@Res() res: Response) {
-    res.cookie(JWT_AUTH_KEY, '', {
-      httpOnly: true,
-      sameSite: true,
-      secure: true,
-    });
-
-    res.end();
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie(JWT_AUTH_KEY);
   }
 
   @Post('signup')

@@ -39,19 +39,16 @@ export async function bootstrap(
     .setTitle('Spot in API')
     .setDescription('The Spot in API description')
     .setVersion(process.env.npm_package_version as string)
-    .addCookieAuth(
-      JWT_AUTH_KEY,
+    .addBearerAuth(
       {
-        type: 'apiKey',
-        in: 'cookie',
-        description: 'The cookie containing the JWT',
+        type: 'http',
+        description: 'The JWT to access protected endpoints',
       },
       JWT_AUTH_KEY,
     )
     .addApiKey(
       {
         type: 'apiKey',
-        in: 'header',
         description: 'The token to access protected endpoints',
       },
       TOKEN_AUTH_KEY,

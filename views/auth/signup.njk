@@ -3,66 +3,62 @@
 
 {% block body %}
 <h1><i class="fas fa-edit"></i> Sign up</h1>
-<form>
+{# <form id="signup-form"> #}
+<form action="/auth/signup" method="POST">
     <label for="username">
         Username
-        {% if (errors.username) %}
-        <span class="error">(at least 3 lowercase alphanumeric characters)</span>
-        <input type="text" name="username" id="username" placeholder="Username" value="{{ values.username }}" aria-invalid="true" autofocus>
-        {% else %}
         <input type="text" name="username" id="username" placeholder="Username" value="{{ values.username }}" autofocus>
-        {% endif %}
     </label>
     
     <label for="email">
         Email
-        {% if (errors.email) %}
-        <span class="error">(well formed email)</span>
-        <input type="text" name="email" id="email" placeholder="Email" value="{{ values.email }}" aria-invalid="true">
-        {% else %}
         <input type="text" name="email" id="email" placeholder="Email" value="{{ values.email }}">
-        {% endif %}
     </label>
     
     <label for="password">
         Password
-        {% if (errors.password) %}
-        <span class="error">(at least 8 characters)</span>
-        <input type="password" name="password" id="password" placeholder="Password" aria-invalid="true">
-        {% else %}
         <input type="password" name="password" id="password" placeholder="Password">
-        {% endif %}
     </label>
-    
+
     <button type="submit"><i class="fas fa-edit"></i> Sign up</button>
 </form>
-<script>
-    const form = document.querySelector('form');
+{# <script>
+    const form = document.getElementById("signup-form");
+    const errors = document.getElementById("errors");
 
-    async function handleSubmit(event) {
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        const formData = new FormData(event.target);
-        const username = formData.get('username');
-        const email = formData.get('email');
-        const password = formData.get('password');
-        const body = { username, email, password };
-        try {
-            const res = await fetch('/api/auth/signup', {
-                method: 'POST',
-                body: JSON.stringify(body),
-                headers: {
-                    'content-type': 'application/json'
-                }
-            });
-            if (res.status === 200) {
-                window.location.href = '/auth/login';
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
 
-    form.addEventListener('submit', handleSubmit);
-</script>
+        // Reset error message
+        errors.hidden = true;
+
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const res = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                email,
+                password,
+            }),
+        });
+
+        if (res.status === 200) {
+            window.location = "/auth/login";
+        } else {
+            const json = await res.json();
+            
+            errorMessages = json.message.map((message) => `${message.charAt(0).toUpperCase() + message.slice(1)}.</br>`);
+
+            errors.innerHTML = errorMessages.join(" ");
+            errors.hidden = false;
+        }
+    });
+</script> #}
 
 {% endblock %}

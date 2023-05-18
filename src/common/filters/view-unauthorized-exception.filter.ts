@@ -10,13 +10,10 @@ import { Response } from 'express';
 
 @Catch(UnauthorizedException)
 export class ViewUnauthorizedExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(_: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const status = exception.getStatus();
 
-    response
-      .status(status)
-      .redirect(HttpStatus.TEMPORARY_REDIRECT, '/auth/login');
+    response.redirect(HttpStatus.FOUND, '/auth/login');
   }
 }

@@ -5,7 +5,7 @@
 <p class="text-justify">
     Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event. 
 </p>
-<table>
+<table id="spots-table">
     <thead>
         <tr>
             <th class="grow">Title</th>
@@ -16,13 +16,13 @@
     </thead>
     <tbody>
     {% for spot in spots %}
-        <tr>
+        <tr id="{{ spot.id }}">
             <td><a href="/spots/{{ spot.id }}">
             {{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}
             </a></td>
             <td><a href="/spots/{{ spot.id }}"><i class="fas fa-eye"></i></a></td>
             <td><a href="/spots/{{ spot.id }}/edit"><i class="fas fa-pen"></i></a></td>
-            <td><a href="/spots/{{ spot.id }}/delete"><i class="fas fa-archive"></i></a></td>
+            <td><a href="#delete" onclick="deleteSpot(this)"><i class="fas fa-archive"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>
@@ -30,4 +30,18 @@
 <p>
     <a href="/spots/create" role="button"><i class="fas fa-plus-circle"></i> New spot</a>
 </p>
+
+<script>
+async function deleteSpot(element) {
+    const td = element.parentElement;
+    const tr = td.parentElement;
+    const spotId = tr.id;
+
+    const res = await fetch(`/api/spots/${spotId}`, {
+        method: "DELETE",
+    });
+
+    window.location = "/spots";
+}
+</script
 {% endblock %}

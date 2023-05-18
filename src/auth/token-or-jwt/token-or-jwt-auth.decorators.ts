@@ -16,7 +16,7 @@ export const TokenOrJwtAuth = (...guards: (Function | CanActivate)[]) =>
     ApiCookieAuth(JWT_AUTH_KEY),
     ApiSecurity(TOKEN_AUTH_KEY),
     ApiUnauthorizedResponse({
-      description: 'Wrong JWT or token.',
+      description: 'Wrong JWT, token or the spot is already configured.',
     }),
     ApiForbiddenResponse({
       description: 'Unsufficient roles or permissions.',

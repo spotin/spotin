@@ -7,6 +7,7 @@ import {
   Res,
   HttpStatus,
   UseFilters,
+  Redirect,
 } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -124,20 +125,16 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('spots/index')
-  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
-    await this.spotsService.deleteSpot(id, user);
-
-    const spots = await this.spotsService.getSpots(user);
-
-    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
-
-    return {
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-      spots: spotsDto,
-    };
+  async deleteSpotView(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    try {
+      await this.spotsService.deleteSpot(id, user);
+    } catch (error) {
+      res.redirect(HttpStatus.PERMANENT_REDIRECT, '/spots');
+    }
   }
 
   @Get(':id/edit')
@@ -156,7 +153,6 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('spots/form')
   async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
 
@@ -200,7 +196,7 @@ export class SpotsViewsController {
       if (!spot.configured) {
         res.redirect(`/spots/${id}/edit`);
       } else if (!spot.redirection) {
-        res.redirect(HttpStatus.TEMPORARY_REDIRECT, `/spots/${id}`);
+        res.redirect(HttpStatus.FOUND, `/spots/${id}`);
       } else {
         res.redirect(spot.redirection);
       }

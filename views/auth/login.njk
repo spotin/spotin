@@ -1,40 +1,45 @@
 {% extends "layout.njk" %}
-
 {% block body %}
 <h1><i class="fas fa-sign-in-alt"></i> Log in</h1>
 <p>Please contact <a href="mailto:info@spotin.ch">info@spotin.ch</a> to create an account.</p>
-<form id="login-form" novalidate>
+<form action="/auth/login" method="POST">
     <label for="username">Username</label>
     <input type="username" name="username" id="username" placeholder="Username" autofocus>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" placeholder="Password">
+    <div id="error" hidden class="container flash error">Wrong username or password. Please try again.</div>
     <button type="submit"><i class="fas fa-sign-in-alt"></i> Log in</button>
 </form>
+{# 
 <script>
-    const form = document.querySelector("form");
+    const form = document.getElementById("login-form");
+    const error = document.getElementById("error");
 
-    async function handleSubmit(event) {
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        const formData = new FormData(event.target);
-        const username = formData.get('username');
-        const password = formData.get('password');
-        const body = { username, password };
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                body: JSON.stringify(body),
-                headers: {
-                    'content-type': 'application/json'
-                }
-            });
-            if (res.status === 200) {
-                window.location.href = '/spots';
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
 
-    form.addEventListener('submit', handleSubmit);
-</script>
+        // Reset error message
+        error.hidden = true;
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const res = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password,
+            }),
+        });
+
+        if (res.status === 200) {
+            window.location = "/spots";
+        } else {
+            error.hidden = false;
+        }
+    });
+</script> #}
 {% endblock %}
