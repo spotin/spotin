@@ -12,6 +12,7 @@ import { JWT_EXPIRATION_TIME, JWT_SECRET } from '@/config/config.constants';
 import { TokenStrategy } from '@/auth/token/token.strategy';
 import { UnconfiguredSpotStrategy } from '@/auth/unconfigured-spot/unconfigured-spot.strategy';
 import { SpotsModule } from '@/spots/spots.module';
+import { UnrestrictedStrategy } from '@/auth/unrestricted/unrestricted.strategy';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SpotsModule } from '@/spots/spots.module';
     LocalStrategy,
     TokenStrategy,
     UnconfiguredSpotStrategy,
+    UnrestrictedStrategy,
   ],
   controllers: [AuthApiController, AuthViewsController],
   exports: [AuthService],

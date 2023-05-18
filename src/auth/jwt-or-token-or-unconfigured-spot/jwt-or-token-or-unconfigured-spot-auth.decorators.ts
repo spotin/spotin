@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { JwtOrTokenOrUnconfiguredSpotAuthGuard } from '@/auth/jwt-or-token-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.guard';
+import { JwtOrTokenOrUnconfiguredSpotAuthGuard } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.guard';
 import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';

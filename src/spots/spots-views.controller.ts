@@ -5,8 +5,8 @@ import {
   Render,
   Param,
   Res,
-  HttpCode,
   HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -23,7 +23,9 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
+import { UnrestrictedOrJwtAuth } from '@/auth/unrestricted-or-jwt/unrestricted-or-jwt-auth.decorator';
+import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
+import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -35,6 +37,7 @@ export class SpotsViewsController {
 
   @Get()
   @JwtAuth()
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the spots page',
     description: 'Render the spots page.',
@@ -51,14 +54,16 @@ export class SpotsViewsController {
 
     return {
       title: 'Spots - Spot in',
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
+      username: user.username,
+      email: user.email,
+      role: user.role,
       spots: spotsDto,
     };
   }
 
   @Get('create')
+  @JwtAuth()
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the create a new spot page',
     description: 'Render the create a new spot page.',
@@ -79,6 +84,7 @@ export class SpotsViewsController {
   }
 
   @Get('latest')
+  @UnrestrictedOrJwtAuth()
   @ApiOperation({
     summary: 'Render the list of public spots page',
     description: 'Render the list of public spots page.',
@@ -88,7 +94,7 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/latest')
-  async publicSpotsView() {
+  async publicSpotsView(@AuthUser() user: User | undefined) {
     const spots = await this.spotsService.getPublicSpots();
 
     const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
@@ -96,11 +102,15 @@ export class SpotsViewsController {
     return {
       title: 'Latest spots - Spot in',
       spots: spotsDto,
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
     };
   }
 
   @Get(':id/delete')
   @JwtAuth()
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Delete the specified spot and render the list of spots',
     description: 'Delete the specified spot and render the list of spots.',
@@ -131,6 +141,8 @@ export class SpotsViewsController {
   }
 
   @Get(':id/edit')
+  @JwtOrTokenOrUnconfiguredSpotAuth()
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the edit a spot page',
     description: 'Render the edit a spot page.',
@@ -145,7 +157,6 @@ export class SpotsViewsController {
     description: 'Render successful.',
   })
   @Render('spots/form')
-  @JwtOrTokenOrUnconfiguredSpotAuth()
   async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
     const spot = await this.spotsService.getSpot(id);
 
@@ -199,6 +210,8 @@ export class SpotsViewsController {
   }
 
   @Get(':id')
+  @UnrestrictedOrJwtAuth()
+  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the specified spot page',
     description: 'Render the specified spot page.',
@@ -216,7 +229,7 @@ export class SpotsViewsController {
     description: 'Spot has not been found. Redirect to `/not-found` page.',
   })
   async getSpotView(
-    @AuthUser() user: User,
+    @AuthUser() user: User | undefined,
     @Res() res: Response,
     @Param('id') id: string,
   ) {
