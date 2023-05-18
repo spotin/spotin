@@ -21,10 +21,12 @@ export async function bootstrap(
     }),
   );
 
-  nunjucks.configure(join(__dirname, '..', 'views'), {
-    express: app,
-    watch: process.env.NODE_ENV === 'development',
-  });
+  nunjucks
+    .configure(join(__dirname, '..', 'views'), {
+      express: app,
+      watch: process.env.NODE_ENV === 'development',
+    })
+    .addGlobal('title', 'AHHHHH');
 
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.useStaticAssets(join(__dirname, '..', 'public'));

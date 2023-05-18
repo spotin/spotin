@@ -42,6 +42,7 @@ export class SpotsViewsController {
     const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
 
     return {
+      title: 'Spots - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
@@ -61,6 +62,7 @@ export class SpotsViewsController {
   @Render('spots/form')
   createSpotView(@AuthUser() user: User) {
     return {
+      title: 'Create a new spot - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
@@ -84,6 +86,7 @@ export class SpotsViewsController {
     const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
 
     return {
+      title: 'Latest spots - Spot in',
       spots: spotsDto,
     };
   }

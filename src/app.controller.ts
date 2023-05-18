@@ -18,6 +18,7 @@ export class AppController {
   @Render('index')
   root(@AuthUser() user: User) {
     return {
+      title: 'Home - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
@@ -49,6 +50,7 @@ export class AppController {
   @Render('not-found')
   notFound(@AuthUser() user: User) {
     return {
+      title: 'Not Found - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
