@@ -4,7 +4,6 @@ import {
   ArgumentsHost,
   HttpException,
   UnauthorizedException,
-  HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -14,6 +13,6 @@ export class UnauthorizedViewsExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    response.redirect(HttpStatus.FOUND, '/auth/login');
+    response.redirect('/auth/login');
   }
 }

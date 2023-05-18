@@ -39,7 +39,7 @@ export class AuthApiController {
     description: 'The user has been successfully logged in.',
     type: JwtDto,
   })
-  async loginApi(@AuthUser() user: User) {
+  async login(@AuthUser() user: User) {
     const jwt = await this.authService.generateJwt(user);
 
     return new JwtDto(jwt);

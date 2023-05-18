@@ -138,7 +138,7 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Redirect successful.',
   })
-  @Redirect('/spots', HttpStatus.FOUND)
+  @Redirect('/spots')
   async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
     await this.spotsService.deleteSpot(id, user);
   }
@@ -167,12 +167,6 @@ export class SpotsViewsController {
   ) {
     // Get errors from the session
     const errors = session.errors;
-
-    // Delete errors from the session
-    delete session.errors;
-
-    console.log('coucou');
-    console.log(errors);
 
     const spot = await this.spotsService.getSpot(id);
 
