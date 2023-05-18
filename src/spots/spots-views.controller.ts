@@ -28,7 +28,7 @@ import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestr
 import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
 import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
 
-@ApiTags('Views')
+@ApiTags('Spots - Views')
 @Controller('spots')
 export class SpotsViewsController {
   constructor(

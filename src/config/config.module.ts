@@ -7,6 +7,7 @@ import {
   JWT_SECRET,
   JWT_EXPIRATION_TIME,
   NODE_ENV,
+  SESSION_SECRET,
 } from '@/config/config.constants';
 
 @Module({
@@ -20,6 +21,7 @@ import {
         [NODE_ENV]: Joi.string()
           .valid('development', 'test', 'production')
           .default('production'),
+        [SESSION_SECRET]: Joi.string().required(),
       }),
       validationOptions: {
         allowUnknown: true,

@@ -1,25 +1,66 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
+import { CustomPost } from '@/common/decorators/custom-post.decorator';
 import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
+import { CreateTokenDto } from '@/tokens/dto/create-token.dto';
 import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import { TokensService } from '@/tokens/tokens.service';
-import { Controller, Get, Param, Render, UseFilters } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Redirect,
+  Render,
+  Res,
+  Session,
+  UseFilters,
+} from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import * as crypto from 'crypto';
+import { Response } from 'express';
 
-@ApiTags('Views')
+@ApiTags('Tokens - Views')
 @Controller('tokens')
+@UseFilters(ViewUnauthorizedExceptionFilter)
 export class TokensViewsController {
   constructor(private readonly tokensService: TokensService) {}
 
+  @Get('create')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Render the create a new token page',
+    description: 'Render the create a new token page.',
+    operationId: 'renderTokenView',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('tokens/form')
+  renderTokenView(@AuthUser() user: User) {
+    return {
+      title: 'Create a new token - Spot in',
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
+    };
+  }
+
   @Get()
   @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the tokens page',
     description: 'Render the tokens page.',
@@ -32,44 +73,82 @@ export class TokensViewsController {
   async getTokensView(@AuthUser() user: User) {
     const tokens = await this.tokensService.getTokens(user);
 
-    const tokensDto = tokens.map((token) => new ReadTokenDto(token));
-
     return {
       title: 'Tokens - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      tokens: tokensDto,
+      tokens,
     };
   }
 
-  @Get('create')
+  @Get(':id')
   @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
-    summary: 'Render the create a new token page',
-    description: 'Render the create a new token page.',
-    operationId: 'createTokenView',
+    summary: 'Render the token page',
+    description: 'Render the token page.',
+    operationId: 'getTokenView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('tokens/form')
-  createTokenView(@AuthUser() user: User) {
+  @Render('tokens/[id]')
+  async getTokenView(
+    @AuthUser() user: User,
+    @Session() session: Record<string, unknown>,
+  ) {
+    // Get token from the session
+    const token = session.token;
+
+    // Delete token from the session
+    delete session.token;
+
     return {
-      title: 'Create a new token - Spot in',
+      title: 'Token - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
+      token,
     };
+  }
+
+  @CustomPost({
+    name: 'Token',
+    summary: 'Create a new token',
+    description: 'Create a new token. Redirect to `/tokens/:id`.',
+    bodyType: CreateTokenDto,
+    responseType: ReadTokenDto,
+    operationId: 'createTokenView',
+  })
+  @JwtAuth()
+  async createTokenView(
+    @AuthUser() user: User,
+    @Body() createTokenDto: CreateTokenDto,
+    @Session() session: Record<string, unknown>,
+    @Res() res: Response,
+  ) {
+    const hash = crypto
+      .createHash('sha256')
+      .update(crypto.randomBytes(64).toString('base64'))
+      .digest('hex');
+
+    const token = await this.tokensService.createToken(
+      { ...createTokenDto, hash },
+      user,
+    );
+
+    // Store the token in the session
+    session.token = token;
+
+    // Redirect to the token page
+    res.redirect(HttpStatus.FOUND, `/tokens/${token.id}`);
   }
 
   @Get(':id/delete')
   @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
-    summary: 'Delete the specified token and render the list of token',
-    description: 'Delete the specified token and render the list of token.',
+    summary: 'Delete the specified token',
+    description: 'Delete the specified token. Redirect to `/tokens`.',
     operationId: 'deleteTokenView',
   })
   @ApiParam({
@@ -80,85 +159,8 @@ export class TokensViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('tokens/index')
+  @Redirect('/tokens', HttpStatus.FOUND)
   async deleteTokenView(@AuthUser() user: User, @Param('id') id: string) {
     await this.tokensService.deleteToken(id);
-
-    const tokens = await this.tokensService.getTokens(user);
-
-    const tokensDto = tokens.map((token) => new ReadTokenDto(token));
-
-    return {
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-      tokens: tokensDto,
-    };
-  }
-
-  @Get(':id')
-  @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
-  @ApiOperation({
-    summary: 'Render the token page',
-    description: 'Render the token page.',
-    operationId: 'tokenView',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The token ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Render('tokens/view')
-  async tokenView(@AuthUser() user: User, @Param('id') id: string) {
-    const token = await this.tokensService.getToken(id, user);
-
-    return {
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-      token: new ReadTokenDto(token),
-    };
-  }
-
-  @Get('view/:hash/:name')
-  @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
-  @ApiOperation({
-    summary: 'Render the create a new token page',
-    description: 'Render the create a new token page.',
-    operationId: 'createTokenView',
-  })
-  @ApiParam({
-    name: 'hash',
-    description: 'The token hash.',
-    format: 'string',
-  })
-  @ApiParam({
-    name: 'name',
-    description: 'The token name.',
-    format: 'string',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Render('tokens/view')
-  viewTokenView(
-    @AuthUser() user: User,
-    @Param('hash') hash: string,
-    @Param('name') name: string,
-  ) {
-    return {
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-      token: {
-        hash: hash,
-        name: name,
-      },
-    };
   }
 }

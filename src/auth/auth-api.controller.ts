@@ -19,7 +19,7 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 
-@ApiTags('Auth')
+@ApiTags('Auth - API')
 @Controller('api/auth')
 export class AuthApiController {
   constructor(
@@ -43,25 +43,10 @@ export class AuthApiController {
     description: 'The user has been successfully logged in.',
     type: JwtDto,
   })
-  async login(@AuthUser() user: User) {
+  async loginApi(@AuthUser() user: User) {
     const jwt = await this.authService.generateJwt(user);
 
     return new JwtDto(jwt);
-  }
-
-  @Get('logout')
-  @JwtAuth()
-  @HttpCode(204)
-  @ApiOperation({
-    summary: 'Log out from Spot in',
-    description: 'Log out from Spot in.',
-    operationId: 'logout',
-  })
-  @ApiNoContentResponse({
-    description: 'The user has been successfully logged out.',
-  })
-  async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie(JWT_AUTH_KEY);
   }
 
   @Post('signup')
@@ -81,7 +66,7 @@ export class AuthApiController {
   @ApiConflictResponse({
     description: 'Another user has the same username.',
   })
-  async signup(@Body() signupUserDto: SignupUserDto) {
+  async signupApi(@Body() signupUserDto: SignupUserDto) {
     await this.usersService.createUser(signupUserDto);
   }
 }

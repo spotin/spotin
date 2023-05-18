@@ -1,5 +1,6 @@
 import * as nunjucks from 'nunjucks';
 import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -8,16 +9,38 @@ import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
+import { ConfigService } from '@nestjs/config';
+import { SESSION_SECRET } from '@/config/config.constants';
 
 export async function bootstrap(
   app: NestExpressApplication,
 ): Promise<NestExpressApplication> {
+  const configService = app.get(ConfigService);
+
   const { httpAdapter } = app.get(HttpAdapterHost);
 
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+    }),
+  );
+
+  const sessionSecret = configService.get(SESSION_SECRET, { infer: true });
+
+  app.use(
+    session({
+      secret: sessionSecret,
+      resave: false,
+      saveUninitialized: false,
+      rolling: true,
+      name: 'sid',
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: true,
+      },
     }),
   );
 
@@ -59,6 +82,7 @@ export async function bootstrap(
 
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
+      docExpansion: 'none',
       showExtensions: true,
       tagsSorter: 'alpha',
       operationsSorter: 'alpha',
