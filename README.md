@@ -22,7 +22,7 @@ npm install
 cp .env.defaults .env
 
 # Start the database for local development
-docker compose --file docker-compose.dev.yml up --detach
+npm run dev:database
 
 # Run the database migrations
 npm run prisma:migrate
