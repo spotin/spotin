@@ -2,44 +2,24 @@
 {% block body %}
 <h1><i class="fas fa-sign-in-alt"></i> Log in</h1>
 <p>Please contact <a href="mailto:info@spotin.ch">info@spotin.ch</a> to create an account.</p>
+{% if signupWaitingApproval %}
+<div class="container flash info">You have been successfully signed up. An administrator will review your account and you will receive an email when your account is approved.</div>
+{% endif %}
 <form action="/auth/login" method="POST">
     <label for="username">Username</label>
+    {% if errors.username %}
+    <span class="error">The username field cannot be empty</span>
+    <input name="username" id="username" placeholder="Username" aria-invalid="true" autofocus>
+    {% else %}
     <input type="username" name="username" id="username" placeholder="Username" autofocus>
+    {% endif %}
     <label for="password">Password</label>
+    {% if errors.password %}
+    <span class="error">The password field cannot be empty</span>
+    <input name="password" id="password" placeholder="Password" aria-invalid="true">
+    {% else %}
     <input type="password" name="password" id="password" placeholder="Password">
-    <div id="error" hidden class="container flash error">Wrong username or password. Please try again.</div>
+    {% endif %}
     <button type="submit"><i class="fas fa-sign-in-alt"></i> Log in</button>
 </form>
-{# 
-<script>
-    const form = document.getElementById("login-form");
-    const error = document.getElementById("error");
-
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        // Reset error message
-        error.hidden = true;
-
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        const res = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({
-                username,
-                password,
-            }),
-        });
-
-        if (res.status === 200) {
-            window.location = "/spots";
-        } else {
-            error.hidden = false;
-        }
-    });
-</script> #}
 {% endblock %}

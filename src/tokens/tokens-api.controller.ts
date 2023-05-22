@@ -76,7 +76,7 @@ export class TokensApiController {
     operationId: 'deleteTokenApi',
   })
   @JwtAuth()
-  async deleteTokenApi(@Param('id') id: string) {
-    await this.tokensService.deleteToken(id);
+  async deleteTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+    await this.tokensService.deleteToken(id, user);
   }
 }

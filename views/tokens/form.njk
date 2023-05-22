@@ -7,9 +7,9 @@
         <label for="name">Name</label> 
         {% if errors.name %}
         <span class="error">The name field cannot be empty</span>
-        <input name="name" id="name" placeholder="Name" value="{{ values.name }}" aria-invalid="true" autofocus>
+        <input name="name" id="name" placeholder="Name" value="{{ token.name }}" aria-invalid="true" autofocus>
         {% else %}
-        <input name="name" id="name" placeholder="Name" value="{{ values.name }}" autofocus>
+        <input name="name" id="name" placeholder="Name" value="{{ token.name }}" autofocus>
         {% endif %}
     </fieldset>
     <button type="submit"><i class="fas fa-save"></i> New token</button>

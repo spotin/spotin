@@ -1,20 +1,6 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  Param,
-  Res,
-} from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiOkResponse,
-  ApiTags,
-  ApiParam,
-  ApiNotFoundResponse,
-} from '@nestjs/swagger';
-import { Response } from 'express';
-import { Spot, User, UserRole } from '@prisma/client';
+import { BadRequestException, Body, Controller, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { User, UserRole } from '@prisma/client';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';

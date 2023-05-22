@@ -7,6 +7,11 @@ import {
   Res,
   HttpStatus,
   UseFilters,
+  Session,
+  Redirect,
+  Post,
+  Body,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -15,7 +20,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { Spot, User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
@@ -26,94 +31,103 @@ import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
+import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
+import { NotFoundViewsExceptionFilter } from '@/common/filters/not-found-views-exception.filter';
+import { SessionData } from 'express-session';
+import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 
 @ApiTags('Spots - Views')
 @Controller('spots')
+@UseFilters(UnauthorizedViewsExceptionFilter)
+@UseFilters(BadRequestViewsExceptionFilter)
+@UseFilters(NotFoundViewsExceptionFilter)
 export class SpotsViewsController {
   constructor(
     private readonly spotsService: SpotsService,
-    readonly configService: ConfigService,
+    private readonly configService: ConfigService,
   ) {}
-
-  @Get()
-  @JwtAuth()
-  @UseFilters(UnauthorizedViewsExceptionFilter)
-  @ApiOperation({
-    summary: 'Render the spots page',
-    description: 'Render the spots page.',
-    operationId: 'getSpotsView',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Render('spots/list')
-  async getSpotsView(@AuthUser() user: User) {
-    const spots = await this.spotsService.getSpots(user);
-
-    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
-
-    return {
-      title: 'Spots - Spot in',
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      spots: spotsDto,
-    };
-  }
 
   @Get('create')
   @JwtAuth()
-  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the create a new spot page',
     description: 'Render the create a new spot page.',
-    operationId: 'createSpotView',
+    operationId: 'renderCreateSpotView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('spots/form')
-  createSpotView(@AuthUser() user: User) {
+  renderCreateSpotView(
+    @AuthUser() user: User,
+    @Session() session: SessionData,
+  ) {
+    // Get errors from the session
+    const errors = session.errors;
+
+    // Delete errors from the session
+    delete session.errors;
+
     return {
       title: 'Create a new spot - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      action: 'POST',
+      errors,
     };
   }
 
   @Get('latest')
   @JwtOrUnrestrictedAuth()
   @ApiOperation({
-    summary: 'Render the list of public spots page',
-    description: 'Render the list of public spots page.',
-    operationId: 'publicSpotsView',
+    summary: 'Render the list of latest public spots page',
+    description: 'Render the list of latest public spots page.',
+    operationId: 'renderLatestSpotsView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('spots/latest')
-  async publicSpotsView(@AuthUser() user: User | undefined) {
+  async renderLatestSpotsView(@AuthUser() user: User | undefined) {
     const spots = await this.spotsService.getPublicSpots();
-
-    const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
 
     return {
       title: 'Latest spots - Spot in',
-      spots: spotsDto,
       username: user?.username,
       email: user?.email,
       role: user?.role,
+      spots,
+    };
+  }
+
+  @Get()
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Render the spots page',
+    description: 'Render the spots page.',
+    operationId: 'renderSpotsListView',
+  })
+  @ApiOkResponse({
+    description: 'Render successful.',
+  })
+  @Render('spots/list')
+  async renderSpotsListView(@AuthUser() user: User) {
+    const spots = await this.spotsService.getSpots(user);
+
+    return {
+      title: 'Spots - Spot in',
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      spots,
     };
   }
 
   @Get(':id/delete')
   @JwtAuth()
-  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
-    summary: 'Delete the specified spot and render the list of spots',
-    description: 'Delete the specified spot and render the list of spots.',
+    summary: 'Delete the specified spot',
+    description: 'Delete the specified spot. Redirect to `/spots` page.',
     operationId: 'deleteSpotView',
   })
   @ApiParam({
@@ -122,18 +136,11 @@ export class SpotsViewsController {
     format: 'uuid',
   })
   @ApiOkResponse({
-    description: 'Render successful.',
+    description: 'Redirect successful.',
   })
-  async deleteSpotView(
-    @AuthUser() user: User,
-    @Param('id') id: string,
-    @Res() res: Response,
-  ) {
-    try {
-      await this.spotsService.deleteSpot(id, user);
-    } catch (error) {
-      res.redirect(HttpStatus.PERMANENT_REDIRECT, '/spots');
-    }
+  @Redirect('/spots', HttpStatus.FOUND)
+  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
+    await this.spotsService.deleteSpot(id, user);
   }
 
   @Get(':id/edit')
@@ -142,7 +149,7 @@ export class SpotsViewsController {
   @ApiOperation({
     summary: 'Render the edit a spot page',
     description: 'Render the edit a spot page.',
-    operationId: 'editSpotView',
+    operationId: 'renderEditTokenView',
   })
   @ApiParam({
     name: 'id',
@@ -152,18 +159,29 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  async editSpotView(@AuthUser() user: User, @Param('id') id: string) {
-    const spot = await this.spotsService.getSpot(id);
+  @Render('spots/form')
+  async renderEditTokenView(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+    @Session() session: SessionData,
+  ) {
+    // Get errors from the session
+    const errors = session.errors;
 
-    const spotDto = new ReadSpotDto(spot);
+    // Delete errors from the session
+    delete session.errors;
+
+    console.log('coucou');
+    console.log(errors);
+
+    const spot = await this.spotsService.getSpot(id);
 
     return {
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      id,
-      values: spotDto,
-      action: 'PATCH',
+      spot,
+      errors,
     };
   }
 
@@ -179,7 +197,7 @@ export class SpotsViewsController {
     format: 'uuid',
   })
   @ApiOkResponse({
-    description: 'Redirection success.',
+    description: 'Redirect successful.',
     type: ReadSpotDto,
   })
   @ApiNotFoundResponse({
@@ -206,11 +224,10 @@ export class SpotsViewsController {
 
   @Get(':id')
   @JwtOrUnrestrictedAuth()
-  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the specified spot page',
     description: 'Render the specified spot page.',
-    operationId: 'getSpotView',
+    operationId: 'renderSpotView',
   })
   @ApiParam({
     name: 'id',
@@ -223,22 +240,14 @@ export class SpotsViewsController {
   @ApiNotFoundResponse({
     description: 'Spot has not been found. Redirect to `/not-found` page.',
   })
-  async getSpotView(
+  async renderSpotView(
     @AuthUser() user: User | undefined,
     @Res() res: Response,
     @Param('id') id: string,
   ) {
-    let spot: Spot;
-
-    try {
-      spot = await this.spotsService.getSpot(id);
-    } catch (error) {
-      return res.redirect('/not-found');
-    }
-
+    const spot = await this.spotsService.getSpot(id);
     const fqdn = this.configService.get(FQDN, { infer: true });
     const redirection = `${fqdn}/spots/${spot.id}/redirect`;
-    const spotDto = new ReadSpotDto(spot);
 
     try {
       const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
@@ -248,11 +257,46 @@ export class SpotsViewsController {
         email: user?.email,
         role: user?.role,
         title: 'Spot',
-        spot: spotDto,
+        spot,
         qrcode: qrcodeSvg,
       });
     } catch (error) {
       console.error(error);
     }
+  }
+
+  @Post(':id')
+  @UnconfiguredSpotOrTokenOrJwtAuth()
+  @ApiOperation({
+    summary: 'Update the specified spot',
+    description: 'Update the specified spot. Redirect to `/spots/:id`.',
+    operationId: 'updateSpotView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirect successful.',
+  })
+  async updateSpotView(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+    @Body() updateSpot: UpdateSpotDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    if (user.role === UserRole.GUEST) {
+      updateSpot.configured = true;
+      updateSpot.referenced = undefined;
+
+      if (!updateSpot.redirection || updateSpot.redirection === '') {
+        throw new BadRequestException();
+      }
+    }
+
+    await this.spotsService.updateSpot(id, updateSpot, user);
+
+    res.redirect(`/spots/${id}`);
   }
 }

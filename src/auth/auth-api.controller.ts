@@ -1,9 +1,7 @@
-import { Controller, Post, Res, Body, HttpCode, Get } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Post, Body, HttpCode } from '@nestjs/common';
 import {
   ApiBody,
   ApiConflictResponse,
-  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -15,9 +13,7 @@ import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
 import { UsersService } from '@/users/users.service';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
 import { JwtDto } from '@/auth/dtos/jwt.dto';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 
 @ApiTags('Auth - API')
 @Controller('api/auth')

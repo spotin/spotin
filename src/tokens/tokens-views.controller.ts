@@ -1,18 +1,14 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
-import { CustomPost } from '@/common/decorators/custom-post.decorator';
 import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
 import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { CreateTokenDto } from '@/tokens/dto/create-token.dto';
-import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
+import { NotFoundViewsExceptionFilter } from '@/common/filters/not-found-views-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  HttpCode,
   HttpStatus,
   Param,
   Post,
@@ -23,14 +19,12 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import {
-  ApiBody,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Token, User } from '@prisma/client';
 import * as crypto from 'crypto';
 import { Response } from 'express';
 import { SessionData } from 'express-session';
@@ -39,6 +33,7 @@ import { SessionData } from 'express-session';
 @Controller('tokens')
 @UseFilters(UnauthorizedViewsExceptionFilter)
 @UseFilters(BadRequestViewsExceptionFilter)
+@UseFilters(NotFoundViewsExceptionFilter)
 export class TokensViewsController {
   constructor(private readonly tokensService: TokensService) {}
 
@@ -47,7 +42,7 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Render the create a new token page',
     description: 'Render the create a new token page.',
-    operationId: 'renderTokenView',
+    operationId: 'renderCreateTokenView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
@@ -77,13 +72,13 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Render the tokens page',
     description: 'Render the tokens page.',
-    operationId: 'getTokensView',
+    operationId: 'renderTokensListView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('tokens/list')
-  async getTokensView(@AuthUser() user: User) {
+  async renderTokensListView(@AuthUser() user: User) {
     const tokens = await this.tokensService.getTokens(user);
 
     return {
@@ -95,23 +90,61 @@ export class TokensViewsController {
     };
   }
 
+  @Get(':id/delete')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Delete the specified token',
+    description: 'Delete the specified token. Redirect to `/tokens`.',
+    operationId: 'deleteTokenView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The token ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirect successful.',
+  })
+  @Redirect('/tokens', HttpStatus.FOUND)
+  async deleteTokenView(@AuthUser() user: User, @Param('id') id: string) {
+    await this.tokensService.deleteToken(id, user);
+  }
+
   @Get(':id')
   @JwtAuth()
   @ApiOperation({
     summary: 'Render the token page',
     description: 'Render the token page.',
-    operationId: 'getTokenView',
+    operationId: 'renderTokenView',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
   @Render('tokens/view')
-  async getTokenView(@AuthUser() user: User, @Session() session: SessionData) {
-    // Get token from the session
-    const token = session.token;
+  async renderTokenView(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+    @Session() session: SessionData,
+  ) {
+    let token: Omit<Token, 'hash'> & { hash?: string };
 
-    // Delete token from the session
-    delete session.token;
+    if (session.token) {
+      // Get token from the session
+      token = session.token;
+
+      // Delete token from the session
+      delete session.token;
+    } else {
+      token = await this.tokensService.getToken(id, user);
+
+      // Delete the hash
+      delete token.hash;
+    }
 
     return {
       title: 'Token - Spot in',
@@ -122,15 +155,16 @@ export class TokensViewsController {
     };
   }
 
-  @CustomPost({
-    name: 'Token',
+  @Post()
+  @JwtAuth()
+  @ApiOperation({
     summary: 'Create a new token',
     description: 'Create a new token. Redirect to `/tokens/:id`.',
-    bodyType: CreateTokenDto,
-    responseType: ReadTokenDto,
     operationId: 'createTokenView',
   })
-  @JwtAuth()
+  @ApiOkResponse({
+    description: 'Redirect successful.',
+  })
   async createTokenView(
     @AuthUser() user: User,
     @Body() createTokenDto: CreateTokenDto,
@@ -152,25 +186,5 @@ export class TokensViewsController {
 
     // Redirect to the token page
     res.redirect(HttpStatus.FOUND, `/tokens/${token.id}`);
-  }
-
-  @Get(':id/delete')
-  @JwtAuth()
-  @ApiOperation({
-    summary: 'Delete the specified token',
-    description: 'Delete the specified token. Redirect to `/tokens`.',
-    operationId: 'deleteTokenView',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The token ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Redirect('/tokens', HttpStatus.FOUND)
-  async deleteTokenView(@AuthUser() user: User, @Param('id') id: string) {
-    await this.tokensService.deleteToken(id);
   }
 }

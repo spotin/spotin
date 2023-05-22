@@ -4,8 +4,9 @@ import { Token } from '@prisma/client';
 
 declare module 'express-session' {
   export interface SessionData {
-    token?: Token;
     error?: string;
     errors?: Record<string, string[]>;
+    signupWaitingApproval?: boolean;
+    token?: Token;
   }
 }

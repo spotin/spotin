@@ -52,10 +52,11 @@ export class TokensService {
   }
 
   /** Delete a token by id */
-  async deleteToken(tokenId: string) {
+  async deleteToken(tokenId: string, user: User) {
     await this.prisma.token.delete({
       where: {
         id: tokenId,
+        userId: user.id,
       },
     });
   }

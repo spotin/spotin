@@ -10,6 +10,7 @@ import {
   Post,
   Render,
   Res,
+  Session,
   UseFilters,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -28,10 +29,13 @@ import {
 } from '@nestjs/swagger';
 import { LoginUserDto } from '@/auth/dtos/login-user.dto';
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
+import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
+import { SessionData } from 'express-session';
 
 @ApiTags('Auth - Views')
 @Controller('auth')
 @UseFilters(UnauthorizedViewsExceptionFilter)
+@UseFilters(BadRequestViewsExceptionFilter)
 export class AuthViewsController {
   constructor(
     private authService: AuthService,
@@ -48,8 +52,10 @@ export class AuthViewsController {
     description: 'Render successful.',
   })
   @Render('auth/login')
-  renderLoginView() {
-    return;
+  renderLoginView(@Session() session: SessionData) {
+    return {
+      signupWaitingApproval: session.signupWaitingApproval,
+    };
   }
 
   @Post('login')
@@ -69,8 +75,14 @@ export class AuthViewsController {
     description: 'The user has been successfully logged in.',
   })
   @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
-  async loginView(@AuthUser() user: User, @Res() res: Response) {
+  async loginView(
+    @AuthUser() user: User,
+    @Res() res: Response,
+    @Session() session: SessionData,
+  ) {
     const jwt = await this.authService.generateJwt(user);
+
+    delete session.signupWaitingApproval;
 
     res.cookie(JWT_AUTH_KEY, jwt.jwt, {
       httpOnly: true,
@@ -91,8 +103,14 @@ export class AuthViewsController {
     description: 'Render successful.',
   })
   @Render('auth/signup')
-  renderSignupView() {
-    return;
+  renderSignupView(@Session() session: SessionData) {
+    const errors = session.errors;
+
+    delete session.errors;
+
+    return {
+      errors,
+    };
   }
 
   @Post('signup')
@@ -113,10 +131,16 @@ export class AuthViewsController {
     description: 'Another user has the same username.',
   })
   @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
-  async signupView(@Body() signupUserDto: SignupUserDto, @Res() res: Response) {
+  async signupView(
+    @Body() signupUserDto: SignupUserDto,
+    @Res() res: Response,
+    @Session() session: SessionData,
+  ) {
     await this.usersService.createUser(signupUserDto);
 
-    res.redirect('/auth/signup');
+    session.signupWaitingApproval = true;
+
+    res.redirect('/auth/login');
   }
 
   @Get('profile')
