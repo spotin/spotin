@@ -2,7 +2,8 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { CustomPost } from '@/common/decorators/custom-post.decorator';
-import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
+import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
+import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { CreateTokenDto } from '@/tokens/dto/create-token.dto';
 import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import { TokensService } from '@/tokens/tokens.service';
@@ -32,10 +33,12 @@ import {
 import { User } from '@prisma/client';
 import * as crypto from 'crypto';
 import { Response } from 'express';
+import { SessionData } from 'express-session';
 
 @ApiTags('Tokens - Views')
 @Controller('tokens')
-@UseFilters(ViewUnauthorizedExceptionFilter)
+@UseFilters(UnauthorizedViewsExceptionFilter)
+@UseFilters(BadRequestViewsExceptionFilter)
 export class TokensViewsController {
   constructor(private readonly tokensService: TokensService) {}
 
@@ -50,12 +53,22 @@ export class TokensViewsController {
     description: 'Render successful.',
   })
   @Render('tokens/form')
-  renderTokenView(@AuthUser() user: User) {
+  renderCreateTokenView(
+    @AuthUser() user: User,
+    @Session() session: SessionData,
+  ) {
+    // Get errors from the session
+    const errors = session.errors;
+
+    // Delete errors from the session
+    delete session.errors;
+
     return {
       title: 'Create a new token - Spot in',
       username: user?.username,
       email: user?.email,
       role: user?.role,
+      errors,
     };
   }
 
@@ -69,7 +82,7 @@ export class TokensViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('tokens/index')
+  @Render('tokens/list')
   async getTokensView(@AuthUser() user: User) {
     const tokens = await this.tokensService.getTokens(user);
 
@@ -92,11 +105,8 @@ export class TokensViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('tokens/[id]')
-  async getTokenView(
-    @AuthUser() user: User,
-    @Session() session: Record<string, unknown>,
-  ) {
+  @Render('tokens/view')
+  async getTokenView(@AuthUser() user: User, @Session() session: SessionData) {
     // Get token from the session
     const token = session.token;
 

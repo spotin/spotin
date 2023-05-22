@@ -13,7 +13,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
+import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
 import { AuthService } from '@/auth/auth.service';
 import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
@@ -31,7 +31,7 @@ import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
 
 @ApiTags('Auth - Views')
 @Controller('auth')
-@UseFilters(ViewUnauthorizedExceptionFilter)
+@UseFilters(UnauthorizedViewsExceptionFilter)
 export class AuthViewsController {
   constructor(
     private authService: AuthService,

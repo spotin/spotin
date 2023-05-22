@@ -7,7 +7,6 @@ import {
   Res,
   HttpStatus,
   UseFilters,
-  Redirect,
 } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -24,8 +23,8 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
+import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
 import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
 
 @ApiTags('Spots - Views')
@@ -38,7 +37,7 @@ export class SpotsViewsController {
 
   @Get()
   @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
+  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the spots page',
     description: 'Render the spots page.',
@@ -47,7 +46,7 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('spots/index')
+  @Render('spots/list')
   async getSpotsView(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
@@ -64,7 +63,7 @@ export class SpotsViewsController {
 
   @Get('create')
   @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
+  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the create a new spot page',
     description: 'Render the create a new spot page.',
@@ -111,7 +110,7 @@ export class SpotsViewsController {
 
   @Get(':id/delete')
   @JwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
+  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Delete the specified spot and render the list of spots',
     description: 'Delete the specified spot and render the list of spots.',
@@ -139,7 +138,7 @@ export class SpotsViewsController {
 
   @Get(':id/edit')
   @UnconfiguredSpotOrTokenOrJwtAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
+  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the edit a spot page',
     description: 'Render the edit a spot page.',
@@ -207,7 +206,7 @@ export class SpotsViewsController {
 
   @Get(':id')
   @JwtOrUnrestrictedAuth()
-  @UseFilters(ViewUnauthorizedExceptionFilter)
+  @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the specified spot page',
     description: 'Render the specified spot page.',
@@ -244,7 +243,7 @@ export class SpotsViewsController {
     try {
       const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
-      return res.render('spots/[id]', {
+      return res.render('spots/view', {
         username: user?.username,
         email: user?.email,
         role: user?.role,
