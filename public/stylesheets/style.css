@@ -2,6 +2,14 @@
   color: #e53935;
 }
 
+.text-justify {
+  text-align: justify;
+}
+
+.text-right {
+  text-align: right;
+}
+
 /* Red Light scheme (Default) */
 /* Can be forced with data-theme="light" */
 [data-theme='light'],
@@ -97,11 +105,11 @@ body {
 
 .site-footer hr {
   border-top-color: #bbb;
-  opacity: 0.5
+  opacity: 0.5;
 }
 
 .site-footer hr.small {
-  margin: 20px 0
+  margin: 20px 0;
 }
 
 .site-footer h6 {
@@ -109,7 +117,7 @@ body {
   font-size: 16px;
   text-transform: uppercase;
   margin-top: 5px;
-  letter-spacing: 2px
+  letter-spacing: 2px;
 }
 
 .site-footer a {
@@ -123,15 +131,15 @@ body {
 
 .footer-links {
   padding-left: 0;
-  list-style: none
+  list-style: none;
 }
 
 .footer-links li {
-  display: block
+  display: block;
 }
 
 .footer-links a {
-  color: #737373
+  color: #737373;
 }
 
 .footer-links a:active,
@@ -142,22 +150,22 @@ body {
 }
 
 .footer-links.inline li {
-  display: inline-block
+  display: inline-block;
 }
 
-@media (max-width:991px) {
-  .site-footer [class^=col-] {
-    margin-bottom: 30px
+@media (max-width: 991px) {
+  .site-footer [class^='col-'] {
+    margin-bottom: 30px;
   }
 }
 
-@media (max-width:767px) {
+@media (max-width: 767px) {
   .site-footer {
-    padding-bottom: 0
+    padding-bottom: 0;
   }
 
   .site-footer .copyright-text,
   .site-footer .social-icons {
-    text-align: center
+    text-align: center;
   }
 }
