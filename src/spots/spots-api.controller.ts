@@ -26,7 +26,7 @@ import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
-import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
+import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -99,7 +99,7 @@ export class SpotsApiController {
     responseType: ReadSpotDto,
     operationId: 'updateSpotApi',
   })
-  @JwtOrTokenOrUnconfiguredSpotAuth()
+  @UnconfiguredSpotOrTokenOrJwtAuth()
   async updateSpotApi(
     @AuthUser() user: User,
     @Param('id') id: string,

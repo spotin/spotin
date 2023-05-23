@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class JwtOrTokenOrUnconfiguredSpotAuthGuard extends AuthGuard([
-  JWT_AUTH_KEY,
-  TOKEN_AUTH_KEY,
+export class UnconfiguredSpotOrTokenOrJwtAuthGuard extends AuthGuard([
   UNCONFIGURED_SPOT_AUTH_KEY,
+  TOKEN_AUTH_KEY,
+  JWT_AUTH_KEY,
 ]) {}
