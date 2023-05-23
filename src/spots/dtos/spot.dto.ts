@@ -13,6 +13,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { Spot } from '@prisma/client';
+import { Transform, Type } from 'class-transformer';
 
 export class SpotDto implements Spot {
   /**
@@ -30,6 +31,7 @@ export class SpotDto implements Spot {
   @IsString()
   @MinLength(1)
   @MaxLength(255)
+  @Transform(({ value }) => (value ? value : null))
   title: string | null;
 
   /**
@@ -39,6 +41,7 @@ export class SpotDto implements Spot {
   @IsOptional()
   @IsString()
   @MinLength(1)
+  @Transform(({ value }) => (value ? value : null))
   description: string | null;
 
   /**
@@ -49,6 +52,8 @@ export class SpotDto implements Spot {
   @IsNumber()
   @Min(-90)
   @Max(90)
+  @Type(() => Number)
+  @Transform(({ value }) => (value ? value : null))
   latitude: number | null;
 
   /**
@@ -59,6 +64,8 @@ export class SpotDto implements Spot {
   @IsNumber()
   @Min(-180)
   @Max(180)
+  @Type(() => Number)
+  @Transform(({ value }) => (value ? value : null))
   longitude: number | null;
 
   /**
@@ -68,6 +75,7 @@ export class SpotDto implements Spot {
   @IsOptional()
   @IsUrl()
   @MaxLength(255)
+  @Transform(({ value }) => (value ? value : null))
   redirection: string | null;
 
   /**
@@ -83,6 +91,7 @@ export class SpotDto implements Spot {
   @ApiPropertyOptional({ default: false })
   @IsOptional()
   @IsBoolean()
+  @Type(() => Boolean)
   referenced: boolean = false;
 
   /**
@@ -92,18 +101,21 @@ export class SpotDto implements Spot {
   @ApiPropertyOptional({ default: true })
   @IsOptional()
   @IsBoolean()
+  @Type(() => Boolean)
   configured: boolean = true;
 
   /**
    * Date when the spot was created
    */
   @IsDateString()
+  @Type(() => Date)
   createdAt: Date;
 
   /**
    * Date when the spot was updated
    */
   @IsDateString()
+  @Type(() => Date)
   updatedAt: Date;
 
   /**
@@ -112,5 +124,6 @@ export class SpotDto implements Spot {
   @IsDateString()
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => Date)
   deletedAt: Date | null;
 }

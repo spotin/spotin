@@ -30,10 +30,8 @@ export class BadRequestViewsExceptionFilter implements ExceptionFilter {
       errors[key].push(value);
     }
 
-    console.log(BadRequestViewsExceptionFilter.name);
-    console.log(errors);
-
     request.session.errors = errors;
+    request.session.body = request.body;
 
     const origin = request.get('Referrer') as string;
 

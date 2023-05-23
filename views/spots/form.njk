@@ -10,7 +10,7 @@
     <label for="title">
         Title
         {% if errors.title %}
-        <span class="error">(cannot be empty)</span>
+        <span class="error">Cannot be empty</span>
         <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" aria-invalid="true" autofocus>
         {% else %}
         <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" autofocus>
@@ -19,7 +19,12 @@
 
     <label for="description">
         Description
+        {% if errors.description %}
+        <span class="error">Cannot be empty</span>
+        <textarea id="description" type="text" name="description" placeholder="Description" aria-invalid="true" autofocus>{{ spot.description }}</textarea>
+        {% else %}
         <textarea id="description" type="text" name="description" placeholder="Description">{{ spot.description }}</textarea>
+        {% endif %}
     </label>
 
     <!-- Prompt user for current location -->
@@ -34,8 +39,8 @@
     <div class="grid">
         <label for="latitude">
             Latitude (between -90.0 and 90.0)
-            {% if errors.coordinates %}
-            <span class="error">(between -90.0 and 90.0)</span>
+            {% if errors.latitude %}
+            <span class="error">Latitude must be between -90.0 and 90.0</span>
             <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188"
                 value="{{ spot.latitude }}" aria-invalid="true" min="-90" max="90">
             {% else %}
@@ -45,8 +50,8 @@
         </label>
         <label for="longitude">
             Longitude (between -180.0 and 180.0)
-            {% if errors.coordinates %}
-            <span class="error">(between -180.0 and 180.0)</span>
+            {% if errors.longitude %}
+            <span class="error">Longitude must be between -180.0 and 180.0</span>
             <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227512"
                 value="{{ spot.longitude }}" aria-invalid="true" min="-180" max="180">
             {% else %}
@@ -80,49 +85,4 @@
 
     <button type="submit"><i class="fas fa-save"></i> Save</button>
 </form>
-<script>
-    const form = document.getElementById("spot-form");
-
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        // Get forms fields
-        const title = document.getElementById("title").value;
-        const description = document.getElementById("description").value;
-        const longitude = document.getElementById("longitude").value;
-        const latitude = document.getElementById("latitude").value;
-        const redirection = document.getElementById("redirection").value;
-        {% if user.role != "GUEST" %}
-        const referenced = document.getElementById("referenced").checked;
-        const configured = document.getElementById("configured").checked;
-        {% endif %}
-
-        const res = await fetch(form.action, {
-            method: form.method,
-            redirect: 'manual',
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({
-                title: title !== '' ? title : undefined,
-                description: description !== '' ? description : undefined,
-                // if the user's machine language is not english, the decimal separator is a comma
-                longitude: longitude !== '' ? parseFloat(longitude.replace(',', '.')) : null,
-                latitude: latitude !== '' ? parseFloat(latitude.replace(',', '.')) : null,
-                redirection: redirection !== '' ? redirection : undefined,
-                referenced: referenced,
-                configured: configured,
-            }),
-        });
-
-        console.log(res)
-        if (res.ok) {
-            // Redirect the user to the spot page
-            window.location = res.url;
-        } else {
-            // Reload the window to display the errors
-            window.location.reload();
-        }
-    });
-</script>
 {% endblock %}

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Token } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
   IsDateString,
   IsOptional,
@@ -45,12 +46,14 @@ export class TokenDto implements Token {
    * Date when the token was created
    */
   @IsDateString()
+  @Type(() => Date)
   createdAt: Date;
 
   /**
    * Date when the token was updated
    */
   @IsDateString()
+  @Type(() => Date)
   updatedAt: Date;
 
   /**
@@ -59,5 +62,6 @@ export class TokenDto implements Token {
   @ApiPropertyOptional()
   @IsOptional()
   @IsDateString()
+  @Type(() => Date)
   deletedAt: Date | null;
 }

@@ -5,13 +5,13 @@ import {
   Render,
   Param,
   Res,
-  HttpStatus,
   UseFilters,
   Session,
   Redirect,
   Post,
   Body,
   BadRequestException,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
@@ -35,6 +35,7 @@ import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-vie
 import { NotFoundViewsExceptionFilter } from '@/common/filters/not-found-views-exception.filter';
 import { SessionData } from 'express-session';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
+import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 
 @ApiTags('Spots - Views')
 @Controller('spots')
@@ -62,11 +63,12 @@ export class SpotsViewsController {
     @AuthUser() user: User,
     @Session() session: SessionData,
   ) {
-    // Get errors from the session
-    const errors = session.errors;
+    // Get errors and body from the session
+    const { errors, body } = session;
 
-    // Delete errors from the session
+    // Clear session
     delete session.errors;
+    delete session.body;
 
     return {
       title: 'Create a new spot - Spot in',
@@ -74,6 +76,7 @@ export class SpotsViewsController {
       email: user?.email,
       role: user?.role,
       errors,
+      spot: body,
     };
   }
 
@@ -165,8 +168,12 @@ export class SpotsViewsController {
     @Param('id') id: string,
     @Session() session: SessionData,
   ) {
-    // Get errors from the session
-    const errors = session.errors;
+    // Get errors and body from the session
+    const { errors, body } = session;
+
+    // Clear session
+    delete session.errors;
+    delete session.body;
 
     const spot = await this.spotsService.getSpot(id);
 
@@ -174,7 +181,7 @@ export class SpotsViewsController {
       username: user?.username,
       email: user?.email,
       role: user?.role,
-      spot,
+      spot: body ? body : spot,
       errors,
     };
   }
@@ -201,18 +208,14 @@ export class SpotsViewsController {
     @Res({ passthrough: true }) res: Response,
     @Param('id') id: string,
   ) {
-    try {
-      const spot = await this.spotsService.getSpot(id);
+    const spot = await this.spotsService.getSpot(id);
 
-      if (!spot.configured) {
-        res.redirect(`/spots/${id}/edit`);
-      } else if (!spot.redirection) {
-        res.redirect(HttpStatus.FOUND, `/spots/${id}`);
-      } else {
-        res.redirect(spot.redirection);
-      }
-    } catch (error) {
-      res.redirect('/not-found');
+    if (!spot.configured) {
+      res.redirect(`/spots/${id}/edit`);
+    } else if (!spot.redirection) {
+      res.redirect(`/spots/${id}`);
+    } else {
+      res.redirect(spot.redirection);
     }
   }
 
@@ -246,7 +249,7 @@ export class SpotsViewsController {
     try {
       const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
-      return res.render('spots/view', {
+      res.render('spots/view', {
         username: user?.username,
         email: user?.email,
         role: user?.role,
@@ -292,5 +295,25 @@ export class SpotsViewsController {
     await this.spotsService.updateSpot(id, updateSpot, user);
 
     res.redirect(`/spots/${id}`);
+  }
+
+  @Post()
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Create a new spot',
+    description: 'Create a new spot. Redirect to `/spots/:id`.',
+    operationId: 'createSpotView',
+  })
+  @ApiOkResponse({
+    description: 'Redirect successful.',
+  })
+  async createSpotView(
+    @AuthUser() user: User,
+    @Body() createSpotDto: CreateSpotDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const newSpot = await this.spotsService.createSpot(createSpotDto, user);
+
+    res.redirect(`/spots/${newSpot.id}`);
   }
 }

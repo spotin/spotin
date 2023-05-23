@@ -105,7 +105,7 @@ export class TokensViewsController {
   @ApiOkResponse({
     description: 'Redirect successful.',
   })
-  @Redirect('/tokens', HttpStatus.FOUND)
+  @Redirect('/tokens', HttpStatus.PERMANENT_REDIRECT)
   async deleteTokenView(@AuthUser() user: User, @Param('id') id: string) {
     await this.tokensService.deleteToken(id, user);
   }
@@ -185,6 +185,6 @@ export class TokensViewsController {
     session.token = token;
 
     // Redirect to the token page
-    res.redirect(HttpStatus.FOUND, `/tokens/${token.id}`);
+    res.redirect(`/tokens/${token.id}`);
   }
 }

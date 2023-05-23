@@ -24,6 +24,10 @@ export async function bootstrap(
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true, // Remove unknown properties from DTOs
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
