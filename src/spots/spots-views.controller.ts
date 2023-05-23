@@ -23,9 +23,9 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { UnrestrictedOrJwtAuth } from '@/auth/unrestricted-or-jwt/unrestricted-or-jwt-auth.decorator';
+import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
-import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
+import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -84,7 +84,7 @@ export class SpotsViewsController {
   }
 
   @Get('latest')
-  @UnrestrictedOrJwtAuth()
+  @JwtOrUnrestrictedAuth()
   @ApiOperation({
     summary: 'Render the list of public spots page',
     description: 'Render the list of public spots page.',
@@ -141,7 +141,7 @@ export class SpotsViewsController {
   }
 
   @Get(':id/edit')
-  @JwtOrTokenOrUnconfiguredSpotAuth()
+  @UnconfiguredSpotOrTokenOrJwtAuth()
   @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the edit a spot page',
@@ -210,7 +210,7 @@ export class SpotsViewsController {
   }
 
   @Get(':id')
-  @UnrestrictedOrJwtAuth()
+  @JwtOrUnrestrictedAuth()
   @UseFilters(ViewUnauthorizedExceptionFilter)
   @ApiOperation({
     summary: 'Render the specified spot page',
