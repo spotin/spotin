@@ -1,9 +1,11 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 import { ViewUnauthorizedExceptionFilter } from '@/common/filters/view-unauthorized-exception.filter';
-import { Controller, Get, Render, UseFilters } from '@nestjs/common';
+import { Controller, Get, Render, Res, UseFilters } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { Response } from 'express';
 
 @ApiTags('Views')
 @Controller('auth')
@@ -54,5 +56,22 @@ export class AuthViewsController {
       email: user.email,
       role: user.role,
     };
+  }
+
+  @Get('logout')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Log out from Spot in',
+    description:
+      'Log out from Spot in. Clear the JWT Cookie and redirect to `/`.',
+    operationId: 'logoutView',
+  })
+  @ApiOkResponse({
+    description: 'The user has been successfully logged in.',
+  })
+  logoutView(@Res() res: Response) {
+    res.clearCookie(JWT_AUTH_KEY);
+
+    res.redirect('/');
   }
 }
