@@ -26,7 +26,7 @@ export async function bootstrap(
       express: app,
       watch: process.env.NODE_ENV === 'development',
     })
-    .addGlobal('title', 'AHHHHH');
+    .addGlobal('title', 'Spot in');
 
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.useStaticAssets(join(__dirname, '..', 'public'));
