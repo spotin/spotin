@@ -5,6 +5,7 @@
 {% if signupWaitingApproval %}
 <div class="container flash info">You have been successfully signed up. An administrator will review your account and you will receive an email when your account is approved.</div>
 {% endif %}
+<p>Please contact <a href="mailto:info@spotin.ch">info@spotin.ch</a> to create an account.</p>
 <form action="/auth/login" method="POST">
     <label for="username">Username</label>
     {% if errors.username %}
