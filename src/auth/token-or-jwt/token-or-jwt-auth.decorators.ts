@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { JwtOrTokenAuthGuard } from '@/auth/jwt-or-token/jwt-or-token-auth.guard';
+import { TokenOrJwtAuthGuard } from '@/auth/token-or-jwt/token-or-jwt-auth.guard';
 import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
@@ -10,9 +10,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-export const JwtOrTokenAuth = (...guards: (Function | CanActivate)[]) =>
+export const TokenOrJwtAuth = (...guards: (Function | CanActivate)[]) =>
   applyDecorators(
-    UseGuards(JwtOrTokenAuthGuard, ...guards),
+    UseGuards(TokenOrJwtAuthGuard, ...guards),
     ApiCookieAuth(JWT_AUTH_KEY),
     ApiSecurity(TOKEN_AUTH_KEY),
     ApiUnauthorizedResponse({

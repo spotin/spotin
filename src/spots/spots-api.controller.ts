@@ -25,7 +25,7 @@ import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtOrTokenAuth } from '@/auth/jwt-or-token/jwt-or-token-auth.decorators';
+import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
 import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
 
 @ApiTags('Spots')
@@ -54,7 +54,7 @@ export class SpotsApiController {
     operationId: 'getSpotsApi',
     responseType: [ReadSpotDto],
   })
-  @JwtOrTokenAuth()
+  @TokenOrJwtAuth()
   async getSpotsApi(@AuthUser() user: User) {
     const spots = await this.spotsService.getSpots(user);
 
@@ -82,7 +82,7 @@ export class SpotsApiController {
     responseType: ReadSpotDto,
     operationId: 'createSpotApi',
   })
-  @JwtOrTokenAuth()
+  @TokenOrJwtAuth()
   async createSpotApi(
     @AuthUser() user: User,
     @Body() createSpotDto: CreateSpotDto,
@@ -128,7 +128,7 @@ export class SpotsApiController {
     summary: 'Delete the specified spot',
     operationId: 'deleteSpotApi',
   })
-  @JwtOrTokenAuth()
+  @TokenOrJwtAuth()
   async deleteSpotApi(@AuthUser() user: User, @Param('id') id: string) {
     await this.spotsService.deleteSpot(id, user);
   }
