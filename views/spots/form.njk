@@ -115,8 +115,14 @@
             }),
         });
 
-        // Redirect the user
-        window.location = res.url;
+        console.log(res)
+        if (res.ok) {
+            // Redirect the user to the spot page
+            window.location = res.url;
+        } else {
+            // Reload the window to display the errors
+            window.location.reload();
+        }
     });
 </script>
 {% endblock %}

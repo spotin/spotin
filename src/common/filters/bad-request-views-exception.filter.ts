@@ -30,6 +30,7 @@ export class BadRequestViewsExceptionFilter implements ExceptionFilter {
       errors[key].push(value);
     }
 
+    console.log(BadRequestViewsExceptionFilter.name);
     console.log(errors);
 
     request.session.errors = errors;
