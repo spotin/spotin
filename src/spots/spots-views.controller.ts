@@ -264,6 +264,7 @@ export class SpotsViewsController {
 
   @Post(':id')
   @UnconfiguredSpotOrTokenOrJwtAuth()
+  @HttpCode(200)
   @ApiOperation({
     summary: 'Update the specified spot',
     description: 'Update the specified spot. Redirect to `/spots/:id`.',

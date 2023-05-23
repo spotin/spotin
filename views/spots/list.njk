@@ -5,7 +5,7 @@
 <p class="text-justify">
     Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event. 
 </p>
-<table id="spots-table">
+<table>
     <thead>
         <tr>
             <th class="grow">Title</th>
@@ -16,7 +16,7 @@
     </thead>
     <tbody>
     {% for spot in spots %}
-        <tr id="{{ spot.id }}">
+        <tr>
             <td><a href="/spots/{{ spot.id }}">
             {{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}
             </a></td>

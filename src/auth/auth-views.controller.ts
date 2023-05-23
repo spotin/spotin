@@ -161,4 +161,21 @@ export class AuthViewsController {
       role: user.role,
     };
   }
+
+  @Get('logout')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Log out from Spot in',
+    description:
+      'Log out from Spot in. Clear the JWT Cookie and redirect to `/`.',
+    operationId: 'logoutView',
+  })
+  @ApiOkResponse({
+    description: 'The user has been successfully logged in.',
+  })
+  logoutView(@Res() res: Response) {
+    res.clearCookie(JWT_AUTH_KEY);
+
+    res.redirect('/');
+  }
 }

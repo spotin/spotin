@@ -29,7 +29,7 @@ export class AuthApiController {
   @ApiOperation({
     summary: 'Log in to Spot in with username and password',
     description: 'Log in to Spot in with username and password.',
-    operationId: 'login',
+    operationId: 'loginApi',
   })
   @ApiBody({
     description: "The user's credentials.",
@@ -39,7 +39,7 @@ export class AuthApiController {
     description: 'The user has been successfully logged in.',
     type: JwtDto,
   })
-  async login(@AuthUser() user: User) {
+  async loginApi(@AuthUser() user: User) {
     const jwt = await this.authService.generateJwt(user);
 
     return new JwtDto(jwt);
@@ -50,7 +50,7 @@ export class AuthApiController {
   @ApiOperation({
     summary: 'Sign up to Spot in',
     description: 'Sign up to Spot in.',
-    operationId: 'signup',
+    operationId: 'signupApi',
   })
   @ApiBody({
     description: "The user's details.",
