@@ -57,17 +57,15 @@
         <input id="redirection" type="text" name="redirection" placeholder="http(s)://"
         value="{{ values.redirection }}">
     </label>
-
-    <label for="referenced">
+    <label for="referenced" {{ 'hidden' if role === "GUEST" }}>
         Referenced
         <input id="referenced" type="checkbox" name="referenced" value="true" {% if values.referenced %}checked{% endif %}>
     </label>
 
-    <label for="configured">
+    <label for="configured" {{ 'hidden' if role === "GUEST" }}>
         Configured
         <input id="configured" type="checkbox" name="configured" value="true" {% if values.configured %}checked{% endif %}>
     </label>
-
     <br>
 
     <button type="submit"><i class="fas fa-save"></i> Save</button>
