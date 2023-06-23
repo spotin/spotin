@@ -3,7 +3,7 @@ import { PrismaModule } from 'nestjs-prisma';
 import { SpotsModule } from '@/spots/spots.module';
 import { AuthModule } from '@/auth/auth.module';
 import { UsersModule } from '@/users/users.module';
-import { AppViewsController } from '@/app-views.controller';
+import { AppMvcController } from '@/app-mvc.controller';
 import { ConfigModule } from './config/config.module';
 import { TokensModule } from './tokens/tokens.module';
 
@@ -16,6 +16,6 @@ import { TokensModule } from './tokens/tokens.module';
     UsersModule,
     TokensModule,
   ],
-  controllers: [AppViewsController],
+  controllers: [AppMvcController],
 })
 export class AppModule {}

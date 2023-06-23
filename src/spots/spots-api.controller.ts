@@ -14,7 +14,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
 import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
 
-@ApiTags('Spots - API')
+@ApiTags('API - Spots')
 @Controller('api/spots')
 export class SpotsApiController {
   constructor(private readonly spotsService: SpotsService) {}

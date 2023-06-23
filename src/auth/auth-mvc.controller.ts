@@ -13,7 +13,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
+import { UnauthorizedMvcExceptionFilter } from '@/common/filters/unauthorized-mvc-exception.filter';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
 import { AuthService } from '@/auth/auth.service';
 import { SignupUserDto } from '@/auth/dtos/signup-user.dto';
@@ -28,16 +28,16 @@ import {
 } from '@nestjs/swagger';
 import { LoginUserDto } from '@/auth/dtos/login-user.dto';
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
-import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
+import { BadRequestMvcExceptionFilter } from '@/common/filters/bad-request-mvc-exception.filter';
 import { SessionData } from 'express-session';
-import { ConflictViewsExceptionFilter } from '@/common/filters/conflict-views-exception.filter';
+import { ConflictMvcExceptionFilter } from '@/common/filters/conflict-mvc-exception.filter';
 
-@ApiTags('Auth - Views')
+@ApiTags('MVC - Auth')
 @Controller('auth')
-@UseFilters(UnauthorizedViewsExceptionFilter)
-@UseFilters(BadRequestViewsExceptionFilter)
-@UseFilters(ConflictViewsExceptionFilter)
-export class AuthViewsController {
+@UseFilters(UnauthorizedMvcExceptionFilter)
+@UseFilters(BadRequestMvcExceptionFilter)
+@UseFilters(ConflictMvcExceptionFilter)
+export class AuthMvcController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
@@ -53,7 +53,7 @@ export class AuthViewsController {
     description: 'Render successful.',
   })
   @Render('auth/login')
-  renderLoginView(@Session() session: SessionData) {
+  renderLoginMvc(@Session() session: SessionData) {
     return {
       signupWaitingApproval: session.signupWaitingApproval,
     };
@@ -66,7 +66,7 @@ export class AuthViewsController {
     summary: 'Log in to Spot in with username and password',
     description:
       'Log in to Spot in with username and password. Save the JWT in Cookie and redirect to `/spots`.',
-    operationId: 'loginView',
+    operationId: 'loginMvc',
   })
   @ApiBody({
     description: "The user's credentials.",
@@ -76,7 +76,7 @@ export class AuthViewsController {
     description: 'The user has been successfully logged in.',
   })
   @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
-  async loginView(
+  async loginMvc(
     @AuthUser() user: User,
     @Res() res: Response,
     @Session() session: SessionData,
@@ -98,13 +98,13 @@ export class AuthViewsController {
   @ApiOperation({
     summary: 'Render the signup page',
     description: 'Render the signup page.',
-    operationId: 'renderSignupView',
+    operationId: 'renderSignupMvc',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('auth/signup')
-  renderSignupView(@Session() session: SessionData) {
+  renderSignupMvc(@Session() session: SessionData) {
     const errors = session.errors;
 
     delete session.errors;
@@ -119,7 +119,7 @@ export class AuthViewsController {
   @ApiOperation({
     summary: 'Sign up to Spot in',
     description: 'Sign up to Spot in.',
-    operationId: 'signupView',
+    operationId: 'signupMvc',
   })
   @ApiBody({
     description: "The user's details.",
@@ -132,7 +132,7 @@ export class AuthViewsController {
     description: 'Another user has the same username.',
   })
   @ApiBadRequestResponse(MissingOrIncorrectFieldsResponse)
-  async signupView(
+  async signupMvc(
     @Body() signupUserDto: SignupUserDto,
     @Res() res: Response,
     @Session() session: SessionData,
@@ -149,13 +149,13 @@ export class AuthViewsController {
   @ApiOperation({
     summary: 'Render the profile page',
     description: 'Render the profile page.',
-    operationId: 'renderProfileView',
+    operationId: 'renderProfileMvc',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('auth/profile')
-  renderProfileView(@AuthUser() user: User) {
+  renderProfileMvc(@AuthUser() user: User) {
     return {
       username: user.username,
       email: user.email,
@@ -169,12 +169,12 @@ export class AuthViewsController {
     summary: 'Log out from Spot in',
     description:
       'Log out from Spot in. Clear the JWT Cookie and redirect to `/`.',
-    operationId: 'logoutView',
+    operationId: 'logoutMvc',
   })
   @ApiOkResponse({
     description: 'The user has been successfully logged in.',
   })
-  logoutView(@Res() res: Response) {
+  logoutMvc(@Res() res: Response) {
     res.clearCookie('jwt');
 
     res.redirect('/');

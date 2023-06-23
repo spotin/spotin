@@ -12,7 +12,7 @@ import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import * as crypto from 'crypto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 
-@ApiTags('Tokens - API')
+@ApiTags('API - Tokens')
 @Controller('api/tokens')
 export class TokensApiController {
   constructor(private readonly tokensService: TokensService) {}

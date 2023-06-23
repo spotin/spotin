@@ -1,9 +1,9 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
-import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
+import { BadRequestMvcExceptionFilter } from '@/common/filters/bad-request-mvc-exception.filter';
+import { NotFoundMvcExceptionFilter } from '@/common/filters/not-found-mvc-exception.filter';
+import { UnauthorizedMvcExceptionFilter } from '@/common/filters/unauthorized-mvc-exception.filter';
 import { CreateTokenDto } from '@/tokens/dto/create-token.dto';
-import { NotFoundViewsExceptionFilter } from '@/common/filters/not-found-views-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
 import {
   Body,
@@ -30,12 +30,12 @@ import * as crypto from 'crypto';
 import { Response } from 'express';
 import { SessionData } from 'express-session';
 
-@ApiTags('Tokens - Views')
+@ApiTags('MVC - Tokens')
 @Controller('tokens')
-@UseFilters(UnauthorizedViewsExceptionFilter)
-@UseFilters(BadRequestViewsExceptionFilter)
-@UseFilters(NotFoundViewsExceptionFilter)
-export class TokensViewsController {
+@UseFilters(UnauthorizedMvcExceptionFilter)
+@UseFilters(BadRequestMvcExceptionFilter)
+@UseFilters(NotFoundMvcExceptionFilter)
+export class TokensMvcController {
   constructor(private readonly tokensService: TokensService) {}
 
   @Get('create')
@@ -43,13 +43,13 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Render the create a new token page',
     description: 'Render the create a new token page.',
-    operationId: 'renderCreateTokenView',
+    operationId: 'renderCreateTokenMvc',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('tokens/form')
-  renderCreateTokenView(
+  renderCreateTokenMvc(
     @AuthUser() user: User,
     @Session() session: SessionData,
   ) {
@@ -73,13 +73,13 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Render the tokens page',
     description: 'Render the tokens page.',
-    operationId: 'renderTokensListView',
+    operationId: 'renderTokensListMvc',
   })
   @ApiOkResponse({
     description: 'Render successful.',
   })
   @Render('tokens/list')
-  async renderTokensListView(@AuthUser() user: User) {
+  async renderTokensListMvc(@AuthUser() user: User) {
     const tokens = await this.tokensService.getTokens(user);
 
     return {
@@ -96,7 +96,7 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Delete the specified token',
     description: 'Delete the specified token. Redirect to `/tokens`.',
-    operationId: 'deleteTokenView',
+    operationId: 'deleteTokenMvc',
   })
   @ApiParam({
     name: 'id',
@@ -107,7 +107,7 @@ export class TokensViewsController {
     description: 'Redirect successful.',
   })
   @Redirect('/tokens', HttpStatus.PERMANENT_REDIRECT)
-  async deleteTokenView(@AuthUser() user: User, @Param('id') id: string) {
+  async deleteTokenMvc(@AuthUser() user: User, @Param('id') id: string) {
     await this.tokensService.deleteToken(id, user);
   }
 
@@ -116,7 +116,7 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Render the token page',
     description: 'Render the token page.',
-    operationId: 'renderTokenView',
+    operationId: 'renderTokenMvc',
   })
   @ApiOkResponse({
     description: 'Render successful.',
@@ -127,7 +127,7 @@ export class TokensViewsController {
     format: 'uuid',
   })
   @Render('tokens/view')
-  async renderTokenView(
+  async renderTokenMvc(
     @AuthUser() user: User,
     @Param('id') id: string,
     @Session() session: SessionData,
@@ -161,12 +161,12 @@ export class TokensViewsController {
   @ApiOperation({
     summary: 'Create a new token',
     description: 'Create a new token. Redirect to `/tokens/:id`.',
-    operationId: 'createTokenView',
+    operationId: 'createTokenMvc',
   })
   @ApiCreatedResponse({
     description: 'Redirect successful.',
   })
-  async createTokenView(
+  async createTokenMvc(
     @AuthUser() user: User,
     @Body() createTokenDto: CreateTokenDto,
     @Session() session: Record<string, unknown>,

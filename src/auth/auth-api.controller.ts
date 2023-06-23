@@ -15,7 +15,7 @@ import { LocalAuth } from '@/auth/local/local-auth.decorator';
 import { JwtDto } from '@/auth/dtos/jwt.dto';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
-@ApiTags('Auth - API')
+@ApiTags('API - Auth')
 @Controller('api/auth')
 export class AuthApiController {
   constructor(

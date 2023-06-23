@@ -3,7 +3,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthApiController } from '@/auth/auth-api.controller';
-import { AuthViewsController } from '@/auth/auth-views.controller';
+import { AuthMvcController } from '@/auth/auth-mvc.controller';
 import { LocalStrategy } from '@/auth/local/local.strategy';
 import { JwtStrategy } from '@/auth/jwt/jwt.strategy';
 import { AuthService } from '@/auth/auth.service';
@@ -39,7 +39,7 @@ import { UnrestrictedStrategy } from '@/auth/unrestricted/unrestricted.strategy'
     UnconfiguredSpotStrategy,
     UnrestrictedStrategy,
   ],
-  controllers: [AuthApiController, AuthViewsController],
+  controllers: [AuthApiController, AuthMvcController],
   exports: [AuthService],
 })
 export class AuthModule {}

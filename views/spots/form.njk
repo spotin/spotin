@@ -2,11 +2,7 @@
 
 {% block body %}
 <h2><i class="fas fa-map-marker-alt"></i> {{ title }}</h2>
-{% if spot.id %}
-<form id="form" action="/spots/{{ spot.id }}">
-{% else %}
-<form id="form" action="/spots">
-{% endif %}
+<form id="form" action="{{ action }}">
     <label for="title">
         Title
         {% if errors.title %}

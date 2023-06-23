@@ -21,12 +21,11 @@ export class SpotsService {
   }
 
   /** Read a spot by id */
-  async getSpot(spotId: string) {
+  async getSpot(spotId: string, user?: User) {
     const spot = await this.prisma.spot.findFirstOrThrow({
       where: {
-        id: {
-          equals: spotId,
-        },
+        id: spotId,
+        userId: user?.id,
         deletedAt: {
           equals: null,
         },
