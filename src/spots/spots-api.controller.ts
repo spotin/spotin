@@ -94,10 +94,6 @@ export class SpotsApiController {
     if (user.role === UserRole.GUEST) {
       updateSpot.configured = true;
       updateSpot.referenced = undefined;
-
-      if (!updateSpot.redirection || updateSpot.redirection === '') {
-        throw new BadRequestException();
-      }
     }
 
     const updatedSpot = await this.spotsService.updateSpot(

@@ -124,26 +124,6 @@ export class SpotsMvcController {
     };
   }
 
-  @Get(':id/delete')
-  @JwtAuth()
-  @ApiOperation({
-    summary: 'Delete the specified spot',
-    description: 'Delete the specified spot. Redirect to `/spots` page.',
-    operationId: 'deleteSpotView',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'The spot ID.',
-    format: 'uuid',
-  })
-  @ApiOkResponse({
-    description: 'Redirect successful.',
-  })
-  @Redirect('/spots')
-  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
-    await this.spotsService.deleteSpot(id, user);
-  }
-
   @Get(':id/configure')
   @UnconfiguredSpotAuth()
   @UseFilters(ConfiguredSpotMvcExceptionFilter)
@@ -215,6 +195,26 @@ export class SpotsMvcController {
     delete session.body;
 
     res.redirect(`/spots/${id}`);
+  }
+
+  @Get(':id/delete')
+  @JwtAuth()
+  @ApiOperation({
+    summary: 'Delete the specified spot',
+    description: 'Delete the specified spot. Redirect to `/spots` page.',
+    operationId: 'deleteSpotView',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'Redirect successful.',
+  })
+  @Redirect('/spots')
+  async deleteSpotView(@AuthUser() user: User, @Param('id') id: string) {
+    await this.spotsService.deleteSpot(id, user);
   }
 
   @Get(':id/edit')
