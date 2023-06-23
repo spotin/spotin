@@ -1,0 +1,20 @@
+{% extends "layout.njk" %}
+
+{% block body %}
+<h1><i class="fas fa-key"></i> Token</h1>
+<fieldset>
+    <label for="name">Name</label>
+    <input type="name" name="name" id="name" value="{{ token.name }}" readonly>
+</fieldset>
+<fieldset>
+    <label for="value">Value</label>
+    <input type="value" name="value" id="value"
+    {% if token.hash == null %}
+        value="The value is displayed only once, right after the creation of the token."
+        disabled
+    {% else %}
+        value="{{ token.hash }}"
+        readonly
+    {% endif %}>
+</fieldset>
+{% endblock %}

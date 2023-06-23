@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+
+{% block body %}
+<article class="resource">
+    <a href="#" id="download-qr-code" class="qrcode">
+        <svg id="qrcode" width="150px">{{ qrcode | safe }}</svg>
+    </a>
+
+    <hgroup class="head">
+        <h1 class="title">{{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}</h1>
+        <h2 class="uuid">
+            {% if spot.redirection %}
+            <i class="fas fa-external-link-alt"></i> <a href="{{ spot.redirection }}" target="_blank" rel="noreferrer">{{ spot.redirection }}</a>
+            {% else %}
+            <i class="fas fa-link"></i> <a href="/spots/{{ spot.id }}">{{ spot.id }}</a>
+            {% endif %}
+        </h2>
+    </hgroup>
+    {% if spot.description %}
+    <p class="description">{{ spot.description }}</p>
+    {% endif %}
+    {% if spot.latitude !== "" and spot.longitude !== "" %}
+        <div id='map' style='width: 100%; height: 400px;'></div>
+    {% endif %}
+</article>
+
+<script>
+    // get the spot.coordinates
+    var longitude = '{{ spot.longitude }}';
+    var latitude = '{{ spot.latitude }}';
+
+    if (longitude !== '' && latitude !== '') {
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
+            center: [longitude, latitude],
+            zoom: 10
+        });
+
+        // add the marker to the map
+        var marker = new maplibregl.Marker({
+            color: "#e53935",
+        })
+        .setLngLat([longitude, latitude])
+        .addTo(map);
+    }
+
+    document.getElementById("download-qr-code").addEventListener("click", (event) => {
+        const filename = "{{ spot.title if spot.title else spot.id }}.svg"
+        const qrcode = document.getElementById("qrcode").innerHTML;
+        const blob = new Blob([qrcode.toString()]);
+        const element = document.createElement("a");
+        element.download = filename;
+        element.href = window.URL.createObjectURL(blob);
+        element.click();
+        element.remove();
+    });
+</script>
+{% endblock %}

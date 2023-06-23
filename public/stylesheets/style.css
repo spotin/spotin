@@ -1,21 +1,23 @@
-@import url("https://css.gg/trash.css");
-
-.trash {
-  color: #e53935;
-}
-
 .error {
   color: #e53935;
 }
 
-.trash:hover {
-  color: rgb(229, 57, 53);
+.text-justify {
+  text-align: justify;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 /* Red Light scheme (Default) */
 /* Can be forced with data-theme="light" */
-[data-theme="light"],
-:root:not([data-theme="dark"]) {
+[data-theme='light'],
+:root:not([data-theme='dark']) {
   --primary: #e53935;
   --primary-hover: #d32f2f;
   --primary-focus: rgba(229, 57, 53, 0.125);
@@ -25,7 +27,7 @@
 /* Red Dark scheme (Auto) */
 /* Automatically enabled if user has Dark mode enabled */
 @media only screen and (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     --primary: #e53935;
     --primary-hover: #f44336;
     --primary-focus: rgba(229, 57, 53, 0.25);
@@ -35,7 +37,7 @@
 
 /* Red Dark scheme (Forced) */
 /* Enabled if forced with data-theme="dark" */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --primary: #e53935;
   --primary-hover: #f44336;
   --primary-focus: rgba(229, 57, 53, 0.25);
@@ -95,4 +97,79 @@ body {
 
 #keyword {
   color: #e53935;
+}
+
+.site-footer {
+  background-color: #26272b;
+  padding: 45px 0 20px;
+  font-size: 15px;
+  line-height: 24px;
+  color: #737373;
+}
+
+.site-footer hr {
+  border-top-color: #bbb;
+  opacity: 0.5;
+}
+
+.site-footer hr.small {
+  margin: 20px 0;
+}
+
+.site-footer h6 {
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+
+.site-footer a {
+  color: #737373;
+}
+
+.site-footer a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+
+.footer-links {
+  padding-left: 0;
+  list-style: none;
+}
+
+.footer-links li {
+  display: block;
+}
+
+.footer-links a {
+  color: #737373;
+}
+
+.footer-links a:active,
+.footer-links a:focus,
+.footer-links a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+
+.footer-links.inline li {
+  display: inline-block;
+}
+
+@media (max-width: 991px) {
+  .site-footer [class^='col-'] {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: 0;
+  }
+
+  .site-footer .copyright-text,
+  .site-footer .social-icons {
+    text-align: center;
+  }
 }

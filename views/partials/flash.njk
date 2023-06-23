@@ -1,0 +1,9 @@
+{% if flash.info %}
+<div class="container flash info">{{ flash.info }}</div>
+{% endif %}
+{% if flash.success %}
+<div class="container flash success">{{ flash.success }}</div>
+{% endif %}
+{% if flash.error %}
+<div class="container flash error">{{ flash.error }}</div>
+{% endif %}
