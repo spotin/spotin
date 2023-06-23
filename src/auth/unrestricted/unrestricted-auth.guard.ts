@@ -1,6 +1,8 @@
-import { UNRESTRICTED_AUTH_KEY } from '@/auth/unrestricted/unrestricted.strategy';
+import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
 import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class UnrestrictedAuthGuard extends AuthGuard(UNRESTRICTED_AUTH_KEY) {}
+export class UnrestrictedAuthGuard extends AuthGuard(
+  PASSPORT_STRATEGY.UNRESTRICTED,
+) {}

@@ -2,27 +2,32 @@
 
 {% block body %}
 <h2><i class="fas fa-map-marker-alt"></i> {{ title }}</h2>
-<form novalidate>
+<form id="form" action="{{ action }}">
     <label for="title">
         Title
         {% if errors.title %}
-        <span class="error">(cannot be empty)</span>
-        <input name="title" id="title" placeholder="Title" value="{{ values.title }}" aria-invalid="true" autofocus>
+        <span class="error">Cannot be empty</span>
+        <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" aria-invalid="true" autofocus>
         {% else %}
-        <input name="title" id="title" placeholder="Title" value="{{ values.title }}" autofocus>
+        <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" autofocus>
         {% endif %}
     </label>
 
     <label for="description">
         Description
-        <textarea id="description" type="text" name="description" placeholder="Description">{{ values.description }}</textarea>
+        {% if errors.description %}
+        <span class="error">Cannot be empty</span>
+        <textarea id="description" type="text" name="description" placeholder="Description" aria-invalid="true" autofocus>{{ spot.description }}</textarea>
+        {% else %}
+        <textarea id="description" type="text" name="description" placeholder="Description">{{ spot.description }}</textarea>
+        {% endif %}
     </label>
 
     <!-- Prompt user for current location -->
     <button type="button" onclick="navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords;
-        document.getElementById('latitude').value = latitude;
-        document.getElementById('longitude').value = longitude;
+        document.getElementById('latitude').value = latitude.toFixed(5);
+        document.getElementById('longitude').value = longitude.toFixed(5);
     });">
         <i class="fas fa-map-marker-alt"></i> Use current location
     </button>
@@ -30,104 +35,86 @@
     <div class="grid">
         <label for="latitude">
             Latitude (between -90.0 and 90.0)
-            {% if errors.coordinates %}
-            <span class="error">(between -90.0 and 90.0)</span>
+            {% if errors.latitude %}
+            <span class="error">Latitude must be between -90.0 and 90.0</span>
             <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188"
-                value="{{ values.latitude }}" aria-invalid="true" min="-90" max="90">
+                value="{{ spot.latitude }}" aria-invalid="true" min="-90" max="90">
             {% else %}
                 <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188"
-                value="{{ values.latitude }}" min="-90" max="90">
+                value="{{ spot.latitude }}" min="-90" max="90">
             {% endif %}
         </label>
         <label for="longitude">
             Longitude (between -180.0 and 180.0)
-            {% if errors.coordinates %}
-            <span class="error">(between -180.0 and 180.0)</span>
+            {% if errors.longitude %}
+            <span class="error">Longitude must be between -180.0 and 180.0</span>
             <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227512"
-                value="{{ values.longitude }}" aria-invalid="true" min="-180" max="180">
+                value="{{ spot.longitude }}" aria-invalid="true" min="-180" max="180">
             {% else %}
                 <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227511"
-                value="{{ values.longitude }}" min="-180" max="180">
+                value="{{ spot.longitude }}" min="-180" max="180">
             {% endif %}
         </label>
     </div>
 
     <label for="redirection">
         Redirection URL
+        {% if errors.redirection %}
+        <span class="error">Redirection must be a valid URL</span>
         <input id="redirection" type="text" name="redirection" placeholder="http(s)://"
-        value="{{ values.redirection }}">
+        value="{{ spot.redirection }}">
+        {% else %}
+            <input id="redirection" type="text" name="redirection" placeholder="http(s)://"
+        value="{{ spot.redirection }}">
+        {% endif %}
     </label>
     <label for="referenced" {{ 'hidden' if role === "GUEST" }}>
         Referenced
-        <input id="referenced" type="checkbox" name="referenced" value="true" {% if values.referenced %}checked{% endif %}>
+        <input id="referenced" type="checkbox" name="referenced" value="true" {% if spot.referenced %}checked{% endif %}>
     </label>
 
     <label for="configured" {{ 'hidden' if role === "GUEST" }}>
         Configured
-        <input id="configured" type="checkbox" name="configured" value="true" {% if values.configured %}checked{% endif %}>
+        <input id="configured" type="checkbox" name="configured" value="true" {% if spot.configured %}checked{% endif %}>
     </label>
     <br>
 
     <button type="submit"><i class="fas fa-save"></i> Save</button>
 </form>
 <script>
-    const form = document.querySelector("form");
-    const id = "{{ id }}";
-    const action = "{{ action }}";
-
-    let url = "/api/spots";
-    if (action === 'PATCH') {
-        url = `/api/spots/${id}`;
-    }
+    const form = document.getElementById("form");
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
-
-        // Get form values
+        
         const title = document.getElementById("title").value;
         const description = document.getElementById("description").value;
         const longitude = document.getElementById("longitude").value;
         const latitude = document.getElementById("latitude").value;
+        const redirection = document.getElementById("redirection").value;
         const referenced = document.getElementById("referenced").checked;
         const configured = document.getElementById("configured").checked;
-        const redirection = document.getElementById("redirection").value;
 
-        // Create the DTO
         const createSpotDto = {
             title,
             description,
-            // if the user's machine language is not english, the decimal separator is a comma
-            longitude: longitude !== '' ? parseFloat(longitude.replace(',', '.')) : null,
-            latitude: latitude !== '' ? parseFloat(latitude.replace(',', '.')) : null,
-            redirection: redirection !== '' ? redirection : null,
+            longitude: longitude !== '' ? parseFloat(longitude) : undefined,
+            latitude: latitude !== '' ? parseFloat(latitude) : undefined,
+            redirection,
             referenced: referenced,
             configured: configured,
         }
 
-        // Send the DTO to the API
-        try {
-            const response = await fetch(url, {
-                method: action, // *GET, POST, PUT, DELETE, etc.
-                mode: "cors", // no-cors, *cors, same-origin
-                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: "same-origin", // include, *same-origin, omit
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(createSpotDto), // body data type must match "Content-Type" header
-            });
+        const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(createSpotDto),
+        });
 
-            const { status } = response;
-
-            if (status == 400) {
-                alert('A field is wrong or missing, please check your input');
-            } else {
-                location.replace(`/spots/${id}`);
-            }
-        } catch (err) {
-            console.error(err);
-        }
+        // Redirect the user
+        window.location.href = response.url;
     });
-
 </script>
 {% endblock %}

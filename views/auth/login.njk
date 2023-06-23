@@ -1,40 +1,25 @@
 {% extends "layout.njk" %}
-
 {% block body %}
 <h1><i class="fas fa-sign-in-alt"></i> Log in</h1>
 <p>Please contact <a href="mailto:info@spotin.ch">info@spotin.ch</a> to create an account.</p>
-<form id="login-form" novalidate>
+{% if signupWaitingApproval %}
+<div class="container flash info">You have been successfully signed up. An administrator will review your account and you will receive an email when your account is approved.</div>
+{% endif %}
+<form action="/auth/login" method="POST">
     <label for="username">Username</label>
+    {% if errors.username %}
+    <span class="error">The username field cannot be empty</span>
+    <input name="username" id="username" placeholder="Username" aria-invalid="true" autofocus>
+    {% else %}
     <input type="username" name="username" id="username" placeholder="Username" autofocus>
+    {% endif %}
     <label for="password">Password</label>
+    {% if errors.password %}
+    <span class="error">The password field cannot be empty</span>
+    <input name="password" id="password" placeholder="Password" aria-invalid="true">
+    {% else %}
     <input type="password" name="password" id="password" placeholder="Password">
+    {% endif %}
     <button type="submit"><i class="fas fa-sign-in-alt"></i> Log in</button>
 </form>
-<script>
-    const form = document.querySelector("form");
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const username = formData.get('username');
-        const password = formData.get('password');
-        const body = { username, password };
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                body: JSON.stringify(body),
-                headers: {
-                    'content-type': 'application/json'
-                }
-            });
-            if (res.status === 200) {
-                window.location.href = '/spots';
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    form.addEventListener('submit', handleSubmit);
-</script>
 {% endblock %}

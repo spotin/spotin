@@ -14,7 +14,7 @@ import { RolesGuard } from '@/auth/roles/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 
-@ApiTags('Users')
+@ApiTags('API - Users')
 @Controller('api/users')
 export class UsersApiController {
   constructor(private readonly usersService: UsersService) {}

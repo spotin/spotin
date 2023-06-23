@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { UnconfiguredSpotOrTokenOrJwtAuthGuard } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.guard';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
-import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
+import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { UnconfiguredSpotOrTokenOrJwtAuthGuard } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-jwt-or-token-auth.guard';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
-  ApiCookieAuth,
+  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiSecurity,
   ApiUnauthorizedResponse,
@@ -15,8 +14,8 @@ export const UnconfiguredSpotOrTokenOrJwtAuth = (
 ) =>
   applyDecorators(
     UseGuards(UnconfiguredSpotOrTokenOrJwtAuthGuard, ...guards),
-    ApiCookieAuth(JWT_AUTH_KEY),
-    ApiSecurity(TOKEN_AUTH_KEY),
+    ApiBearerAuth(PASSPORT_STRATEGY.JWT),
+    ApiSecurity(PASSPORT_STRATEGY.TOKEN),
     ApiUnauthorizedResponse({
       description: 'Wrong JWT, token or the spot is already configured.',
     }),

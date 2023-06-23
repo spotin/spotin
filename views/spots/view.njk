@@ -2,7 +2,7 @@
 
 {% block body %}
 <article class="resource">
-    <a href="#" onclick="downloadQrCode()" class="qrcode">
+    <a href="#" id="download-qr-code" class="qrcode">
         <svg id="qrcode" width="150px">{{ qrcode | safe }}</svg>
     </a>
 
@@ -45,7 +45,7 @@
         .addTo(map);
     }
 
-    function downloadQrCode() {
+    document.getElementById("download-qr-code").addEventListener("click", (event) => {
         const filename = "{{ spot.title if spot.title else spot.id }}.svg"
         const qrcode = document.getElementById("qrcode").innerHTML;
         const blob = new Blob([qrcode.toString()]);
@@ -54,6 +54,6 @@
         element.href = window.URL.createObjectURL(blob);
         element.click();
         element.remove();
-    }
+    });
 </script>
 {% endblock %}

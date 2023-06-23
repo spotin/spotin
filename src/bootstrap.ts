@@ -1,23 +1,46 @@
 import * as nunjucks from 'nunjucks';
 import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
-import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
+import { ConfigService } from '@nestjs/config';
+import { SESSION_SECRET } from '@/config/config.constants';
+import { PASSPORT_STRATEGY, TOKEN_HEADER_NAME } from '@/auth/auth.constants';
 
 export async function bootstrap(
   app: NestExpressApplication,
 ): Promise<NestExpressApplication> {
+  const configService = app.get(ConfigService);
+
   const { httpAdapter } = app.get(HttpAdapterHost);
 
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true, // Remove unknown properties from DTOs
+    }),
+  );
+
+  const sessionSecret = configService.get(SESSION_SECRET, { infer: true });
+
+  app.use(
+    session({
+      secret: sessionSecret,
+      resave: false,
+      saveUninitialized: false,
+      rolling: true,
+      name: 'sid',
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: true,
+      },
     }),
   );
 
@@ -39,22 +62,20 @@ export async function bootstrap(
     .setTitle('Spot in API')
     .setDescription('The Spot in API description')
     .setVersion(process.env.npm_package_version as string)
-    .addCookieAuth(
-      JWT_AUTH_KEY,
+    .addBearerAuth(
       {
-        type: 'apiKey',
-        in: 'cookie',
-        description: 'The cookie containing the JWT',
+        type: 'http',
+        description: 'The JWT to access protected endpoints',
       },
-      JWT_AUTH_KEY,
+      PASSPORT_STRATEGY.JWT,
     )
     .addApiKey(
       {
         type: 'apiKey',
-        in: 'header',
         description: 'The token to access protected endpoints',
+        name: TOKEN_HEADER_NAME,
       },
-      TOKEN_AUTH_KEY,
+      PASSPORT_STRATEGY.TOKEN,
     )
     .build();
 

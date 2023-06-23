@@ -4,9 +4,9 @@ import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
-@ApiTags('Views')
+@ApiTags('MVC - App')
 @Controller()
-export class AppController {
+export class AppMvcController {
   @Get()
   @JwtOrUnrestrictedAuth()
   @ApiOperation({

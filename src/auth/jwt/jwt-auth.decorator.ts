@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
-  ApiCookieAuth,
+  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
+import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
 
 export const JwtAuth = (...guards: (Function | CanActivate)[]) =>
   applyDecorators(
     UseGuards(JwtAuthGuard, ...guards),
-    ApiCookieAuth(JWT_AUTH_KEY),
+    ApiBearerAuth(PASSPORT_STRATEGY.JWT),
     ApiUnauthorizedResponse({
       description: 'Wrong JWT.',
     }),

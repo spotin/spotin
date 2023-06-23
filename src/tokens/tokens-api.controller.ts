@@ -10,8 +10,9 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { User } from '@prisma/client';
 import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import * as crypto from 'crypto';
+import { GetOne } from '@/common/decorators/get-one.decorator';
 
-@ApiTags('Tokens')
+@ApiTags('API - Tokens')
 @Controller('api/tokens')
 export class TokensApiController {
   constructor(private readonly tokensService: TokensService) {}
@@ -29,6 +30,19 @@ export class TokensApiController {
     const tokensDto = tokens.map((token) => new ReadTokenDto(token));
 
     return tokensDto;
+  }
+
+  @GetOne({
+    name: 'Token',
+    summary: 'Get the specified token',
+    operationId: 'getTokenApi',
+    responseType: ReadTokenDto,
+  })
+  @JwtAuth()
+  async getTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+    const token = await this.tokensService.getToken(id, user);
+
+    return new ReadTokenDto(token);
   }
 
   @CustomPost({
@@ -62,7 +76,7 @@ export class TokensApiController {
     operationId: 'deleteTokenApi',
   })
   @JwtAuth()
-  async deleteTokenApi(@Param('id') id: string) {
-    await this.tokensService.deleteToken(id);
+  async deleteTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+    await this.tokensService.deleteToken(id, user);
   }
 }

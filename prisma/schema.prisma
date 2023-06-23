@@ -36,7 +36,7 @@ model Spot {
 model Token {
   id        String    @id @default(uuid())
   hash      String    @unique @db.VarChar(255)
-  name      String?   @db.VarChar(255)
+  name      String    @db.VarChar(255)
   userId    String    @map(name: "user_id")
   createdAt DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
