@@ -27,6 +27,8 @@ export async function bootstrap(
     }),
   );
 
+  app.set('trust proxy', process.env.NODE_ENV === 'production');
+
   const sessionSecret = configService.get(SESSION_SECRET, { infer: true });
 
   app.use(
