@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
-import { JwtOrTokenOrUnconfiguredSpotAuthGuard } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.guard';
+import { TokenOrJwtAuthGuard } from '@/auth/token-or-jwt/token-or-jwt-auth.guard';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -9,15 +9,13 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-export const JwtOrTokenOrUnconfiguredSpotAuth = (
-  ...guards: (Function | CanActivate)[]
-) =>
+export const TokenOrJwtAuth = (...guards: (Function | CanActivate)[]) =>
   applyDecorators(
-    UseGuards(JwtOrTokenOrUnconfiguredSpotAuthGuard, ...guards),
+    UseGuards(TokenOrJwtAuthGuard, ...guards),
     ApiBearerAuth(PASSPORT_STRATEGY.JWT),
     ApiSecurity(PASSPORT_STRATEGY.TOKEN),
     ApiUnauthorizedResponse({
-      description: 'Wrong JWT, token or the spot is already configured.',
+      description: 'Wrong JWT or token.',
     }),
     ApiForbiddenResponse({
       description: 'Unsufficient roles or permissions.',

@@ -2,12 +2,11 @@ import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '@prisma/client';
 import { Strategy } from 'passport-custom';
 
 type DoneCallback = (
   err: Error | null,
-  user?: User | null | true,
+  user?: true,
   info?: ExpressAuthInfo,
 ) => void;
 

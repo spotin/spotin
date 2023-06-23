@@ -9,7 +9,7 @@ import { Strategy } from 'passport-custom';
 
 type DoneCallback = (
   err: Error | null,
-  user?: Pick<User, 'id' | 'role'>,
+  user?: Pick<User, 'id' | 'role'> | false,
   info?: ExpressAuthInfo,
 ) => void;
 
@@ -40,7 +40,7 @@ export class UnconfiguredSpotStrategy extends PassportStrategy(
           authInfo,
         );
       } catch {
-        done(new UnauthorizedException());
+        done(null, false, authInfo);
       }
     });
   }

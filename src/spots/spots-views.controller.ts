@@ -10,7 +10,6 @@ import {
   Redirect,
   Post,
   Body,
-  BadRequestException,
   HttpCode,
 } from '@nestjs/common';
 import {
@@ -31,12 +30,13 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
 import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
 import { NotFoundViewsExceptionFilter } from '@/common/filters/not-found-views-exception.filter';
 import { SessionData } from 'express-session';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
+import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
+import { use } from 'passport';
 
 @ApiTags('Spots - Views')
 @Controller('spots')
@@ -144,8 +144,7 @@ export class SpotsViewsController {
   }
 
   @Get(':id/edit')
-  @JwtOrTokenOrUnconfiguredSpotAuth()
-  @UseFilters(UnauthorizedViewsExceptionFilter)
+  @UnconfiguredSpotOrTokenOrJwtAuth()
   @ApiOperation({
     summary: 'Render the edit a spot page',
     description: 'Render the edit a spot page.',
@@ -159,24 +158,34 @@ export class SpotsViewsController {
   @ApiOkResponse({
     description: 'Render successful.',
   })
-  @Render('spots/form')
   async renderEditTokenView(
     @AuthUser() user: User,
     @Param('id') id: string,
     @Session() session: SessionData,
+    @Res() res: Response,
   ) {
     // Get errors and body from the session
     const { errors, body } = session;
 
     const spot = await this.spotsService.getSpot(id);
 
-    return {
+    if (user.id !== spot.userId && spot.configured) {
+      res.redirect(`/spots/${id}`);
+    }
+
+    const template = {
       username: user?.username,
       email: user?.email,
       role: user?.role,
       spot: body ? body : spot,
       errors,
     };
+
+    if (user.id !== spot.userId) {
+      template.role = UserRole.GUEST;
+    }
+
+    res.render('spots/form', template);
   }
 
   @Get(':id/redirect')
@@ -256,7 +265,7 @@ export class SpotsViewsController {
   }
 
   @Post(':id')
-  @JwtOrTokenOrUnconfiguredSpotAuth()
+  @UnconfiguredSpotOrTokenOrJwtAuth()
   @HttpCode(200)
   @ApiOperation({
     summary: 'Update the specified spot',
@@ -281,10 +290,6 @@ export class SpotsViewsController {
     if (user.role === UserRole.GUEST) {
       updateSpot.configured = true;
       updateSpot.referenced = undefined;
-
-      if (!updateSpot.redirection || updateSpot.redirection === '') {
-        throw new BadRequestException();
-      }
     }
 
     await this.spotsService.updateSpot(id, updateSpot, user);

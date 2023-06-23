@@ -30,8 +30,8 @@
     <!-- Prompt user for current location -->
     <button type="button" onclick="navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords;
-        document.getElementById('latitude').value = latitude;
-        document.getElementById('longitude').value = longitude;
+        document.getElementById('latitude').value = latitude.toFixed(5);
+        document.getElementById('longitude').value = longitude.toFixed(5);
     });">
         <i class="fas fa-map-marker-alt"></i> Use current location
     </button>
@@ -86,7 +86,7 @@
     <button type="submit"><i class="fas fa-save"></i> Save</button>
 </form>
 <script>
-    const form = document.querySelector("#form");
+    const form = document.getElementById("form");
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();

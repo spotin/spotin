@@ -12,7 +12,7 @@ import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 
 type DoneCallback = (
   err: Error | null,
-  user?: User,
+  user?: User | false,
   info?: ExpressAuthInfo,
 ) => void;
 
@@ -42,7 +42,7 @@ export class JwtStrategy extends PassportStrategy(
 
           done(null, user, authInfo);
         } catch (error) {
-          done(new UnauthorizedException());
+          done(null, false, authInfo);
         }
       },
     );

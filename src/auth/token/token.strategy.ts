@@ -1,6 +1,6 @@
 import { HeaderAPIKeyStrategy } from 'passport-headerapikey';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 import { TOKEN_HEADER_NAME, PASSPORT_STRATEGY } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
@@ -8,7 +8,7 @@ import { User } from '@prisma/client';
 
 type DoneCallback = (
   err: Error | null,
-  user?: User,
+  user?: User | false,
   info?: ExpressAuthInfo,
 ) => void;
 
@@ -32,7 +32,7 @@ export class TokenStrategy extends PassportStrategy(
 
           done(null, user, authInfo);
         } catch (error) {
-          done(new UnauthorizedException());
+          done(null, false, authInfo);
         }
       },
     );

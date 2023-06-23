@@ -30,11 +30,13 @@ import { LoginUserDto } from '@/auth/dtos/login-user.dto';
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
 import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
 import { SessionData } from 'express-session';
+import { ConflictViewsExceptionFilter } from '@/common/filters/conflict-views-exception.filter';
 
 @ApiTags('Auth - Views')
 @Controller('auth')
 @UseFilters(UnauthorizedViewsExceptionFilter)
 @UseFilters(BadRequestViewsExceptionFilter)
+@UseFilters(ConflictViewsExceptionFilter)
 export class AuthViewsController {
   constructor(
     private authService: AuthService,
