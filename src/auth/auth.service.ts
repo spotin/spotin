@@ -3,10 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
 import { LoginUser } from '@/auth/types/login-user.type';
-import { Jwt } from '@/auth/types/jwt';
-import { JwtPayload } from '@/auth/types/jwt-payload';
+import { JwtPayload } from '@/auth/types/jwt-payload.type';
 import { SpotsService } from '@/spots/spots.service';
 import * as bcrypt from 'bcrypt';
+import { Jwt } from '@/auth/types/jwt.type';
 
 @Injectable()
 export class AuthService {

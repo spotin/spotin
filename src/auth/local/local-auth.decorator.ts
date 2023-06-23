@@ -6,12 +6,12 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LocalAuthGuard } from '@/auth/local/local-auth.guard';
-import { LOCAL_AUTH_KEY } from '@/auth/local/local.strategy';
+import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
 
 export const LocalAuth = (...guards: (Function | CanActivate)[]) =>
   applyDecorators(
     UseGuards(LocalAuthGuard, ...guards),
-    ApiSecurity(LOCAL_AUTH_KEY),
+    ApiSecurity(PASSPORT_STRATEGY.LOCAL),
     ApiUnauthorizedResponse({
       description: 'Wrong username/password.',
     }),

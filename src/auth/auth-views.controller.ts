@@ -1,6 +1,5 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
 import { Response } from 'express';
 import {
   Body,
@@ -84,7 +83,7 @@ export class AuthViewsController {
 
     delete session.signupWaitingApproval;
 
-    res.cookie(JWT_AUTH_KEY, jwt.jwt, {
+    res.cookie('jwt', jwt.jwt, {
       httpOnly: true,
       sameSite: true,
       secure: true,
@@ -174,7 +173,7 @@ export class AuthViewsController {
     description: 'The user has been successfully logged in.',
   })
   logoutView(@Res() res: Response) {
-    res.clearCookie(JWT_AUTH_KEY);
+    res.clearCookie('jwt');
 
     res.redirect('/');
   }

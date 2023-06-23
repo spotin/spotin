@@ -3,9 +3,9 @@
 {% block body %}
 <h2><i class="fas fa-map-marker-alt"></i> {{ title }}</h2>
 {% if spot.id %}
-<form id="spot-form" action="/spots/{{ spot.id }}" method="POST">
+<form id="form" action="/spots/{{ spot.id }}">
 {% else %}
-<form id="spot-form" action="/spots" method="POST">
+<form id="form" action="/spots">
 {% endif %}
     <label for="title">
         Title
@@ -85,4 +85,40 @@
 
     <button type="submit"><i class="fas fa-save"></i> Save</button>
 </form>
+<script>
+    const form = document.querySelector("#form");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        
+        const title = document.getElementById("title").value;
+        const description = document.getElementById("description").value;
+        const longitude = document.getElementById("longitude").value;
+        const latitude = document.getElementById("latitude").value;
+        const redirection = document.getElementById("redirection").value;
+        const referenced = document.getElementById("referenced").checked;
+        const configured = document.getElementById("configured").checked;
+
+        const createSpotDto = {
+            title,
+            description,
+            longitude: longitude !== '' ? parseFloat(longitude) : undefined,
+            latitude: latitude !== '' ? parseFloat(latitude) : undefined,
+            redirection,
+            referenced: referenced,
+            configured: configured,
+        }
+
+        const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(createSpotDto),
+        });
+
+        // Redirect the user
+        window.location.href = response.url;
+    });
+</script>
 {% endblock %}

@@ -1,19 +1,29 @@
+import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { User } from '@prisma/client';
 import { Strategy } from 'passport-custom';
 
-export const UNRESTRICTED_AUTH_KEY = 'unrestricted';
+type DoneCallback = (
+  err: Error | null,
+  user?: User | null | true,
+  info?: ExpressAuthInfo,
+) => void;
+
+const authInfo: ExpressAuthInfo = {
+  strategy: PASSPORT_STRATEGY.UNRESTRICTED,
+};
 
 @Injectable()
 export class UnrestrictedStrategy extends PassportStrategy(
   Strategy,
-  UNRESTRICTED_AUTH_KEY,
+  PASSPORT_STRATEGY.UNRESTRICTED,
 ) {
   constructor() {
-    super();
-  }
-
-  async validate(): Promise<boolean> {
-    return true;
+    // Signature from https://www.passportjs.org/packages/passport-custom/
+    super((_: Request, done: DoneCallback) => {
+      done(null, true, authInfo);
+    });
   }
 }

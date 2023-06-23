@@ -19,6 +19,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import {
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -162,7 +163,7 @@ export class TokensViewsController {
     description: 'Create a new token. Redirect to `/tokens/:id`.',
     operationId: 'createTokenView',
   })
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     description: 'Redirect successful.',
   })
   async createTokenView(

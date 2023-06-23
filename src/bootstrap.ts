@@ -7,10 +7,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { JWT_AUTH_KEY } from '@/auth/jwt/jwt.strategy';
-import { TOKEN_AUTH_KEY } from '@/auth/token/token.strategy';
 import { ConfigService } from '@nestjs/config';
 import { SESSION_SECRET } from '@/config/config.constants';
+import { PASSPORT_STRATEGY, TOKEN_HEADER_NAME } from '@/auth/auth.constants';
 
 export async function bootstrap(
   app: NestExpressApplication,
@@ -25,9 +24,6 @@ export async function bootstrap(
     new ValidationPipe({
       transform: true,
       whitelist: true, // Remove unknown properties from DTOs
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
     }),
   );
 
@@ -71,14 +67,15 @@ export async function bootstrap(
         type: 'http',
         description: 'The JWT to access protected endpoints',
       },
-      JWT_AUTH_KEY,
+      PASSPORT_STRATEGY.JWT,
     )
     .addApiKey(
       {
         type: 'apiKey',
         description: 'The token to access protected endpoints',
+        name: TOKEN_HEADER_NAME,
       },
-      TOKEN_AUTH_KEY,
+      PASSPORT_STRATEGY.TOKEN,
     )
     .build();
 
@@ -86,7 +83,6 @@ export async function bootstrap(
 
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
-      docExpansion: 'none',
       showExtensions: true,
       tagsSorter: 'alpha',
       operationsSorter: 'alpha',

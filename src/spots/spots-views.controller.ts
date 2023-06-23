@@ -14,6 +14,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import {
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -30,7 +31,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { UnauthorizedViewsExceptionFilter } from '@/common/filters/unauthorized-views-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
+import { JwtOrTokenOrUnconfiguredSpotAuth } from '@/auth/jwt-or-token-or-unconfigured-spot/jwt-or-token-or-unconfigured-spot-auth.decorators';
 import { BadRequestViewsExceptionFilter } from '@/common/filters/bad-request-views-exception.filter';
 import { NotFoundViewsExceptionFilter } from '@/common/filters/not-found-views-exception.filter';
 import { SessionData } from 'express-session';
@@ -65,10 +66,6 @@ export class SpotsViewsController {
   ) {
     // Get errors and body from the session
     const { errors, body } = session;
-
-    // Clear session
-    delete session.errors;
-    delete session.body;
 
     return {
       title: 'Create a new spot - Spot in',
@@ -147,7 +144,7 @@ export class SpotsViewsController {
   }
 
   @Get(':id/edit')
-  @UnconfiguredSpotOrTokenOrJwtAuth()
+  @JwtOrTokenOrUnconfiguredSpotAuth()
   @UseFilters(UnauthorizedViewsExceptionFilter)
   @ApiOperation({
     summary: 'Render the edit a spot page',
@@ -170,10 +167,6 @@ export class SpotsViewsController {
   ) {
     // Get errors and body from the session
     const { errors, body } = session;
-
-    // Clear session
-    delete session.errors;
-    delete session.body;
 
     const spot = await this.spotsService.getSpot(id);
 
@@ -263,7 +256,7 @@ export class SpotsViewsController {
   }
 
   @Post(':id')
-  @UnconfiguredSpotOrTokenOrJwtAuth()
+  @JwtOrTokenOrUnconfiguredSpotAuth()
   @HttpCode(200)
   @ApiOperation({
     summary: 'Update the specified spot',
@@ -283,6 +276,7 @@ export class SpotsViewsController {
     @Param('id') id: string,
     @Body() updateSpot: UpdateSpotDto,
     @Res({ passthrough: true }) res: Response,
+    @Session() session: SessionData,
   ) {
     if (user.role === UserRole.GUEST) {
       updateSpot.configured = true;
@@ -295,6 +289,10 @@ export class SpotsViewsController {
 
     await this.spotsService.updateSpot(id, updateSpot, user);
 
+    // Clear session
+    delete session.errors;
+    delete session.body;
+
     res.redirect(`/spots/${id}`);
   }
 
@@ -305,15 +303,20 @@ export class SpotsViewsController {
     description: 'Create a new spot. Redirect to `/spots/:id`.',
     operationId: 'createSpotView',
   })
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     description: 'Redirect successful.',
   })
   async createSpotView(
     @AuthUser() user: User,
     @Body() createSpotDto: CreateSpotDto,
     @Res({ passthrough: true }) res: Response,
+    @Session() session: SessionData,
   ) {
     const newSpot = await this.spotsService.createSpot(createSpotDto, user);
+
+    // Clear session
+    delete session.errors;
+    delete session.body;
 
     res.redirect(`/spots/${newSpot.id}`);
   }

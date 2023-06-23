@@ -2,26 +2,39 @@ import { HeaderAPIKeyStrategy } from 'passport-headerapikey';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
+import { TOKEN_HEADER_NAME, PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 import { User } from '@prisma/client';
 
-export const TOKEN_AUTH_KEY = 'token';
+type DoneCallback = (
+  err: Error | null,
+  user?: User,
+  info?: ExpressAuthInfo,
+) => void;
+
+const authInfo: ExpressAuthInfo = {
+  strategy: PASSPORT_STRATEGY.TOKEN,
+};
 
 @Injectable()
 export class TokenStrategy extends PassportStrategy(
   HeaderAPIKeyStrategy,
-  TOKEN_AUTH_KEY,
+  PASSPORT_STRATEGY.TOKEN,
 ) {
   constructor(private authService: AuthService) {
-    super({ header: TOKEN_AUTH_KEY }, false);
-  }
+    // Signature from http://www.passportjs.org/packages/passport-headerapikey/
+    super(
+      { header: TOKEN_HEADER_NAME },
+      false,
+      async (token: string, done: DoneCallback) => {
+        try {
+          const user = await this.authService.validateToken(token);
 
-  async validate(token: string): Promise<User> {
-    try {
-      const user = await this.authService.validateToken(token);
-
-      return user;
-    } catch (error) {
-      throw new UnauthorizedException();
-    }
+          done(null, user, authInfo);
+        } catch (error) {
+          done(new UnauthorizedException());
+        }
+      },
+    );
   }
 }
