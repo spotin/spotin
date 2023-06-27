@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
