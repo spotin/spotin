@@ -52,6 +52,7 @@ cp .env.defaults .env
 # - SPOT_IN_JWT_SECRET
 # - SPOT_IN_JWT_EXPIRATION_TIME
 # - SPOT_IN_DATABASE_URL
+# - SPOT_IN_IMAGE
 
 # Build the application with Docker
 docker compose build --no-cache
