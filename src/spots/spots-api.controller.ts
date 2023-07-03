@@ -88,7 +88,7 @@ export class SpotsApiController {
     responseType: ReadSpotDto,
     operationId: 'updateSpotApi',
   })
-  @UnconfiguredSpotOrTokenOrJwtAuth()
+  @TokenOrJwtAuth()
   async updateSpotApi(
     @AuthUser() user: User,
     @Param('id') id: string,
