@@ -11,15 +11,16 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "GitHub.copilot",
-        "ms-vsliveshare.vsliveshare",
-        "ms-azuretools.vscode-docker",
-        "Prisma.prisma",
-        "redhat.vscode-yaml",
-        "ronnidc.nunjucks"
-      ]
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"GitHub.copilot",
+		"ms-vsliveshare.vsliveshare",
+		"ms-azuretools.vscode-docker",
+		"Prisma.prisma",
+		"redhat.vscode-yaml",
+		"ronnidc.nunjucks",
+		"GitHub.vscode-github-actions"
+	]
     }
   },
   // Map the user's SSH directory to the container for SSH signing
