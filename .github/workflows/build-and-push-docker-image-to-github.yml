@@ -3,6 +3,8 @@ run-name: Build and push Docker image to GitHub
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '.github/workflows/build-and-push-docker-image-to-github.yml'
       - 'prisma/**'
@@ -39,7 +41,7 @@ jobs:
         uses: docker/metadata-action@v2
         with:
           images: |
-            ghcr.io/${{ github.repository }}-${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
+            ghcr.io/${{ github.repository }}-nestjs
           tags: |
             type=raw,value=latest
             type=sha
