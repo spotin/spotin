@@ -1,5 +1,6 @@
 name: Build and push Docker image to GitHub
 run-name: Build and push Docker image to GitHub
+
 on:
   push:
     paths:
@@ -25,13 +26,27 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
-      - name: Build and push Docker image to GitHub
-        id: build-and-push-docker-image-to-github
-        uses: ./.github/actions
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
         with:
-          docker-registry-username: ${{ github.actor }}
-          docker-registry-password: ${{ secrets.GITHUB_TOKEN }}
-          docker-image-name: ${{ github.repository }}-engine
-          docker-image-context: .
-    outputs:
-      docker-image-tags: ${{ steps.build-and-push-docker-image-to-github.outputs.docker-image-tags }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v2
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}-staging
+          tags: |
+            type=raw,value=latest
+            type=sha
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
