@@ -19,6 +19,7 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -35,10 +36,11 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
+        if: github.ref == 'refs/heads/main'
         uses: docker/metadata-action@v2
         with:
           images: |
-            ghcr.io/${{ github.repository }}-staging
+            ghcr.io/${{ github.repository }}-${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
           tags: |
             type=raw,value=latest
             type=sha
