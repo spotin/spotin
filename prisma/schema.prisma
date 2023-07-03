@@ -20,6 +20,7 @@ model Spot {
   description String?
   latitude    Float?    @db.DoublePrecision
   longitude   Float?    @db.DoublePrecision
+  payload     Json?     @db.Json
   redirection String?   @db.VarChar(255)
   referenced  Boolean   @default(false)
   configured  Boolean   @default(true)

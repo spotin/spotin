@@ -11,8 +11,9 @@ import {
   IsUrl,
   MaxLength,
   MinLength,
+  IsJSON,
 } from 'class-validator';
-import { Spot } from '@prisma/client';
+import { Prisma, Spot } from '@prisma/client';
 import { Transform, Type } from 'class-transformer';
 
 export class SpotDto implements Spot {
@@ -67,6 +68,16 @@ export class SpotDto implements Spot {
   @Type(() => Number)
   @Transform(({ value }) => (value ? value : null))
   longitude: number | null;
+
+  /**
+   * Payload to store inconsistent data about the spot
+   */
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsJSON()
+  @MaxLength(510)
+  @Transform(({ value }) => (value ? value : null))
+  payload: Prisma.JsonValue | null;
 
   /**
    * Redirection when the QR code is accessed
