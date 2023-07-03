@@ -75,7 +75,7 @@ export class SpotDto implements Spot {
   @ApiPropertyOptional()
   @IsOptional()
   @IsJSON()
-  @MaxLength(510)
+  @MaxLength(1000)
   @Transform(({ value }) => (value ? value : null))
   payload: Prisma.JsonValue | null;
 
