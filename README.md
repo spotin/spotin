@@ -36,6 +36,31 @@ npm run dev
 
 The application should start and be accessible at <http://localhost:3000>. The API documentation is accessible at <http://localhost:3000/api>. You can log in with the credentials defined in the `.env` file (`SPOT_IN_ADMIN_EMAIL` and `SPOT_IN_ADMIN_PASSWORD`).
 
+## Run the application in staging with Docker
+
+In a terminal, run the following commands:
+
+```bash
+# Copy the default environment variables file
+cp .env.defaults .env
+
+# Edit the .env file to your needs, especially the following variables:
+# - SPOT_IN_FQDN
+# - SPOT_IN_ADMIN_EMAIL
+# - SPOT_IN_ADMIN_PASSWORD
+# - SPOT_IN_SESSION_SECRET
+# - SPOT_IN_JWT_SECRET
+# - SPOT_IN_JWT_EXPIRATION_TIME
+# - SPOT_IN_DATABASE_URL
+# - SPOT_IN_IMAGE_VERSION
+
+# Start the application with Docker
+docker compose --file docker-compose.dev.yml --file docker-compose.yml up --detach
+
+# Optional: seed the database with some data
+docker compose exec spotin npm run prisma:seed
+```
+
 ## Run the application in production with Docker
 
 In a terminal, run the following commands:
@@ -52,9 +77,7 @@ cp .env.defaults .env
 # - SPOT_IN_JWT_SECRET
 # - SPOT_IN_JWT_EXPIRATION_TIME
 # - SPOT_IN_DATABASE_URL
-
-# Build the application with Docker
-docker compose build --no-cache
+# - SPOT_IN_IMAGE_VERSION
 
 # Start the application with Docker
 docker compose up --detach

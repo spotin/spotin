@@ -1,8 +1,6 @@
 services:
   spotin:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/spotin/spotin:${SPOT_IN_IMAGE_VERSION:-latest}
     env_file:
       - .env
     restart: unless-stopped
