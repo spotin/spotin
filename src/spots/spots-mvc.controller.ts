@@ -20,7 +20,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
@@ -188,7 +188,11 @@ export class SpotsMvcController {
     updateSpot.configured = true;
     updateSpot.referenced = undefined;
 
-    await this.spotsService.updateSpot(id, updateSpot, user);
+    await this.spotsService.updateSpot(
+      id,
+      updateSpot as Prisma.SpotUpdateInput,
+      user,
+    );
 
     // Clear session
     delete session.errors;
@@ -356,7 +360,11 @@ export class SpotsMvcController {
     @Res({ passthrough: true }) res: Response,
     @Session() session: SessionData,
   ) {
-    await this.spotsService.updateSpot(id, updateSpot, user);
+    await this.spotsService.updateSpot(
+      id,
+      updateSpot as Prisma.SpotUpdateInput,
+      user,
+    );
 
     // Clear session
     delete session.errors;
@@ -381,7 +389,10 @@ export class SpotsMvcController {
     @Res({ passthrough: true }) res: Response,
     @Session() session: SessionData,
   ) {
-    const newSpot = await this.spotsService.createSpot(createSpotDto, user);
+    const newSpot = await this.spotsService.createSpot(
+      createSpotDto as Prisma.SpotCreateWithoutUsersInput,
+      user,
+    );
 
     // Clear session
     delete session.errors;

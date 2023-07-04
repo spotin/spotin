@@ -22,6 +22,10 @@
     {% if spot.latitude !== "" and spot.longitude !== "" %}
         <div id='map' style='width: 100%; height: 400px;'></div>
     {% endif %}
+    {% if spot.payload %}
+    <h5>JSON Payload</h5>
+    <pre>{{ spot.payload }}</pre>
+    {% endif %}
 </article>
 
 <script>

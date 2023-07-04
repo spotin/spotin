@@ -57,6 +57,16 @@
         </label>
     </div>
 
+    <label for="payload">
+        JSON payload
+        {% if errors.payload %}
+        <span class="error">Payload must be valid JSON</span>
+        <textarea id="payload" type="text" name="payload" placeholder="JSON payload" aria-invalid="true">{{ spot.payload }}</textarea>
+        {% else %}
+        <textarea id="payload" type="text" name="payload" placeholder="JSON payload">{{ spot.payload }}</textarea>
+        {% endif %}
+    </label>
+
     <label for="redirection">
         Redirection URL
         {% if errors.redirection %}
@@ -91,6 +101,7 @@
         const description = document.getElementById("description").value;
         const longitude = document.getElementById("longitude").value;
         const latitude = document.getElementById("latitude").value;
+        const payload = document.getElementById("payload").value;
         const redirection = document.getElementById("redirection").value;
         const referenced = document.getElementById("referenced").checked;
         const configured = document.getElementById("configured").checked;
@@ -100,6 +111,7 @@
             description,
             longitude: longitude !== '' ? parseFloat(longitude) : undefined,
             latitude: latitude !== '' ? parseFloat(latitude) : undefined,
+            payload,
             redirection,
             referenced: referenced,
             configured: configured,

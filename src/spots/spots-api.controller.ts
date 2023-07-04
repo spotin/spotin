@@ -1,6 +1,6 @@
-import { BadRequestException, Body, Controller, Param } from '@nestjs/common';
+import { Body, Controller, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { User, UserRole } from '@prisma/client';
+import { Prisma, User, UserRole } from '@prisma/client';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
@@ -73,7 +73,10 @@ export class SpotsApiController {
     @AuthUser() user: User,
     @Body() createSpotDto: CreateSpotDto,
   ) {
-    const newSpot = await this.spotsService.createSpot(createSpotDto, user);
+    const newSpot = await this.spotsService.createSpot(
+      createSpotDto as Prisma.SpotCreateWithoutUsersInput,
+      user,
+    );
 
     return new ReadSpotDto(newSpot);
   }
@@ -98,7 +101,7 @@ export class SpotsApiController {
 
     const updatedSpot = await this.spotsService.updateSpot(
       id,
-      updateSpot,
+      updateSpot as Prisma.SpotUpdateInput,
       user,
     );
 
