@@ -75,7 +75,7 @@
 
     <label for="configured" {{ 'hidden' if role === "GUEST" }}>
         Configured
-        <input id="configured" type="checkbox" name="configured" value="true" {% if spot.configured %}checked{% endif %}>
+        <input id="configured" type="checkbox" name="configured" value="true" {% if spot.configured %}checked {% elif spot.configured == null %} checked {% endif %}>
     </label>
     <br>
 
