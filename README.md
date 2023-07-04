@@ -52,7 +52,7 @@ cp .env.defaults .env
 # - SPOT_IN_JWT_SECRET
 # - SPOT_IN_JWT_EXPIRATION_TIME
 # - SPOT_IN_DATABASE_URL
-# - SPOT_IN_IMAGE
+# - SPOT_IN_IMAGE_VERSION
 
 # Start the application with Docker
 docker compose --file docker-compose.dev.yml --file docker-compose.yml up --detach
@@ -77,7 +77,7 @@ cp .env.defaults .env
 # - SPOT_IN_JWT_SECRET
 # - SPOT_IN_JWT_EXPIRATION_TIME
 # - SPOT_IN_DATABASE_URL
-# - SPOT_IN_IMAGE
+# - SPOT_IN_IMAGE_VERSION
 
 # Start the application with Docker
 docker compose up --detach

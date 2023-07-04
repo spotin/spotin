@@ -1,6 +1,6 @@
 services:
   spotin:
-    image: '${SPOT_IN_IMAGE:-ghcr.io/spotin/spotin-nestjs:latest}'
+    image: ghcr.io/spotin/spotin:${SPOT_IN_IMAGE_VERSION:-latest}
     env_file:
       - .env
     restart: unless-stopped
