@@ -47,7 +47,7 @@ export const CustomPatch = ({
       type: bodyType,
     }),
     ApiOkResponse({
-      description: `The ${name} has been successfully created.`,
+      description: `The ${name} has been successfully updated.`,
       type: responseType,
     }),
     ApiNotFoundResponse({

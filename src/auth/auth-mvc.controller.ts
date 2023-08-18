@@ -47,7 +47,7 @@ export class AuthMvcController {
   @ApiOperation({
     summary: 'Render the login page',
     description: 'Render the login page.',
-    operationId: 'renderLoginView',
+    operationId: 'renderLoginMvc',
   })
   @ApiOkResponse({
     description: 'Render successful.',

@@ -1,5 +1,10 @@
-import { Body, Controller, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpCode, Param, Post } from '@nestjs/common';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Prisma, User, UserRole } from '@prisma/client';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
@@ -12,7 +17,7 @@ import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
-import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
+import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 
 @ApiTags('API - Spots')
 @Controller('api/spots')
@@ -32,6 +37,44 @@ export class SpotsApiController {
     const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
 
     return spotsDto;
+  }
+
+  @Post(':id/configure')
+  @UnconfiguredSpotAuth()
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Configure the spot',
+    description: 'Configure the spot.',
+    operationId: 'configureSpotApi',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The spot ID.',
+    format: 'uuid',
+  })
+  @ApiOkResponse({
+    description: 'The spot has been successfully configured.',
+    type: ReadSpotDto,
+  })
+  async configureSpotApi(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+    @Body() updateSpot: UpdateSpotDto,
+  ) {
+    updateSpot.configured = true;
+    updateSpot.referenced = undefined;
+
+    const updatedSpot = await this.spotsService.updateSpot(
+      id,
+      {
+        ...updateSpot,
+        // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
+        payload: updateSpot.payload ? updateSpot.payload : Prisma.DbNull,
+      },
+      user,
+    );
+
+    return new ReadSpotDto(updatedSpot);
   }
 
   @GetMany({
@@ -88,7 +131,7 @@ export class SpotsApiController {
     responseType: ReadSpotDto,
     operationId: 'updateSpotApi',
   })
-  @UnconfiguredSpotOrTokenOrJwtAuth()
+  @TokenOrJwtAuth()
   async updateSpotApi(
     @AuthUser() user: User,
     @Param('id') id: string,
@@ -101,7 +144,11 @@ export class SpotsApiController {
 
     const updatedSpot = await this.spotsService.updateSpot(
       id,
-      updateSpot as Prisma.SpotUpdateInput,
+      {
+        ...updateSpot,
+        // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
+        payload: updateSpot.payload ? updateSpot.payload : Prisma.DbNull,
+      },
       user,
     );
 
