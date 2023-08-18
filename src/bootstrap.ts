@@ -27,6 +27,10 @@ export async function bootstrap(
     }),
   );
 
+  // https://docs.nestjs.com/security/cors
+  app.enableCors();
+
+  // https://docs.nestjs.com/techniques/session
   app.set('trust proxy', process.env.NODE_ENV === 'production');
 
   const sessionSecret = configService.get(SESSION_SECRET, { infer: true });
