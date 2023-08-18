@@ -6,6 +6,7 @@ import { LoginUser } from '@/auth/types/login-user.type';
 import { JwtPayload } from '@/auth/types/jwt-payload.type';
 import { SpotsService } from '@/spots/spots.service';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import { Jwt } from '@/auth/types/jwt.type';
 
 @Injectable()
@@ -51,10 +52,10 @@ export class AuthService {
     return user;
   }
 
-  async validateToken(tokenHash: string) {
-    const user = (await this.usersService.getUserByTokenHash(
-      tokenHash,
-    )) as User;
+  async validateToken(value: string) {
+    const hash = crypto.createHash('sha256').update(value).digest('hex');
+
+    const user = (await this.usersService.getUserByTokenHash(hash)) as User;
 
     if (!user.enabled) {
       throw new UnauthorizedException();

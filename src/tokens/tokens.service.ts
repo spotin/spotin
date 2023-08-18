@@ -48,6 +48,7 @@ export class TokensService {
         },
       },
     });
+
     return newToken;
   }
 

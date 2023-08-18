@@ -9,12 +9,15 @@
 <fieldset>
     <label for="value">Value</label>
     <input type="value" name="value" id="value"
-    {% if token.hash == null %}
+    {% if token.value == null %}
         value="The value is displayed only once, right after the creation of the token."
         disabled
     {% else %}
-        value="{{ token.hash }}"
+        value="{{ token.value }}"
         readonly
     {% endif %}>
 </fieldset>
+<a href="/tokens">
+    <button><i class="fas fa-list"></i> View all tokens</button>
+</a>
 {% endblock %}

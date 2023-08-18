@@ -132,6 +132,7 @@ export class TokensMvcController {
     @Param('id') id: string,
     @Session() session: SessionData,
   ) {
+    // Set the hash as optional
     let token: Omit<Token, 'hash'> & { hash?: string };
 
     if (session.token) {
@@ -172,20 +173,21 @@ export class TokensMvcController {
     @Session() session: Record<string, unknown>,
     @Res() res: Response,
   ) {
-    const hash = crypto
-      .createHash('sha256')
-      .update(crypto.randomBytes(64).toString('base64'))
-      .digest('hex');
+    const value = crypto.randomBytes(64).toString('base64');
+    const hash = crypto.createHash('sha256').update(value).digest('hex');
 
-    const token = await this.tokensService.createToken(
+    const createdToken = await this.tokensService.createToken(
       { ...createTokenDto, hash },
       user,
     );
 
     // Store the token in the session
-    session.token = token;
+    session.token = {
+      ...createdToken,
+      value,
+    };
 
     // Redirect to the token page
-    res.redirect(`/tokens/${token.id}`);
+    res.redirect(`/tokens/${createdToken.id}`);
   }
 }
