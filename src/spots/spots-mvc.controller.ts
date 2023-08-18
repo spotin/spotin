@@ -395,7 +395,11 @@ export class SpotsMvcController {
     @Session() session: SessionData,
   ) {
     const newSpot = await this.spotsService.createSpot(
-      createSpotDto as Prisma.SpotCreateWithoutUsersInput,
+      {
+        ...createSpotDto,
+        // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
+        payload: createSpotDto.payload ? createSpotDto.payload : Prisma.DbNull,
+      },
       user,
     );
 
