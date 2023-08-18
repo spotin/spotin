@@ -26,9 +26,9 @@ export class TokenStrategy extends PassportStrategy(
     super(
       { header: TOKEN_HEADER_NAME },
       false,
-      async (token: string, done: DoneCallback) => {
+      async (value: string, done: DoneCallback) => {
         try {
-          const user = await this.authService.validateToken(token);
+          const user = await this.authService.validateToken(value);
 
           done(null, user, authInfo);
         } catch (error) {

@@ -11,6 +11,7 @@ import { User } from '@prisma/client';
 import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
 import * as crypto from 'crypto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
+import { NewTokenDto } from '@/tokens/dto/new-token.dto';
 
 @ApiTags('API - Tokens')
 @Controller('api/tokens')
@@ -49,7 +50,7 @@ export class TokensApiController {
     name: 'Token',
     summary: 'Create a new token',
     bodyType: CreateTokenDto,
-    responseType: ReadTokenDto,
+    responseType: NewTokenDto,
     operationId: 'createTokenApi',
   })
   @JwtAuth()
@@ -57,17 +58,18 @@ export class TokensApiController {
     @AuthUser() user: User,
     @Body() createTokenDto: CreateTokenDto,
   ) {
-    const hash = crypto
-      .createHash('sha256')
-      .update(crypto.randomBytes(64).toString('base64'))
-      .digest('hex');
+    const value = crypto.randomBytes(64).toString('base64');
+    const hash = crypto.createHash('sha256').update(value).digest('hex');
 
-    const token = await this.tokensService.createToken(
+    const createdToken = await this.tokensService.createToken(
       { ...createTokenDto, hash },
       user,
     );
 
-    return token;
+    return new NewTokenDto({
+      ...createdToken,
+      value,
+    });
   }
 
   @CustomDelete({
