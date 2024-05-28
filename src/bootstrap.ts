@@ -5,7 +5,7 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
+import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { SESSION_SECRET } from '@/config/config.constants';
@@ -60,9 +60,6 @@ export async function bootstrap(
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.useStaticAssets(join(__dirname, '..', 'public'));
 	app.setViewEngine('njk');
-
-	const prismaService = app.get(PrismaService);
-	await prismaService.enableShutdownHooks(app);
 
 	const config = new DocumentBuilder()
 		.setTitle('Spot in API')

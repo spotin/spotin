@@ -15,9 +15,9 @@
 				"GitHub.copilot",
 				"GitHub.vscode-github-actions",
 				"ms-azuretools.vscode-docker",
+				"eseom.nunjucks-template",
 				"Prisma.prisma",
 				"redhat.vscode-yaml",
-				"ronnidc.nunjucks",
 				"streetsidesoftware.code-spell-checker",
 				"streetsidesoftware.code-spell-checker-french"
 			]

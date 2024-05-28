@@ -1,30 +1,33 @@
 {% extends "layout.njk" %}
-
-
 {% block body %}
-<h1><i class="fas fa-edit"></i> Sign up</h1>
-<form action="/auth/signup" method="POST">
+  <h1>
+    <i class="fas fa-edit"></i>
+    Sign up
+  </h1>
+  <form action="/auth/signup" method="POST">
     <label for="username">Username</label>
     {% if errors.username %}
-    <span class="error">Please check the username field</span>
-    <input type="username" name="username" id="username" placeholder="Username" aria-invalid="true" autofocus>
+      <span class="error">Please check the username field</span>
+      <input type="username" name="username" id="username" placeholder="Username" aria-invalid="true" autofocus>
     {% else %}
-    <input type="username" name="username" id="username" placeholder="Username" autofocus>
+      <input type="username" name="username" id="username" placeholder="Username" autofocus>
     {% endif %}
     <label for="email">Email</label>
     {% if errors.email %}
-    <span class="error">Please check the email field</span>
-    <input type="email" name="email" id="email" placeholder="Email" aria-invalid="true" autofocus>
+      <span class="error">Please check the email field</span>
+      <input type="email" name="email" id="email" placeholder="Email" aria-invalid="true" autofocus>
     {% else %}
-    <input type="email" name="email" id="email" placeholder="Email" autofocus>
+      <input type="email" name="email" id="email" placeholder="Email" autofocus>
     {% endif %}
     <label for="password">Password</label>
     {% if errors.password %}
-    <span class="error">Please check the password field</span>
-    <input type="password"name="password" id="password" placeholder="Password" aria-invalid="true">
+      <span class="error">Please check the password field</span>
+      <input type="password" name="password" id="password" placeholder="Password" aria-invalid="true">
     {% else %}
-    <input type="password" name="password" id="password" placeholder="Password">
+      <input type="password" name="password" id="password" placeholder="Password">
     {% endif %}
-    <button type="submit"><i class="fas fa-edit"></i> Sign up</button>
-</form>
+    <button type="submit">
+      <i class="fas fa-edit"></i>
+      Sign up</button>
+  </form>
 {% endblock %}

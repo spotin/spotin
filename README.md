@@ -48,7 +48,7 @@ API documentation is accessible at <http://localhost:3000/api>. You can log in
 with the credentials defined in the `.env` file (`SPOT_IN_ADMIN_EMAIL` and
 `SPOT_IN_ADMIN_PASSWORD`).
 
-### Try out the application in development with Docker
+## Try out the application in development with Docker
 
 This is not recommended for development, but you can try out the application in
 development with Docker.
