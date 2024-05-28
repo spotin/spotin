@@ -17,85 +17,85 @@ import { Roles } from '@/auth/decorators/roles.decorator';
 @ApiTags('API - Users')
 @Controller('api/users')
 export class UsersApiController {
-  constructor(private readonly usersService: UsersService) {}
+	constructor(private readonly usersService: UsersService) {}
 
-  @GetMany({
-    name: 'Users',
-    summary: 'Get the users',
-    operationId: 'getUsersApi',
-    responseType: [ReadUserDto],
-  })
-  @JwtAuth(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  async getUsersApi() {
-    const users = await this.usersService.getUsers();
+	@GetMany({
+		name: 'Users',
+		summary: 'Get the users',
+		operationId: 'getUsersApi',
+		responseType: [ReadUserDto],
+	})
+	@JwtAuth(RolesGuard)
+	@Roles(UserRole.ADMIN)
+	async getUsersApi() {
+		const users = await this.usersService.getUsers();
 
-    const usersDto = users.map((user) => new ReadUserDto(user));
+		const usersDto = users.map((user) => new ReadUserDto(user));
 
-    return usersDto;
-  }
+		return usersDto;
+	}
 
-  @GetOne({
-    name: 'User',
-    summary: 'Get the specified user',
-    operationId: 'getSpotApi',
-    responseType: ReadUserDto,
-  })
-  @JwtAuth(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  async getUserApi(@Param('id') id: string) {
-    const user = (await this.usersService.getUser(id)) as User;
+	@GetOne({
+		name: 'User',
+		summary: 'Get the specified user',
+		operationId: 'getSpotApi',
+		responseType: ReadUserDto,
+	})
+	@JwtAuth(RolesGuard)
+	@Roles(UserRole.ADMIN)
+	async getUserApi(@Param('id') id: string) {
+		const user = (await this.usersService.getUser(id)) as User;
 
-    return new ReadUserDto(user);
-  }
+		return new ReadUserDto(user);
+	}
 
-  @CustomPost({
-    name: 'User',
-    summary: 'Create a new user',
-    bodyType: CreateUserDto,
-    responseType: ReadUserDto,
-    operationId: 'createUserApi',
-  })
-  @JwtAuth(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @ApiConflictResponse({
-    description: 'Another user has the same username.',
-  })
-  async createUserApi(@Body() createUserDto: CreateUserDto) {
-    const newUser = await this.usersService.createUser(createUserDto);
+	@CustomPost({
+		name: 'User',
+		summary: 'Create a new user',
+		bodyType: CreateUserDto,
+		responseType: ReadUserDto,
+		operationId: 'createUserApi',
+	})
+	@JwtAuth(RolesGuard)
+	@Roles(UserRole.ADMIN)
+	@ApiConflictResponse({
+		description: 'Another user has the same username.',
+	})
+	async createUserApi(@Body() createUserDto: CreateUserDto) {
+		const newUser = await this.usersService.createUser(createUserDto);
 
-    return new ReadUserDto(newUser);
-  }
+		return new ReadUserDto(newUser);
+	}
 
-  @CustomPatch({
-    name: 'User',
-    summary: 'Update the specified user',
-    bodyType: UpdateUserDto,
-    responseType: ReadUserDto,
-    operationId: 'updateUserApi',
-  })
-  @JwtAuth(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @ApiConflictResponse({
-    description: 'Another user has the same username.',
-  })
-  async updateUserApi(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    const updatedUser = await this.usersService.updateUser(id, updateUserDto);
+	@CustomPatch({
+		name: 'User',
+		summary: 'Update the specified user',
+		bodyType: UpdateUserDto,
+		responseType: ReadUserDto,
+		operationId: 'updateUserApi',
+	})
+	@JwtAuth(RolesGuard)
+	@Roles(UserRole.ADMIN)
+	@ApiConflictResponse({
+		description: 'Another user has the same username.',
+	})
+	async updateUserApi(
+		@Param('id') id: string,
+		@Body() updateUserDto: UpdateUserDto,
+	) {
+		const updatedUser = await this.usersService.updateUser(id, updateUserDto);
 
-    return new ReadUserDto(updatedUser);
-  }
+		return new ReadUserDto(updatedUser);
+	}
 
-  @CustomDelete({
-    name: 'User',
-    summary: 'Delete the specified user',
-    operationId: 'deleteUserApi',
-  })
-  @JwtAuth(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  async deleteUserApi(@Param('id') id: string) {
-    await this.usersService.deleteUser(id);
-  }
+	@CustomDelete({
+		name: 'User',
+		summary: 'Delete the specified user',
+		operationId: 'deleteUserApi',
+	})
+	@JwtAuth(RolesGuard)
+	@Roles(UserRole.ADMIN)
+	async deleteUserApi(@Param('id') id: string) {
+		await this.usersService.deleteUser(id);
+	}
 }

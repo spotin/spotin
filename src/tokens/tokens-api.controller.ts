@@ -16,69 +16,69 @@ import { NewTokenDto } from '@/tokens/dto/new-token.dto';
 @ApiTags('API - Tokens')
 @Controller('api/tokens')
 export class TokensApiController {
-  constructor(private readonly tokensService: TokensService) {}
+	constructor(private readonly tokensService: TokensService) {}
 
-  @GetMany({
-    name: 'Tokens',
-    summary: 'Get the tokens',
-    operationId: 'getTokensApi',
-    responseType: [ReadTokenDto],
-  })
-  @JwtAuth()
-  async getTokensApi(@AuthUser() user: User) {
-    const tokens = await this.tokensService.getTokens(user);
+	@GetMany({
+		name: 'Tokens',
+		summary: 'Get the tokens',
+		operationId: 'getTokensApi',
+		responseType: [ReadTokenDto],
+	})
+	@JwtAuth()
+	async getTokensApi(@AuthUser() user: User) {
+		const tokens = await this.tokensService.getTokens(user);
 
-    const tokensDto = tokens.map((token) => new ReadTokenDto(token));
+		const tokensDto = tokens.map((token) => new ReadTokenDto(token));
 
-    return tokensDto;
-  }
+		return tokensDto;
+	}
 
-  @GetOne({
-    name: 'Token',
-    summary: 'Get the specified token',
-    operationId: 'getTokenApi',
-    responseType: ReadTokenDto,
-  })
-  @JwtAuth()
-  async getTokenApi(@Param('id') id: string, @AuthUser() user: User) {
-    const token = await this.tokensService.getToken(id, user);
+	@GetOne({
+		name: 'Token',
+		summary: 'Get the specified token',
+		operationId: 'getTokenApi',
+		responseType: ReadTokenDto,
+	})
+	@JwtAuth()
+	async getTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+		const token = await this.tokensService.getToken(id, user);
 
-    return new ReadTokenDto(token);
-  }
+		return new ReadTokenDto(token);
+	}
 
-  @CustomPost({
-    name: 'Token',
-    summary: 'Create a new token',
-    bodyType: CreateTokenDto,
-    responseType: NewTokenDto,
-    operationId: 'createTokenApi',
-  })
-  @JwtAuth()
-  async createTokenApi(
-    @AuthUser() user: User,
-    @Body() createTokenDto: CreateTokenDto,
-  ) {
-    const value = crypto.randomBytes(64).toString('base64');
-    const hash = crypto.createHash('sha256').update(value).digest('hex');
+	@CustomPost({
+		name: 'Token',
+		summary: 'Create a new token',
+		bodyType: CreateTokenDto,
+		responseType: NewTokenDto,
+		operationId: 'createTokenApi',
+	})
+	@JwtAuth()
+	async createTokenApi(
+		@AuthUser() user: User,
+		@Body() createTokenDto: CreateTokenDto,
+	) {
+		const value = crypto.randomBytes(64).toString('base64');
+		const hash = crypto.createHash('sha256').update(value).digest('hex');
 
-    const createdToken = await this.tokensService.createToken(
-      { ...createTokenDto, hash },
-      user,
-    );
+		const createdToken = await this.tokensService.createToken(
+			{ ...createTokenDto, hash },
+			user,
+		);
 
-    return new NewTokenDto({
-      ...createdToken,
-      value,
-    });
-  }
+		return new NewTokenDto({
+			...createdToken,
+			value,
+		});
+	}
 
-  @CustomDelete({
-    name: 'Token',
-    summary: 'Delete the specified token',
-    operationId: 'deleteTokenApi',
-  })
-  @JwtAuth()
-  async deleteTokenApi(@Param('id') id: string, @AuthUser() user: User) {
-    await this.tokensService.deleteToken(id, user);
-  }
+	@CustomDelete({
+		name: 'Token',
+		summary: 'Delete the specified token',
+		operationId: 'deleteTokenApi',
+	})
+	@JwtAuth()
+	async deleteTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+		await this.tokensService.deleteToken(id, user);
+	}
 }

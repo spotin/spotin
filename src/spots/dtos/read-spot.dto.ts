@@ -2,12 +2,12 @@ import { OmitType } from '@nestjs/swagger';
 import { SpotDto } from '@/spots/dtos/spot.dto';
 
 export class ReadSpotDto extends OmitType(SpotDto, ['userId'] as const) {
-  constructor(partial: Partial<SpotDto>) {
-    super();
+	constructor(partial: Partial<SpotDto>) {
+		super();
 
-    // Exclude userId property from the object
-    delete partial.userId;
+		// Exclude userId property from the object
+		delete partial.userId;
 
-    Object.assign(this, partial);
-  }
+		Object.assign(this, partial);
+	}
 }

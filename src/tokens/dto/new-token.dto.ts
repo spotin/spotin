@@ -3,23 +3,23 @@ import { OmitType } from '@nestjs/swagger';
 import { IsString, Length } from 'class-validator';
 
 export class NewTokenDto extends OmitType(TokenDto, [
-  'userId',
-  'hash',
+	'userId',
+	'hash',
 ] as const) {
-  /**
-   * The token value
-   */
-  @IsString()
-  @Length(64)
-  value: string;
+	/**
+	 * The token value
+	 */
+	@IsString()
+	@Length(64)
+	value: string;
 
-  constructor(partial: Partial<TokenDto> & { value: string }) {
-    super();
+	constructor(partial: Partial<TokenDto> & { value: string }) {
+		super();
 
-    // Exclude userId and hash properties from the object
-    delete partial.userId;
-    delete partial.hash;
+		// Exclude userId and hash properties from the object
+		delete partial.userId;
+		delete partial.hash;
 
-    Object.assign(this, partial);
-  }
+		Object.assign(this, partial);
+	}
 }

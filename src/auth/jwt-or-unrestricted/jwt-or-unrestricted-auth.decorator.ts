@@ -5,7 +5,7 @@ import { CanActivate, UseGuards, applyDecorators } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 export const JwtOrUnrestrictedAuth = (...guards: (Function | CanActivate)[]) =>
-  applyDecorators(
-    UseGuards(JwtOrUnrestrictedAuthGuard, ...guards),
-    ApiBearerAuth(PASSPORT_STRATEGY.JWT),
-  );
+	applyDecorators(
+		UseGuards(JwtOrUnrestrictedAuthGuard, ...guards),
+		ApiBearerAuth(PASSPORT_STRATEGY.JWT),
+	);

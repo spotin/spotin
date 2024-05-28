@@ -5,24 +5,24 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 
 type DoneCallback = (
-  err: Error | null,
-  user?: true,
-  info?: ExpressAuthInfo,
+	err: Error | null,
+	user?: true,
+	info?: ExpressAuthInfo,
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-  strategy: PASSPORT_STRATEGY.UNRESTRICTED,
+	strategy: PASSPORT_STRATEGY.UNRESTRICTED,
 };
 
 @Injectable()
 export class UnrestrictedStrategy extends PassportStrategy(
-  Strategy,
-  PASSPORT_STRATEGY.UNRESTRICTED,
+	Strategy,
+	PASSPORT_STRATEGY.UNRESTRICTED,
 ) {
-  constructor() {
-    // Signature from https://www.passportjs.org/packages/passport-custom/
-    super((_: Request, done: DoneCallback) => {
-      done(null, true, authInfo);
-    });
-  }
+	constructor() {
+		// Signature from https://www.passportjs.org/packages/passport-custom/
+		super((_: Request, done: DoneCallback) => {
+			done(null, true, authInfo);
+		});
+	}
 }
