@@ -4,7 +4,8 @@
 
 Welcome to the Spot in Documentation website!
 
-This documentation is based on the [Diátaxis Documentation Framework](./explanations/about-this-documentation/index.md).
+This documentation is based on the
+[Diátaxis Documentation Framework](./explanations/about-this-documentation/index.md).
 
 The documentation is separated in the following axes:
 

@@ -12,6 +12,7 @@ _TODO_
 
 ## Resources and alternatives
 
-These resources and alternatives are related to the current item (in alphabetical order).
+These resources and alternatives are related to the current item (in
+alphabetical order).
 
 _None at the moment._

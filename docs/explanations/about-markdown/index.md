@@ -1,6 +1,7 @@
 # About Markdown
 
-As the website of [Markdown](https://daringfireball.net/projects/markdown/) mentions:
+As the website of [Markdown](https://daringfireball.net/projects/markdown/)
+mentions:
 
 !!! quote
 
@@ -12,6 +13,7 @@ _TODO_
 
 ## Resources and alternatives
 
-These resources and alternatives are related to the current item (in alphabetical order).
+These resources and alternatives are related to the current item (in
+alphabetical order).
 
 - [The Markdown Guide](https://www.markdownguide.org/)

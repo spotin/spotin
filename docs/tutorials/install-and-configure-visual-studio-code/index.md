@@ -1,6 +1,7 @@
 # Install and configure Visual Studio Code
 
-[Visual Studio Code](../../explanations/about-visual-studio-code/index.md) is an IDE that we use to develop all our applications.
+[Visual Studio Code](../../explanations/about-visual-studio-code/index.md) is an
+IDE that we use to develop all our applications.
 
 ## Steps
 
