@@ -5,9 +5,9 @@ export const NODE_ENV = 'NODE_ENV';
 export const SESSION_SECRET = 'SPOT_IN_SESSION_SECRET';
 
 export interface EnvironmentVariables {
-  [FQDN]: string;
-  [JWT_SECRET]: string;
-  [JWT_EXPIRATION_TIME]: string;
-  [NODE_ENV]: string;
-  [SESSION_SECRET]: string;
+	[FQDN]: string;
+	[JWT_SECRET]: string;
+	[JWT_EXPIRATION_TIME]: string;
+	[NODE_ENV]: string;
+	[SESSION_SECRET]: string;
 }

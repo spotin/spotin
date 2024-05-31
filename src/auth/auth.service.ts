@@ -11,68 +11,68 @@ import { Jwt } from '@/auth/types/jwt.type';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-    private spotsService: SpotsService,
-  ) {}
+	constructor(
+		private usersService: UsersService,
+		private jwtService: JwtService,
+		private spotsService: SpotsService,
+	) {}
 
-  async validateCredentials({ username, password }: LoginUser): Promise<User> {
-    const user = (await this.usersService.getUserByUsername(username)) as User;
+	async validateCredentials({ username, password }: LoginUser): Promise<User> {
+		const user = (await this.usersService.getUserByUsername(username)) as User;
 
-    const passwordsMatch = bcrypt.compareSync(password, user.password);
+		const passwordsMatch = bcrypt.compareSync(password, user.password);
 
-    if (!user.enabled || !passwordsMatch) {
-      throw new UnauthorizedException();
-    }
+		if (!user.enabled || !passwordsMatch) {
+			throw new UnauthorizedException();
+		}
 
-    return user;
-  }
+		return user;
+	}
 
-  async generateJwt(user: User): Promise<Jwt> {
-    const payload: JwtPayload = {
-      sub: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-    };
+	async generateJwt(user: User): Promise<Jwt> {
+		const payload: JwtPayload = {
+			sub: user.id,
+			username: user.username,
+			email: user.email,
+			role: user.role,
+		};
 
-    return {
-      jwt: await this.jwtService.signAsync(payload),
-    };
-  }
+		return {
+			jwt: await this.jwtService.signAsync(payload),
+		};
+	}
 
-  async validateJwtPayload({ sub }: JwtPayload): Promise<User> {
-    const user = (await this.usersService.getUser(sub)) as User;
+	async validateJwtPayload({ sub }: JwtPayload): Promise<User> {
+		const user = (await this.usersService.getUser(sub)) as User;
 
-    if (!user.enabled) {
-      throw new UnauthorizedException();
-    }
+		if (!user.enabled) {
+			throw new UnauthorizedException();
+		}
 
-    return user;
-  }
+		return user;
+	}
 
-  async validateToken(value: string) {
-    const hash = crypto.createHash('sha256').update(value).digest('hex');
+	async validateToken(value: string) {
+		const hash = crypto.createHash('sha256').update(value).digest('hex');
 
-    const user = (await this.usersService.getUserByTokenHash(hash)) as User;
+		const user = (await this.usersService.getUserByTokenHash(hash)) as User;
 
-    if (!user.enabled) {
-      throw new UnauthorizedException();
-    }
+		if (!user.enabled) {
+			throw new UnauthorizedException();
+		}
 
-    return user;
-  }
+		return user;
+	}
 
-  async validateSpot(spotId: string) {
-    const spot = await this.spotsService.getSpot(spotId);
+	async validateSpot(spotId: string) {
+		const spot = await this.spotsService.getSpot(spotId);
 
-    if (spot.configured) {
-      throw new UnauthorizedException();
-    }
+		if (spot.configured) {
+			throw new UnauthorizedException();
+		}
 
-    const user = (await this.usersService.getUser(spot.userId)) as User;
+		const user = (await this.usersService.getUser(spot.userId)) as User;
 
-    return user;
-  }
+		return user;
+	}
 }

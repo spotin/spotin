@@ -8,14 +8,14 @@ import { ConfigModule } from './config/config.module';
 import { TokensModule } from './tokens/tokens.module';
 
 @Module({
-  imports: [
-    AuthModule,
-    ConfigModule,
-    PrismaModule.forRoot(),
-    SpotsModule,
-    UsersModule,
-    TokensModule,
-  ],
-  controllers: [AppMvcController],
+	imports: [
+		AuthModule,
+		ConfigModule,
+		PrismaModule.forRoot(),
+		SpotsModule,
+		UsersModule,
+		TokensModule,
+	],
+	controllers: [AppMvcController],
 })
 export class AppModule {}

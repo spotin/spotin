@@ -7,34 +7,34 @@ import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 import { User } from '@prisma/client';
 
 type DoneCallback = (
-  err: Error | null,
-  user?: User | false,
-  info?: ExpressAuthInfo,
+	err: Error | null,
+	user?: User | false,
+	info?: ExpressAuthInfo,
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-  strategy: PASSPORT_STRATEGY.TOKEN,
+	strategy: PASSPORT_STRATEGY.TOKEN,
 };
 
 @Injectable()
 export class TokenStrategy extends PassportStrategy(
-  HeaderAPIKeyStrategy,
-  PASSPORT_STRATEGY.TOKEN,
+	HeaderAPIKeyStrategy,
+	PASSPORT_STRATEGY.TOKEN,
 ) {
-  constructor(private authService: AuthService) {
-    // Signature from http://www.passportjs.org/packages/passport-headerapikey/
-    super(
-      { header: TOKEN_HEADER_NAME },
-      false,
-      async (value: string, done: DoneCallback) => {
-        try {
-          const user = await this.authService.validateToken(value);
+	constructor(private authService: AuthService) {
+		// Signature from http://www.passportjs.org/packages/passport-headerapikey/
+		super(
+			{ header: TOKEN_HEADER_NAME },
+			false,
+			async (value: string, done: DoneCallback) => {
+				try {
+					const user = await this.authService.validateToken(value);
 
-          done(null, user, authInfo);
-        } catch (error) {
-          done(null, false, authInfo);
-        }
-      },
-    );
-  }
+					done(null, user, authInfo);
+				} catch (error) {
+					done(null, false, authInfo);
+				}
+			},
+		);
+	}
 }

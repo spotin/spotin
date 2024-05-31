@@ -1,8 +1,13 @@
 ## Docker volumes
 postgres-data
 
-## Environment files
+## dotenv environment variables files
 .env
+.env.*
+!.env.defaults
+!.env.schema
+!.env.*.defaults
+!.env.*.schema
 
 ## Linux
 *~
@@ -29,14 +34,14 @@ postgres-data
 logs
 *.log
 
+# Coverage directory
+coverage
+
 # Dependency directories
 node_modules
 
 # NestJS build / generated output
 .nest
-
-## Traefik
-acme.json
 
 ## Windows
 

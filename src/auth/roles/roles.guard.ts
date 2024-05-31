@@ -6,22 +6,22 @@ import { Request } from 'express';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+	constructor(private reflector: Reflector) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+	async canActivate(context: ExecutionContext): Promise<boolean> {
+		const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+			context.getHandler(),
+			context.getClass(),
+		]);
 
-    if (!roles) {
-      return true;
-    }
+		if (!roles) {
+			return true;
+		}
 
-    const request: Request = context.switchToHttp().getRequest();
+		const request: Request = context.switchToHttp().getRequest();
 
-    const user = request.user as User;
+		const user = request.user as User;
 
-    return roles.includes(user.role);
-  }
+		return roles.includes(user.role);
+	}
 }

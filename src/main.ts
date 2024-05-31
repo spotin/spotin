@@ -4,11 +4,11 @@ import { bootstrap } from '@/bootstrap';
 import { AppModule } from '@/app.module';
 
 const main = async () => {
-  const instance = await NestFactory.create<NestExpressApplication>(AppModule);
+	const instance = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  const app = await bootstrap(instance);
+	const app = await bootstrap(instance);
 
-  await app.listen(3000);
+	await app.listen(3000);
 };
 
 main();

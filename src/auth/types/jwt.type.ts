@@ -1,3 +1,3 @@
 export type Jwt = {
-  jwt: string;
+	jwt: string;
 };

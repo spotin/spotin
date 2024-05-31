@@ -3,4 +3,4 @@ import { UnrestrictedAuthGuard } from '@/auth/unrestricted/unrestricted-auth.gua
 import { CanActivate, UseGuards, applyDecorators } from '@nestjs/common';
 
 export const UnrestrictedAuth = (...guards: (Function | CanActivate)[]) =>
-  applyDecorators(UseGuards(UnrestrictedAuthGuard, ...guards));
+	applyDecorators(UseGuards(UnrestrictedAuthGuard, ...guards));

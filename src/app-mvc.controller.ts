@@ -7,56 +7,56 @@ import { User } from '@prisma/client';
 @ApiTags('MVC - App')
 @Controller()
 export class AppMvcController {
-  @Get()
-  @JwtOrUnrestrictedAuth()
-  @ApiOperation({
-    summary: 'Render the main page',
-    description: 'Render the main page.',
-    operationId: 'root',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Render('index')
-  root(@AuthUser() user: User | undefined) {
-    return {
-      title: 'Home - Spot in',
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-    };
-  }
+	@Get()
+	@JwtOrUnrestrictedAuth()
+	@ApiOperation({
+		summary: 'Render the main page',
+		description: 'Render the main page.',
+		operationId: 'root',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	@Render('index')
+	root(@AuthUser() user: User | undefined) {
+		return {
+			title: 'Home - Spot in',
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+		};
+	}
 
-  @Get('api')
-  @ApiOperation({
-    summary: 'Render the Swagger UI page',
-    description: 'Render the Swagger UI page.',
-    operationId: 'api',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  api() {
-    return;
-  }
+	@Get('api')
+	@ApiOperation({
+		summary: 'Render the Swagger UI page',
+		description: 'Render the Swagger UI page.',
+		operationId: 'api',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	api() {
+		return;
+	}
 
-  @Get('not-found')
-  @JwtOrUnrestrictedAuth()
-  @ApiOperation({
-    summary: 'Render the not found page',
-    description: 'Render the not found page.',
-    operationId: 'notFound',
-  })
-  @ApiOkResponse({
-    description: 'Render successful.',
-  })
-  @Render('not-found')
-  notFound(@AuthUser() user: User | undefined) {
-    return {
-      title: 'Not Found - Spot in',
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-    };
-  }
+	@Get('not-found')
+	@JwtOrUnrestrictedAuth()
+	@ApiOperation({
+		summary: 'Render the not found page',
+		description: 'Render the not found page.',
+		operationId: 'notFound',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	@Render('not-found')
+	notFound(@AuthUser() user: User | undefined) {
+		return {
+			title: 'Not Found - Spot in',
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+		};
+	}
 }

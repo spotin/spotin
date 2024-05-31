@@ -1,30 +1,32 @@
 {
-  "name": "Spot in Development Container",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
-  "runArgs": ["-p=3000:3000"],
-  // Execute the post-create.sh script once the container is created
-  "postCreateCommand": "./.devcontainer/post-create.sh",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers-contrib/features/mkdocs:2": {}
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": [
-		"dbaeumer.vscode-eslint",
-		"esbenp.prettier-vscode",
-		"GitHub.copilot",
-		"ms-vsliveshare.vsliveshare",
-		"ms-azuretools.vscode-docker",
-		"Prisma.prisma",
-		"redhat.vscode-yaml",
-		"ronnidc.nunjucks",
-		"GitHub.vscode-github-actions"
-	]
-    }
-  },
-  // Map the user's SSH directory to the container for SSH signing
-  "mounts": [
-    "type=bind,source=${localEnv:HOME}/.ssh,target=${localEnv:HOME}/.ssh,type=bind,consistency=cached"
-  ]
+	"name": "Spot in Development Container",
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers-contrib/features/mkdocs:2": {},
+		"ghcr.io/meaningful-ooo/devcontainer-features/fish:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"EditorConfig.EditorConfig",
+				"GitHub.copilot",
+				"GitHub.vscode-github-actions",
+				"ms-azuretools.vscode-docker",
+				"eseom.nunjucks-template",
+				"Prisma.prisma",
+				"redhat.vscode-yaml",
+				"streetsidesoftware.code-spell-checker",
+				"streetsidesoftware.code-spell-checker-french"
+			]
+		}
+	},
+	// Map the user's SSH directory to the container for SSH signing
+	"mounts": [
+		"type=bind,source=${localEnv:HOME}/.ssh,target=${localEnv:HOME}/.ssh,type=bind,consistency=cached"
+	],
+	// Execute the post-create.sh script once the container is created
+	"postCreateCommand": "./.devcontainer/post-create.sh"
 }

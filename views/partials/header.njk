@@ -1,15 +1,38 @@
 <nav class="container-fluid">
-    <ul><a class="contrast" href="/"><img src="/images/logo.svg" alt="Spot in logo" width="200"/></a></ul>
-    <ul>
-        <!-- if is authenticated -->
-        {% if username %}
-        <li><a class="contrast" href="/spots"><i class="fas fa-map-marker-alt"></i> Spots</a></li>
-        <li><a class="contrast" href="/tokens"><i class="fas fa-key"></i> Tokens</a></li>
-        <li><a class="contrast" href="/auth/profile"><i class="fas fa-user"></i> {{ username }} </a></li>
-        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
-        {%  else  %}
-        <li><a href="/auth/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
-        {# <li><a href="/auth/signup" class="contrast"><i class="fas fa-edit"></i> Sign up</a></li> #}
-        {% endif %}
-    </ul>
+  <ul>
+    <a class="contrast" href="/"><img src="/images/logo.svg" alt="Spot in logo" width="200"/> </a>
+  </ul>
+  <ul>
+    <!-- if is authenticated -->
+    {% if username %}
+      <li>
+        <a class="contrast" href="/spots">
+          <i class="fas fa-map-marker-alt"></i>
+          Spots</a>
+      </li>
+      <li>
+        <a class="contrast" href="/tokens">
+          <i class="fas fa-key"></i>
+          Tokens</a>
+      </li>
+      <li>
+        <a class="contrast" href="/auth/profile">
+          <i class="fas fa-user"></i>
+          {{ username }}
+        </a>
+      </li>
+      <li>
+        <a href="/auth/logout">
+          <i class="fas fa-sign-out-alt"></i>
+          Log out</a>
+      </li>
+    {% else %}
+      <li>
+        <a href="/auth/login">
+          <i class="fas fa-sign-in-alt"></i>
+          Log in</a>
+      </li>
+      {# <li><a href="/auth/signup" class="contrast"><i class="fas fa-edit"></i> Sign up</a></li> #}
+    {% endif %}
+  </ul>
 </nav>

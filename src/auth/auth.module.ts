@@ -15,31 +15,31 @@ import { SpotsModule } from '@/spots/spots.module';
 import { UnrestrictedStrategy } from '@/auth/unrestricted/unrestricted.strategy';
 
 @Module({
-  imports: [
-    ConfigModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get(JWT_SECRET, { infer: true }),
-        signOptions: {
-          expiresIn: configService.get(JWT_EXPIRATION_TIME, { infer: true }),
-        },
-      }),
-    }),
-    PassportModule,
-    UsersModule,
-    SpotsModule,
-  ],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    LocalStrategy,
-    TokenStrategy,
-    UnconfiguredSpotStrategy,
-    UnrestrictedStrategy,
-  ],
-  controllers: [AuthApiController, AuthMvcController],
-  exports: [AuthService],
+	imports: [
+		ConfigModule,
+		JwtModule.registerAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: async (configService: ConfigService) => ({
+				secret: configService.get(JWT_SECRET, { infer: true }),
+				signOptions: {
+					expiresIn: configService.get(JWT_EXPIRATION_TIME, { infer: true }),
+				},
+			}),
+		}),
+		PassportModule,
+		UsersModule,
+		SpotsModule,
+	],
+	providers: [
+		AuthService,
+		JwtStrategy,
+		LocalStrategy,
+		TokenStrategy,
+		UnconfiguredSpotStrategy,
+		UnrestrictedStrategy,
+	],
+	controllers: [AuthApiController, AuthMvcController],
+	exports: [AuthService],
 })
 export class AuthModule {}

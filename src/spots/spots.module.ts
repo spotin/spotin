@@ -6,9 +6,9 @@ import { SpotsApiController } from '@/spots/spots-api.controller';
 import { SpotsMvcController } from '@/spots/spots-mvc.controller';
 
 @Module({
-  imports: [ConfigModule, PrismaModule],
-  providers: [SpotsService],
-  controllers: [SpotsApiController, SpotsMvcController],
-  exports: [SpotsService],
+	imports: [ConfigModule, PrismaModule],
+	providers: [SpotsService],
+	controllers: [SpotsApiController, SpotsMvcController],
+	exports: [SpotsService],
 })
 export class SpotsModule {}

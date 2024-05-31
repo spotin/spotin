@@ -4,5 +4,5 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class UnrestrictedAuthGuard extends AuthGuard(
-  PASSPORT_STRATEGY.UNRESTRICTED,
+	PASSPORT_STRATEGY.UNRESTRICTED,
 ) {}

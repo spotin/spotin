@@ -1,8 +1,11 @@
 # Install and configure Docker
 
-[Docker](../../explanations/about-docker/index.md) allows to create containers that are independent from your operating system. This allows to embed all your software needs and ship it to someone else.
+[Docker](../../explanations/about-docker/index.md) allows to create containers
+that are independent from your operating system. This allows to embed all your
+software needs and ship it to someone else.
 
-In this tutorial, you will install Docker in order to develop, build and ship your applications so that will work on other Dockers environments.
+In this tutorial, you will install Docker in order to develop, build and ship
+your applications so that will work on other Dockers environments.
 
 ## Steps
 
@@ -84,7 +87,8 @@ Congrats! You have successfully installed and configured Docker!
 
 ## Versions
 
-At the time of writing this tutorial, the versions for Docker and Docker Compose are as follow (on macOS).
+At the time of writing this tutorial, the versions for Docker and Docker Compose
+are as follow (on macOS).
 
 ```sh
 > docker --version
