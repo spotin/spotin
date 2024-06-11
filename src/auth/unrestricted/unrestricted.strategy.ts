@@ -1,7 +1,7 @@
-import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { PassportStrategy } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 import { Injectable } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
+import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 
 type DoneCallback = (
@@ -11,13 +11,13 @@ type DoneCallback = (
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-	strategy: PASSPORT_STRATEGY.UNRESTRICTED,
+	strategy: PassportStrategy.UNRESTRICTED,
 };
 
 @Injectable()
-export class UnrestrictedStrategy extends PassportStrategy(
+export class UnrestrictedStrategy extends NestPassportStrategy(
 	Strategy,
-	PASSPORT_STRATEGY.UNRESTRICTED,
+	PassportStrategy.UNRESTRICTED,
 ) {
 	constructor() {
 		// Signature from https://www.passportjs.org/packages/passport-custom/

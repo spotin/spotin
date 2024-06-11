@@ -8,9 +8,9 @@
 	"[jsonc]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	"[njk]": {
-		"editor.defaultFormatter": "eseom.nunjucks-template"
-	},
+	// "[njk]": {
+	// 	"editor.defaultFormatter": "eseom.nunjucks-template"
+	// },
 	"[prisma]": {
 		"editor.defaultFormatter": "Prisma.prisma"
 	},
@@ -26,7 +26,6 @@
 	"editor.formatOnSave": true,
 	"editor.renderWhitespace": "all",
 	"emmet.includeLanguages": {
-		"ejs": "html",
 		"njk": "html",
 		"nunjucks": "html"
 	},

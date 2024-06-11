@@ -13,19 +13,19 @@ import * as crypto from 'crypto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { NewTokenDto } from '@/tokens/dto/new-token.dto';
 
-@ApiTags('API - Tokens')
+@ApiTags('Tokens')
 @Controller('api/tokens')
-export class TokensApiController {
+export class TokensController {
 	constructor(private readonly tokensService: TokensService) {}
 
 	@GetMany({
 		name: 'Tokens',
 		summary: 'Get the tokens',
-		operationId: 'getTokensApi',
+		operationId: 'getTokens',
 		responseType: [ReadTokenDto],
 	})
 	@JwtAuth()
-	async getTokensApi(@AuthUser() user: User) {
+	async getTokens(@AuthUser() user: User) {
 		const tokens = await this.tokensService.getTokens(user);
 
 		const tokensDto = tokens.map((token) => new ReadTokenDto(token));
@@ -36,11 +36,11 @@ export class TokensApiController {
 	@GetOne({
 		name: 'Token',
 		summary: 'Get the specified token',
-		operationId: 'getTokenApi',
+		operationId: 'getToken',
 		responseType: ReadTokenDto,
 	})
 	@JwtAuth()
-	async getTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+	async getToken(@Param('id') id: string, @AuthUser() user: User) {
 		const token = await this.tokensService.getToken(id, user);
 
 		return new ReadTokenDto(token);
@@ -51,10 +51,10 @@ export class TokensApiController {
 		summary: 'Create a new token',
 		bodyType: CreateTokenDto,
 		responseType: NewTokenDto,
-		operationId: 'createTokenApi',
+		operationId: 'createToken',
 	})
 	@JwtAuth()
-	async createTokenApi(
+	async createToken(
 		@AuthUser() user: User,
 		@Body() createTokenDto: CreateTokenDto,
 	) {
@@ -75,10 +75,10 @@ export class TokensApiController {
 	@CustomDelete({
 		name: 'Token',
 		summary: 'Delete the specified token',
-		operationId: 'deleteTokenApi',
+		operationId: 'deleteToken',
 	})
 	@JwtAuth()
-	async deleteTokenApi(@Param('id') id: string, @AuthUser() user: User) {
+	async deleteToken(@Param('id') id: string, @AuthUser() user: User) {
 		await this.tokensService.deleteToken(id, user);
 	}
 }

@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Jwt } from '@/auth/types/jwt.type';
+import { Jwt } from '@/auth/jwt/types/jwt.type';
 
 export class JwtDto implements Jwt {
 	/**

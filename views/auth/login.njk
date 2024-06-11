@@ -4,31 +4,99 @@
     <i class="fas fa-sign-in-alt"></i>
     Log in
   </h1>
-  <p>
-    Please contact
-    <a href="mailto:info@spotin.ch">info@spotin.ch</a>
-    to create an account.</p>
-  {% if signupWaitingApproval %}
-    <div class="container flash info">You have been successfully signed up. An administrator will review your account and
-      you will receive an email when your account is approved.</div>
-  {% endif %}
-  <form action="/auth/login" method="POST">
-    <label for="username">Username</label>
-    {% if errors.username %}
-      <span class="error">The username field cannot be empty</span>
-      <input name="username" id="username" placeholder="Username" aria-invalid="true" autofocus>
-    {% else %}
-      <input type="username" name="username" id="username" placeholder="Username" autofocus>
-    {% endif %}
-    <label for="password">Password</label>
-    {% if errors.password %}
-      <span class="error">The password field cannot be empty</span>
-      <input name="password" id="password" placeholder="Password" aria-invalid="true">
-    {% else %}
+  <form id="login-form">
+    <fieldset>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Email" autofocus>
+    </fieldset>
+    <fieldset>
+      <label for="password">Password</label>
       <input type="password" name="password" id="password" placeholder="Password">
-    {% endif %}
+    </fieldset>
+    <div id="errors"></div>
     <button type="submit">
       <i class="fas fa-sign-in-alt"></i>
-      Log in</button>
+      Log in
+    </button>
   </form>
+  <p>
+    Don't have an account? <a href="/auth/register">Sign up</a>
+  </p>
+  <p>
+    Forgot your password? <a href="/auth/reset-password-request">Reset your password</a>
+  </p>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    const form = document.querySelector("#login-form");
+    const errors = document.querySelector("#errors");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Get the form data
+      const email = form.querySelector("#email");
+      const password = form.querySelector("#password");
+
+      // Reset error messages
+      email.removeAttribute('aria-invalid');
+      password.removeAttribute('aria-invalid');
+
+      errors.innerHTML = "";
+
+      try {
+        const body = JSON.stringify({
+          email: email.value,
+          password: password.value,
+        });
+
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: 'same-origin',
+          body
+        });
+
+        if (response.ok) {
+          // Save the JWT in cookies
+          const data = await response.json();
+
+          // TODO: Enable HttpOnly cookie
+          document.cookie = `jwt=${data.jwt}; path=/; Secure; HttpOnly; SameSite=Strict`;
+
+          window.location = "/";
+        } else {
+          if (response.status === 400) {
+            const error = await response.json();
+
+            const ul = document.createElement('ul');
+
+            for (const message of error.message) {
+              // Find the field that caused the error
+              const fieldName = message.split(' ')[0];
+              const field = document.querySelector (`#${fieldName}`);
+
+              field.setAttribute('aria-invalid', 'true');
+
+              // Create a list item with the error message
+              const li = document.createElement('li');
+              li.className = 'error';
+              li.innerHTML = message;
+              ul.appendChild(li);
+            }
+
+            errors.appendChild(ul);
+          } else {
+            errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+      }
+    });
+  </script>
 {% endblock %}

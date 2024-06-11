@@ -19,19 +19,19 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 
-@ApiTags('API - Spots')
+@ApiTags('Spots')
 @Controller('api/spots')
-export class SpotsApiController {
+export class SpotsController {
 	constructor(private readonly spotsService: SpotsService) {}
 
 	@GetMany({
 		path: 'public',
 		name: 'Spots',
 		summary: 'Get the public spots',
-		operationId: 'getPublicSpotsApi',
+		operationId: 'getPublicSpots',
 		responseType: [ReadSpotDto],
 	})
-	async getPublicSpotsApi() {
+	async getPublicSpots() {
 		const spots = await this.spotsService.getPublicSpots();
 
 		const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
@@ -45,7 +45,7 @@ export class SpotsApiController {
 	@ApiOperation({
 		summary: 'Configure the spot',
 		description: 'Configure the spot.',
-		operationId: 'configureSpotApi',
+		operationId: 'configureSpot',
 	})
 	@ApiParam({
 		name: 'id',
@@ -56,7 +56,7 @@ export class SpotsApiController {
 		description: 'The spot has been successfully configured.',
 		type: ReadSpotDto,
 	})
-	async configureSpotApi(
+	async configureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
@@ -80,11 +80,11 @@ export class SpotsApiController {
 	@GetMany({
 		name: 'Spots',
 		summary: 'Get the spots',
-		operationId: 'getSpotsApi',
+		operationId: 'getSpots',
 		responseType: [ReadSpotDto],
 	})
 	@TokenOrJwtAuth()
-	async getSpotsApi(@AuthUser() user: User) {
+	async getSpots(@AuthUser() user: User) {
 		const spots = await this.spotsService.getSpots(user);
 
 		const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
@@ -95,10 +95,10 @@ export class SpotsApiController {
 	@GetOne({
 		name: 'Spot',
 		summary: 'Get the specified spot',
-		operationId: 'getSpotApi',
+		operationId: 'getSpot',
 		responseType: ReadSpotDto,
 	})
-	async getSpotApi(@Param('id') id: string) {
+	async getSpot(@Param('id') id: string) {
 		const spot = await this.spotsService.getSpot(id);
 
 		return new ReadSpotDto(spot);
@@ -109,10 +109,10 @@ export class SpotsApiController {
 		summary: 'Create a new spot',
 		bodyType: CreateSpotDto,
 		responseType: ReadSpotDto,
-		operationId: 'createSpotApi',
+		operationId: 'createSpot',
 	})
 	@TokenOrJwtAuth()
-	async createSpotApi(
+	async createSpot(
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
 	) {
@@ -133,10 +133,10 @@ export class SpotsApiController {
 		summary: 'Update the specified spot',
 		bodyType: UpdateSpotDto,
 		responseType: ReadSpotDto,
-		operationId: 'updateSpotApi',
+		operationId: 'updateSpot',
 	})
 	@TokenOrJwtAuth()
-	async updateSpotApi(
+	async updateSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
@@ -162,10 +162,10 @@ export class SpotsApiController {
 	@CustomDelete({
 		name: 'Spot',
 		summary: 'Delete the specified spot',
-		operationId: 'deleteSpotApi',
+		operationId: 'deleteSpot',
 	})
 	@TokenOrJwtAuth()
-	async deleteSpotApi(@AuthUser() user: User, @Param('id') id: string) {
+	async deleteSpot(@AuthUser() user: User, @Param('id') id: string) {
 		await this.spotsService.deleteSpot(id, user);
 	}
 }

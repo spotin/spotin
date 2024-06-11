@@ -2,12 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
-import { LoginUser } from '@/auth/types/login-user.type';
-import { JwtPayload } from '@/auth/types/jwt-payload.type';
+import { LoginUser } from '@/auth/local/types/login-user.type';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { SpotsService } from '@/spots/spots.service';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import { Jwt } from '@/auth/types/jwt.type';
+import { Jwt } from '@/auth/jwt/types/jwt.type';
 
 @Injectable()
 export class AuthService {
@@ -17,8 +17,8 @@ export class AuthService {
 		private spotsService: SpotsService,
 	) {}
 
-	async validateCredentials({ username, password }: LoginUser): Promise<User> {
-		const user = (await this.usersService.getUserByUsername(username)) as User;
+	async validateCredentials({ email, password }: LoginUser): Promise<User> {
+		const user = (await this.usersService.getUserByEmail(email)) as User;
 
 		const passwordsMatch = bcrypt.compareSync(password, user.password);
 
@@ -72,6 +72,18 @@ export class AuthService {
 		}
 
 		const user = (await this.usersService.getUser(spot.userId)) as User;
+
+		return user;
+	}
+
+	async validatePasswordResetRequestToken(token: string): Promise<User> {
+		const user = (await this.usersService.getUserByResetPasswordRequestToken(
+			token,
+		)) as User;
+
+		if (!user) {
+			throw new UnauthorizedException();
+		}
 
 		return user;
 	}

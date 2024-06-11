@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthApiController } from '@/auth/auth-api.controller';
-import { AuthMvcController } from '@/auth/auth-mvc.controller';
+import { AuthController } from '@/auth/auth.controller';
+import { AuthViewsController } from '@/auth/auth-views.controller';
 import { LocalStrategy } from '@/auth/local/local.strategy';
 import { JwtStrategy } from '@/auth/jwt/jwt.strategy';
 import { AuthService } from '@/auth/auth.service';
@@ -13,6 +13,8 @@ import { TokenStrategy } from '@/auth/token/token.strategy';
 import { UnconfiguredSpotStrategy } from '@/auth/unconfigured-spot/unconfigured-spot.strategy';
 import { SpotsModule } from '@/spots/spots.module';
 import { UnrestrictedStrategy } from '@/auth/unrestricted/unrestricted.strategy';
+import { ResetPasswordRequestsModule } from '@/reset-password-requests/reset-password-requests.module';
+import { ResetPasswordStrategy } from '@/auth/reset-password/reset-password.strategy';
 
 @Module({
 	imports: [
@@ -28,6 +30,7 @@ import { UnrestrictedStrategy } from '@/auth/unrestricted/unrestricted.strategy'
 			}),
 		}),
 		PassportModule,
+		ResetPasswordRequestsModule,
 		UsersModule,
 		SpotsModule,
 	],
@@ -35,11 +38,12 @@ import { UnrestrictedStrategy } from '@/auth/unrestricted/unrestricted.strategy'
 		AuthService,
 		JwtStrategy,
 		LocalStrategy,
+		ResetPasswordStrategy,
 		TokenStrategy,
 		UnconfiguredSpotStrategy,
 		UnrestrictedStrategy,
 	],
-	controllers: [AuthApiController, AuthMvcController],
+	controllers: [AuthController, AuthViewsController],
 	exports: [AuthService],
 })
 export class AuthModule {}

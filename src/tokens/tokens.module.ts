@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TokensService } from './tokens.service';
-import { TokensApiController } from './tokens-api.controller';
+import { TokensController } from './tokens.controller';
 import { PrismaModule } from 'nestjs-prisma';
-import { TokensMvcController } from '@/tokens/tokens-mvc.controller';
+import { TokensMvcController } from '@/tokens/tokens-views.controller';
 
 @Module({
 	imports: [PrismaModule],
-	controllers: [TokensApiController, TokensMvcController],
+	controllers: [TokensController, TokensMvcController],
 	providers: [TokensService],
 	exports: [TokensService],
 })

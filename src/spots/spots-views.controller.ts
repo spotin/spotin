@@ -6,21 +6,16 @@ import {
 	Param,
 	Res,
 	UseFilters,
-	Session,
 	Redirect,
-	Post,
-	Body,
-	HttpCode,
 } from '@nestjs/common';
 import {
-	ApiCreatedResponse,
 	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
@@ -30,20 +25,12 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { UnauthorizedMvcExceptionFilter } from '@/common/filters/unauthorized-mvc-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { BadRequestMvcExceptionFilter } from '@/common/filters/bad-request-mvc-exception.filter';
-import { SessionData } from 'express-session';
-import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
-import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
-import { ConfiguredSpotMvcExceptionFilter } from '@/spots/filters/configured-spot-mvc-exception.filter';
-import { NotFoundMvcExceptionFilter } from '@/common/filters/not-found-mvc-exception.filter';
 
-@ApiTags('MVC - Spots')
+@ApiTags('Spots')
 @Controller('spots')
 @UseFilters(UnauthorizedMvcExceptionFilter)
-@UseFilters(BadRequestMvcExceptionFilter)
-@UseFilters(NotFoundMvcExceptionFilter)
-export class SpotsMvcController {
+export class SpotsViewsController {
 	constructor(
 		private readonly spotsService: SpotsService,
 		private readonly configService: ConfigService,
@@ -54,23 +41,18 @@ export class SpotsMvcController {
 	@ApiOperation({
 		summary: 'Render the create a new spot page',
 		description: 'Render the create a new spot page.',
-		operationId: 'renderCreateSpotMvc',
+		operationId: 'renderCreateSpot',
 	})
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	renderCreateSpotMvc(@AuthUser() user: User, @Session() session: SessionData) {
-		// Get errors and body from the session
-		const { errors, body } = session;
-
+	renderCreateSpot(@AuthUser() user: User) {
 		return {
-			title: 'Create a new spot - Spot in',
+			title: 'Create a new spot | Spot in',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
-			errors,
-			spot: body,
 			action: `/spots`,
 		};
 	}
@@ -80,17 +62,17 @@ export class SpotsMvcController {
 	@ApiOperation({
 		summary: 'Render the list of latest public spots page',
 		description: 'Render the list of latest public spots page.',
-		operationId: 'renderLatestSpotsMvc',
+		operationId: 'renderLatestSpots',
 	})
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
 	@Render('spots/latest')
-	async renderLatestSpotsMvc(@AuthUser() user: User | undefined) {
+	async renderLatestSpots(@AuthUser() user: User | undefined) {
 		const spots = await this.spotsService.getPublicSpots();
 
 		return {
-			title: 'Latest spots - Spot in',
+			title: 'Latest spots | Spot in',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
@@ -103,17 +85,17 @@ export class SpotsMvcController {
 	@ApiOperation({
 		summary: 'Render the spots page',
 		description: 'Render the spots page.',
-		operationId: 'renderSpotsListMvc',
+		operationId: 'renderSpotsList',
 	})
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
 	@Render('spots/list')
-	async renderSpotsListMvc(@AuthUser() user: User) {
+	async renderSpotsList(@AuthUser() user: User) {
 		const spots = await this.spotsService.getSpots(user);
 
 		return {
-			title: 'Spots - Spot in',
+			title: 'Spots | Spot in',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -123,11 +105,10 @@ export class SpotsMvcController {
 
 	@Get(':id/configure')
 	@UnconfiguredSpotAuth()
-	@UseFilters(ConfiguredSpotMvcExceptionFilter)
 	@ApiOperation({
 		summary: 'Render the configure a spot page',
 		description: 'Render the configure a spot page.',
-		operationId: 'renderConfigureSpotMvc',
+		operationId: 'renderConfigureSpot',
 	})
 	@ApiParam({
 		name: 'id',
@@ -138,68 +119,16 @@ export class SpotsMvcController {
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	async renderConfigureSpotMvc(
-		@AuthUser() user: User,
-		@Param('id') id: string,
-		@Session() session: SessionData,
-	) {
+	async renderConfigureSpot(@AuthUser() user: User, @Param('id') id: string) {
 		const spot = await this.spotsService.getSpot(id, user);
-
-		// Get errors and body from the session
-		const { errors, body } = session;
 
 		return {
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
-			spot: body ? body : spot,
-			errors,
+			spot,
 			action: `/spots/${id}/configure`,
 		};
-	}
-
-	@Post(':id/configure')
-	@UnconfiguredSpotAuth()
-	@UseFilters(ConfiguredSpotMvcExceptionFilter)
-	@HttpCode(200)
-	@ApiOperation({
-		summary: 'Configure the spot',
-		description: 'Configure the spot. Redirect to `/spots/:id`.',
-		operationId: 'configureSpotMvc',
-	})
-	@ApiParam({
-		name: 'id',
-		description: 'The spot ID.',
-		format: 'uuid',
-	})
-	@ApiOkResponse({
-		description: 'Redirect successful.',
-	})
-	async configureSpotMvc(
-		@AuthUser() user: User,
-		@Param('id') id: string,
-		@Body() updateSpot: UpdateSpotDto,
-		@Res({ passthrough: true }) res: Response,
-		@Session() session: SessionData,
-	) {
-		updateSpot.configured = true;
-		updateSpot.referenced = undefined;
-
-		await this.spotsService.updateSpot(
-			id,
-			{
-				...updateSpot,
-				// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
-				payload: updateSpot.payload ? updateSpot.payload : Prisma.DbNull,
-			},
-			user,
-		);
-
-		// Clear session
-		delete session.errors;
-		delete session.body;
-
-		res.redirect(`/spots/${id}`);
 	}
 
 	@Get(':id/delete')
@@ -207,7 +136,7 @@ export class SpotsMvcController {
 	@ApiOperation({
 		summary: 'Delete the specified spot',
 		description: 'Delete the specified spot. Redirect to `/spots` page.',
-		operationId: 'deleteSpotMvc',
+		operationId: 'deleteSpot',
 	})
 	@ApiParam({
 		name: 'id',
@@ -218,7 +147,7 @@ export class SpotsMvcController {
 		description: 'Redirect successful.',
 	})
 	@Redirect('/spots')
-	async deleteSpotMvc(@AuthUser() user: User, @Param('id') id: string) {
+	async deleteSpot(@AuthUser() user: User, @Param('id') id: string) {
 		await this.spotsService.deleteSpot(id, user);
 	}
 
@@ -227,7 +156,7 @@ export class SpotsMvcController {
 	@ApiOperation({
 		summary: 'Render the edit a spot page',
 		description: 'Render the edit a spot page.',
-		operationId: 'renderEditSpotMvc',
+		operationId: 'renderEditSpot',
 	})
 	@ApiParam({
 		name: 'id',
@@ -237,24 +166,19 @@ export class SpotsMvcController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	async renderEditSpotMvc(
+	async renderEditSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-		@Session() session: SessionData,
 		@Res() res: Response,
 	) {
 		try {
 			const spot = await this.spotsService.getSpot(id, user);
 
-			// Get errors and body from the session
-			const { errors, body } = session;
-
 			res.render('spots/form', {
 				username: user?.username,
 				email: user?.email,
 				role: user?.role,
-				spot: body ? body : spot,
-				errors,
+				spot,
 				action: `/spots/${id}`,
 			});
 		} catch (error) {
@@ -300,7 +224,7 @@ export class SpotsMvcController {
 	@ApiOperation({
 		summary: 'Render the specified spot page',
 		description: 'Render the specified spot page.',
-		operationId: 'renderSpotMvc',
+		operationId: 'renderSpot',
 	})
 	@ApiParam({
 		name: 'id',
@@ -313,7 +237,7 @@ export class SpotsMvcController {
 	@ApiNotFoundResponse({
 		description: 'Spot has not been found. Redirect to `/not-found` page.',
 	})
-	async renderSpotMvc(
+	async renderSpot(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
 		@Param('id') id: string,
@@ -336,77 +260,5 @@ export class SpotsMvcController {
 		} catch (error) {
 			console.error(error);
 		}
-	}
-
-	@Post(':id')
-	@JwtAuth()
-	@HttpCode(200)
-	@ApiOperation({
-		summary: 'Update the specified spot',
-		description: 'Update the specified spot. Redirect to `/spots/:id`.',
-		operationId: 'updateSpotMvc',
-	})
-	@ApiParam({
-		name: 'id',
-		description: 'The spot ID.',
-		format: 'uuid',
-	})
-	@ApiOkResponse({
-		description: 'Redirect successful.',
-	})
-	async updateSpotMvc(
-		@AuthUser() user: User,
-		@Param('id') id: string,
-		@Body() updateSpot: UpdateSpotDto,
-		@Res({ passthrough: true }) res: Response,
-		@Session() session: SessionData,
-	) {
-		await this.spotsService.updateSpot(
-			id,
-			{
-				...updateSpot,
-				// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
-				payload: updateSpot.payload ? updateSpot.payload : Prisma.DbNull,
-			},
-			user,
-		);
-
-		// Clear session
-		delete session.errors;
-		delete session.body;
-
-		res.redirect(`/spots/${id}`);
-	}
-
-	@Post()
-	@JwtAuth()
-	@ApiOperation({
-		summary: 'Create a new spot',
-		description: 'Create a new spot. Redirect to `/spots/:id`.',
-		operationId: 'createSpotMvc',
-	})
-	@ApiCreatedResponse({
-		description: 'Redirect successful.',
-	})
-	async createSpotMvc(
-		@AuthUser() user: User,
-		@Body() createSpotDto: CreateSpotDto,
-		@Res({ passthrough: true }) res: Response,
-		@Session() session: SessionData,
-	) {
-		const newSpot = await this.spotsService.createSpot(
-			{
-				...createSpotDto,
-				// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
-				payload: createSpotDto.payload ? createSpotDto.payload : Prisma.DbNull,
-			},
-			user,
-		);
-
-		// Clear session
-		delete session.errors;
-		delete session.body;
-
-		res.redirect(`/spots/${newSpot.id}`);
 	}
 }

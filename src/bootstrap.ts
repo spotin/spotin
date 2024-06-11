@@ -1,21 +1,20 @@
 import * as nunjucks from 'nunjucks';
 import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
-import { SESSION_SECRET } from '@/config/config.constants';
-import { PASSPORT_STRATEGY, TOKEN_HEADER_NAME } from '@/auth/auth.constants';
+import {
+	PASSWORD_RESET_HEADER_NAME,
+	PassportStrategy,
+	TOKEN_HEADER_NAME,
+} from '@/auth/auth.constants';
 
 export async function bootstrap(
 	app: NestExpressApplication,
 ): Promise<NestExpressApplication> {
-	const configService = app.get(ConfigService);
-
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
@@ -32,23 +31,6 @@ export async function bootstrap(
 
 	// https://docs.nestjs.com/techniques/session
 	app.set('trust proxy', process.env.NODE_ENV === 'production');
-
-	const sessionSecret = configService.get(SESSION_SECRET, { infer: true });
-
-	app.use(
-		session({
-			secret: sessionSecret,
-			resave: false,
-			saveUninitialized: false,
-			rolling: true,
-			name: 'sid',
-			cookie: {
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
-				sameSite: true,
-			},
-		}),
-	);
 
 	nunjucks
 		.configure(join(__dirname, '..', 'views'), {
@@ -70,7 +52,7 @@ export async function bootstrap(
 				type: 'http',
 				description: 'The JWT to access protected endpoints',
 			},
-			PASSPORT_STRATEGY.JWT,
+			PassportStrategy.JWT,
 		)
 		.addApiKey(
 			{
@@ -78,7 +60,15 @@ export async function bootstrap(
 				description: 'The token to access protected endpoints',
 				name: TOKEN_HEADER_NAME,
 			},
-			PASSPORT_STRATEGY.TOKEN,
+			PassportStrategy.TOKEN,
+		)
+		.addApiKey(
+			{
+				type: 'apiKey',
+				description: 'The token to reset the password',
+				name: PASSWORD_RESET_HEADER_NAME,
+			},
+			PassportStrategy.RESET_PASSWORD,
 		)
 		.build();
 
