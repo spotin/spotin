@@ -5,7 +5,7 @@ import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 
-@ApiTags('Users')
+@ApiTags('Views')
 @Controller('users')
 @JwtAuth(RolesGuard)
 @Roles(UserRole.ADMIN)

@@ -27,7 +27,7 @@ import { UnauthorizedMvcExceptionFilter } from '@/common/filters/unauthorized-mv
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 
-@ApiTags('Spots')
+@ApiTags('Views')
 @Controller('spots')
 @UseFilters(UnauthorizedMvcExceptionFilter)
 export class SpotsViewsController {

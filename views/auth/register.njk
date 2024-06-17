@@ -4,14 +4,13 @@
     <i class="fas fa-edit"></i>
     Sign up
   </h1>
-  <form id="register-form">
+  <form id="form">
     <fieldset>
       <label for="username">Username</label>
-      <input type="username" name="username" id="username" placeholder="Username" autofocus required>
-    </fieldset>
-    <fieldset>
+      <input type="username" name="username" id="username" placeholder="Username" autofocus="autofocus" required="required">
+
       <label for="email">Email</label>
-      <input type="text" name="email" id="email" placeholder="Email" autofocus required>
+      <input type="text" name="email" id="email" placeholder="Email" autofocus="autofocus" required="required">
     </fieldset>
     <div id="success"></div>
     <div id="errors"></div>
@@ -21,16 +20,18 @@
     </button>
   </form>
   <p>
-    Already have an account? <a href="/auth/login">Log in</a>
+    Already have an account?
+    <a href="/auth/login">Log in</a>
   </p>
   <p>
-    Forgot your password? <a href="/auth/reset-password-request">Reset your password</a>
+    Forgot your password?
+    <a href="/auth/reset-password-request">Reset your password</a>
   </p>
 {% endblock %}
 
 {% block javascript %}
   <script>
-    const form = document.querySelector("#register-form");
+    const form = document.querySelector("#form");
     const success = document.querySelector("#success");
     const errors = document.querySelector("#errors");
 
@@ -49,10 +50,7 @@
       errors.innerHTML = "";
 
       try {
-        const body = JSON.stringify({
-          username: username.value,
-          email: email.value,
-        });
+        const body = JSON.stringify({username: username.value, email: email.value});
 
         const response = await fetch("/api/auth/register", {
           method: "POST",
@@ -74,7 +72,7 @@
             for (const message of error.message) {
               // Find the field that caused the error
               const fieldName = message.split(' ')[0];
-              const field = document.querySelector (`#${fieldName}`);
+              const field = document.querySelector(`#${fieldName}`);
 
               field.setAttribute('aria-invalid', 'true');
 

@@ -1,10 +1,11 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Query, Render, Res } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
-@ApiTags('Auth')
+@ApiTags('Views')
 @Controller('auth')
 export class AuthViewsController {
 	@Get('login')
@@ -20,6 +21,24 @@ export class AuthViewsController {
 	renderLogin() {
 		return {
 			title: 'Log in | Spot in',
+		};
+	}
+
+	@Get('logout')
+	@ApiOperation({
+		summary: 'Render the logout page',
+		description: 'Render the logout page.',
+		operationId: 'renderLogout',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	@Render('auth/logout')
+	renderLogout(@Res({ passthrough: true }) res: Response) {
+		res.clearCookie('jwt');
+
+		return {
+			title: 'Logout | Spot in',
 		};
 	}
 
@@ -64,11 +83,15 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('auth/reset-password')
-	renderResetPassword() {
-		return {
+	renderResetPassword(@Res() res: Response, @Query('token') token: string) {
+		if (!token) {
+			return res.redirect('/auth/reset-password-request');
+		}
+
+		return res.render('auth/reset-password', {
 			title: 'Reset password | Spot in',
-		};
+			token,
+		});
 	}
 
 	@Get('profile')

@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { Token, User } from '@prisma/client';
 
-@ApiTags('Tokens')
+@ApiTags('Views')
 @Controller('tokens')
 @UseFilters(UnauthorizedMvcExceptionFilter)
 export class TokensMvcController {

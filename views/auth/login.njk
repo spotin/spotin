@@ -4,14 +4,13 @@
     <i class="fas fa-sign-in-alt"></i>
     Log in
   </h1>
-  <form id="login-form">
+  <form id="form">
     <fieldset>
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Email" autofocus>
-    </fieldset>
-    <fieldset>
+      <input type="email" name="email" id="email" placeholder="Email" autofocus="autofocus" required="required">
+
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" placeholder="Password">
+      <input type="password" name="password" id="password" placeholder="Password" autofocus="autofocus" required="required">
     </fieldset>
     <div id="errors"></div>
     <button type="submit">
@@ -20,16 +19,18 @@
     </button>
   </form>
   <p>
-    Don't have an account? <a href="/auth/register">Sign up</a>
+    Don't have an account?
+    <a href="/auth/register">Sign up</a>
   </p>
   <p>
-    Forgot your password? <a href="/auth/reset-password-request">Reset your password</a>
+    Forgot your password?
+    <a href="/auth/reset-password-request">Reset your password</a>
   </p>
 {% endblock %}
 
 {% block javascript %}
   <script>
-    const form = document.querySelector("#login-form");
+    const form = document.querySelector("#form");
     const errors = document.querySelector("#errors");
 
     form.addEventListener("submit", async (event) => {
@@ -46,27 +47,17 @@
       errors.innerHTML = "";
 
       try {
-        const body = JSON.stringify({
-          email: email.value,
-          password: password.value,
-        });
+        const body = JSON.stringify({email: email.value, password: password.value});
 
         const response = await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          credentials: 'same-origin',
           body
         });
 
         if (response.ok) {
-          // Save the JWT in cookies
-          const data = await response.json();
-
-          // TODO: Enable HttpOnly cookie
-          document.cookie = `jwt=${data.jwt}; path=/; Secure; HttpOnly; SameSite=Strict`;
-
           window.location = "/";
         } else {
           if (response.status === 400) {
@@ -77,7 +68,7 @@
             for (const message of error.message) {
               // Find the field that caused the error
               const fieldName = message.split(' ')[0];
-              const field = document.querySelector (`#${fieldName}`);
+              const field = document.querySelector(`#${fieldName}`);
 
               field.setAttribute('aria-invalid', 'true');
 

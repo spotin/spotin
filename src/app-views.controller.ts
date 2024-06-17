@@ -4,7 +4,7 @@ import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
-@ApiTags('App')
+@ApiTags('Views')
 @Controller()
 export class AppController {
 	@Get()

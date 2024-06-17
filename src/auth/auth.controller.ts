@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Res } from '@nestjs/common';
 import {
 	ApiBody,
 	ApiConflictResponse,
@@ -18,6 +18,7 @@ import { ResetPasswordAuth } from '@/auth/reset-password/reset-password.decorato
 import { ResetPasswordDto } from '@/auth/reset-password/dtos/reset-password.dto';
 import { ResetPasswordRequestsService } from '@/reset-password-requests/reset-password-requests.service';
 import { ResetPasswordRequestDto } from '@/auth/reset-password/dtos/reset-password-request.dto';
+import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -44,12 +45,20 @@ export class AuthController {
 		description: 'The user has been successfully logged in.',
 		type: JwtDto,
 	})
-	async login(@AuthUser() user: User) {
+	async login(
+		@AuthUser() user: User,
+		@Res({ passthrough: true }) res: Response,
+	) {
 		const jwt = await this.authService.generateJwt(user);
 
 		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
 			user,
 		);
+
+		res.cookie('jwt', jwt.jwt, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+		});
 
 		return new JwtDto(jwt);
 	}

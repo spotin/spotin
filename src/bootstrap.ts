@@ -83,6 +83,7 @@ export async function bootstrap(
 		},
 	});
 
+	// https://docs.nestjs.com/techniques/cookies
 	app.use(cookieParser());
 
 	return app;
