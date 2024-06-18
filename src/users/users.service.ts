@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import * as bcrypt from 'bcrypt';
+import * as argon2id from 'argon2';
 import { randomBytes } from 'crypto';
 import { ResetPasswordRequestsService } from '@/reset-password-requests/reset-password-requests.service';
 
@@ -71,10 +71,7 @@ export class UsersService {
 
 	async createUser(createUser: Omit<Prisma.UserCreateInput, 'password'>) {
 		// Generate a random password for the user until they set it
-		const password = await bcrypt.hashSync(
-			randomBytes(20).toString('hex'),
-			bcrypt.genSaltSync(10),
-		);
+		const password = await argon2id.hash(randomBytes(20).toString('hex'));
 
 		const newUser = await this.prisma.user.create({
 			data: {
@@ -97,7 +94,7 @@ export class UsersService {
 		let password = updateUser.password;
 
 		if (password && typeof password === 'string') {
-			password = await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+			password = await argon2id.hash(password);
 		}
 
 		return await this.prisma.user.update({

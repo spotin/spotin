@@ -5,7 +5,7 @@ import { UsersService } from '@/users/users.service';
 import { LoginUser } from '@/auth/local/types/login-user.type';
 import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { SpotsService } from '@/spots/spots.service';
-import * as bcrypt from 'bcrypt';
+import * as argon2id from 'argon2';
 import * as crypto from 'crypto';
 import { Jwt } from '@/auth/jwt/types/jwt.type';
 
@@ -20,7 +20,10 @@ export class AuthService {
 	async validateCredentials({ email, password }: LoginUser): Promise<User> {
 		const user = (await this.usersService.getUserByEmail(email)) as User;
 
-		const passwordsMatch = bcrypt.compareSync(password, user.password);
+		const passwordsMatch = await argon2id.verify(
+			user.password,
+			password as string,
+		);
 
 		if (!user.enabled || !passwordsMatch) {
 			throw new UnauthorizedException();
