@@ -1,5 +1,5 @@
-const { PrismaClient, UserRole } = require('@prisma/client');
-const bcrypt = require('bcrypt');
+import { PrismaClient, UserRole } from '@prisma/client';
+import * as argon2id from 'argon2';
 
 const prisma = new PrismaClient();
 
@@ -9,10 +9,9 @@ async function main() {
 		update: {},
 		create: {
 			username: 'admin',
-			email: process.env.SPOT_IN_ADMIN_EMAIL,
-			password: await bcrypt.hashSync(
-				process.env.SPOT_IN_ADMIN_PASSWORD,
-				bcrypt.genSaltSync(10),
+			email: process.env.SPOT_IN_ADMIN_EMAIL as string,
+			password: await argon2id.hash(
+				process.env.SPOT_IN_ADMIN_PASSWORD as string,
 			),
 			enabled: true,
 			role: UserRole.ADMIN,
