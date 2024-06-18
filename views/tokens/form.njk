@@ -2,19 +2,92 @@
 {% block body %}
   <h2>
     <i class="fas fa-key"></i>
-    New token</h2>
-  <form action="/tokens" method="POST">
+    New token
+  </h2>
+  <form id="form">
     <fieldset>
       <label for="name">Name</label>
-      {% if errors.name %}
-        <span class="error">The name field cannot be empty</span>
-        <input name="name" id="name" placeholder="Name" value="{{ token.name }}" aria-invalid="true" autofocus/>
-      {% else %}
-        <input name="name" id="name" placeholder="Name" value="{{ token.name }}" autofocus/>
-      {% endif %}
+      <input name="name" id="name" placeholder="Name" autofocus="autofocus" required="required"/>
+
+      <label for="value">Value</label>
+      <input type="value" name="value" id="value" readonly="readonly" autocomplete="off"/>
     </fieldset>
-    <button type="submit">
-      <i class="fas fa-save"></i>New token
+    <div id="success"></div>
+    <div id="errors"></div>
+    <button id="button" name="button" type="submit">
+      <i class="fas fa-save"></i>
+      New token
     </button>
   </form>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    const form = document.querySelector("#form");
+    const success = document.querySelector("#success");
+    const errors = document.querySelector("#errors");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Get the form data
+      const name = form.querySelector("#name");
+      const value = form.querySelector("#value");
+      const button = form.querySelector("#button");
+
+      // Reset error messages
+      name.removeAttribute('aria-invalid');
+      name.removeAttribute('disabled');
+      button.removeAttribute('disabled');
+
+      success.innerHTML = "";
+      errors.innerHTML = "";
+
+      const body = JSON.stringify({name: name.value});
+
+      const response = await fetch("/api/tokens", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });
+
+      if (response.ok) {
+        const token = await response.json();
+
+        value.value = token.value;
+
+        name.setAttribute('disabled', 'disabled');
+        button.setAttribute('disabled', 'disabled');
+
+        success.innerHTML = "<p class=\"success\">Token created successfully. Please copy it to a safe location. You will not be able to view it again.</p>";
+
+      } else {
+        if (response.status === 400) {
+          const error = await response.json();
+
+          const ul = document.createElement('ul');
+
+          for (const message of error.message) {
+            // Find the field that caused the error
+            const fieldName = message.split(' ')[0];
+            const field = document.querySelector(`#${fieldName}`);
+
+            field.setAttribute('aria-invalid', 'true');
+
+            // Create a list item with the error message
+            const li = document.createElement('li');
+            li.className = 'error';
+            li.innerHTML = message;
+            ul.appendChild(li);
+          }
+
+          errors.appendChild(ul);
+        } else {
+          errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+        }
+      }
+    });
+  </script>
 {% endblock %}

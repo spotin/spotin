@@ -2,119 +2,197 @@
 {% block body %}
   <h2>
     <i class="fas fa-map-marker-alt"></i>
-    {{ title }}</h2>
-  <form id="form" action="{{ action }}">
-    <label for="title">
-      Title
-      {% if errors.title %}
-        <span class="error">Cannot be empty</span>
-        <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" aria-invalid="true" autofocus>
-        {% else %}
-          <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" autofocus>
-          {% endif %}
-        </label>
-        <label for="description">
-          Description
-          {% if errors.description %}
-            <span class="error">Cannot be empty</span>
-            <textarea id="description" type="text" name="description" placeholder="Description" aria-invalid="true" autofocus>{{ spot.description }}</textarea>
-          {% else %}
-            <textarea id="description" type="text" name="description" placeholder="Description">{{ spot.description }}</textarea>
-          {% endif %}
-        </label>
-        <!-- Prompt user for current location -->
-        <button
-          type="button"
-          onclick="navigator.geolocation.getCurrentPosition(position => { const { latitude, longitude } = position.coords;
-            document.getElementById('latitude').value = latitude.toFixed(5); document.getElementById('longitude').value =
-            longitude.toFixed(5); });">
-          <i class="fas fa-map-marker-alt"></i>
-          Use current location
-        </button>
-        <div class="grid">
-          <label for="latitude">
-            Latitude (between -90.0 and 90.0)
-            {% if errors.latitude %}
-              <span class="error">Latitude must be between -90.0 and 90.0</span>
-              <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188" value="{{ spot.latitude }}" aria-invalid="true" min="-90" max="90">
-              {% else %}
-                <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188" value="{{ spot.latitude }}" min="-90" max="90">
-                {% endif %}
-              </label>
-              <label for="longitude">
-                Longitude (between -180.0 and 180.0)
-                {% if errors.longitude %}
-                  <span class="error">Longitude must be between -180.0 and 180.0</span>
-                  <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227512" value="{{ spot.longitude }}" aria-invalid="true" min="-180" max="180">
-                  {% else %}
-                    <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227511" value="{{ spot.longitude }}" min="-180" max="180">
-                    {% endif %}
-                  </label>
-                </div>
-                <label for="payload">
-                  JSON payload
-                  {% if errors.payload %}
-                    <span class="error">Payload must be valid JSON</span>
-                    <textarea id="payload" type="text" name="payload" placeholder="JSON payload" aria-invalid="true">{{ spot.payload }}</textarea>
-                  {% else %}
-                    <textarea id="payload" type="text" name="payload" placeholder="JSON payload">{{ spot.payload }}</textarea>
-                  {% endif %}
-                </label>
-                <label for="redirection">
-                  Redirection URL
-                  {% if errors.redirection %}
-                    <span class="error">Redirection must be a valid URL</span>
-                    <input id="redirection" type="text" name="redirection" placeholder="http(s)://" value="{{ spot.redirection }}">
-                    {% else %}
-                      <input id="redirection" type="text" name="redirection" placeholder="http(s)://" value="{{ spot.redirection }}">
-                      {% endif %}
-                    </label>
-                    <label for="referenced" {{ 'hidden' if role === "GUEST" }}>
-                      Referenced
-                      <input id="referenced" type="checkbox" name="referenced" value="true" {% if spot.referenced %} checked {% endif %}></label>
-                      <label for="configured" {{ 'hidden' if role === "GUEST" }}>
-                        Configured
-                        <input id="configured" type="checkbox" name="configured" value="true" {% if spot.configured %} checked {% elif spot.configured == null %} checked {% endif %}></label>
-                        <br>
-                          <button type="submit">
-                            <i class="fas fa-save"></i>
-                            Save</button>
-                        </form>
-                        <script>
-                          const form = document.getElementById("form");
-                          form.addEventListener("submit", async (event) => {
-                            event.preventDefault();
-                            const title = document.getElementById("title").value;
-                            const description = document.getElementById("description").value;
-                            const longitude = document.getElementById("longitude").value;
-                            const latitude = document.getElementById("latitude").value;
-                            const payload = document.getElementById("payload").value;
-                            const redirection = document.getElementById("redirection").value;
-                            const referenced = document.getElementById("referenced").checked;
-                            const configured = document.getElementById("configured").checked;
-                            const createSpotDto = {
-                              title,
-                              description,
-                              longitude: longitude !== ''
-                                ? parseFloat(longitude)
-                                : undefined,
-                              latitude: latitude !== ''
-                                ? parseFloat(latitude)
-                                : undefined,
-                              payload,
-                              redirection,
-                              referenced: referenced,
-                              configured: configured
-                            }
-                            const response = await fetch(form.action, {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json"
-                              },
-                              body: JSON.stringify(createSpotDto)
-                            });
-                            // Redirect the user
-                            window.location.href = response.url;
-                          });
-                        </script>
-                      {% endblock %}
+    Create or manage a spot
+  </h2>
+  <form id="form">
+    <fieldset>
+      <input type="hidden" name="id" id="id" value="{{ spot.id }}">
+
+      <label for="title">Title</label>
+      <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" autofocus="autofocus">
+
+      <label for="description">Description</label>
+      <textarea id="description" type="text" name="description" placeholder="Description">{{ spot.description }}</textarea>
+
+      <!-- Prompt user for current location -->
+      <button type="button" id="get-location-button">
+        <i class="fas fa-map-marker-alt"></i>
+        Use current location
+      </button>
+
+      <label for="latitude">Latitude (between -90.0 and 90.0)</label>
+      <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188" value="{{ spot.latitude }}" min="-90" max="90">
+
+      <label for="longitude">Longitude (between -180.0 and 180.0)</label>
+      <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227511" value="{{ spot.longitude }}" min="-180" max="180">
+
+      <label for="payload">JSON payload</label>
+      <textarea id="payload" type="text" name="payload" placeholder="JSON payload">{{ spot.payload }}</textarea>
+
+      <label for="redirection">Redirection URL</label>
+      <input id="redirection" type="text" name="redirection" placeholder="http(s)://" value="{{ spot.redirection }}">
+
+      <label for="referenced" {{ 'hidden' if role == "GUEST" or role == "USER" }}>
+        <input id="referenced" type="checkbox" role="switch" name="referenced" value="true" {% if spot.referenced %} checked="checked" {% endif %}>
+        Referenced
+      </label>
+
+      <label for="configured" {{ 'hidden' if role == "GUEST" }}>
+        <input id="configured" type="checkbox" role="switch" name="configured" value="true" {% if spot.configured %} checked="checked" {% endif %}>
+        Configured
+      </label>
+    </fieldset>
+    <div id="success"></div>
+    <div id="errors"></div>
+    <button type="submit">
+      <i class="fas fa-save"></i>
+      Save
+    </button>
+  </form>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    const getLocationButton = document.querySelector("#get-location-button");
+
+    getLocationButton.addEventListener("click", async () => {
+      if (!navigator.geolocation) {
+        return;
+      }
+
+      const position = await new Promise((resolve, reject) => {
+        navigator
+          .geolocation
+          .getCurrentPosition(resolve, reject);
+      });
+
+      const latitude = document.querySelector("#latitude");
+      const longitude = document.querySelector("#longitude");
+
+      latitude.value = position
+        .coords
+        .latitude
+        .toFixed(5);
+      longitude.value = position
+        .coords
+        .longitude
+        .toFixed(5);
+    });
+
+    const form = document.querySelector("#form");
+    const success = document.querySelector("#success");
+    const errors = document.querySelector("#errors");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Get the form data
+      const id = form.querySelector("#id");
+      const title = form.querySelector("#title");
+      const description = form.querySelector("#description");
+      const latitude = form.querySelector("#latitude");
+      const longitude = form.querySelector("#longitude");
+      const payload = form.querySelector("#payload");
+      const redirection = form.querySelector("#redirection");
+      const referenced = form.querySelector("#referenced");
+      const configured = form.querySelector("#configured");
+
+      // Reset error messages
+      title.removeAttribute('aria-invalid');
+      description.removeAttribute('aria-invalid');
+      latitude.removeAttribute('aria-invalid');
+      longitude.removeAttribute('aria-invalid');
+      payload.removeAttribute('aria-invalid');
+      redirection.removeAttribute('aria-invalid');
+
+      success.innerHTML = "";
+      errors.innerHTML = "";
+
+      // Check if the latitude is between -90.0 and 90.0
+      if (latitude.value < -90 || latitude.value > 90) {
+        latitude.setAttribute('aria-invalid', 'true');
+
+        errors.innerHTML = "<p class=\"error\">Latitude must be between -90.0 and 90.0.</p>";
+
+        return;
+      }
+
+      // Check if the longitude is between -180.0 and 180.0
+      if (longitude.value < -180 || longitude.value > 180) {
+        longitude.setAttribute('aria-invalid', 'true');
+
+        errors.innerHTML = "<p class=\"error\">Longitude must be between -180.0 and 180.0.</p>";
+
+        return;
+      }
+
+      // Check if the payload is a valid JSON
+      if (payload.value !== "") {
+        try {
+          JSON.parse(payload.value);
+        } catch (error) {
+          payload.setAttribute('aria-invalid', 'true');
+
+          errors.innerHTML = "<p class=\"error\">Payload must be a valid JSON.</p>";
+
+          return;
+        }
+      }
+
+      const body = JSON.stringify({
+        title: title.value,
+        description: description.value,
+        latitude: latitude.value,
+        longitude: longitude.value,
+        payload: payload.value,
+        redirection: redirection.value,
+        referenced: referenced.checked,
+        configured: configured.checked
+      });
+
+      let endpoint = "/api/spots";
+      let method = "POST";
+
+      if (id.value) {
+        endpoint += `/${id.value}`;
+        method = "PATCH";
+      }
+
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });
+
+      if (response.ok) {
+        window.location.href = "/spots";
+      } else {
+        if (response.status === 400) {
+          const error = await response.json();
+
+          const ul = document.createElement('ul');
+
+          for (const message of error.message) {
+            // Find the field that caused the error
+            const fieldName = message.split(' ')[0];
+            const field = document.querySelector(`#${fieldName}`);
+
+            field.setAttribute('aria-invalid', 'true');
+
+            // Create a list item with the error message
+            const li = document.createElement('li');
+            li.className = 'error';
+            li.innerHTML = message;
+            ul.appendChild(li);
+          }
+
+          errors.appendChild(ul);
+        } else {
+          errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+        }
+      }
+    });
+  </script>
+{% endblock %}

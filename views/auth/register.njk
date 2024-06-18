@@ -1,0 +1,97 @@
+{% extends "layout.njk" %}
+{% block body %}
+  <h1>
+    <i class="fas fa-edit"></i>
+    Sign up
+  </h1>
+  <form id="form">
+    <fieldset>
+      <label for="username">Username</label>
+      <input type="username" name="username" id="username" placeholder="Username" autofocus="autofocus" required="required">
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Email" autofocus="autofocus" required="required">
+    </fieldset>
+    <div id="success"></div>
+    <div id="errors"></div>
+    <button type="submit">
+      <i class="fas fa-edit"></i>
+      Sign up
+    </button>
+  </form>
+  <p>
+    Already have an account?
+    <a href="/auth/login">Log in</a>
+  </p>
+  <p>
+    Forgot your password?
+    <a href="/auth/reset-password-request">Reset your password</a>
+  </p>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    const form = document.querySelector("#form");
+    const success = document.querySelector("#success");
+    const errors = document.querySelector("#errors");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Get the form data
+      const username = form.querySelector("#username");
+      const email = form.querySelector("#email");
+
+      // Reset error messages
+      username.removeAttribute('aria-invalid');
+      email.removeAttribute('aria-invalid');
+
+      success.innerHTML = "";
+      errors.innerHTML = "";
+
+      try {
+        const body = JSON.stringify({username: username.value, email: email.value});
+
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body
+        });
+
+        if (response.ok) {
+          success.innerHTML += "<p class=\"success\">You have successfully signed up. Please check your email to verify your account.<p>";
+          success.innerHTML += "<p class=\"success\">You can then <a href='/auth/login'>Log in</a>.</p>";
+        } else {
+          if (response.status === 400) {
+            const error = await response.json();
+
+            const ul = document.createElement('ul');
+
+            for (const message of error.message) {
+              // Find the field that caused the error
+              const fieldName = message.split(' ')[0];
+              const field = document.querySelector(`#${fieldName}`);
+
+              field.setAttribute('aria-invalid', 'true');
+
+              // Create a list item with the error message
+              const li = document.createElement('li');
+              li.className = 'error';
+              li.innerHTML = message;
+              ul.appendChild(li);
+            }
+
+            errors.appendChild(ul);
+          } else {
+            errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+      }
+    });
+  </script>
+{% endblock %}

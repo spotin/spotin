@@ -4,9 +4,9 @@ import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
-@ApiTags('MVC - App')
+@ApiTags('Views')
 @Controller()
-export class AppMvcController {
+export class AppController {
 	@Get()
 	@JwtOrUnrestrictedAuth()
 	@ApiOperation({
@@ -20,7 +20,7 @@ export class AppMvcController {
 	@Render('index')
 	root(@AuthUser() user: User | undefined) {
 		return {
-			title: 'Home - Spot in',
+			title: 'Home | Spot in',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
@@ -53,7 +53,7 @@ export class AppMvcController {
 	@Render('not-found')
 	notFound(@AuthUser() user: User | undefined) {
 		return {
-			title: 'Not Found - Spot in',
+			title: 'Not Found | Spot in',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,

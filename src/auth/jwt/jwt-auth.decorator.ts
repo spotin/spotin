@@ -6,16 +6,16 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
-import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { PassportStrategy } from '@/auth/auth.constants';
 
 export const JwtAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(JwtAuthGuard, ...guards),
-		ApiBearerAuth(PASSPORT_STRATEGY.JWT),
+		ApiBearerAuth(PassportStrategy.JWT),
 		ApiUnauthorizedResponse({
 			description: 'Wrong JWT.',
 		}),
 		ApiForbiddenResponse({
-			description: 'Unsufficient roles or permissions.',
+			description: 'Insufficient roles or permissions.',
 		}),
 	);

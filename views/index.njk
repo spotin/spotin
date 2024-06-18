@@ -8,21 +8,15 @@
     </h1>
     <p class="text-justify">
       <b>Spot in®</b>
-      est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur
-      de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez,
-      documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.
+      est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.
     </p>
     <p class="text-justify">
       <b>Spot in®</b>
-      ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im
-      Herzen des Internets der Orte verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkundet,
-      dokumentiert, entdeckt, lernt und lasst Euch verzaubern! Wir sorgen für den link, ihr für den Inhalt.
+      ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im Herzen des Internets der Orte verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkundet, dokumentiert, entdeckt, lernt und lasst Euch verzaubern! Wir sorgen für den link, ihr für den Inhalt.
     </p>
     <p class="text-justify">
       <b>Spot in®</b>
-      is the missing link between the physical space and the hidden treasures of information in the digital world. At the
-      heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore,
-      document, discover, learn and be amazed! We power the link, you the content.
+      is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed! We power the link, you the content.
     </p>
     <p>
       <a href="/spots/latest">
@@ -32,6 +26,9 @@
       </a>
     </p>
   </div>
+{% endblock %}
+
+{% block javascript %}
   <script>
     let count = 0;
     let words = ["places", "spots", "events"];
@@ -39,7 +36,9 @@
     // Change the keyword every 2 seconds
     setInterval(function () {
       count++;
-      document.getElementById("keyword").innerHTML = words[count % words.length];
+      document
+        .getElementById("keyword")
+        .innerHTML = words[count % words.length];
     }, 2000);
   </script>
 {% endblock %}

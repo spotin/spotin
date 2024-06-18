@@ -1,8 +1,8 @@
 import { HeaderAPIKeyStrategy } from 'passport-headerapikey';
-import { PassportStrategy } from '@nestjs/passport';
+import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
-import { TOKEN_HEADER_NAME, PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { TOKEN_HEADER_NAME, PassportStrategy } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 import { User } from '@prisma/client';
 
@@ -13,13 +13,13 @@ type DoneCallback = (
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-	strategy: PASSPORT_STRATEGY.TOKEN,
+	strategy: PassportStrategy.TOKEN,
 };
 
 @Injectable()
-export class TokenStrategy extends PassportStrategy(
+export class TokenStrategy extends NestPassportStrategy(
 	HeaderAPIKeyStrategy,
-	PASSPORT_STRATEGY.TOKEN,
+	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
 		// Signature from http://www.passportjs.org/packages/passport-headerapikey/

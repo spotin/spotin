@@ -5,9 +5,7 @@
       {{ title }}
     </title>
     <meta charset="UTF-8">
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="/stylesheets/cookieconsent.min.css"/>
     <link rel="stylesheet" href="/stylesheets/maplibre-gl.css"/>
     <link rel="stylesheet" href="/stylesheets/pico.min.css"/>
@@ -17,7 +15,7 @@
     <script src="/javascripts/regular.min.js"></script>
     <script src="/javascripts/solid.min.js"></script>
     <script src="/javascripts/fontawesome.min.js"></script>
-    <script defer src="/javascripts/script.js"></script>
+    <script defer="defer" src="/javascripts/script.js"></script>
   </head>
   <body>
     {% include "partials/header.njk" %}
@@ -26,5 +24,6 @@
       {% block body %}{% endblock %}
     </main>
     {% include "partials/footer.njk" %}
+    {% block javascript %}{% endblock %}
   </body>
 </html>

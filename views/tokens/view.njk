@@ -5,11 +5,10 @@
     Token</h1>
   <fieldset>
     <label for="name">Name</label>
-    <input type="name" name="name" id="name" value="{{ token.name }}" readonly/>
-  </fieldset>
-  <fieldset>
+    <input type="name" name="name" id="name" value="{{ token.name }}" disabled="disabled"/>
+
     <label for="value">Value</label>
-    <input type="value" name="value" id="value" {% if token.value == null %} value="The value is displayed only once, right after the creation of the token." disabled {% else %} value="{{ token.value }}" readonly {% endif %}/>
+    <input type="value" name="value" id="value" value="The value is displayed only once, right after the creation of the token." disabled="disabled"/>
   </fieldset>
   <a href="/tokens">
     <button>

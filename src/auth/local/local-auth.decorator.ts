@@ -6,16 +6,16 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LocalAuthGuard } from '@/auth/local/local-auth.guard';
-import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { PassportStrategy } from '@/auth/auth.constants';
 
 export const LocalAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(LocalAuthGuard, ...guards),
-		ApiSecurity(PASSPORT_STRATEGY.LOCAL),
+		ApiSecurity(PassportStrategy.LOCAL),
 		ApiUnauthorizedResponse({
 			description: 'Wrong username/password.',
 		}),
 		ApiForbiddenResponse({
-			description: 'Unsufficient roles or permissions.',
+			description: 'Insufficient roles or permissions.',
 		}),
 	);

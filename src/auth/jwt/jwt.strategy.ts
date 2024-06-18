@@ -1,13 +1,13 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { User } from '@prisma/client';
-import { JwtPayload } from '@/auth/types/jwt-payload.type';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { AuthService } from '@/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { JWT_SECRET } from '@/config/config.constants';
-import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { EnvironmentVariables, JWT_SECRET } from '@/config/config.constants';
+import { PassportStrategy } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 
 type DoneCallback = (
@@ -17,15 +17,18 @@ type DoneCallback = (
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-	strategy: PASSPORT_STRATEGY.JWT,
+	strategy: PassportStrategy.JWT,
 };
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(
+export class JwtStrategy extends NestPassportStrategy(
 	Strategy,
-	PASSPORT_STRATEGY.JWT,
+	authInfo.strategy,
 ) {
-	constructor(private authService: AuthService, configService: ConfigService) {
+	constructor(
+		private authService: AuthService,
+		configService: ConfigService<EnvironmentVariables, true>,
+	) {
 		// Signature from https://www.passportjs.org/packages/passport-jwt/
 		super(
 			{

@@ -15,7 +15,7 @@ import {
 import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { Type } from 'class-transformer';
 
-export class UserDto implements User {
+export class UserDto implements Omit<User, 'resetPasswordRequestId'> {
 	/**
 	 * Identification of the user
 	 */

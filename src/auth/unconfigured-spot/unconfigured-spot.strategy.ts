@@ -1,8 +1,8 @@
-import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { PassportStrategy } from '@/auth/auth.constants';
 import { AuthService } from '@/auth/auth.service';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
 import { User, UserRole } from '@prisma/client';
 import { Request } from 'express';
 import { Strategy } from 'passport-custom';
@@ -14,13 +14,13 @@ type DoneCallback = (
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-	strategy: PASSPORT_STRATEGY.UNCONFIGURED_SPOT,
+	strategy: PassportStrategy.UNCONFIGURED_SPOT,
 };
 
 @Injectable()
-export class UnconfiguredSpotStrategy extends PassportStrategy(
+export class UnconfiguredSpotStrategy extends NestPassportStrategy(
 	Strategy,
-	PASSPORT_STRATEGY.UNCONFIGURED_SPOT,
+	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
 		// Signature from https://www.passportjs.org/packages/passport-custom/

@@ -1,8 +1,8 @@
 import { Strategy } from 'passport-local';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
-import { PASSPORT_STRATEGY } from '@/auth/auth.constants';
+import { PassportStrategy } from '@/auth/auth.constants';
 import { User } from '@prisma/client';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
 
@@ -13,27 +13,33 @@ type DoneCallback = (
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-	strategy: PASSPORT_STRATEGY.LOCAL,
+	strategy: PassportStrategy.LOCAL,
 };
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(
+export class LocalStrategy extends NestPassportStrategy(
 	Strategy,
-	PASSPORT_STRATEGY.LOCAL,
+	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
 		// Signature from https://www.passportjs.org/packages/passport-local/
-		super(async (username: string, password: string, done: DoneCallback) => {
-			try {
-				const user = await this.authService.validateCredentials({
-					username,
-					password,
-				});
+		super(
+			{
+				usernameField: 'email',
+				passwordField: 'password',
+			},
+			async (email: string, password: string, done: DoneCallback) => {
+				try {
+					const user = await this.authService.validateCredentials({
+						email,
+						password,
+					});
 
-				done(null, user, authInfo);
-			} catch (error) {
-				done(null, false, authInfo);
-			}
-		});
+					done(null, user, authInfo);
+				} catch (error) {
+					done(null, false, authInfo);
+				}
+			},
+		);
 	}
 }

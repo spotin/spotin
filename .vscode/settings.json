@@ -9,7 +9,7 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[njk]": {
-		"editor.defaultFormatter": "eseom.nunjucks-template"
+		"editor.defaultFormatter": "douglaszaltron.nunjucks-vscode-extensionpack"
 	},
 	"[prisma]": {
 		"editor.defaultFormatter": "Prisma.prisma"
@@ -26,7 +26,6 @@
 	"editor.formatOnSave": true,
 	"editor.renderWhitespace": "all",
 	"emmet.includeLanguages": {
-		"ejs": "html",
 		"njk": "html",
 		"nunjucks": "html"
 	},
