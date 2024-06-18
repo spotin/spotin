@@ -78,7 +78,7 @@ export class ResetPasswordRequestsService {
 			requestPasswordReset = await this.createResetPasswordRequest(user.id);
 		}
 
-		await this.mail.sendPasswordResetMail(user, requestPasswordReset.token);
+		await this.mail.sendResetPasswordMail(user, requestPasswordReset.token);
 	}
 
 	async sendResetPasswordRequestForNewUser(newUser: User) {

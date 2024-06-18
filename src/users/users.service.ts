@@ -35,16 +35,6 @@ export class UsersService {
 		});
 	}
 
-	// TODO: Remove?
-	// async getUserByUsername(username: string) {
-	// 	return await this.prisma.user.findFirst({
-	// 		where: { username },
-	// 		include: {
-	// 			spots: true,
-	// 		},
-	// 	});
-	// }
-
 	async getUserByTokenHash(tokenHash: string) {
 		const token = await this.prisma.token.findFirst({
 			where: {

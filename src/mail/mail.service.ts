@@ -28,7 +28,7 @@ export class MailService {
 		});
 	}
 
-	public async sendPasswordResetMail(user: User, tokenId: string) {
+	public async sendResetPasswordMail(user: User, tokenId: string) {
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;

@@ -1,11 +1,5 @@
 import { Controller, Post, Body, HttpCode, Res } from '@nestjs/common';
-import {
-	ApiBody,
-	ApiConflictResponse,
-	ApiOkResponse,
-	ApiOperation,
-	ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { AuthService } from '@/auth/auth.service';
 import { LoginUserDto } from '@/auth/local/dtos/login-user.dto';
@@ -57,6 +51,7 @@ export class AuthController {
 
 		res.cookie('jwt', jwt.jwt, {
 			httpOnly: true,
+			sameSite: 'strict',
 			secure: process.env.NODE_ENV === 'production',
 		});
 
@@ -76,9 +71,6 @@ export class AuthController {
 	})
 	@ApiOkResponse({
 		description: 'The user has been successfully signed up.',
-	})
-	@ApiConflictResponse({
-		description: 'Another user has the same email.',
 	})
 	async register(@Body() registerUserDto: RegisterUserDto) {
 		try {
