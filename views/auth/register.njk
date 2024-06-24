@@ -85,7 +85,7 @@
 
             errors.appendChild(ul);
           } else if (response.status === 409) {
-            errors.innerHTML = "<p class=\"error\">An account with that username or email already exists.</p>";
+            errors.innerHTML = "<p class=\"error\">An account with that username already exists.</p>";
           } else {
             errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
           }
