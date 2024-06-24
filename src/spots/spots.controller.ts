@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Patch } from '@nestjs/common';
 import {
 	ApiOkResponse,
 	ApiOperation,
@@ -39,9 +39,8 @@ export class SpotsController {
 		return spotsDto;
 	}
 
-	@Post(':id/configure')
+	@Patch(':id/configure')
 	@UnconfiguredSpotAuth()
-	@HttpCode(200)
 	@ApiOperation({
 		summary: 'Configure the spot',
 		description: 'Configure the spot.',

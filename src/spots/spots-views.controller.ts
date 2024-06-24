@@ -127,7 +127,7 @@ export class SpotsViewsController {
 			email: user?.email,
 			role: user?.role,
 			spot,
-			action: `/spots/${id}/configure`,
+			toConfigure: true,
 		};
 	}
 

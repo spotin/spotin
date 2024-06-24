@@ -16,6 +16,8 @@ import { Roles } from '@/auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
+@JwtAuth(RolesGuard)
+@Roles(UserRole.ADMIN)
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
@@ -25,8 +27,6 @@ export class UsersController {
 		operationId: 'getUsersApi',
 		responseType: [ReadUserDto],
 	})
-	@JwtAuth(RolesGuard)
-	@Roles(UserRole.ADMIN)
 	async getUsersApi() {
 		const users = await this.usersService.getUsers();
 
@@ -41,8 +41,6 @@ export class UsersController {
 		operationId: 'getSpotApi',
 		responseType: ReadUserDto,
 	})
-	@JwtAuth(RolesGuard)
-	@Roles(UserRole.ADMIN)
 	async getUserApi(@Param('id') id: string) {
 		const user = (await this.usersService.getUser(id)) as User;
 
@@ -56,8 +54,6 @@ export class UsersController {
 		responseType: ReadUserDto,
 		operationId: 'createUserApi',
 	})
-	@JwtAuth(RolesGuard)
-	@Roles(UserRole.ADMIN)
 	@ApiConflictResponse({
 		description: 'Another user has the same username.',
 	})
@@ -74,8 +70,6 @@ export class UsersController {
 		responseType: ReadUserDto,
 		operationId: 'updateUserApi',
 	})
-	@JwtAuth(RolesGuard)
-	@Roles(UserRole.ADMIN)
 	@ApiConflictResponse({
 		description: 'Another user has the same username.',
 	})
@@ -93,8 +87,6 @@ export class UsersController {
 		summary: 'Delete the specified user',
 		operationId: 'deleteUserApi',
 	})
-	@JwtAuth(RolesGuard)
-	@Roles(UserRole.ADMIN)
 	async deleteUserApi(@Param('id') id: string) {
 		await this.usersService.deleteUser(id);
 	}

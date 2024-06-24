@@ -7,6 +7,7 @@
   <form id="form">
     <fieldset>
       <input type="hidden" name="id" id="id" value="{{ spot.id }}">
+      <input type="hidden" name="to-configure" id="to-configure" value="{{ toConfigure }}">
 
       <label for="title">Title</label>
       <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" autofocus="autofocus">
@@ -87,6 +88,7 @@
       event.preventDefault();
 
       // Get the form data
+      const toConfigure = form.querySelector("#to-configure");
       const id = form.querySelector("#id");
       const title = form.querySelector("#title");
       const description = form.querySelector("#description");
@@ -158,6 +160,10 @@
         method = "PATCH";
       }
 
+      if (toConfigure.value) {
+        endpoint += "/configure";
+      }
+
       const response = await fetch(endpoint, {
         method,
         headers: {
@@ -167,7 +173,9 @@
       });
 
       if (response.ok) {
-        window.location.href = "/spots";
+        const spot = await response.json();
+
+        window.location.href = `/spots/${spot.id}`;
       } else {
         if (response.status === 400) {
           const error = await response.json();
