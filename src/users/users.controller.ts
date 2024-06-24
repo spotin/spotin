@@ -16,7 +16,7 @@ import { Roles } from '@/auth/decorators/roles.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
-export class UsersApiController {
+export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
 	@GetMany({

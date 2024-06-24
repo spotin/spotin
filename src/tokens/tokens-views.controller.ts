@@ -1,6 +1,6 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { UnauthorizedMvcExceptionFilter } from '@/common/filters/unauthorized-mvc-exception.filter';
+import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
 import {
 	Controller,
@@ -21,8 +21,8 @@ import { Token, User } from '@prisma/client';
 
 @ApiTags('Views')
 @Controller('tokens')
-@UseFilters(UnauthorizedMvcExceptionFilter)
-export class TokensMvcController {
+@UseFilters(UnauthorizedViewExceptionFilter)
+export class TokensViewsController {
 	constructor(private readonly tokensService: TokensService) {}
 
 	@Get('create')
@@ -30,13 +30,13 @@ export class TokensMvcController {
 	@ApiOperation({
 		summary: 'Render the create a new token page',
 		description: 'Render the create a new token page.',
-		operationId: 'renderCreateTokenMvc',
+		operationId: 'renderCreateToken',
 	})
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
 	@Render('tokens/form')
-	renderCreateTokenMvc(@AuthUser() user: User) {
+	renderCreateToken(@AuthUser() user: User) {
 		return {
 			title: 'Create a new token | Spot in',
 			username: user?.username,
