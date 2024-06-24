@@ -1,17 +1,17 @@
 import { Controller, Body, Param } from '@nestjs/common';
 import { CustomPost } from '@/common/decorators/custom-post.decorator';
 import { TokensService } from './tokens.service';
-import { CreateTokenDto } from './dto/create-token.dto';
+import { CreateTokenDto } from './dtos/create-token.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { User } from '@prisma/client';
-import { ReadTokenDto } from '@/tokens/dto/read-token.dto';
+import { ReadTokenDto } from '@/tokens/dtos/read-token.dto';
 import * as crypto from 'crypto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
-import { NewTokenDto } from '@/tokens/dto/new-token.dto';
+import { CreatedTokenDto } from '@/tokens/dtos/created-token.dto';
 
 @ApiTags('Tokens')
 @Controller('api/tokens')
@@ -50,7 +50,7 @@ export class TokensController {
 		name: 'Token',
 		summary: 'Create a new token',
 		bodyType: CreateTokenDto,
-		responseType: NewTokenDto,
+		responseType: CreatedTokenDto,
 		operationId: 'createToken',
 	})
 	@JwtAuth()
@@ -66,7 +66,7 @@ export class TokensController {
 			user,
 		);
 
-		return new NewTokenDto({
+		return new CreatedTokenDto({
 			...createdToken,
 			value,
 		});

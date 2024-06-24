@@ -34,7 +34,13 @@ export class SpotsController {
 	async getPublicSpots() {
 		const spots = await this.spotsService.getPublicSpots();
 
-		const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+		const spotsDto = spots.map(
+			(spot) =>
+				new ReadSpotDto({
+					...spot,
+					payload: spot.payload ? spot.payload.toString() : undefined,
+				}),
+		);
 
 		return spotsDto;
 	}
@@ -73,7 +79,10 @@ export class SpotsController {
 			user,
 		);
 
-		return new ReadSpotDto(updatedSpot);
+		return new ReadSpotDto({
+			...updatedSpot,
+			payload: updatedSpot.payload ? updatedSpot.payload.toString() : undefined,
+		});
 	}
 
 	@GetMany({
@@ -86,7 +95,13 @@ export class SpotsController {
 	async getSpots(@AuthUser() user: User) {
 		const spots = await this.spotsService.getSpots(user);
 
-		const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+		const spotsDto = spots.map(
+			(spot) =>
+				new ReadSpotDto({
+					...spot,
+					payload: spot.payload ? spot.payload.toString() : undefined,
+				}),
+		);
 
 		return spotsDto;
 	}
@@ -100,7 +115,10 @@ export class SpotsController {
 	async getSpot(@Param('id') id: string) {
 		const spot = await this.spotsService.getSpot(id);
 
-		return new ReadSpotDto(spot);
+		return new ReadSpotDto({
+			...spot,
+			payload: spot.payload ? spot.payload.toString() : undefined,
+		});
 	}
 
 	@CustomPost({
@@ -124,7 +142,10 @@ export class SpotsController {
 			user,
 		);
 
-		return new ReadSpotDto(newSpot);
+		return new ReadSpotDto({
+			...newSpot,
+			payload: newSpot.payload ? newSpot.payload.toString() : undefined,
+		});
 	}
 
 	@CustomPatch({
@@ -155,7 +176,10 @@ export class SpotsController {
 			user,
 		);
 
-		return new ReadSpotDto(updatedSpot);
+		return new ReadSpotDto({
+			...updatedSpot,
+			payload: updatedSpot.payload ? updatedSpot.payload.toString() : undefined,
+		});
 	}
 
 	@CustomDelete({

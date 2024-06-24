@@ -1,13 +1,20 @@
-import { OmitType } from '@nestjs/swagger';
 import { SpotDto } from '@/spots/dtos/spot.dto';
+import { ReadSpot } from '@/spots/types/read-spot';
+import { Spot } from '@/spots/types/spot';
 
-export class ReadSpotDto extends OmitType(SpotDto, ['userId'] as const) {
-	constructor(partial: Partial<SpotDto>) {
+export class ReadSpotDto extends SpotDto implements ReadSpot {
+	constructor(entity: Spot) {
 		super();
 
-		// Exclude userId property from the object
-		delete partial.userId;
-
-		Object.assign(this, partial);
+		this.id = entity.id;
+		this.title = entity.title;
+		this.description = entity.description;
+		this.latitude = entity.latitude;
+		this.longitude = entity.longitude;
+		this.payload = entity.payload;
+		this.redirection = entity.redirection;
+		this.referenced = entity.referenced;
+		this.createdAt = entity.createdAt;
+		this.updatedAt = entity.updatedAt;
 	}
 }

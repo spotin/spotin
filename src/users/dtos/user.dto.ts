@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User, UserRole } from '@prisma/client';
 import {
-	IsArray,
 	IsBoolean,
 	IsDateString,
 	IsEmail,
@@ -10,12 +8,11 @@ import {
 	IsUUID,
 	MaxLength,
 	MinLength,
-	ValidateNested,
 } from 'class-validator';
-import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
-import { Type } from 'class-transformer';
+import { User } from '@/users/types/user';
+import { UserRole } from '@prisma/client';
 
-export class UserDto implements Omit<User, 'resetPasswordRequestId'> {
+export class UserDto implements User {
 	/**
 	 * Identification of the user
 	 */
@@ -73,18 +70,4 @@ export class UserDto implements Omit<User, 'resetPasswordRequestId'> {
 	 */
 	@IsDateString()
 	updatedAt: Date;
-
-	/**
-	 * Date when the spot was deleted
-	 */
-	@IsDateString()
-	deletedAt: Date | null;
-
-	/**
-	 * Spots created by the user
-	 */
-	@IsArray()
-	@ValidateNested({ each: true })
-	@Type(() => ReadSpotDto)
-	spots: ReadSpotDto[];
 }
