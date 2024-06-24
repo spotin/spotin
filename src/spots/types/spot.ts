@@ -6,8 +6,8 @@ export type Spot = {
 	longitude?: number | null;
 	payload?: string | null;
 	redirection?: string | null;
-	referenced?: boolean;
-	configured?: boolean;
+	referenced: boolean;
+	configured: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 };
