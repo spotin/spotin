@@ -5,7 +5,10 @@ const prisma = new PrismaClient();
 
 async function main() {
 	const admin = await prisma.user.upsert({
-		where: { email: process.env.SPOT_IN_ADMIN_EMAIL as string },
+		where: {
+			email: process.env.SPOT_IN_ADMIN_EMAIL as string,
+			username: 'Spot in',
+		},
 		update: {},
 		create: {
 			username: 'Spot in',

@@ -1,5 +1,18 @@
-import { Controller, Post, Body, HttpCode, Res } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+	Controller,
+	Post,
+	Body,
+	HttpCode,
+	Res,
+	ConflictException,
+} from '@nestjs/common';
+import {
+	ApiBody,
+	ApiConflictResponse,
+	ApiOkResponse,
+	ApiOperation,
+	ApiTags,
+} from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { AuthService } from '@/auth/auth.service';
 import { LoginUserDto } from '@/auth/local/dtos/login-user.dto';
@@ -13,6 +26,7 @@ import { ResetPasswordDto } from '@/auth/reset-password/dtos/reset-password.dto'
 import { ResetPasswordRequestsService } from '@/reset-password-requests/reset-password-requests.service';
 import { ResetPasswordRequestDto } from '@/auth/reset-password/dtos/reset-password-request.dto';
 import { Response } from 'express';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -72,11 +86,20 @@ export class AuthController {
 	@ApiOkResponse({
 		description: 'The user has been successfully signed up.',
 	})
+	@ApiConflictResponse({
+		description: 'The username is already taken.',
+	})
 	async register(@Body() registerUserDto: RegisterUserDto) {
 		try {
 			await this.usersService.createUser(registerUserDto);
 		} catch (e) {
-			if (e.code === 'P2002') {
+			if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
+				const meta = e.meta as Record<string, Array<string>>;
+
+				if (meta.target.includes('username')) {
+					throw new ConflictException();
+				}
+
 				const user = await this.usersService.getUserByEmail(
 					registerUserDto.email,
 				);

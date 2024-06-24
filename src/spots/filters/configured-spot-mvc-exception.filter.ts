@@ -8,7 +8,7 @@ import {
 import { Request, Response } from 'express';
 
 @Catch(UnauthorizedException)
-export class ConfiguredSpotMvcExceptionFilter implements ExceptionFilter {
+export class ConfiguredSpotViewExceptionFilter implements ExceptionFilter {
 	catch(_: HttpException, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
 		const response = ctx.getResponse<Response>();

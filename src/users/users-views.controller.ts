@@ -9,4 +9,4 @@ import { UserRole } from '@prisma/client';
 @Controller('users')
 @JwtAuth(RolesGuard)
 @Roles(UserRole.ADMIN)
-export class UsersMvcController {}
+export class UsersViewsController {}

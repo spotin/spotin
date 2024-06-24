@@ -21,8 +21,8 @@ model Spot {
   longitude   Float?    @db.DoublePrecision
   payload     Json?     @db.Json
   redirection String?   @db.VarChar(255)
-  referenced  Boolean   @default(false)
-  configured  Boolean   @default(true)
+  referenced  Boolean   @default(false) @db.Boolean
+  configured  Boolean   @default(true) @db.Boolean
   userId      String    @map(name: "user_id")
   createdAt   DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt   DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
