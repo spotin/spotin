@@ -4,7 +4,7 @@ export type Spot = {
 	description?: string | null;
 	latitude?: number | null;
 	longitude?: number | null;
-	payload?: string | null;
+	payload?: string;
 	redirection?: string | null;
 	referenced?: boolean;
 	configured?: boolean;

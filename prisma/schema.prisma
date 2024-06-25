@@ -9,7 +9,8 @@ datasource db {
 
 enum UserRole {
   ADMIN
-  USER
+  STANDARD_USER
+  CERTIFIED_USER
   GUEST
 }
 
@@ -55,7 +56,7 @@ model User {
   password               String    @db.VarChar(255)
   spots                  Spot[]
   tokens                 Token[]
-  role                   UserRole  @default(USER)
+  role                   UserRole  @default(STANDARD_USER)
   enabled                Boolean   @default(true)
   createdAt              DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt              DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)

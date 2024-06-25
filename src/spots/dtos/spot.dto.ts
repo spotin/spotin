@@ -64,7 +64,7 @@ export class SpotDto implements Spot {
 	@IsOptional()
 	@IsJSON()
 	@MaxLength(1000)
-	payload?: string | null;
+	payload?: string;
 
 	/**
 	 * Redirection when the QR code is accessed

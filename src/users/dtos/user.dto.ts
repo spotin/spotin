@@ -48,7 +48,7 @@ export class UserDto implements User {
 	/**
 	 * Role of the user
 	 */
-	@ApiProperty({ enum: UserRole })
+	@ApiProperty({ enum: UserRole, default: UserRole.STANDARD_USER })
 	@IsEnum(UserRole)
 	role: UserRole;
 
