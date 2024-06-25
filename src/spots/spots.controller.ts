@@ -1,6 +1,6 @@
-import { Body, Controller, Param } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Prisma, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
@@ -34,7 +34,7 @@ export class SpotsController {
 			(spot) =>
 				new ReadSpotDto({
 					...spot,
-					payload: spot.payload ? spot.payload.toString() : undefined,
+					payload: spot.payload ? JSON.stringify(spot.payload) : undefined,
 				}),
 		);
 
@@ -53,24 +53,19 @@ export class SpotsController {
 	async configureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-		@Body() updateSpot: UpdateSpotDto,
+		@Body() configureSpotDto: ConfigureSpotDto,
 	) {
-		updateSpot.configured = true;
-		updateSpot.referenced = undefined;
-
-		const updatedSpot = await this.spotsService.updateSpot(
+		const configuredSpotDto = await this.spotsService.updateSpot(
 			id,
-			{
-				...updateSpot,
-				// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
-				payload: updateSpot.payload ? updateSpot.payload : Prisma.DbNull,
-			},
+			configureSpotDto,
 			user,
 		);
 
 		return new ReadSpotDto({
-			...updatedSpot,
-			payload: updatedSpot.payload ? updatedSpot.payload.toString() : undefined,
+			...configuredSpotDto,
+			payload: configuredSpotDto.payload
+				? configuredSpotDto.payload.toString()
+				: undefined,
 		});
 	}
 
@@ -88,7 +83,7 @@ export class SpotsController {
 			(spot) =>
 				new ReadSpotDto({
 					...spot,
-					payload: spot.payload ? spot.payload.toString() : undefined,
+					payload: spot.payload ? JSON.stringify(spot.payload) : undefined,
 				}),
 		);
 
@@ -106,7 +101,7 @@ export class SpotsController {
 
 		return new ReadSpotDto({
 			...spot,
-			payload: spot.payload ? spot.payload.toString() : undefined,
+			payload: spot.payload ? JSON.stringify(spot.payload) : undefined,
 		});
 	}
 
@@ -122,20 +117,22 @@ export class SpotsController {
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
 	) {
-		// TODO: Only allow CERTIFIED users to create spots that are public
+		if (createSpotDto.referenced) {
+			const isCertifiedOrAdmin =
+				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
 
-		const newSpot = await this.spotsService.createSpot(
-			{
-				...createSpotDto,
-				// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
-				payload: createSpotDto.payload ? createSpotDto.payload : Prisma.DbNull,
-			},
-			user,
-		);
+			if (!isCertifiedOrAdmin) {
+				throw new ForbiddenException(
+					'Standard users cannot create referenced spots',
+				);
+			}
+		}
+
+		const newSpot = await this.spotsService.createSpot(createSpotDto, user);
 
 		return new ReadSpotDto({
 			...newSpot,
-			payload: newSpot.payload ? newSpot.payload.toString() : undefined,
+			payload: newSpot.payload ? JSON.stringify(newSpot.payload) : undefined,
 		});
 	}
 
@@ -152,25 +149,28 @@ export class SpotsController {
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
 	) {
-		// TODO: Only allow CERTIFIED users to create spots that are public
-		if (user.role === UserRole.GUEST) {
-			updateSpot.configured = true;
-			updateSpot.referenced = undefined;
+		if (updateSpot.referenced) {
+			const isCertifiedOrAdmin =
+				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
+
+			if (!isCertifiedOrAdmin) {
+				throw new ForbiddenException(
+					'Standard users cannot create referenced spots',
+				);
+			}
 		}
 
 		const updatedSpot = await this.spotsService.updateSpot(
 			id,
-			{
-				...updateSpot,
-				// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#using-null-values
-				payload: updateSpot.payload ? updateSpot.payload : Prisma.DbNull,
-			},
+			updateSpot,
 			user,
 		);
 
 		return new ReadSpotDto({
 			...updatedSpot,
-			payload: updatedSpot.payload ? updatedSpot.payload.toString() : undefined,
+			payload: updatedSpot.payload
+				? JSON.stringify(updatedSpot.payload)
+				: undefined,
 		});
 	}
 
