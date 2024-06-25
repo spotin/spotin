@@ -8,7 +8,11 @@ import { LocalStrategy } from '@/auth/local/local.strategy';
 import { JwtStrategy } from '@/auth/jwt/jwt.strategy';
 import { AuthService } from '@/auth/auth.service';
 import { UsersModule } from '@/users/users.module';
-import { JWT_EXPIRATION_TIME, JWT_SECRET } from '@/config/config.constants';
+import {
+	EnvironmentVariables,
+	JWT_EXPIRATION_TIME,
+	JWT_SECRET,
+} from '@/config/config.constants';
 import { TokenStrategy } from '@/auth/token/token.strategy';
 import { UnconfiguredSpotStrategy } from '@/auth/unconfigured-spot/unconfigured-spot.strategy';
 import { SpotsModule } from '@/spots/spots.module';
@@ -22,7 +26,9 @@ import { ResetPasswordStrategy } from '@/auth/reset-password/reset-password.stra
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: async (configService: ConfigService) => ({
+			useFactory: async (
+				configService: ConfigService<EnvironmentVariables, true>,
+			) => ({
 				secret: configService.get(JWT_SECRET, { infer: true }),
 				signOptions: {
 					expiresIn: configService.get(JWT_EXPIRATION_TIME, { infer: true }),

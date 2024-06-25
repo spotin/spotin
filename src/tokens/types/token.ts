@@ -1,7 +1,7 @@
 export type Token = {
 	id: string;
 	name: string;
-	hash?: string | null;
+	hash?: string;
 	createdAt: Date;
 	updatedAt: Date;
 };
