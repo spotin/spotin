@@ -1,10 +1,5 @@
-import { Body, Controller, Param, Patch } from '@nestjs/common';
-import {
-	ApiOkResponse,
-	ApiOperation,
-	ApiParam,
-	ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Prisma, User, UserRole } from '@prisma/client';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
@@ -18,6 +13,7 @@ import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
+import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -34,27 +30,26 @@ export class SpotsController {
 	async getPublicSpots() {
 		const spots = await this.spotsService.getPublicSpots();
 
-		const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+		const spotsDto = spots.map(
+			(spot) =>
+				new ReadSpotDto({
+					...spot,
+					payload: spot.payload ? spot.payload.toString() : undefined,
+				}),
+		);
 
 		return spotsDto;
 	}
 
-	@Patch(':id/configure')
-	@UnconfiguredSpotAuth()
-	@ApiOperation({
-		summary: 'Configure the spot',
-		description: 'Configure the spot.',
+	@CustomPatch({
+		path: ':id/configure',
+		name: 'Spot',
+		summary: 'Configure the specified spot',
+		bodyType: ConfigureSpotDto,
+		responseType: ReadSpotDto,
 		operationId: 'configureSpot',
 	})
-	@ApiParam({
-		name: 'id',
-		description: 'The spot ID.',
-		format: 'uuid',
-	})
-	@ApiOkResponse({
-		description: 'The spot has been successfully configured.',
-		type: ReadSpotDto,
-	})
+	@UnconfiguredSpotAuth()
 	async configureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
@@ -73,7 +68,10 @@ export class SpotsController {
 			user,
 		);
 
-		return new ReadSpotDto(updatedSpot);
+		return new ReadSpotDto({
+			...updatedSpot,
+			payload: updatedSpot.payload ? updatedSpot.payload.toString() : undefined,
+		});
 	}
 
 	@GetMany({
@@ -86,7 +84,13 @@ export class SpotsController {
 	async getSpots(@AuthUser() user: User) {
 		const spots = await this.spotsService.getSpots(user);
 
-		const spotsDto = spots.map((spot) => new ReadSpotDto(spot));
+		const spotsDto = spots.map(
+			(spot) =>
+				new ReadSpotDto({
+					...spot,
+					payload: spot.payload ? spot.payload.toString() : undefined,
+				}),
+		);
 
 		return spotsDto;
 	}
@@ -100,7 +104,10 @@ export class SpotsController {
 	async getSpot(@Param('id') id: string) {
 		const spot = await this.spotsService.getSpot(id);
 
-		return new ReadSpotDto(spot);
+		return new ReadSpotDto({
+			...spot,
+			payload: spot.payload ? spot.payload.toString() : undefined,
+		});
 	}
 
 	@CustomPost({
@@ -115,6 +122,8 @@ export class SpotsController {
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
 	) {
+		// TODO: Only allow CERTIFIED users to create spots that are public
+
 		const newSpot = await this.spotsService.createSpot(
 			{
 				...createSpotDto,
@@ -124,7 +133,10 @@ export class SpotsController {
 			user,
 		);
 
-		return new ReadSpotDto(newSpot);
+		return new ReadSpotDto({
+			...newSpot,
+			payload: newSpot.payload ? newSpot.payload.toString() : undefined,
+		});
 	}
 
 	@CustomPatch({
@@ -140,6 +152,7 @@ export class SpotsController {
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
 	) {
+		// TODO: Only allow CERTIFIED users to create spots that are public
 		if (user.role === UserRole.GUEST) {
 			updateSpot.configured = true;
 			updateSpot.referenced = undefined;
@@ -155,7 +168,10 @@ export class SpotsController {
 			user,
 		);
 
-		return new ReadSpotDto(updatedSpot);
+		return new ReadSpotDto({
+			...updatedSpot,
+			payload: updatedSpot.payload ? updatedSpot.payload.toString() : undefined,
+		});
 	}
 
 	@CustomDelete({

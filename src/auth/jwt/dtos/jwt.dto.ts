@@ -10,7 +10,7 @@ export class JwtDto implements Jwt {
 	@IsString()
 	jwt: string;
 
-	constructor(partial: Partial<JwtDto>) {
-		Object.assign(this, partial);
+	constructor(entity: Jwt) {
+		this.jwt = entity.jwt;
 	}
 }

@@ -12,9 +12,9 @@ import { Jwt } from '@/auth/jwt/types/jwt.type';
 @Injectable()
 export class AuthService {
 	constructor(
-		private usersService: UsersService,
-		private jwtService: JwtService,
-		private spotsService: SpotsService,
+		private readonly jwtService: JwtService,
+		private readonly spotsService: SpotsService,
+		private readonly usersService: UsersService,
 	) {}
 
 	async validateCredentials({ email, password }: LoginUser): Promise<User> {
