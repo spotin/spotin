@@ -70,6 +70,7 @@ export class SpotDto implements Spot {
 	 * Redirection when the QR code is accessed
 	 */
 	@ApiPropertyOptional({ format: 'url' })
+	@IsOptional()
 	@IsUrl()
 	@MaxLength(255)
 	redirection?: string | null;
@@ -78,6 +79,7 @@ export class SpotDto implements Spot {
 	 * Set if the spot will be referenced on the website
 	 */
 	@ApiPropertyOptional({ default: false })
+	@IsOptional()
 	@IsBoolean()
 	referenced?: boolean = false;
 
