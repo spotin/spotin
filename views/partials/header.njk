@@ -7,6 +7,14 @@
   <ul>
     <!-- if is authenticated -->
     {% if username %}
+      {% if role == "ADMIN" %}
+        <li>
+          <a href="/users">
+            <i class="fas fa-users"></i>
+            Users
+          </a>
+        </li>
+      {% endif %}
       <li>
         <a href="/spots">
           <i class="fas fa-map-marker-alt"></i>
