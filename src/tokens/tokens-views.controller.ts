@@ -17,7 +17,7 @@ import {
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
-import { Token, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @ApiTags('Views')
 @Controller('tokens')
@@ -105,12 +105,7 @@ export class TokensViewsController {
 	})
 	@Render('tokens/view')
 	async renderToken(@AuthUser() user: User, @Param('id') id: string) {
-		// Set the hash as optional
-		const token: Omit<Token, 'hash'> & { hash?: string } =
-			await this.tokensService.getToken(id, user);
-
-		// Delete the hash
-		delete token.hash;
+		const token = await this.tokensService.getToken(id, user);
 
 		return {
 			title: 'Token | Spot in',

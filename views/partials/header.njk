@@ -1,25 +1,34 @@
 <nav class="container-fluid">
   <ul>
-    <a class="contrast" href="/"><img src="/images/logo.svg" alt="Spot in logo" width="200"/>
+    <a href="/">
+      <img src="/images/logo.svg" alt="Spot in logo" width="200"/>
     </a>
   </ul>
   <ul>
     <!-- if is authenticated -->
     {% if username %}
+      {% if role == "ADMIN" %}
+        <li>
+          <a href="/users">
+            <i class="fas fa-users"></i>
+            Users
+          </a>
+        </li>
+      {% endif %}
       <li>
-        <a class="contrast" href="/spots">
+        <a href="/spots">
           <i class="fas fa-map-marker-alt"></i>
           Spots
         </a>
       </li>
       <li>
-        <a class="contrast" href="/tokens">
+        <a href="/tokens">
           <i class="fas fa-key"></i>
           Tokens
         </a>
       </li>
       <li>
-        <a class="contrast" href="/auth/profile">
+        <a href="/auth/profile">
           <i class="fas fa-user"></i>
           {{ username }}
         </a>
@@ -38,7 +47,7 @@
         </a>
       </li>
       <li>
-        <a href="/auth/register" class="contrast">
+        <a href="/auth/register">
           <i class="fas fa-edit"></i>
           Sign up</a>
       </li>
