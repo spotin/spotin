@@ -2,6 +2,8 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
+import { Token } from '@/tokens/types/token';
+import { User } from '@/users/types/user';
 import {
 	Controller,
 	Get,
@@ -17,7 +19,6 @@ import {
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 
 @ApiTags('Views')
 @Controller('tokens')
@@ -36,7 +37,9 @@ export class TokensViewsController {
 		description: 'Render successful.',
 	})
 	@Render('tokens/form')
-	renderCreateToken(@AuthUser() user: User) {
+	async renderCreateToken(
+		@AuthUser() user: User,
+	): Promise<Record<string, string | undefined>> {
 		return {
 			title: 'Create a new token | Spot in',
 			username: user?.username,
@@ -56,7 +59,9 @@ export class TokensViewsController {
 		description: 'Render successful.',
 	})
 	@Render('tokens/list')
-	async renderTokensList(@AuthUser() user: User) {
+	async renderTokensList(
+		@AuthUser() user: User,
+	): Promise<Record<string, string | undefined | Token[]>> {
 		const tokens = await this.tokensService.getTokens(user);
 
 		return {
@@ -84,7 +89,10 @@ export class TokensViewsController {
 		description: 'Redirect successful.',
 	})
 	@Redirect('/tokens', HttpStatus.PERMANENT_REDIRECT)
-	async deleteToken(@AuthUser() user: User, @Param('id') id: string) {
+	async deleteToken(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<void> {
 		await this.tokensService.deleteToken(id, user);
 	}
 
@@ -104,7 +112,10 @@ export class TokensViewsController {
 		format: 'uuid',
 	})
 	@Render('tokens/view')
-	async renderToken(@AuthUser() user: User, @Param('id') id: string) {
+	async renderToken(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<Record<string, string | undefined | Token>> {
 		const token = await this.tokensService.getToken(id, user);
 
 		return {

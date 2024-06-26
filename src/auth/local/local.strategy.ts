@@ -3,8 +3,8 @@ import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 import { PassportStrategy } from '@/auth/auth.constants';
-import { User } from '@prisma/client';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
+import { User } from '@/users/types/user';
 
 type DoneCallback = (
 	err: Error | null,

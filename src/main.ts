@@ -3,7 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { bootstrap } from '@/bootstrap';
 import { AppModule } from '@/app.module';
 
-const main = async () => {
+const main = async (): Promise<void> => {
 	const instance = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	const app = await bootstrap(instance);

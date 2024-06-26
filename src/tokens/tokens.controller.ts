@@ -7,11 +7,10 @@ import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { User } from '@prisma/client';
 import { ReadTokenDto } from '@/tokens/dtos/read-token.dto';
-import * as crypto from 'crypto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { CreatedTokenDto } from '@/tokens/dtos/created-token.dto';
+import { User } from '@/users/types/user';
 
 @ApiTags('Tokens')
 @Controller('api/tokens')
@@ -25,7 +24,7 @@ export class TokensController {
 		responseType: [ReadTokenDto],
 	})
 	@JwtAuth()
-	async getTokens(@AuthUser() user: User) {
+	async getTokens(@AuthUser() user: User): Promise<ReadTokenDto[]> {
 		const tokens = await this.tokensService.getTokens(user);
 
 		const tokensDto = tokens.map((token) => new ReadTokenDto(token));
@@ -40,7 +39,10 @@ export class TokensController {
 		responseType: ReadTokenDto,
 	})
 	@JwtAuth()
-	async getToken(@Param('id') id: string, @AuthUser() user: User) {
+	async getToken(
+		@Param('id') id: string,
+		@AuthUser() user: User,
+	): Promise<ReadTokenDto> {
 		const token = await this.tokensService.getToken(id, user);
 
 		return new ReadTokenDto(token);
@@ -57,19 +59,13 @@ export class TokensController {
 	async createToken(
 		@AuthUser() user: User,
 		@Body() createTokenDto: CreateTokenDto,
-	) {
-		const value = crypto.randomBytes(64).toString('base64');
-		const hash = crypto.createHash('sha256').update(value).digest('hex');
-
+	): Promise<CreatedTokenDto> {
 		const createdToken = await this.tokensService.createToken(
-			{ ...createTokenDto, hash },
+			{ ...createTokenDto },
 			user,
 		);
 
-		return new CreatedTokenDto({
-			...createdToken,
-			value,
-		});
+		return new CreatedTokenDto(createdToken);
 	}
 
 	@CustomDelete({
@@ -78,7 +74,10 @@ export class TokensController {
 		operationId: 'deleteToken',
 	})
 	@JwtAuth()
-	async deleteToken(@Param('id') id: string, @AuthUser() user: User) {
+	async deleteToken(
+		@Param('id') id: string,
+		@AuthUser() user: User,
+	): Promise<void> {
 		await this.tokensService.deleteToken(id, user);
 	}
 }

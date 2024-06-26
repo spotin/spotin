@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 import { TOKEN_HEADER_NAME, PassportStrategy } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
-import { User } from '@prisma/client';
+import { User } from '@/users/types/user';
 
 type DoneCallback = (
 	err: Error | null,

@@ -13,7 +13,6 @@ import {
 	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import { AuthService } from '@/auth/auth.service';
 import { LoginUserDto } from '@/auth/local/dtos/login-user.dto';
 import { UsersService } from '@/users/users.service';
@@ -27,6 +26,8 @@ import { ResetPasswordRequestsService } from '@/reset-password-requests/reset-pa
 import { ResetPasswordRequestDto } from '@/auth/reset-password/dtos/reset-password-request.dto';
 import { Response } from 'express';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { User } from '@/users/types/user';
+import { UserRole } from '@/users/enums/user-role';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -56,7 +57,7 @@ export class AuthController {
 	async login(
 		@AuthUser() user: User,
 		@Res({ passthrough: true }) res: Response,
-	) {
+	): Promise<JwtDto> {
 		const jwt = await this.authService.generateJwt(user);
 
 		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
@@ -89,9 +90,13 @@ export class AuthController {
 	@ApiConflictResponse({
 		description: 'The username is already taken.',
 	})
-	async register(@Body() registerUserDto: RegisterUserDto) {
+	async register(@Body() registerUserDto: RegisterUserDto): Promise<void> {
 		try {
-			await this.usersService.createUser(registerUserDto);
+			await this.usersService.createUser({
+				...registerUserDto,
+				enabled: true,
+				role: UserRole.STANDARD_USER,
+			});
 		} catch (e) {
 			if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
 				const meta = e.meta as Record<string, Array<string>>;
@@ -132,7 +137,7 @@ export class AuthController {
 	})
 	async requestPasswordReset(
 		@Body() requestPasswordResetDto: ResetPasswordRequestDto,
-	) {
+	): Promise<void> {
 		const user = await this.usersService.getUserByEmail(
 			requestPasswordResetDto.email,
 		);
@@ -162,7 +167,7 @@ export class AuthController {
 	async resetPassword(
 		@AuthUser() user: User,
 		@Body() resetPasswordDto: ResetPasswordDto,
-	) {
+	): Promise<void> {
 		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
 			user,
 		);

@@ -1,6 +1,5 @@
 import { Controller, Body, Param } from '@nestjs/common';
 import { ApiConflictResponse, ApiTags } from '@nestjs/swagger';
-import { User, UserRole } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
 import { CreateUserDto } from '@/users/dtos/create-user.dto';
 import { UpdateUserDto } from '@/users/dtos/update-user.dto';
@@ -13,6 +12,8 @@ import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
+import { UserRole } from '@/users/enums/user-role';
+import { User } from '@/users/types/user';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -27,7 +28,7 @@ export class UsersController {
 		operationId: 'getUsersApi',
 		responseType: [ReadUserDto],
 	})
-	async getUsersApi() {
+	async getUsersApi(): Promise<ReadUserDto[]> {
 		const users = await this.usersService.getUsers();
 
 		const usersDto = users.map((user) => new ReadUserDto(user));
@@ -41,7 +42,7 @@ export class UsersController {
 		operationId: 'getSpotApi',
 		responseType: ReadUserDto,
 	})
-	async getUserApi(@Param('id') id: string) {
+	async getUserApi(@Param('id') id: string): Promise<ReadUserDto> {
 		const user = (await this.usersService.getUser(id)) as User;
 
 		return new ReadUserDto(user);
@@ -57,7 +58,9 @@ export class UsersController {
 	@ApiConflictResponse({
 		description: 'Another user has the same username.',
 	})
-	async createUserApi(@Body() createUserDto: CreateUserDto) {
+	async createUserApi(
+		@Body() createUserDto: CreateUserDto,
+	): Promise<ReadUserDto> {
 		const newUser = await this.usersService.createUser(createUserDto);
 
 		return new ReadUserDto(newUser);
@@ -76,7 +79,7 @@ export class UsersController {
 	async updateUserApi(
 		@Param('id') id: string,
 		@Body() updateUserDto: UpdateUserDto,
-	) {
+	): Promise<ReadUserDto> {
 		const updatedUser = await this.usersService.updateUser(id, updateUserDto);
 
 		return new ReadUserDto(updatedUser);
@@ -87,7 +90,7 @@ export class UsersController {
 		summary: 'Delete the specified user',
 		operationId: 'deleteUserApi',
 	})
-	async deleteUserApi(@Param('id') id: string) {
+	async deleteUserApi(@Param('id') id: string): Promise<void> {
 		await this.usersService.deleteUser(id);
 	}
 }

@@ -8,6 +8,7 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const UnconfiguredSpotAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(UnconfiguredSpotAuthGuard, ...guards),

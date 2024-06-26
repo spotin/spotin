@@ -1,14 +1,18 @@
+import { CreateSpot } from '@/spots/types/create-spot';
+import { Spot } from '@/spots/types/spot';
+import { SpotWithUser } from '@/spots/types/spot-with-user';
+import { UpdateSpot } from '@/spots/types/update-spot';
+import { UserRole } from '@/users/enums/user-role';
+import { User } from '@/users/types/user';
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class SpotsService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	/** List spots */
-	async getSpots(user: User) {
-		return await this.prisma.spot.findMany({
+	async getSpots(user: User): Promise<Spot[]> {
+		const spots = await this.prisma.spot.findMany({
 			where: {
 				userId: {
 					equals: user.id,
@@ -18,10 +22,14 @@ export class SpotsService {
 				},
 			},
 		});
+
+		return spots.map((spot) => ({
+			...spot,
+			payload: spot.payload ? JSON.stringify(spot.payload) : null,
+		}));
 	}
 
-	/** Read a spot by id */
-	async getSpot(spotId: string, user?: User) {
+	async getSpot(spotId: string, user?: User): Promise<Spot> {
 		const spot = await this.prisma.spot.findFirstOrThrow({
 			where: {
 				id: spotId,
@@ -32,14 +40,42 @@ export class SpotsService {
 			},
 		});
 
-		return spot;
+		return {
+			...spot,
+			payload: spot.payload ? JSON.stringify(spot.payload) : null,
+		};
 	}
 
-	/** Create a new spot */
-	async createSpot(createSpot: Prisma.SpotCreateWithoutUsersInput, user: User) {
+	async getSpotWithUser(spotId: string): Promise<SpotWithUser> {
+		const spot = await this.prisma.spot.findFirstOrThrow({
+			where: {
+				id: spotId,
+				deletedAt: {
+					equals: null,
+				},
+			},
+			include: {
+				users: true,
+			},
+		});
+
+		return {
+			...spot,
+			user: {
+				...spot.users,
+				role: UserRole[spot.users.role],
+			},
+			payload: spot.payload ? JSON.stringify(spot.payload) : null,
+		};
+	}
+
+	async createSpot(createSpot: CreateSpot, user: User): Promise<Spot> {
 		const newSpot = await this.prisma.spot.create({
 			data: {
 				...createSpot,
+				payload: createSpot.payload
+					? JSON.parse(createSpot.payload)
+					: undefined,
 				users: {
 					connect: {
 						id: user.id,
@@ -48,15 +84,17 @@ export class SpotsService {
 			},
 		});
 
-		return newSpot;
+		return {
+			...newSpot,
+			payload: newSpot.payload ? JSON.stringify(newSpot.payload) : null,
+		};
 	}
 
-	/** Update a spot by id */
 	async updateSpot(
 		spotId: string,
-		updateSpot: Prisma.SpotUpdateInput,
+		updateSpot: UpdateSpot,
 		user: User | null,
-	) {
+	): Promise<Spot> {
 		const updatedSpot = await this.prisma.spot.update({
 			where: {
 				id: spotId,
@@ -65,14 +103,19 @@ export class SpotsService {
 			},
 			data: {
 				...updateSpot,
+				payload: updateSpot.payload
+					? JSON.parse(updateSpot.payload)
+					: undefined,
 			},
 		});
 
-		return updatedSpot;
+		return {
+			...updatedSpot,
+			payload: updatedSpot.payload ? JSON.stringify(updatedSpot.payload) : null,
+		};
 	}
 
-	/** Delete a spot by id */
-	async deleteSpot(spotId: string, user: User) {
+	async deleteSpot(spotId: string, user: User): Promise<void> {
 		await this.prisma.spot.update({
 			where: {
 				id: spotId,
@@ -86,8 +129,8 @@ export class SpotsService {
 	}
 
 	/** List public spots */
-	async getPublicSpots() {
-		return await this.prisma.spot.findMany({
+	async getPublicSpots(): Promise<Spot[]> {
+		const publicSpots = await this.prisma.spot.findMany({
 			where: {
 				referenced: true,
 				deletedAt: {
@@ -95,5 +138,10 @@ export class SpotsService {
 				},
 			},
 		});
+
+		return publicSpots.map((publicSpot) => ({
+			...publicSpot,
+			payload: publicSpot.payload ? JSON.stringify(publicSpot.payload) : null,
+		}));
 	}
 }

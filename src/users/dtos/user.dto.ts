@@ -10,7 +10,7 @@ import {
 	MinLength,
 } from 'class-validator';
 import { User } from '@/users/types/user';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/users/enums/user-role';
 
 export class UserDto implements User {
 	/**

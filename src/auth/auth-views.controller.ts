@@ -1,7 +1,7 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { User } from '@/users/types/user';
 import { Controller, Get, Query, Render, Res } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
@@ -18,7 +18,7 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/login')
-	renderLogin() {
+	async renderLogin(): Promise<Record<string, string>> {
 		return {
 			title: 'Log in | Spot in',
 		};
@@ -34,7 +34,9 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/logout')
-	renderLogout(@Res({ passthrough: true }) res: Response) {
+	async renderLogout(
+		@Res({ passthrough: true }) res: Response,
+	): Promise<Record<string, string>> {
 		res.clearCookie('jwt');
 
 		return {
@@ -52,7 +54,7 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/register')
-	renderRegister() {
+	async renderRegister(): Promise<Record<string, string>> {
 		return {
 			title: 'Register | Spot in',
 		};
@@ -68,7 +70,7 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/reset-password-request')
-	renderResetPasswordRequest() {
+	async renderResetPasswordRequest(): Promise<Record<string, string>> {
 		return {
 			title: 'Reset password request | Spot in',
 		};
@@ -83,7 +85,10 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	renderResetPassword(@Res() res: Response, @Query('token') token: string) {
+	async renderResetPassword(
+		@Res() res: Response,
+		@Query('token') token: string,
+	): Promise<void> {
 		if (!token) {
 			return res.redirect('/auth/reset-password-request');
 		}
@@ -105,7 +110,7 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/profile')
-	renderProfile(@AuthUser() user: User) {
+	async renderProfile(@AuthUser() user: User): Promise<Record<string, string>> {
 		return {
 			title: 'Profile | Spot in',
 			username: user.username,

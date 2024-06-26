@@ -1,6 +1,6 @@
 import { Body, Controller, ForbiddenException, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { User, UserRole } from '@prisma/client';
+import { UserRole } from '@/users/enums/user-role';
 import { CreateSpotDto } from '@/spots/dtos/create-spot.dto';
 import { UpdateSpotDto } from '@/spots/dtos/update-spot-type.dto';
 import { SpotsService } from '@/spots/spots.service';
@@ -14,6 +14,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
+import { User } from '@/users/types/user';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -27,14 +28,14 @@ export class SpotsController {
 		operationId: 'getPublicSpots',
 		responseType: [ReadSpotDto],
 	})
-	async getPublicSpots() {
+	async getPublicSpots(): Promise<ReadSpotDto[]> {
 		const spots = await this.spotsService.getPublicSpots();
 
 		const spotsDto = spots.map(
 			(spot) =>
 				new ReadSpotDto({
 					...spot,
-					payload: spot.payload ? JSON.stringify(spot.payload) : undefined,
+					payload: spot.payload ? JSON.stringify(spot.payload) : null,
 				}),
 		);
 
@@ -54,7 +55,7 @@ export class SpotsController {
 		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Body() configureSpotDto: ConfigureSpotDto,
-	) {
+	): Promise<ReadSpotDto> {
 		const configuredSpotDto = await this.spotsService.updateSpot(
 			id,
 			configureSpotDto,
@@ -65,7 +66,7 @@ export class SpotsController {
 			...configuredSpotDto,
 			payload: configuredSpotDto.payload
 				? configuredSpotDto.payload.toString()
-				: undefined,
+				: null,
 		});
 	}
 
@@ -76,14 +77,14 @@ export class SpotsController {
 		responseType: [ReadSpotDto],
 	})
 	@TokenOrJwtAuth()
-	async getSpots(@AuthUser() user: User) {
+	async getSpots(@AuthUser() user: User): Promise<ReadSpotDto[]> {
 		const spots = await this.spotsService.getSpots(user);
 
 		const spotsDto = spots.map(
 			(spot) =>
 				new ReadSpotDto({
 					...spot,
-					payload: spot.payload ? JSON.stringify(spot.payload) : undefined,
+					payload: spot.payload ? JSON.stringify(spot.payload) : null,
 				}),
 		);
 
@@ -96,12 +97,12 @@ export class SpotsController {
 		operationId: 'getSpot',
 		responseType: ReadSpotDto,
 	})
-	async getSpot(@Param('id') id: string) {
+	async getSpot(@Param('id') id: string): Promise<ReadSpotDto> {
 		const spot = await this.spotsService.getSpot(id);
 
 		return new ReadSpotDto({
 			...spot,
-			payload: spot.payload ? JSON.stringify(spot.payload) : undefined,
+			payload: spot.payload ? JSON.stringify(spot.payload) : null,
 		});
 	}
 
@@ -116,7 +117,7 @@ export class SpotsController {
 	async createSpot(
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
-	) {
+	): Promise<ReadSpotDto> {
 		if (createSpotDto.referenced) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
@@ -132,7 +133,7 @@ export class SpotsController {
 
 		return new ReadSpotDto({
 			...newSpot,
-			payload: newSpot.payload ? JSON.stringify(newSpot.payload) : undefined,
+			payload: newSpot.payload ? JSON.stringify(newSpot.payload) : null,
 		});
 	}
 
@@ -148,7 +149,7 @@ export class SpotsController {
 		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
-	) {
+	): Promise<ReadSpotDto> {
 		if (updateSpot.referenced) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
@@ -168,9 +169,7 @@ export class SpotsController {
 
 		return new ReadSpotDto({
 			...updatedSpot,
-			payload: updatedSpot.payload
-				? JSON.stringify(updatedSpot.payload)
-				: undefined,
+			payload: updatedSpot.payload ? JSON.stringify(updatedSpot.payload) : null,
 		});
 	}
 
@@ -180,7 +179,10 @@ export class SpotsController {
 		operationId: 'deleteSpot',
 	})
 	@TokenOrJwtAuth()
-	async deleteSpot(@AuthUser() user: User, @Param('id') id: string) {
+	async deleteSpot(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<void> {
 		await this.spotsService.deleteSpot(id, user);
 	}
 }

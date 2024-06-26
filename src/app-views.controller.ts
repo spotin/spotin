@@ -1,8 +1,8 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { User } from '@/users/types/user';
 import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 
 @ApiTags('Views')
 @Controller()
@@ -18,7 +18,9 @@ export class AppController {
 		description: 'Render successful.',
 	})
 	@Render('index')
-	root(@AuthUser() user: User | undefined) {
+	async root(
+		@AuthUser() user: User | undefined,
+	): Promise<Record<string, string | undefined>> {
 		return {
 			title: 'Home | Spot in',
 			username: user?.username,
@@ -36,9 +38,7 @@ export class AppController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	api() {
-		return;
-	}
+	async api(): Promise<void> {}
 
 	@Get('not-found')
 	@JwtOrUnrestrictedAuth()
@@ -51,7 +51,9 @@ export class AppController {
 		description: 'Render successful.',
 	})
 	@Render('not-found')
-	notFound(@AuthUser() user: User | undefined) {
+	async notFound(
+		@AuthUser() user: User | undefined,
+	): Promise<Record<string, string | undefined>> {
 		return {
 			title: 'Not Found | Spot in',
 			username: user?.username,

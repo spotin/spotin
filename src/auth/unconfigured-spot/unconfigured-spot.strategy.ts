@@ -1,9 +1,10 @@
 import { PassportStrategy } from '@/auth/auth.constants';
 import { AuthService } from '@/auth/auth.service';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
+import { User } from '@/users/types/user';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
-import { User, UserRole } from '@prisma/client';
+import { UserRole } from '@/users/enums/user-role';
 import { Request } from 'express';
 import { Strategy } from 'passport-custom';
 

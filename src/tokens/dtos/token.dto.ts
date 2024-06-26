@@ -1,5 +1,5 @@
 import { Token } from '@/tokens/types/token';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
 	IsDateString,
 	IsOptional,
@@ -28,11 +28,12 @@ export class TokenDto implements Token {
 	/**
 	 * Hash of the token
 	 */
-	@IsString()
+	@ApiPropertyOptional()
 	@IsOptional()
+	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
-	hash?: string;
+	hash: string | null;
 
 	/**
 	 * Date when the token was created
