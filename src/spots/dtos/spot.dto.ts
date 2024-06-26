@@ -26,45 +26,50 @@ export class SpotDto implements Spot {
 	/**
 	 * Title of the spot
 	 */
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
-	title?: string | null;
+	title: string | null;
 
 	/**
 	 * Description of the spot
 	 */
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsString()
 	@MinLength(1)
-	description?: string | null;
+	description: string | null;
 
 	/**
 	 * Latitude of the position of the spot
 	 */
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsNumber()
 	@Min(-90)
 	@Max(90)
-	latitude?: number | null;
+	latitude: number | null;
 
 	/**
 	 * Longitude of the position of the spot
 	 */
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsNumber()
 	@Min(-180)
 	@Max(180)
-	longitude?: number | null;
+	longitude: number | null;
 
 	/**
 	 * Payload to store inconsistent data about the spot
 	 */
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsJSON()
 	@MaxLength(1000)
-	payload?: string;
+	payload: string | null;
 
 	/**
 	 * Redirection when the QR code is accessed
@@ -73,7 +78,7 @@ export class SpotDto implements Spot {
 	@IsOptional()
 	@IsUrl()
 	@MaxLength(255)
-	redirection?: string | null;
+	redirection: string | null;
 
 	/**
 	 * Set if the spot will be referenced on the website
@@ -81,7 +86,7 @@ export class SpotDto implements Spot {
 	@ApiPropertyOptional({ default: false })
 	@IsOptional()
 	@IsBoolean()
-	referenced?: boolean = false;
+	referenced: boolean = false;
 
 	/**
 	 * Set if the spot is already configured or not
@@ -89,7 +94,7 @@ export class SpotDto implements Spot {
 	@ApiPropertyOptional({ default: true })
 	@IsOptional()
 	@IsBoolean()
-	configured?: boolean = true;
+	configured: boolean = true;
 
 	/**
 	 * Date when the spot was created

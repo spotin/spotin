@@ -3,7 +3,7 @@ import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/users/enums/user-role';
 
 @ApiTags('Views')
 @Controller('users')

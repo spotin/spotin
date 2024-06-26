@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables, FQDN } from '@/config/config.constants';
 import { MailTemplate } from '@/mail/mail.constants';
+import { User } from '@/users/types/user';
+import { UserWithResetPasswordRequest } from '@/reset-password-requests/types/user-with-reset-password-request';
 
 @Injectable()
 export class MailService {
@@ -12,7 +13,7 @@ export class MailService {
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
 	) {}
 
-	public async sendWelcomeMail(user: User, tokenId: string) {
+	public async sendWelcomeMail(user: User, tokenId: string): Promise<void> {
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
@@ -28,17 +29,19 @@ export class MailService {
 		});
 	}
 
-	public async sendResetPasswordMail(user: User, tokenId: string) {
+	public async sendResetPasswordMail(
+		userWithResetPasswordRequest: UserWithResetPasswordRequest,
+	): Promise<void> {
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
-		})}/auth/reset-password?token=${tokenId}`;
+		})}/auth/reset-password?token=${userWithResetPasswordRequest.resetPasswordRequest?.token}`;
 
 		await this.mailerService.sendMail({
-			to: user.email,
+			to: userWithResetPasswordRequest.email,
 			subject: 'Reset your password',
 			template: MailTemplate.RESET_PASSWORD,
 			context: {
-				username: user.username,
+				username: userWithResetPasswordRequest.username,
 				link,
 			},
 		});

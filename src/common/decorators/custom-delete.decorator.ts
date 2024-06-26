@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import { applyDecorators, HttpCode, Delete } from '@nestjs/common';
 import {
 	ApiNoContentResponse,
