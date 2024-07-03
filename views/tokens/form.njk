@@ -23,25 +23,30 @@
 
 {% block javascript %}
   <script>
-    const form = document.querySelector("#form");
-    const success = document.querySelector("#success");
-    const errors = document.querySelector("#errors");
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const errors = document.getElementById("errors");
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Get the form data
-      const name = form.querySelector("#name");
-      const value = form.querySelector("#value");
-      const button = form.querySelector("#button");
-
-      // Reset error messages
-      name.removeAttribute('aria-invalid');
-      name.removeAttribute('disabled');
-      button.removeAttribute('disabled');
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
 
       success.innerHTML = "";
       errors.innerHTML = "";
+
+      // Get the form data
+      const name = document.getElementById("name");
+      const value = document.getElementById("value");
+      const button = document.getElementById("button");
+
+      name.removeAttribute('disabled');
+      button.removeAttribute('disabled');
 
       const body = JSON.stringify({
         name: name.value
@@ -68,29 +73,7 @@
         success.innerHTML = "<p class=\"success\">Token created successfully. Please copy it to a safe location. You will not be able to view it again.</p>";
 
       } else {
-        if (response.status === 400) {
-          const error = await response.json();
-
-          const ul = document.createElement('ul');
-
-          for (const message of error.message) {
-            // Find the field that caused the error
-            const fieldName = message.split(' ')[0];
-            const field = document.querySelector(`#${fieldName}`);
-
-            field.setAttribute('aria-invalid', 'true');
-
-            // Create a list item with the error message
-            const li = document.createElement('li');
-            li.className = 'error';
-            li.innerHTML = message;
-            ul.appendChild(li);
-          }
-
-          errors.appendChild(ul);
-        } else {
-          errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
-        }
+        await manageErrors(response, errors);
       }
     });
   </script>

@@ -54,7 +54,7 @@
 
 {% block javascript %}
   <script>
-    const getLocationButton = document.querySelector("#get-location-button");
+    const getLocationButton = document.getElementById("get-location-button");
 
     getLocationButton.addEventListener("click", async () => {
       if (!navigator.geolocation) {
@@ -67,8 +67,8 @@
           .getCurrentPosition(resolve, reject);
       });
 
-      const latitude = document.querySelector("#latitude");
-      const longitude = document.querySelector("#longitude");
+      const latitude = document.getElementById("latitude");
+      const longitude = document.getElementById("longitude");
 
       latitude.value = position
         .coords
@@ -80,66 +80,36 @@
         .toFixed(5);
     });
 
-    const form = document.querySelector("#form");
-    const success = document.querySelector("#success");
-    const errors = document.querySelector("#errors");
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const errors = document.getElementById("errors");
+
+    const latitude = document.getElementById("latitude");
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Get the form data
-      const toConfigure = form.querySelector("#to-configure");
-      const id = form.querySelector("#id");
-      const title = form.querySelector("#title");
-      const description = form.querySelector("#description");
-      const latitude = form.querySelector("#latitude");
-      const longitude = form.querySelector("#longitude");
-      const payload = form.querySelector("#payload");
-      const redirection = form.querySelector("#redirection");
-      const referenced = form.querySelector("#referenced");
-      const configured = form.querySelector("#configured");
-
-      // Reset error messages
-      title.removeAttribute('aria-invalid');
-      description.removeAttribute('aria-invalid');
-      latitude.removeAttribute('aria-invalid');
-      longitude.removeAttribute('aria-invalid');
-      payload.removeAttribute('aria-invalid');
-      redirection.removeAttribute('aria-invalid');
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
 
       success.innerHTML = "";
       errors.innerHTML = "";
 
-      // Check if the latitude is between -90.0 and 90.0
-      if (latitude.value < -90 || latitude.value > 90) {
-        latitude.setAttribute('aria-invalid', 'true');
-
-        errors.innerHTML = "<p class=\"error\">Latitude must be between -90.0 and 90.0.</p>";
-
-        return;
-      }
-
-      // Check if the longitude is between -180.0 and 180.0
-      if (longitude.value < -180 || longitude.value > 180) {
-        longitude.setAttribute('aria-invalid', 'true');
-
-        errors.innerHTML = "<p class=\"error\">Longitude must be between -180.0 and 180.0.</p>";
-
-        return;
-      }
-
-      // Check if the payload is a valid JSON
-      if (payload.value !== "") {
-        try {
-          JSON.parse(payload.value);
-        } catch (error) {
-          payload.setAttribute('aria-invalid', 'true');
-
-          errors.innerHTML = "<p class=\"error\">Payload must be a valid JSON.</p>";
-
-          return;
-        }
-      }
+      // Get the form data
+      const toConfigure = document.getElementById("to-configure");
+      const id = document.getElementById("id");
+      const title = document.getElementById("title");
+      const description = document.getElementById("description");
+      const latitude = document.getElementById("latitude");
+      const longitude = document.getElementById("longitude");
+      const payload = document.getElementById("payload");
+      const redirection = document.getElementById("redirection");
+      const referenced = document.getElementById("referenced");
+      const configured = document.getElementById("configured");
 
       const body = JSON.stringify({
         title: title.value
@@ -148,12 +118,8 @@
         description: description.value
           ? description.value
           : undefined,
-        latitude: latitude.value
-          ? latitude.value
-          : undefined,
-        longitude: longitude.value
-          ? longitude.value
-          : undefined,
+        latitude: Number(latitude.value),
+        longitude: Number(longitude.value),
         payload: payload.value
           ? payload.value
           : undefined,
@@ -189,29 +155,7 @@
 
         window.location.href = `/spots/${spot.id}`;
       } else {
-        if (response.status === 400) {
-          const error = await response.json();
-
-          const ul = document.createElement('ul');
-
-          for (const message of error.message) {
-            // Find the field that caused the error
-            const fieldName = message.split(' ')[0];
-            const field = document.querySelector(`#${fieldName}`);
-
-            field.setAttribute('aria-invalid', 'true');
-
-            // Create a list item with the error message
-            const li = document.createElement('li');
-            li.className = 'error';
-            li.innerHTML = message;
-            ul.appendChild(li);
-          }
-
-          errors.appendChild(ul);
-        } else {
-          errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
-        }
+        await manageErrors(response, errors);
       }
     });
   </script>

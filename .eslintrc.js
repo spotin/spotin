@@ -15,7 +15,7 @@ module.exports = {
 		node: true,
 		jest: true,
 	},
-	ignorePatterns: ['prisma/seed.ts', '.eslintrc.js'],
+	ignorePatterns: ['prisma/seed.ts', 'public/javascripts', '.eslintrc.js'],
 	rules: {
 		'@typescript-eslint/explicit-function-return-type': 'error',
 		'@typescript-eslint/explicit-module-boundary-types': 'off',

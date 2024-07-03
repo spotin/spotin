@@ -31,75 +31,49 @@
 
 {% block javascript %}
   <script>
-    const form = document.querySelector("#form");
-    const success = document.querySelector("#success");
-    const errors = document.querySelector("#errors");
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const errors = document.getElementById("errors");
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Get the form data
-      const username = form.querySelector("#username");
-      const email = form.querySelector("#email");
-
-      // Reset error messages
-      username.removeAttribute('aria-invalid');
-      email.removeAttribute('aria-invalid');
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
 
       success.innerHTML = "";
       errors.innerHTML = "";
 
-      try {
-        const body = JSON.stringify({
-          username: username.value
-            ? username.value
-            : undefined,
-          email: email.value
-            ? email.value
-            : undefined
-        });
+      // Get the form data
+      const username = document.getElementById("username");
+      const email = document.getElementById("email");
 
-        const response = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body
-        });
+      const body = JSON.stringify({
+        username: username.value
+          ? username.value
+          : undefined,
+        email: email.value
+          ? email.value
+          : undefined
+      });
 
-        if (response.ok) {
-          success.innerHTML += "<p class=\"success\">You have successfully signed up. Please check your email to verify your account.<p>";
-          success.innerHTML += "<p class=\"success\">You can then <a href='/auth/login'>Log in</a>.</p>";
-        } else {
-          if (response.status === 400) {
-            const error = await response.json();
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });
 
-            const ul = document.createElement('ul');
-
-            for (const message of error.message) {
-              // Find the field that caused the error
-              const fieldName = message.split(' ')[0];
-              const field = document.querySelector(`#${fieldName}`);
-
-              field.setAttribute('aria-invalid', 'true');
-
-              // Create a list item with the error message
-              const li = document.createElement('li');
-              li.className = 'error';
-              li.innerHTML = message;
-              ul.appendChild(li);
-            }
-
-            errors.appendChild(ul);
-          } else if (response.status === 409) {
-            errors.innerHTML = "<p class=\"error\">An account with that username already exists.</p>";
-          } else {
-            errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
-          }
-        }
-      } catch (e) {
-        console.error(e);
-        errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+      if (response.ok) {
+        success.innerHTML += "<p class=\"success\">You have successfully signed up. Please check your email to verify your account.<p>";
+        success.innerHTML += "<p class=\"success\">You can then <a href='/auth/login'>Log in</a>.</p>";
+      } else {
+        await manageErrors(response, errors);
       }
     });
   </script>
