@@ -142,12 +142,24 @@
       }
 
       const body = JSON.stringify({
-        title: title.value,
-        description: description.value,
-        latitude: latitude.value,
-        longitude: longitude.value,
-        payload: payload.value,
-        redirection: redirection.value,
+        title: title.value
+          ? title.value
+          : undefined,
+        description: description.value
+          ? description.value
+          : undefined,
+        latitude: latitude.value
+          ? latitude.value
+          : undefined,
+        longitude: longitude.value
+          ? longitude.value
+          : undefined,
+        payload: payload.value
+          ? payload.value
+          : undefined,
+        redirection: redirection.value
+          ? redirection.value
+          : undefined,
         referenced: referenced.checked,
         configured: configured.checked
       });

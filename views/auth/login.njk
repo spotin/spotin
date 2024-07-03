@@ -47,7 +47,14 @@
       errors.innerHTML = "";
 
       try {
-        const body = JSON.stringify({email: email.value, password: password.value});
+        const body = JSON.stringify({
+          email: email.value
+            ? email.value
+            : undefined,
+          password: password.value
+            ? password.value
+            : undefined
+        });
 
         const response = await fetch("/api/auth/login", {
           method: "POST",

@@ -43,7 +43,11 @@
       success.innerHTML = "";
       errors.innerHTML = "";
 
-      const body = JSON.stringify({name: name.value});
+      const body = JSON.stringify({
+        name: name.value
+          ? name.value
+          : undefined
+      });
 
       const response = await fetch("/api/tokens", {
         method: "POST",
