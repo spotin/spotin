@@ -103,16 +103,16 @@ export class UsersViewsController {
 		description: 'The spot ID.',
 		format: 'uuid',
 	})
-	@Render('users/view')
-	async renderUser(@Param('id') id: string) {
-		const user = await this.usersService.getUser(id);
+	@Render('users/form')
+	async renderUser(@AuthUser() user: User, @Param('id') id: string) {
+		const foundUser = await this.usersService.getUser(id);
 
 		return {
 			title: 'User | Spot in',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
-			user,
+			user: foundUser,
 		};
 	}
 }

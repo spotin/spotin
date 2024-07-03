@@ -1,52 +1,92 @@
 {% extends "layout.njk" %}
 {% block body %}
   <h2>
-    <i class="fas fa-key"></i>
-    New token
+    <i class="fas fa-users"></i>
+    {% if user %}
+      Edit user
+    {% else %}
+      New user
+    {% endif %}
   </h2>
   <form id="form">
     <fieldset>
-      <label for="name">Name</label>
-      <input name="name" id="name" placeholder="Name" autofocus="autofocus" required="required"/>
+      <input type="hidden" name="id" id="id" value="{{ user.id }}">
 
-      <label for="value">Value</label>
-      <input type="value" name="value" id="value" readonly="readonly" autocomplete="off"/>
+      <label for="username">Username</label>
+      <input name="username" id="username" placeholder="Username" value="{{ user.username }}" autofocus="autofocus" required="required"/>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Email" value="{{ user.email }}" autofocus="autofocus" required="required">
+
+      <label for="role">Role</label>
+      <select id="role" name="role" required="required">
+        <option value="STANDARD_USER" {{ 'selected' if user.role == "STANDARD_USER" }}>Standard user</option>
+        <option value="CERTIFIED_USER" {{ 'selected' if user.role == "CERTIFIED_USER" }}>Certified user</option>
+        <option value="ADMIN" {{ 'selected' if user.role == "ADMIN" }}>Admin</option>
+      </select>
+
+      <label for="enabled">
+        <input id="enabled" type="checkbox" role="switch" name="enabled" {{ 'checked' if user.enabled or not user }}>
+        Enable the user
+      </label>
     </fieldset>
     <div id="success"></div>
     <div id="errors"></div>
     <button id="button" name="button" type="submit">
       <i class="fas fa-save"></i>
-      New token
+      Save
     </button>
   </form>
 {% endblock %}
 
 {% block javascript %}
   <script>
-    const form = document.querySelector("#form");
-    const success = document.querySelector("#success");
-    const errors = document.querySelector("#errors");
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const errors = document.getElementById("errors");
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Get the form data
-      const name = form.querySelector("#name");
-      const value = form.querySelector("#value");
-      const button = form.querySelector("#button");
-
-      // Reset error messages
-      name.removeAttribute('aria-invalid');
-      name.removeAttribute('disabled');
-      button.removeAttribute('disabled');
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
 
       success.innerHTML = "";
       errors.innerHTML = "";
 
-      const body = JSON.stringify({name: name.value});
+      // Get the form data
+      const username = document.getElementById("username");
+      const email = document.getElementById("email");
+      const role = document.getElementById("role");
+      const enabled = document.getElementById("enabled");
 
-      const response = await fetch("/api/tokens", {
-        method: "POST",
+      const body = JSON.stringify({
+        username: username.value
+          ? username.value
+          : undefined,
+        email: email.value
+          ? email.value
+          : undefined,
+        role: role.value
+          ? role.value
+          : undefined,
+        enabled: enabled.checked
+      });
+
+      let endpoint = "/api/users";
+      let method = "POST";
+
+      if (id.value) {
+        endpoint += `/${id.value}`;
+        method = "PATCH";
+      }
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json"
         },
@@ -54,39 +94,12 @@
       });
 
       if (response.ok) {
-        const token = await response.json();
+        const user = await response.json();
 
-        value.value = token.value;
-
-        name.setAttribute('disabled', 'disabled');
-        button.setAttribute('disabled', 'disabled');
-
-        success.innerHTML = "<p class=\"success\">Token created successfully. Please copy it to a safe location. You will not be able to view it again.</p>";
-
+        window.location.href = `/users/${user.id}`;
       } else {
-        if (response.status === 400) {
-          const error = await response.json();
-
-          const ul = document.createElement('ul');
-
-          for (const message of error.message) {
-            // Find the field that caused the error
-            const fieldName = message.split(' ')[0];
-            const field = document.querySelector(`#${fieldName}`);
-
-            field.setAttribute('aria-invalid', 'true');
-
-            // Create a list item with the error message
-            const li = document.createElement('li');
-            li.className = 'error';
-            li.innerHTML = message;
-            ul.appendChild(li);
-          }
-
-          errors.appendChild(ul);
-        } else {
-          errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
-        }
+        // TODO: Handle errors
+        alert("An error occurred. Please try again.");
       }
     });
   </script>
