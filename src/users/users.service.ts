@@ -50,8 +50,35 @@ export class UsersService {
 			},
 		});
 
+		const spotsStatistics = await this.prisma.spot.aggregate({
+			where: {
+				userId: userWithSpots.id,
+				referenced: true,
+			},
+			_count: true,
+			_min: {
+				latitude: true,
+				longitude: true,
+			},
+			_max: {
+				latitude: true,
+				longitude: true,
+			},
+		});
+
 		return {
 			...userWithSpots,
+			spotsStatistics: {
+				count: spotsStatistics._count,
+				latitude: {
+					min: spotsStatistics._min.latitude ?? NaN,
+					max: spotsStatistics._max.latitude ?? NaN,
+				},
+				longitude: {
+					min: spotsStatistics._min.longitude ?? NaN,
+					max: spotsStatistics._max.longitude ?? NaN,
+				},
+			},
 			spots: userWithSpots.spots.map((spot) => ({
 				...spot,
 				payload: spot.payload ? JSON.stringify(spot.payload) : null,
