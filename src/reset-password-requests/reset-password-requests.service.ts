@@ -14,10 +14,6 @@ export class ResetPasswordRequestsService {
 		private readonly prisma: PrismaService,
 	) {}
 
-	// async getResetPasswordRequests(): Promise<ResetPasswordRequest[]> {
-	// 	return await this.prisma.resetPasswordRequest.findMany({});
-	// }
-
 	async getUserWithResetPasswordRequest(
 		userId: string,
 	): Promise<UserWithResetPasswordRequest> {
@@ -36,12 +32,6 @@ export class ResetPasswordRequestsService {
 				userWithResetPasswordRequest.resetPasswordRequest as ResetPasswordRequest,
 		};
 	}
-
-	// async getResetPasswordRequestByToken(token: string): Promise<ResetPasswordRequest>{
-	// 	return await this.prisma.resetPasswordRequest.findFirstOrThrow({
-	// 		where: { token },
-	// 	});
-	// }
 
 	async createResetPasswordRequest(
 		userId: string,

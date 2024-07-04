@@ -40,8 +40,6 @@
 })();
 
 async function manageErrors(response, errors) {
-	errors.className = 'flash error';
-
 	// Set title
 	const p = document.createElement('p');
 
