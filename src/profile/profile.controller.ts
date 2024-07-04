@@ -1,9 +1,11 @@
-import { Controller, Body, Get, Patch } from '@nestjs/common';
+import { Controller, Body, Get, Patch, Param } from '@nestjs/common';
 import {
 	ApiBody,
 	ApiConflictResponse,
+	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
+	ApiParam,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -14,6 +16,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { ReadProfileDto } from '@/profile/dtos/read-profile.dto';
 import { UpdateProfileDto } from '@/profile/dtos/update-profile.dto';
+import { ReadProfileWithPublicSpotsDto } from '@/profile/dtos/read-profile-with-public-spots.dto';
 
 @ApiTags('Profile')
 @Controller('api/profile')
@@ -75,5 +78,31 @@ export class ProfileController {
 		});
 
 		return new ReadProfileDto(updatedProfile);
+	}
+
+	@Get(':username')
+	@ApiOperation({
+		summary: 'Get the specified profile with their public spots',
+		description: 'Get the specified profile with their public spots.',
+		operationId: 'getProfileWithSpots',
+	})
+	@ApiParam({
+		name: 'username',
+		description: "The user's username.",
+	})
+	@ApiOkResponse({
+		description: `The profile has been successfully retrieved.`,
+		type: ReadProfileWithPublicSpotsDto,
+	})
+	@ApiNotFoundResponse({
+		description: `Profile has not been found.`,
+	})
+	async getProfileWithSpots(
+		@Param('username') username: string,
+	): Promise<ReadProfileWithPublicSpotsDto> {
+		const userWithPublicSpots =
+			await this.usersService.getUserWithPublicSpotsByUsername(username);
+
+		return new ReadProfileWithPublicSpotsDto(userWithPublicSpots);
 	}
 }

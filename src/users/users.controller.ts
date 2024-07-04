@@ -25,10 +25,10 @@ export class UsersController {
 	@GetMany({
 		name: 'Users',
 		summary: 'Get the users',
-		operationId: 'getUsersApi',
+		operationId: 'getUsers',
 		responseType: [ReadUserDto],
 	})
-	async getUsersApi(): Promise<ReadUserDto[]> {
+	async getUsers(): Promise<ReadUserDto[]> {
 		const users = await this.usersService.getUsers();
 
 		const usersDto = users.map((user) => new ReadUserDto(user));
@@ -39,10 +39,10 @@ export class UsersController {
 	@GetOne({
 		name: 'User',
 		summary: 'Get the specified user',
-		operationId: 'getSpotApi',
+		operationId: 'getSpot',
 		responseType: ReadUserDto,
 	})
-	async getUserApi(@Param('id') id: string): Promise<ReadUserDto> {
+	async getUser(@Param('id') id: string): Promise<ReadUserDto> {
 		const user = (await this.usersService.getUser(id)) as User;
 
 		return new ReadUserDto(user);
@@ -53,14 +53,12 @@ export class UsersController {
 		summary: 'Create a new user',
 		bodyType: CreateUserDto,
 		responseType: ReadUserDto,
-		operationId: 'createUserApi',
+		operationId: 'createUser',
 	})
 	@ApiConflictResponse({
 		description: 'Another user has the same username.',
 	})
-	async createUserApi(
-		@Body() createUserDto: CreateUserDto,
-	): Promise<ReadUserDto> {
+	async createUser(@Body() createUserDto: CreateUserDto): Promise<ReadUserDto> {
 		const newUser = await this.usersService.createUser(createUserDto);
 
 		return new ReadUserDto(newUser);
@@ -71,12 +69,12 @@ export class UsersController {
 		summary: 'Update the specified user',
 		bodyType: UpdateUserDto,
 		responseType: ReadUserDto,
-		operationId: 'updateUserApi',
+		operationId: 'updateUser',
 	})
 	@ApiConflictResponse({
 		description: 'Another user has the same username.',
 	})
-	async updateUserApi(
+	async updateUser(
 		@Param('id') id: string,
 		@Body() updateUserDto: UpdateUserDto,
 	): Promise<ReadUserDto> {
@@ -88,9 +86,9 @@ export class UsersController {
 	@CustomDelete({
 		name: 'User',
 		summary: 'Delete the specified user',
-		operationId: 'deleteUserApi',
+		operationId: 'deleteUser',
 	})
-	async deleteUserApi(@Param('id') id: string): Promise<void> {
+	async deleteUser(@Param('id') id: string): Promise<void> {
 		await this.usersService.deleteUser(id);
 	}
 }

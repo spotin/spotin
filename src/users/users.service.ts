@@ -7,6 +7,7 @@ import { User } from '@/users/types/user';
 import { CreateUser } from '@/users/types/create-user';
 import { UpdateUser } from '@/users/types/update-user';
 import { UserRole } from '@/users/enums/user-role';
+import { UserWithSpots } from '@/users/types/user-with-spots';
 
 @Injectable()
 export class UsersService {
@@ -32,6 +33,30 @@ export class UsersService {
 		return {
 			...user,
 			role: UserRole[user.role],
+		};
+	}
+
+	async getUserWithPublicSpotsByUsername(
+		username: string,
+	): Promise<UserWithSpots> {
+		const userWithSpots = await this.prisma.user.findFirstOrThrow({
+			where: { username },
+			include: {
+				spots: {
+					where: {
+						referenced: true,
+					},
+				},
+			},
+		});
+
+		return {
+			...userWithSpots,
+			spots: userWithSpots.spots.map((spot) => ({
+				...spot,
+				payload: spot.payload ? JSON.stringify(spot.payload) : null,
+			})),
+			role: UserRole[userWithSpots.role],
 		};
 	}
 
