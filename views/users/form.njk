@@ -98,8 +98,7 @@
 
         window.location.href = `/users/${user.id}`;
       } else {
-        // TODO: Handle errors
-        alert("An error occurred. Please try again.");
+        await manageErrors(response, errors);
       }
     });
   </script>
