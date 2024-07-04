@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+{% block body %}
+  <h1>
+    <i class="fas fa-users"></i>
+    Users
+  </h1>
+  <p class="text-justify">
+    This is the list of all users. You can create, update, and delete users.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th class="grow">Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Enabled</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>
+            <a href="/users/{{ user.id }}">{{ user.username }}</a>
+          </td>
+          <td>
+            <a href="/users/{{ user.id }}">{{ user.email }}</a>
+          </td>
+          <td>
+            <a href="/users/{{ user.id }}">{{ user.role }}</a>
+          </td>
+          <td>
+            <a href="/users/{{ user.id }}">{{ user.enabled }}</a>
+          </td>
+          <td>
+            <a href="/users/{{ user.id }}/delete">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="/users/create" role="button">
+    <i class="fas fa-plus-circle"></i>
+    New user
+  </a>
+{% endblock %}

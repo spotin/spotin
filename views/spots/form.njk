@@ -34,12 +34,12 @@
       <input id="redirection" type="text" name="redirection" placeholder="http(s)://" value="{{ spot.redirection }}">
 
       <label for="referenced" {{ 'hidden' if role == "GUEST" or role == "USER" }}>
-        <input id="referenced" type="checkbox" role="switch" name="referenced" value="true" {% if spot.referenced %} checked="checked" {% endif %}>
+        <input id="referenced" type="checkbox" role="switch" name="referenced" {% if spot.referenced %} checked="checked" {% endif %}>
         Referenced
       </label>
 
       <label for="configured" {{ 'hidden' if role == "GUEST" }}>
-        <input id="configured" type="checkbox" role="switch" name="configured" value="true" {% if spot.configured %} checked="checked" {% endif %}>
+        <input id="configured" type="checkbox" role="switch" name="configured" {% if spot.configured %} checked="checked" {% endif %}>
         Configured
       </label>
     </fieldset>
