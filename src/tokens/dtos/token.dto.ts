@@ -2,6 +2,7 @@ import { Token } from '@/tokens/types/token';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
 	IsDateString,
+	IsOptional,
 	IsString,
 	IsUUID,
 	MaxLength,
