@@ -1,6 +1,3 @@
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { User } from '@/users/types/user';
 import { Controller, Get, Query, Render, Res } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
