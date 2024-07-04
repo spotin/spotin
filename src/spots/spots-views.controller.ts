@@ -50,13 +50,12 @@ export class SpotsViewsController {
 	@Render('spots/form')
 	async renderCreateSpot(
 		@AuthUser() user: User,
-	): Promise<Record<string, string | undefined>> {
+	): Promise<Record<string, string>> {
 		return {
 			title: 'Create a new spot | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
-			action: `/spots`,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 		};
 	}
 
@@ -98,7 +97,7 @@ export class SpotsViewsController {
 	@Render('spots/list')
 	async renderSpotsList(
 		@AuthUser() user: User,
-	): Promise<Record<string, string | undefined | Spot[]>> {
+	): Promise<Record<string, string | Spot[]>> {
 		const spots = await this.spotsService.getSpots(user);
 
 		return {
@@ -188,9 +187,9 @@ export class SpotsViewsController {
 			const spot = await this.spotsService.getSpot(id, user);
 
 			res.render('spots/form', {
-				username: user?.username,
-				email: user?.email,
-				role: user?.role,
+				username: user.username,
+				email: user.email,
+				role: user.role,
 				spot,
 			});
 		} catch (error) {

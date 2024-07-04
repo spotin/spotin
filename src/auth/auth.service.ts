@@ -8,7 +8,6 @@ import * as argon2id from 'argon2';
 import * as crypto from 'crypto';
 import { Jwt } from '@/auth/jwt/types/jwt.type';
 import { User } from '@/users/types/user';
-import { SpotWithUser } from '@/spots/types/spot-with-user';
 
 @Injectable()
 export class AuthService {

@@ -1,6 +1,3 @@
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { User } from '@/users/types/user';
 import { Controller, Get, Query, Render, Res } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -97,25 +94,5 @@ export class AuthViewsController {
 			title: 'Reset password | Spot in',
 			token,
 		});
-	}
-
-	@Get('profile')
-	@JwtAuth()
-	@ApiOperation({
-		summary: 'Render the profile page',
-		description: 'Render the profile page.',
-		operationId: 'renderProfile',
-	})
-	@ApiOkResponse({
-		description: 'Render successful.',
-	})
-	@Render('auth/profile')
-	async renderProfile(@AuthUser() user: User): Promise<Record<string, string>> {
-		return {
-			title: 'Profile | Spot in',
-			username: user.username,
-			email: user.email,
-			role: user.role,
-		};
 	}
 }

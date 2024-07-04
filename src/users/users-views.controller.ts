@@ -45,9 +45,9 @@ export class UsersViewsController {
 	): Promise<Record<string, string>> {
 		return {
 			title: 'Create a new user | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 		};
 	}
 
@@ -68,9 +68,9 @@ export class UsersViewsController {
 
 		return {
 			title: 'Users | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 			users,
 		};
 	}
@@ -120,9 +120,9 @@ export class UsersViewsController {
 
 		return {
 			title: 'User | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 			user: foundUser,
 		};
 	}

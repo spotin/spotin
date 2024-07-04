@@ -1,0 +1,85 @@
+{% extends "layout.njk" %}
+{% block body %}
+  <h1>
+    <i class="fas fa-user"></i>
+    User profile
+  </h1>
+  <form id="form">
+    <fieldset>
+      <label for="username">Username</label>
+      <input name="username" id="username" placeholder="Username" value="{{ username }}" autofocus="autofocus">
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Email" value="{{ email }}" autofocus="autofocus">
+
+      <label for="current-password">Current password</label>
+      <input type="password" name="current-password" id="current-password" placeholder="Current password" autofocus="autofocus" required="required">
+
+      <label for="new-password">New password</label>
+      <input type="password" name="new-password" id="new-password" placeholder="New password" autofocus="autofocus">
+    </fieldset>
+    <div id="success"></div>
+    <div id="errors"></div>
+    <button type="submit">
+      <i class="fas fa-edit"></i>
+      Update profile
+    </button>
+  </form>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const errors = document.getElementById("errors");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
+
+      success.innerHTML = "";
+      errors.innerHTML = "";
+
+      // Get the form data
+      const username = document.getElementById("username");
+      const email = document.getElementById("email");
+      const currentPassword = document.getElementById("current-password");
+      const newPassword = document.getElementById("new-password");
+
+      const body = JSON.stringify({
+        username: username.value
+          ? username.value
+          : undefined,
+        email: email.value
+          ? email.value
+          : undefined,
+        currentPassword: currentPassword.value
+          ? currentPassword.value
+          : undefined,
+        newPassword: newPassword.value
+          ? newPassword.value
+          : undefined
+      });
+
+      const response = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });
+
+      if (response.ok) {
+        success.innerHTML += "<p class=\"success\">You have successfully updated your profile.<p>";
+      } else {
+        await manageErrors(response, errors);
+      }
+    });
+  </script>
+{% endblock %}
