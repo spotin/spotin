@@ -3,6 +3,8 @@ import { Roles } from '@/auth/decorators/roles.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
+import { UserRole } from '@/users/enums/user-role';
+import { User } from '@/users/types/user';
 import { UsersService } from '@/users/users.service';
 import {
 	Controller,
@@ -19,7 +21,6 @@ import {
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
-import { User, UserRole } from '@prisma/client';
 
 @ApiTags('Views')
 @Controller('users')
@@ -39,7 +40,9 @@ export class UsersViewsController {
 		description: 'Render successful.',
 	})
 	@Render('users/form')
-	renderCreateUser(@AuthUser() user: User) {
+	async renderCreateUser(
+		@AuthUser() user: User,
+	): Promise<Record<string, string>> {
 		return {
 			title: 'Create a new user | Spot in',
 			username: user?.username,
@@ -58,7 +61,9 @@ export class UsersViewsController {
 		description: 'Render successful.',
 	})
 	@Render('users/list')
-	async renderUsersList(@AuthUser() user: User) {
+	async renderUsersList(
+		@AuthUser() user: User,
+	): Promise<Record<string, string | User[]>> {
 		const users = await this.usersService.getUsers();
 
 		return {
@@ -85,7 +90,10 @@ export class UsersViewsController {
 		description: 'Redirect successful.',
 	})
 	@Redirect('/users', HttpStatus.PERMANENT_REDIRECT)
-	async deleteUser(@AuthUser() user: User, @Param('id') id: string) {
+	async deleteUser(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<void> {
 		await this.usersService.deleteUser(id);
 	}
 
@@ -104,7 +112,10 @@ export class UsersViewsController {
 		format: 'uuid',
 	})
 	@Render('users/form')
-	async renderUser(@AuthUser() user: User, @Param('id') id: string) {
+	async renderUser(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<Record<string, string | User>> {
 		const foundUser = await this.usersService.getUser(id);
 
 		return {
