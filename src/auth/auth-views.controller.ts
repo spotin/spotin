@@ -98,24 +98,4 @@ export class AuthViewsController {
 			token,
 		});
 	}
-
-	@Get('profile')
-	@JwtAuth()
-	@ApiOperation({
-		summary: 'Render the profile page',
-		description: 'Render the profile page.',
-		operationId: 'renderProfile',
-	})
-	@ApiOkResponse({
-		description: 'Render successful.',
-	})
-	@Render('auth/profile')
-	async renderProfile(@AuthUser() user: User): Promise<Record<string, string>> {
-		return {
-			title: 'Profile | Spot in',
-			username: user.username,
-			email: user.email,
-			role: user.role,
-		};
-	}
 }

@@ -39,12 +39,12 @@ export class TokensViewsController {
 	@Render('tokens/form')
 	async renderCreateToken(
 		@AuthUser() user: User,
-	): Promise<Record<string, string | undefined>> {
+	): Promise<Record<string, string>> {
 		return {
 			title: 'Create a new token | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 		};
 	}
 
@@ -61,14 +61,14 @@ export class TokensViewsController {
 	@Render('tokens/list')
 	async renderTokensList(
 		@AuthUser() user: User,
-	): Promise<Record<string, string | undefined | Token[]>> {
+	): Promise<Record<string, string | Token[]>> {
 		const tokens = await this.tokensService.getTokens(user);
 
 		return {
 			title: 'Tokens | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 			tokens,
 		};
 	}
@@ -115,14 +115,14 @@ export class TokensViewsController {
 	async renderToken(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-	): Promise<Record<string, string | undefined | Token>> {
+	): Promise<Record<string, string | Token>> {
 		const token = await this.tokensService.getToken(id, user);
 
 		return {
 			title: 'Token | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 			token,
 		};
 	}

@@ -7,12 +7,14 @@ import { ConfigModule } from './config/config.module';
 import { TokensModule } from './tokens/tokens.module';
 import { ResetPasswordRequestsModule } from '@/reset-password-requests/reset-password-requests.module';
 import { MailModule } from '@/mail/mail.module';
+import { ProfileModule } from '@/profile/profile.module';
 
 @Module({
 	imports: [
 		AuthModule,
 		ConfigModule,
 		MailModule,
+		ProfileModule,
 		ResetPasswordRequestsModule,
 		SpotsModule,
 		UsersModule,
