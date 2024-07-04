@@ -74,6 +74,13 @@ async function manageErrors(response, errors) {
 		const li = document.createElement('li');
 
 		li.className = 'error';
+		li.innerHTML = 'Wrong email or password.';
+
+		ul.appendChild(li);
+	} else if (response.status === 403) {
+		const li = document.createElement('li');
+
+		li.className = 'error';
 		li.innerHTML = 'You are not authorized to perform this action.';
 
 		ul.appendChild(li);
