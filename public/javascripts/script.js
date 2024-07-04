@@ -72,7 +72,7 @@ async function manageErrors(response, errors) {
 		const li = document.createElement('li');
 
 		li.className = 'error';
-		li.innerHTML = 'Wrong email or password.';
+		li.innerHTML = 'Authentication failed, please review your inputs.';
 
 		ul.appendChild(li);
 	} else if (response.status === 403) {
