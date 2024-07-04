@@ -9,7 +9,7 @@ import { Request, Response } from 'express';
 
 @Catch(UnauthorizedException)
 export class ConfiguredSpotViewExceptionFilter implements ExceptionFilter {
-	catch(_: HttpException, host: ArgumentsHost) {
+	catch(_: HttpException, host: ArgumentsHost): void {
 		const ctx = host.switchToHttp();
 		const response = ctx.getResponse<Response>();
 		const request = ctx.getRequest<Request>();

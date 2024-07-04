@@ -4,6 +4,7 @@ import { TokenAuthGuard } from '@/auth/token/token-auth.guard';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import { ApiSecurity, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const TokenAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(TokenAuthGuard, ...guards),

@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 import { UsersService } from '@/users/users.service';
 import { LoginUser } from '@/auth/local/types/login-user.type';
 import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
@@ -8,6 +7,8 @@ import { SpotsService } from '@/spots/spots.service';
 import * as argon2id from 'argon2';
 import * as crypto from 'crypto';
 import { Jwt } from '@/auth/jwt/types/jwt.type';
+import { User } from '@/users/types/user';
+import { SpotWithUser } from '@/spots/types/spot-with-user';
 
 @Injectable()
 export class AuthService {
@@ -55,7 +56,7 @@ export class AuthService {
 		return user;
 	}
 
-	async validateToken(value: string) {
+	async validateToken(value: string): Promise<User> {
 		const hash = crypto.createHash('sha256').update(value).digest('hex');
 
 		const user = (await this.usersService.getUserByTokenHash(hash)) as User;
@@ -67,16 +68,16 @@ export class AuthService {
 		return user;
 	}
 
-	async validateSpot(spotId: string) {
+	async validateSpot(spotId: string): Promise<User> {
 		const spot = await this.spotsService.getSpot(spotId);
 
 		if (spot.configured) {
 			throw new UnauthorizedException();
 		}
 
-		const user = (await this.usersService.getUser(spot.userId)) as User;
+		const spotWithUser = await this.spotsService.getSpotWithUser(spot.id);
 
-		return user;
+		return spotWithUser.user;
 	}
 
 	async validatePasswordResetRequestToken(token: string): Promise<User> {

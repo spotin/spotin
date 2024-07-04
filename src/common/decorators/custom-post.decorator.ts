@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
 import { applyDecorators, Post } from '@nestjs/common';
 import {

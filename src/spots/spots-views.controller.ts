@@ -15,7 +15,6 @@ import {
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
@@ -26,6 +25,8 @@ import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
+import { Spot } from '@/spots/types/spot';
+import { User } from '@/users/types/user';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -47,7 +48,9 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	renderCreateSpot(@AuthUser() user: User) {
+	async renderCreateSpot(
+		@AuthUser() user: User,
+	): Promise<Record<string, string | undefined>> {
 		return {
 			title: 'Create a new spot | Spot in',
 			username: user?.username,
@@ -68,7 +71,9 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/latest')
-	async renderLatestSpots(@AuthUser() user: User | undefined) {
+	async renderLatestSpots(
+		@AuthUser() user: User | undefined,
+	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getPublicSpots();
 
 		return {
@@ -91,7 +96,9 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/list')
-	async renderSpotsList(@AuthUser() user: User) {
+	async renderSpotsList(
+		@AuthUser() user: User,
+	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getSpots(user);
 
 		return {
@@ -119,7 +126,10 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	async renderConfigureSpot(@AuthUser() user: User, @Param('id') id: string) {
+	async renderConfigureSpot(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<Record<string, string | undefined | Spot | boolean>> {
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
@@ -147,7 +157,10 @@ export class SpotsViewsController {
 		description: 'Redirect successful.',
 	})
 	@Redirect('/spots')
-	async deleteSpot(@AuthUser() user: User, @Param('id') id: string) {
+	async deleteSpot(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+	): Promise<void> {
 		await this.spotsService.deleteSpot(id, user);
 	}
 
@@ -170,7 +183,7 @@ export class SpotsViewsController {
 		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Res() res: Response,
-	) {
+	): Promise<void> {
 		try {
 			const spot = await this.spotsService.getSpot(id, user);
 
@@ -179,7 +192,6 @@ export class SpotsViewsController {
 				email: user?.email,
 				role: user?.role,
 				spot,
-				action: `/spots/${id}`,
 			});
 		} catch (error) {
 			res.redirect(`/spots/${id}/configure`);
@@ -207,7 +219,7 @@ export class SpotsViewsController {
 	async getSpotRedirection(
 		@Res({ passthrough: true }) res: Response,
 		@Param('id') id: string,
-	) {
+	): Promise<void> {
 		const spot = await this.spotsService.getSpot(id);
 
 		if (!spot.configured) {
@@ -237,28 +249,31 @@ export class SpotsViewsController {
 	@ApiNotFoundResponse({
 		description: 'Spot has not been found. Redirect to `/not-found` page.',
 	})
+	@Render('spots/view')
 	async renderSpot(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
 		@Param('id') id: string,
-	) {
+	): Promise<Record<string, string | undefined | Spot>> {
 		const spot = await this.spotsService.getSpot(id);
 		const fqdn = this.configService.get(FQDN, { infer: true });
 		const redirection = `${fqdn}/spots/${spot.id}/redirect`;
 
-		try {
-			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
+		let qrcodeSvg: string | undefined;
 
-			res.render('spots/view', {
-				username: user?.username,
-				email: user?.email,
-				role: user?.role,
-				title: 'Spot',
-				spot,
-				qrcode: qrcodeSvg,
-			});
+		try {
+			qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 		} catch (error) {
 			console.error(error);
 		}
+
+		return {
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+			title: 'Spot',
+			spot,
+			qrcode: qrcodeSvg,
+		};
 	}
 }

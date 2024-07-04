@@ -30,63 +30,46 @@
 
 {% block javascript %}
   <script>
-    const form = document.querySelector("#form");
-    const errors = document.querySelector("#errors");
+    const form = document.getElementById("form");
+    const errors = document.getElementById("errors");
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Get the form data
-      const email = form.querySelector("#email");
-      const password = form.querySelector("#password");
-
-      // Reset error messages
-      email.removeAttribute('aria-invalid');
-      password.removeAttribute('aria-invalid');
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
 
       errors.innerHTML = "";
 
-      try {
-        const body = JSON.stringify({email: email.value, password: password.value});
+      // Get the form data
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
 
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body
-        });
+      const body = JSON.stringify({
+        email: email.value
+          ? email.value
+          : undefined,
+        password: password.value
+          ? password.value
+          : undefined
+      });
 
-        if (response.ok) {
-          window.location = "/";
-        } else {
-          if (response.status === 400) {
-            const error = await response.json();
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });
 
-            const ul = document.createElement('ul');
-
-            for (const message of error.message) {
-              // Find the field that caused the error
-              const fieldName = message.split(' ')[0];
-              const field = document.querySelector(`#${fieldName}`);
-
-              field.setAttribute('aria-invalid', 'true');
-
-              // Create a list item with the error message
-              const li = document.createElement('li');
-              li.className = 'error';
-              li.innerHTML = message;
-              ul.appendChild(li);
-            }
-
-            errors.appendChild(ul);
-          } else {
-            errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
-          }
-        }
-      } catch (e) {
-        console.error(e);
-        errors.innerHTML = "<p class=\"error\">An error occurred. Please try again.</p>";
+      if (response.ok) {
+        window.location = "/";
+      } else {
+        await manageErrors(response, errors);
       }
     });
   </script>

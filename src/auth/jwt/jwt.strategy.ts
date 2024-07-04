@@ -2,13 +2,13 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy as NestPassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { User } from '@prisma/client';
 import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { AuthService } from '@/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables, JWT_SECRET } from '@/config/config.constants';
 import { PassportStrategy } from '@/auth/auth.constants';
 import { ExpressAuthInfo } from '@/auth/types/express-auth-info.type';
+import { User } from '@/users/types/user';
 
 type DoneCallback = (
 	err: Error | null,
@@ -34,7 +34,7 @@ export class JwtStrategy extends NestPassportStrategy(
 			{
 				jwtFromRequest: ExtractJwt.fromExtractors([
 					ExtractJwt.fromAuthHeaderAsBearerToken(),
-					(request: Request) => request.cookies.jwt,
+					(request: Request): string => request.cookies.jwt,
 				]),
 				ignoreExpiration: false,
 				secretOrKey: configService.get(JWT_SECRET, { infer: true }),

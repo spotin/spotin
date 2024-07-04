@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { randomUUID } from 'crypto';
-import { User } from '@prisma/client';
 import { MailService } from '@/mail/mail.service';
+import { ResetPasswordRequest } from '@/reset-password-requests/types/reset-password-request';
+import { User } from '@/users/types/user';
+import { UserRole } from '@/users/enums/user-role';
+import { UserWithResetPasswordRequest } from '@/reset-password-requests/types/user-with-reset-password-request';
 
 @Injectable()
 export class ResetPasswordRequestsService {
@@ -11,23 +14,28 @@ export class ResetPasswordRequestsService {
 		private readonly prisma: PrismaService,
 	) {}
 
-	async getResetPasswordRequests() {
-		return await this.prisma.resetPasswordRequest.findMany({});
+	async getUserWithResetPasswordRequest(
+		userId: string,
+	): Promise<UserWithResetPasswordRequest> {
+		const userWithResetPasswordRequest =
+			await this.prisma.user.findFirstOrThrow({
+				where: { id: userId },
+				include: {
+					resetPasswordRequest: true,
+				},
+			});
+
+		return {
+			...userWithResetPasswordRequest,
+			role: UserRole[userWithResetPasswordRequest.role],
+			resetPasswordRequest:
+				userWithResetPasswordRequest.resetPasswordRequest as ResetPasswordRequest,
+		};
 	}
 
-	async getResetPasswordRequest(id: string) {
-		return await this.prisma.resetPasswordRequest.findFirst({
-			where: { id },
-		});
-	}
-
-	async getResetPasswordRequestByToken(token: string) {
-		return await this.prisma.resetPasswordRequest.findFirst({
-			where: { token },
-		});
-	}
-
-	async createResetPasswordRequest(userId: string) {
+	async createResetPasswordRequest(
+		userId: string,
+	): Promise<ResetPasswordRequest> {
 		const token = randomUUID();
 
 		const requestPasswordReset = await this.prisma.resetPasswordRequest.create({
@@ -44,7 +52,9 @@ export class ResetPasswordRequestsService {
 		return requestPasswordReset;
 	}
 
-	async updateResetPasswordRequest(requestPasswordResetId: string) {
+	async updateResetPasswordRequest(
+		requestPasswordResetId: string,
+	): Promise<ResetPasswordRequest> {
 		const token = randomUUID();
 
 		const requestPasswordReset = await this.prisma.resetPasswordRequest.update({
@@ -59,29 +69,39 @@ export class ResetPasswordRequestsService {
 		return requestPasswordReset;
 	}
 
-	async deleteResetPasswordRequest(requestPasswordResetId: string) {
-		await this.prisma.resetPasswordRequest.delete({
+	async sendResetPasswordRequestForUser(user: User): Promise<void> {
+		const token = randomUUID();
+
+		const userWithResetPasswordRequest = await this.prisma.user.update({
 			where: {
-				id: requestPasswordResetId,
+				id: user.id,
 			},
+			data: {
+				resetPasswordRequest: {
+					upsert: {
+						create: {
+							token,
+						},
+						update: {
+							token,
+						},
+					},
+				},
+			},
+			include: {
+				resetPasswordRequest: true,
+			},
+		});
+
+		await this.mail.sendResetPasswordMail({
+			...userWithResetPasswordRequest,
+			resetPasswordRequest:
+				userWithResetPasswordRequest.resetPasswordRequest as ResetPasswordRequest,
+			role: UserRole[userWithResetPasswordRequest.role],
 		});
 	}
 
-	async sendResetPasswordRequestForUser(user: User) {
-		let requestPasswordReset;
-
-		if (user.resetPasswordRequestId) {
-			requestPasswordReset = await this.updateResetPasswordRequest(
-				user.resetPasswordRequestId,
-			);
-		} else {
-			requestPasswordReset = await this.createResetPasswordRequest(user.id);
-		}
-
-		await this.mail.sendResetPasswordMail(user, requestPasswordReset.token);
-	}
-
-	async sendResetPasswordRequestForNewUser(newUser: User) {
+	async sendResetPasswordRequestForNewUser(newUser: User): Promise<void> {
 		const passwordResetRequest = await this.createResetPasswordRequest(
 			newUser.id,
 		);
@@ -89,9 +109,18 @@ export class ResetPasswordRequestsService {
 		await this.mail.sendWelcomeMail(newUser, passwordResetRequest.token);
 	}
 
-	async deleteResetPasswordRequestForUser(user: User) {
-		if (user.resetPasswordRequestId) {
-			await this.deleteResetPasswordRequest(user.resetPasswordRequestId);
+	async deleteResetPasswordRequestForUser(user: User): Promise<void> {
+		const userWithResetPasswordRequest =
+			await this.getUserWithResetPasswordRequest(user.id);
+
+		const { resetPasswordRequest } = userWithResetPasswordRequest;
+
+		if (resetPasswordRequest) {
+			await await this.prisma.resetPasswordRequest.delete({
+				where: {
+					id: resetPasswordRequest.id,
+				},
+			});
 		}
 	}
 }

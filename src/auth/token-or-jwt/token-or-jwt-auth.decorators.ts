@@ -9,6 +9,7 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const TokenOrJwtAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(TokenOrJwtAuthGuard, ...guards),
