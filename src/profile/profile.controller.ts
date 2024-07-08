@@ -100,9 +100,9 @@ export class ProfileController {
 	async getProfileWithSpots(
 		@Param('username') username: string,
 	): Promise<ReadProfileWithPublicSpotsDto> {
-		const userWithPublicSpots =
+		const profileWithPublicSpots =
 			await this.usersService.getUserWithPublicSpotsByUsername(username);
 
-		return new ReadProfileWithPublicSpotsDto(userWithPublicSpots);
+		return new ReadProfileWithPublicSpotsDto(profileWithPublicSpots);
 	}
 }

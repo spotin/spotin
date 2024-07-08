@@ -1,29 +1,63 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { ProfileWithPublicSpots } from '@/profile/types/profile-with-public-spots';
 import { User } from '@/users/types/user';
-import { Controller, Get, Render } from '@nestjs/common';
+import { UsersService } from '@/users/users.service';
+import { Controller, Get, Param, Render } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Views')
 @Controller('profile')
 export class ProfileViewsController {
+	constructor(private readonly usersService: UsersService) {}
 	@Get()
 	@JwtAuth()
 	@ApiOperation({
-		summary: 'Render the profile page',
-		description: 'Render the profile page.',
-		operationId: 'renderProfile',
+		summary: 'Render the my profile page',
+		description: 'Render the my profile page.',
+		operationId: 'renderMyProfile',
 	})
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
 	@Render('profile/form')
-	async renderProfile(@AuthUser() user: User): Promise<Record<string, string>> {
+	async renderMyProfile(
+		@AuthUser() user: User,
+	): Promise<Record<string, string>> {
 		return {
-			title: 'Profile | Spot in',
+			title: 'My profile | Spot in',
 			username: user.username,
 			email: user.email,
 			role: user.role,
+		};
+	}
+
+	@Get(':username')
+	@JwtOrUnrestrictedAuth()
+	@ApiOperation({
+		summary: 'Render the specified profile with their public spots page',
+		description:
+			'Render the specified profile with their public spots profile page.',
+		operationId: 'renderProfile',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	@Render('profile/view')
+	async renderProfile(
+		@AuthUser() user: User,
+		@Param('username') username: string,
+	): Promise<Record<string, string | ProfileWithPublicSpots>> {
+		const profileWithPublicSpots =
+			await this.usersService.getUserWithPublicSpotsByUsername(username);
+
+		return {
+			title: 'Profile | Spot in',
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+			profile: profileWithPublicSpots,
 		};
 	}
 }
