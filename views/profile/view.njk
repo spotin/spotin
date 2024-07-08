@@ -21,9 +21,6 @@
     const latitudeMax = {{ profile.spotsStatistics.latitude.max }};
 
     if (longitudeMin && longitudeMax && latitudeMin && latitudeMax) {
-      const latitudeCenter = (latitudeMin + latitudeMax) / 2;
-      const longitudeCenter = (longitudeMin + longitudeMax) / 2;
-
       const map = new maplibregl.Map({
         container: 'map', style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
         // style: 'https://demotiles.maplibre.org/style.json'
