@@ -7,6 +7,7 @@ import { User } from '@/users/types/user';
 import { CreateUser } from '@/users/types/create-user';
 import { UpdateUser } from '@/users/types/update-user';
 import { UserRole } from '@/users/enums/user-role';
+import { UserWithSpots } from '@/users/types/user-with-spots';
 
 @Injectable()
 export class UsersService {
@@ -32,6 +33,57 @@ export class UsersService {
 		return {
 			...user,
 			role: UserRole[user.role],
+		};
+	}
+
+	async getUserWithPublicSpotsByUsername(
+		username: string,
+	): Promise<UserWithSpots> {
+		const userWithSpots = await this.prisma.user.findFirstOrThrow({
+			where: { username },
+			include: {
+				spots: {
+					where: {
+						referenced: true,
+					},
+				},
+			},
+		});
+
+		const spotsStatistics = await this.prisma.spot.aggregate({
+			where: {
+				userId: userWithSpots.id,
+				referenced: true,
+			},
+			_count: true,
+			_min: {
+				latitude: true,
+				longitude: true,
+			},
+			_max: {
+				latitude: true,
+				longitude: true,
+			},
+		});
+
+		return {
+			...userWithSpots,
+			spotsStatistics: {
+				count: spotsStatistics._count,
+				latitude: {
+					min: spotsStatistics._min.latitude ?? NaN,
+					max: spotsStatistics._max.latitude ?? NaN,
+				},
+				longitude: {
+					min: spotsStatistics._min.longitude ?? NaN,
+					max: spotsStatistics._max.longitude ?? NaN,
+				},
+			},
+			spots: userWithSpots.spots.map((spot) => ({
+				...spot,
+				payload: spot.payload ? JSON.stringify(spot.payload) : null,
+			})),
+			role: UserRole[userWithSpots.role],
 		};
 	}
 

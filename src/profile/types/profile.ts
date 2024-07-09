@@ -1,3 +1,3 @@
 import { User } from '@/users/types/user';
 
-export type Profile = Pick<User, 'username' | 'email'>;
+export type Profile = Pick<User, 'username' | 'email' | 'createdAt'>;

@@ -1,8 +1,8 @@
+import { Profile } from '@/profile/types/profile';
 import { Spot } from '@/spots/types/spot';
 import { SpotsStatistics } from '@/spots/types/spots-statistics';
-import { User } from '@/users/types/user';
 
-export type UserWithSpots = User & {
+export type ProfileWithPublicSpots = Omit<Profile, 'email'> & {
 	spotsStatistics: SpotsStatistics;
 	spots: Spot[];
 };
