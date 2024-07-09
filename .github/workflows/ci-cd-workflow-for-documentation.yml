@@ -1,5 +1,4 @@
-# Disabled until the repository is public
-name: Deploy Material for MkDocs site to GitHub Pages
+name: CI/CD workflow for documentation
 
 on:
   push:
