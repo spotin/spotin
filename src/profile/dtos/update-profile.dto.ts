@@ -9,7 +9,7 @@ import { UpdateProfile } from '@/profile/types/update-profile';
 import { ProfileDto } from '@/profile/dtos/profile.dto';
 
 export class UpdateProfileDto
-	extends PartialType(OmitType(ProfileDto, ['email' as const]))
+	extends PartialType(OmitType(ProfileDto, ['email', 'createdAt'] as const))
 	implements UpdateProfile
 {
 	/**
