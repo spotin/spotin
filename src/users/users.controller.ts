@@ -42,7 +42,7 @@ export class UsersController {
 		responseType: ReadUserDto,
 	})
 	async getUser(@Param('id') id: string): Promise<ReadUserDto> {
-		const user = (await this.usersService.getUser(id)) as User;
+		const user = await this.usersService.getUser(id);
 
 		return new ReadUserDto(user);
 	}
