@@ -84,7 +84,7 @@ export class AuthService {
 			token,
 		)) as User;
 
-		if (!user) {
+		if (!user.enabled) {
 			throw new UnauthorizedException();
 		}
 

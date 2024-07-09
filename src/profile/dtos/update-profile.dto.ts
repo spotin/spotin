@@ -1,10 +1,15 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import {
+	ApiProperty,
+	ApiPropertyOptional,
+	OmitType,
+	PartialType,
+} from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength, IsOptional } from 'class-validator';
 import { UpdateProfile } from '@/profile/types/update-profile';
 import { ProfileDto } from '@/profile/dtos/profile.dto';
 
 export class UpdateProfileDto
-	extends PartialType(ProfileDto)
+	extends PartialType(OmitType(ProfileDto, ['email' as const]))
 	implements UpdateProfile
 {
 	/**

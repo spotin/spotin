@@ -108,7 +108,7 @@ export class UsersViewsController {
 	})
 	@ApiParam({
 		name: 'id',
-		description: 'The spot ID.',
+		description: 'The user ID.',
 		format: 'uuid',
 	})
 	@Render('users/form')

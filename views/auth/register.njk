@@ -70,7 +70,7 @@
       });
 
       if (response.ok) {
-        success.innerHTML += "<p class=\"success\">You have successfully signed up. Please check your email to verify your account.<p>";
+        success.innerHTML += "<p class=\"success\">A link to activate your account has been emailed to the address provided.<p>";
         success.innerHTML += "<p class=\"success\">You can then <a href='/auth/login'>Log in</a>.</p>";
       } else {
         await manageErrors(response, errors);

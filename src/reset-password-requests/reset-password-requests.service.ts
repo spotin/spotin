@@ -33,43 +33,9 @@ export class ResetPasswordRequestsService {
 		};
 	}
 
-	async createResetPasswordRequest(
-		userId: string,
-	): Promise<ResetPasswordRequest> {
-		const token = randomUUID();
-
-		const requestPasswordReset = await this.prisma.resetPasswordRequest.create({
-			data: {
-				token,
-				user: {
-					connect: {
-						id: userId,
-					},
-				},
-			},
-		});
-
-		return requestPasswordReset;
-	}
-
-	async updateResetPasswordRequest(
-		requestPasswordResetId: string,
-	): Promise<ResetPasswordRequest> {
-		const token = randomUUID();
-
-		const requestPasswordReset = await this.prisma.resetPasswordRequest.update({
-			where: {
-				id: requestPasswordResetId,
-			},
-			data: {
-				token,
-			},
-		});
-
-		return requestPasswordReset;
-	}
-
-	async sendResetPasswordRequestForUser(user: User): Promise<void> {
+	async createOrUpdateResetPasswordRequest(
+		user: User,
+	): Promise<UserWithResetPasswordRequest> {
 		const token = randomUUID();
 
 		const userWithResetPasswordRequest = await this.prisma.user.update({
@@ -93,20 +59,42 @@ export class ResetPasswordRequestsService {
 			},
 		});
 
-		await this.mail.sendResetPasswordMail({
+		return {
 			...userWithResetPasswordRequest,
 			resetPasswordRequest:
 				userWithResetPasswordRequest.resetPasswordRequest as ResetPasswordRequest,
 			role: UserRole[userWithResetPasswordRequest.role],
-		});
+		};
 	}
 
 	async sendResetPasswordRequestForNewUser(newUser: User): Promise<void> {
-		const passwordResetRequest = await this.createResetPasswordRequest(
-			newUser.id,
-		);
+		const passwordResetRequest =
+			await this.createOrUpdateResetPasswordRequest(newUser);
 
-		await this.mail.sendWelcomeMail(newUser, passwordResetRequest.token);
+		await this.mail.sendWelcomeMail(
+			newUser,
+			(passwordResetRequest.resetPasswordRequest as ResetPasswordRequest).token,
+		);
+	}
+
+	async sendResetPasswordRequestForUser(user: User): Promise<void> {
+		const passwordResetRequest =
+			await this.createOrUpdateResetPasswordRequest(user);
+
+		await this.mail.sendResetPasswordMail(
+			user,
+			(passwordResetRequest.resetPasswordRequest as ResetPasswordRequest).token,
+		);
+	}
+
+	async sendRecoverAccountForUser(user: User): Promise<void> {
+		const passwordResetRequest =
+			await this.createOrUpdateResetPasswordRequest(user);
+
+		await this.mail.sendAccountRecoverMail(
+			user,
+			(passwordResetRequest.resetPasswordRequest as ResetPasswordRequest).token,
+		);
 	}
 
 	async deleteResetPasswordRequestForUser(user: User): Promise<void> {

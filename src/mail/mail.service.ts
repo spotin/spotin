@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables, FQDN } from '@/config/config.constants';
 import { MailTemplate } from '@/mail/mail.constants';
 import { User } from '@/users/types/user';
-import { UserWithResetPasswordRequest } from '@/reset-password-requests/types/user-with-reset-password-request';
 
 @Injectable()
 export class MailService {
@@ -30,18 +29,38 @@ export class MailService {
 	}
 
 	public async sendResetPasswordMail(
-		userWithResetPasswordRequest: UserWithResetPasswordRequest,
+		user: User,
+		tokenId: string,
 	): Promise<void> {
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
-		})}/auth/reset-password?token=${userWithResetPasswordRequest.resetPasswordRequest?.token}`;
+		})}/auth/reset-password?token=${tokenId}`;
 
 		await this.mailerService.sendMail({
-			to: userWithResetPasswordRequest.email,
-			subject: 'Reset your password',
+			to: user.email,
+			subject: 'Spot in - Reset your password',
 			template: MailTemplate.RESET_PASSWORD,
 			context: {
-				username: userWithResetPasswordRequest.username,
+				username: user.username,
+				link,
+			},
+		});
+	}
+
+	public async sendAccountRecoverMail(
+		user: User,
+		tokenId: string,
+	): Promise<void> {
+		const link = `${this.configService.get(FQDN, {
+			infer: true,
+		})}/auth/reset-password?token=${tokenId}`;
+
+		await this.mailerService.sendMail({
+			to: user.email,
+			subject: 'Spot in - Recover your account',
+			template: MailTemplate.RECOVER_ACCOUNT,
+			context: {
+				username: user.username,
 				link,
 			},
 		});

@@ -39,7 +39,7 @@ export class UsersController {
 	@GetOne({
 		name: 'User',
 		summary: 'Get the specified user',
-		operationId: 'getSpot',
+		operationId: 'getUser',
 		responseType: ReadUserDto,
 	})
 	async getUser(@Param('id') id: string): Promise<ReadUserDto> {
