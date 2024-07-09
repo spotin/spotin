@@ -1,5 +1,4 @@
-name: Build and push Docker image to GitHub
-run-name: Build and push Docker image to GitHub
+name: CI/CD workflow
 
 on:
   push:
