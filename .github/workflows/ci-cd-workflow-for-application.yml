@@ -74,6 +74,7 @@ jobs:
             prisma
             public
             views
+            Dockerfile
             package.json
             package-lock.json
           if-no-files-found: error
@@ -84,14 +85,22 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-
       - name: Download files
         uses: actions/download-artifact@v4
         with:
           pattern: '*-files'
-          merge-multiple: true
+
+      - name: Prepare files
+        run: |
+          mv application-files/.nest .
+          mv application-files/prisma .
+          mv application-files/public .
+          mv application-files/views .
+          mv application-files/Dockerfile .
+          mv application-files/package.json .
+          mv application-files/package-lock.json .
+
+          rm -rf application-files
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
@@ -113,6 +122,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
