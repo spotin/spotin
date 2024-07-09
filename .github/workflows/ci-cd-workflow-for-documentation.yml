@@ -1,0 +1,87 @@
+name: CI/CD workflow for documentation
+
+on:
+  push:
+    paths:
+      - docs/**/*
+      - mkdocs.yml
+
+  pull_request:
+    paths:
+      - docs/**/*
+      - mkdocs.yml
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+# Default to bash
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - uses: actions/cache@v4
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+
+      - name: Install Material for MkDocs dependencies
+        run: |
+          sudo apt install --yes \
+            libcairo2-dev \
+            libfreetype6-dev \
+            libffi-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libz-dev
+
+          pip install \
+            cairosvg \
+            mkdocs-material \
+            mkdocs-minify-plugin \
+            mkdocs-git-revision-date-localized-plugin \
+            mkdocs-glightbox \
+            pillow
+
+      - name: Build Material for MkDocs
+        run: |
+          mkdocs build --site-dir public
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  # Deployment job
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+    environment:
+      name: GitHub Pages
+      url: ${{ steps.deployment.outputs.page_url }}

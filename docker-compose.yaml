@@ -1,3 +1,7 @@
+networks:
+  spotin_network:
+    name: spotin_network
+
 services:
   spotin:
     container_name: spotin
@@ -9,12 +13,21 @@ services:
         condition: service_started
       postgres:
         condition: service_healthy
+    networks:
+      - spotin_network
+    env_file:
+      - .env
+    environment:
+      - SPOT_IN_DATABASE_URL=postgresql://${SPOT_IN_DATABASE_USER}:${SPOT_IN_DATABASE_PASSWORD}@postgres:5432/${SPOT_IN_DATABASE_NAME}
+      - SPOT_IN_MAIL_HOST=mailpit
     ports:
       - 3000:3000
 
   mailpit:
     container_name: spotin-mailpit
     image: axllent/mailpit:v1.18
+    networks:
+      - spotin_network
     ports:
       - 1025:1025
       - 8025:8025
@@ -26,6 +39,8 @@ services:
       - POSTGRES_DB=spotin
       - POSTGRES_USER=spotin
       - POSTGRES_PASSWORD=spotin
+    networks:
+      - spotin_network
     ports:
       - 5432:5432
     volumes:

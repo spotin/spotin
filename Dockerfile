@@ -9,38 +9,13 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 
 # Install dependencies
-RUN npm ci
-
-# Copy source files
-COPY prisma prisma
-COPY public public
-COPY src src
-COPY views views
-COPY nest-cli.json nest-cli.json
-COPY tsconfig.build.json tsconfig.build.json
-COPY tsconfig.json tsconfig.json
-
-# Build the application
-RUN npm run build
-
-## Second stage: Create the production image
-FROM node:20-alpine as production
-
-# Work directory
-WORKDIR /app
-
-# Copy package files
-COPY --from=build /app/package.json package.json
-COPY --from=build /app/package-lock.json package-lock.json
-
-# Install production dependencies
 RUN npm ci --omit=dev
 
-# Copy built application from stage 1
-COPY --from=build /app/.nest .nest
-COPY --from=build /app/prisma prisma
-COPY --from=build /app/public public
-COPY --from=build /app/views views
+# Copy source files
+COPY .nest .nest
+COPY prisma prisma
+COPY public public
+COPY views views
 
 # Environment variables
 ENV NODE_ENV=production
