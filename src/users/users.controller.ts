@@ -13,7 +13,6 @@ import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { UserRole } from '@/users/enums/user-role';
-import { User } from '@/users/types/user';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -39,11 +38,11 @@ export class UsersController {
 	@GetOne({
 		name: 'User',
 		summary: 'Get the specified user',
-		operationId: 'getSpot',
+		operationId: 'getUser',
 		responseType: ReadUserDto,
 	})
 	async getUser(@Param('id') id: string): Promise<ReadUserDto> {
-		const user = (await this.usersService.getUser(id)) as User;
+		const user = await this.usersService.getUser(id);
 
 		return new ReadUserDto(user);
 	}

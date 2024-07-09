@@ -105,14 +105,18 @@ export class AuthController {
 					throw new ConflictException();
 				}
 
-				const user = await this.usersService.getUserByEmail(
-					registerUserDto.email,
-				);
-
-				if (user && user.enabled) {
-					await this.resetPasswordRequestsService.sendResetPasswordRequestForUser(
-						user,
+				try {
+					const user = await this.usersService.getUserByEmail(
+						registerUserDto.email,
 					);
+
+					if (user.enabled) {
+						await this.resetPasswordRequestsService.sendRecoverAccountForUser(
+							user,
+						);
+					}
+				} catch (e) {
+					// Do nothing
 				}
 			} else {
 				throw e;
@@ -138,14 +142,18 @@ export class AuthController {
 	async requestPasswordReset(
 		@Body() requestPasswordResetDto: ResetPasswordRequestDto,
 	): Promise<void> {
-		const user = await this.usersService.getUserByEmail(
-			requestPasswordResetDto.email,
-		);
-
-		if (user && user.enabled) {
-			await this.resetPasswordRequestsService.sendResetPasswordRequestForUser(
-				user,
+		try {
+			const user = await this.usersService.getUserByEmail(
+				requestPasswordResetDto.email,
 			);
+
+			if (user.enabled) {
+				await this.resetPasswordRequestsService.sendResetPasswordRequestForUser(
+					user,
+				);
+			}
+		} catch (e) {
+			// Do nothing
 		}
 	}
 

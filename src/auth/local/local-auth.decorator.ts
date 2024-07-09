@@ -14,7 +14,7 @@ export const LocalAuth = (...guards: (Function | CanActivate)[]) =>
 		UseGuards(LocalAuthGuard, ...guards),
 		ApiSecurity(PassportStrategy.LOCAL),
 		ApiUnauthorizedResponse({
-			description: 'Wrong username/password.',
+			description: 'Invalid user ID or password.',
 		}),
 		ApiForbiddenResponse({
 			description: 'Insufficient roles or permissions.',

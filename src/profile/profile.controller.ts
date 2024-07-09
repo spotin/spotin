@@ -73,7 +73,6 @@ export class ProfileController {
 
 		const updatedProfile = await this.usersService.updateUser(user.id, {
 			username: profileDto.username,
-			email: profileDto.email,
 			password: profileDto.newPassword,
 		});
 

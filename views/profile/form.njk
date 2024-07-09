@@ -10,7 +10,8 @@
       <input name="username" id="username" placeholder="Username" value="{{ username }}" autofocus="autofocus">
 
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Email" value="{{ email }}" autofocus="autofocus">
+      <input type="email" name="email" id="email" placeholder="Email" value="{{ email }}" autofocus="autofocus" readonly="readonly">
+      <small>Email address cannot be changed.</small>
 
       <label for="current-password">Current password</label>
       <input type="password" name="current-password" id="current-password" placeholder="Current password" autofocus="autofocus" required="required">
@@ -48,16 +49,12 @@
 
       // Get the form data
       const username = document.getElementById("username");
-      const email = document.getElementById("email");
       const currentPassword = document.getElementById("current-password");
       const newPassword = document.getElementById("new-password");
 
       const body = JSON.stringify({
         username: username.value
           ? username.value
-          : undefined,
-        email: email.value
-          ? email.value
           : undefined,
         currentPassword: currentPassword.value
           ? currentPassword.value
