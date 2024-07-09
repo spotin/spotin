@@ -26,7 +26,7 @@
 		"dev:up": "docker compose up --detach mailpit postgres",
 		"dev:down": "docker compose down ",
 		"build": "npm run prisma:generate && nest build",
-		"start": "npm run prisma:migrate && node .nest/main",
+		"start": "npm run prisma:migrate && node .nest/backend/src/main",
 		"prisma:migrate": "prisma migrate dev --name spotin",
 		"prisma:generate": "prisma generate",
 		"prisma:seed": "ts-node prisma/seed.ts"
