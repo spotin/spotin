@@ -33,7 +33,7 @@
       <label for="redirection">Redirection URL</label>
       <input id="redirection" type="text" name="redirection" placeholder="http(s)://" value="{{ spot.redirection }}">
 
-      <label for="referenced" {{ 'hidden' if role == "GUEST" or role == "USER" }}>
+      <label for="referenced" {{ 'hidden' if role == "GUEST" or role == "STANDARD_USER" }}>
         <input id="referenced" type="checkbox" role="switch" name="referenced" {% if spot.referenced %} checked="checked" {% endif %}>
         Referenced
       </label>
