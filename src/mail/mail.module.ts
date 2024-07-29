@@ -13,6 +13,7 @@ import {
 	MAIL_SENDER_NAME,
 	MAIL_USER,
 } from '@/config/config.constants';
+import { I18nService } from 'nestjs-i18n';
 import { PrismaModule } from 'nestjs-prisma';
 
 @Module({
@@ -20,9 +21,10 @@ import { PrismaModule } from 'nestjs-prisma';
 		ConfigModule,
 		MailerModule.forRootAsync({
 			imports: [ConfigModule],
-			inject: [ConfigService],
+			inject: [ConfigService, I18nService],
 			useFactory: async (
 				configService: ConfigService<EnvironmentVariables, true>,
+				i18n: I18nService,
 			) => ({
 				transport: {
 					host: configService.get(MAIL_HOST, { infer: true }),
@@ -39,7 +41,7 @@ import { PrismaModule } from 'nestjs-prisma';
 				},
 				template: {
 					dir: path.join(__dirname, '/templates'),
-					adapter: new HandlebarsAdapter(),
+					adapter: new HandlebarsAdapter({ t: i18n.hbsHelper }),
 					options: {
 						strict: true,
 					},

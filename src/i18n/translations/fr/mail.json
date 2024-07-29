@@ -1,0 +1,27 @@
+{
+	"welcome": {
+		"subject": "Spot in - Bienvenue à Spot in",
+		"helloGreetings": "Bonjour {username}",
+		"message": "Merci de vous être inscrit à Spot in. Veuillez définir votre mot de passe en cliquant sur le lien ci-dessous. Vous pourrez utiliser Spot in une fois votre mot de passe défini.",
+		"linkText": "Confirmation de l'email",
+		"didNotRequestNewAccount": "Si vous ne vous êtes pas inscrit à Spot in sur Spot in, veuillez répondre à cet email pour nous le faire savoir. Nous nous occuperons du reste.",
+		"byeGreetings": "Meilleures salutations"
+	},
+	"resetPassword": {
+		"subject": "Spot in - Réinitialisation du mot de passe",
+		"helloGreetings": "Bonjour {username},",
+		"message": "Vous avez demandé la réinitialisation de votre mot de passe. Veuillez réinitialiser votre mot de passe en cliquant sur le lien ci-dessous.",
+		"linkText": "Réinitialisation du mot de passe",
+		"didNotRequestNewAccount": "Si vous n'avez pas demandé la réinitialisation de votre mot de passe sur Spot in, veuillez répondre à cet email pour nous le faire savoir. Nous nous occuperons du reste.",
+		"byeGreetings": "Meilleures salutations"
+	},
+	"recoverAccount": {
+		"subject": "Spot in - Récupération de votre compte",
+		"helloGreetings": "Bonjour {username}",
+		"paragraphOne": "Vous avez demandé à créer un nouveau compte sur Spot in. Cependant, un compte précédent sous le nom d'utilisateur {username} existe déjà avec votre adresse email.",
+		"paragraphTwo": "Veuillez cliquer sur le lien ci-dessous pour récupérer votre compte. Vous pourrez mettre à jour les détails de votre compte (tels que votre nom d'utilisateur) une fois votre mot de passe défini.",
+		"linkText": "Réinitialisation du mot de passe",
+		"didNotRequestNewAccount": "Si vous n'avez pas demandé à créer un compte sur Spot in, veuillez répondre à cet email pour nous le faire savoir. Nous nous occuperons du reste.",
+		"byeGreetings": "Meilleures salutations"
+	}
+}
