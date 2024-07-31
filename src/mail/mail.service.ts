@@ -4,25 +4,39 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables, FQDN } from '@/config/config.constants';
 import { MailTemplate } from '@/mail/mail.constants';
 import { User } from '@/users/types/user';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class MailService {
 	constructor(
-		private readonly mailerService: MailerService,
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
+		private readonly i18nService: I18nService,
+		private readonly mailerService: MailerService,
 	) {}
 
-	public async sendWelcomeMail(user: User, tokenId: string): Promise<void> {
+	public async sendWelcomeMail(
+		user: User,
+		lang: string,
+		tokenId: string,
+	): Promise<void> {
+		const subject = await this.i18nService.translate('mail.welcome.subject', {
+			lang,
+		});
+
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
 
 		await this.mailerService.sendMail({
 			to: user.email,
-			subject: `Spot in - Welcome`,
+			subject,
 			template: MailTemplate.WELCOME,
 			context: {
-				username: user.username,
+				// https://github.com/toonvanstrijp/nestjs-i18n/issues/471
+				i18nLang: lang,
+				args: {
+					username: user.username,
+				},
 				link,
 			},
 		});
@@ -30,18 +44,30 @@ export class MailService {
 
 	public async sendResetPasswordMail(
 		user: User,
+		lang: string,
 		tokenId: string,
 	): Promise<void> {
+		const subject = await this.i18nService.translate(
+			'mail.passwordReset.subject',
+			{
+				lang,
+			},
+		);
+
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
 
 		await this.mailerService.sendMail({
 			to: user.email,
-			subject: 'Spot in - Reset your password',
+			subject,
 			template: MailTemplate.RESET_PASSWORD,
 			context: {
-				username: user.username,
+				// https://github.com/toonvanstrijp/nestjs-i18n/issues/471
+				i18nLang: lang,
+				args: {
+					username: user.username,
+				},
 				link,
 			},
 		});
@@ -49,18 +75,30 @@ export class MailService {
 
 	public async sendAccountRecoverMail(
 		user: User,
+		lang: string,
 		tokenId: string,
 	): Promise<void> {
+		const subject = await this.i18nService.translate(
+			'mail.recoverAccount.subject',
+			{
+				lang,
+			},
+		);
+
 		const link = `${this.configService.get(FQDN, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
 
 		await this.mailerService.sendMail({
 			to: user.email,
-			subject: 'Spot in - Recover your account',
+			subject,
 			template: MailTemplate.RECOVER_ACCOUNT,
 			context: {
-				username: user.username,
+				// https://github.com/toonvanstrijp/nestjs-i18n/issues/471
+				i18nLang: lang,
+				args: {
+					username: user.username,
+				},
 				link,
 			},
 		});

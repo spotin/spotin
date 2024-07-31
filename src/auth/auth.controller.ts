@@ -28,6 +28,7 @@ import { Response } from 'express';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { User } from '@/users/types/user';
 import { UserRole } from '@/users/enums/user-role';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -90,13 +91,19 @@ export class AuthController {
 	@ApiConflictResponse({
 		description: 'The username is already taken.',
 	})
-	async register(@Body() registerUserDto: RegisterUserDto): Promise<void> {
+	async register(
+		@Body() registerUserDto: RegisterUserDto,
+		@I18n() i18n: I18nContext,
+	): Promise<void> {
 		try {
-			await this.usersService.createUser({
-				...registerUserDto,
-				enabled: true,
-				role: UserRole.STANDARD_USER,
-			});
+			await this.usersService.createUser(
+				{
+					...registerUserDto,
+					enabled: true,
+					role: UserRole.STANDARD_USER,
+				},
+				i18n.lang,
+			);
 		} catch (e) {
 			if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
 				const meta = e.meta as Record<string, Array<string>>;
@@ -113,6 +120,7 @@ export class AuthController {
 					if (user.enabled) {
 						await this.resetPasswordRequestsService.sendRecoverAccountForUser(
 							user,
+							i18n.lang,
 						);
 					}
 				} catch (e) {
@@ -141,6 +149,7 @@ export class AuthController {
 	})
 	async requestPasswordReset(
 		@Body() requestPasswordResetDto: ResetPasswordRequestDto,
+		@I18n() i18n: I18nContext,
 	): Promise<void> {
 		try {
 			const user = await this.usersService.getUserByEmail(
@@ -150,6 +159,7 @@ export class AuthController {
 			if (user.enabled) {
 				await this.resetPasswordRequestsService.sendResetPasswordRequestForUser(
 					user,
+					i18n.lang,
 				);
 			}
 		} catch (e) {

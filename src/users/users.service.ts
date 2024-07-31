@@ -136,7 +136,7 @@ export class UsersService {
 		};
 	}
 
-	async createUser(createUser: CreateUser): Promise<User> {
+	async createUser(createUser: CreateUser, lang: string): Promise<User> {
 		// Generate a random password for the user until they set it
 		const password = await argon2id.hash(randomBytes(20).toString('hex'));
 
@@ -147,10 +147,13 @@ export class UsersService {
 			},
 		});
 
-		await this.resetPasswordRequestsService.sendResetPasswordRequestForNewUser({
-			...newUser,
-			role: UserRole[newUser.role],
-		});
+		await this.resetPasswordRequestsService.sendResetPasswordRequestForNewUser(
+			{
+				...newUser,
+				role: UserRole[newUser.role],
+			},
+			lang,
+		);
 
 		return {
 			...newUser,

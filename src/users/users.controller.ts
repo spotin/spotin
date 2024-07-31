@@ -13,6 +13,7 @@ import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { UserRole } from '@/users/enums/user-role';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -57,8 +58,14 @@ export class UsersController {
 	@ApiConflictResponse({
 		description: 'Another user has the same username.',
 	})
-	async createUser(@Body() createUserDto: CreateUserDto): Promise<ReadUserDto> {
-		const newUser = await this.usersService.createUser(createUserDto);
+	async createUser(
+		@Body() createUserDto: CreateUserDto,
+		@I18n() i18n: I18nContext,
+	): Promise<ReadUserDto> {
+		const newUser = await this.usersService.createUser(
+			createUserDto,
+			i18n.lang,
+		);
 
 		return new ReadUserDto(newUser);
 	}
