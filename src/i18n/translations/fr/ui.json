@@ -1,5 +1,19 @@
 {
 	"index": {
-		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu."
-	}
+		"title": "L'internet des lieux",
+		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.",
+		"viewLatestSpots": "Voir les derniers spots"
+	},
+	"auth": {
+		"login": {
+			"title": "Connexion"
+		},
+		"logout": {
+			"title": "Déconnexion"
+		},
+		"register": {
+			"title": "Inscription"
+		}
+	},
+	"footer": "Un service offert par la ville de Bienne"
 }
