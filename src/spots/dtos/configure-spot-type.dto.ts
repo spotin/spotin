@@ -6,8 +6,8 @@ export class ConfigureSpotDto
 	extends PartialType(
 		OmitType(SpotDto, [
 			'id',
-			'referenced',
 			'configured',
+			'public',
 			'createdAt',
 			'updatedAt',
 		] as const),

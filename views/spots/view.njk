@@ -7,7 +7,7 @@
     </a>
 
     <hgroup class="head">
-      <h1 class="title">{{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}</h1>
+      <h1 class="title">{{ spot.name if spot.name != null and spot.name != "" else "[No title]" }}</h1>
       <h2 class="uuid">
         {% if spot.redirection %}
           <i class="fas fa-external-link-alt"></i>
@@ -55,7 +55,7 @@
     document
       .getElementById("download-qr-code")
       .addEventListener("click", (event) => {
-        const filename = "{{ spot.title if spot.title else spot.id }}.svg"
+        const filename = "{{ spot.name if spot.name else spot.id }}.svg"
         const qrcode = document
           .getElementById("qrcode")
           .innerHTML;

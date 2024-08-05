@@ -132,7 +132,7 @@ export class SpotsService {
 	async getPublicSpots(): Promise<Spot[]> {
 		const publicSpots = await this.prisma.spot.findMany({
 			where: {
-				referenced: true,
+				public: true,
 				deletedAt: {
 					equals: null,
 				},

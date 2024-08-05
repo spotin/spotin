@@ -132,15 +132,35 @@
 				"label": "Spot longitude (between -180.0 and 180.0)",
 				"placeholder": "Enter the longitude of your spot (e.g. 8.227511)"
 			},
-			"jsonPayload": {
-				"label": "JSON payload",
-				"placeholder": "Enter the JSON payload of your spot"
+			"websiteTarget": {
+				"label": "Website target",
+				"placeholder": "Enter the target of your spot (e.g. https://www.example.com)"
 			},
 			"useCurrentLocation": "Use current location",
-			"visibility": {
-				"label": "Spot visibility",
-				"public": "Public",
-				"private": "Private"
+			"configured": {
+				"label": "Configured",
+				"note": "If set to \"No\", another user can configure this spot once.",
+				"values": {
+					"true": "Yes",
+					"false": "No"
+				}
+			},
+			"public": {
+				"label": "Public",
+				"note": "If the spot is public, it will be visible to all users.",
+				"values": {
+					"true": "Yes",
+					"false": "No"
+				}
+			},
+			"optionsForAdvancedUsers": {
+				"label": "Options for advanced users",
+				"note": "These options are for advanced users.",
+				"payload": {
+					"label": "Payload",
+					"placeholder": "Enter the payload of your spot in JSON format (e.g. {\"hello\": \"world\"})",
+					"note": "The payload must be a valid JSON object. Refer to the API documentation for more details."
+				}
 			}
 		},
 		"list": {

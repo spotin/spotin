@@ -118,7 +118,7 @@ export class SpotsController {
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
 	): Promise<ReadSpotDto> {
-		if (createSpotDto.referenced) {
+		if (createSpotDto.public) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
 
@@ -150,7 +150,7 @@ export class SpotsController {
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
 	): Promise<ReadSpotDto> {
-		if (updateSpot.referenced) {
+		if (updateSpot.public) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
 
