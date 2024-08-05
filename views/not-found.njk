@@ -1,11 +1,17 @@
 {% extends "layout.njk" %}
 {% block body %}
   <div>
-    <h1>Not Found</h1>
-    <p>The requested item was not found.</p>
-    <p>
+    <h1>
+      {{ t('ui.notFound.title') }}
+    </h1>
+    <p class="text-justify">
+      {{ t('ui.notFound.message') }}
+    </p>
+    <p class="text-center">
       <a href="/">
-        <button>Return to homepage</button>
+        <button>
+          {{ t('ui.notFound.backToHome') }}
+        </button>
       </a>
     </p>
   </div>

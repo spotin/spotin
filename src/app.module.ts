@@ -8,12 +8,14 @@ import { TokensModule } from './tokens/tokens.module';
 import { ResetPasswordRequestsModule } from '@/reset-password-requests/reset-password-requests.module';
 import { MailModule } from '@/mail/mail.module';
 import { ProfileModule } from '@/profile/profile.module';
+import { I18nModule } from '@/i18n/i18n.module';
 
 @Module({
 	imports: [
 		AuthModule,
 		ConfigModule,
 		MailModule,
+		I18nModule,
 		ProfileModule,
 		ResetPasswordRequestsModule,
 		SpotsModule,

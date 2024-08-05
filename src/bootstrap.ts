@@ -1,4 +1,5 @@
 import * as nunjucks from 'nunjucks';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
@@ -11,6 +12,7 @@ import {
 	PassportStrategy,
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
+import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 
 export async function bootstrap(
 	app: NestExpressApplication,
@@ -18,6 +20,7 @@ export async function bootstrap(
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+	app.useGlobalFilters(new NotFoundExceptionFilter());
 
 	app.useGlobalPipes(
 		new ValidationPipe({
@@ -42,6 +45,20 @@ export async function bootstrap(
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.useStaticAssets(join(__dirname, '..', 'public'));
 	app.setViewEngine('njk');
+
+	const i18n = app.get<I18nService>(I18nService);
+
+	// Inspiration: https://github.com/toonvanstrijp/nestjs-i18n/blob/e0f3398682e540c93bd39fb29a4ceb270d28464c/src/i18n.module.ts#L90-L92
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	app.setLocal('t', (key: string, args?: any, lang?: string) => {
+		let detectedLanguage = lang;
+
+		if (I18nContext.current()) {
+			detectedLanguage = I18nContext.current()?.lang;
+		}
+
+		return i18n.t(key, { lang: detectedLanguage, args });
+	});
 
 	const config = new DocumentBuilder()
 		.setTitle('Spot in API')

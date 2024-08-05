@@ -1,0 +1,27 @@
+{
+	"welcome": {
+		"subject": "Spot in - Welcome to Spot in",
+		"helloGreetings": "Hello {username}",
+		"message": "Thank you for signing up to Spot in. Please set your password by clicking the link below. You will be able to use Spot in once you set your password.",
+		"linkText": "Set my password and start using Spot in",
+		"didNotRequestNewAccount": "If you did not sign up to Spot in, please ignore this email.",
+		"byeGreetings": "Best regards"
+	},
+	"passwordReset": {
+		"subject": "Spot in - Reset your password",
+		"helloGreetings": "Hello {username}",
+		"message": "You have requested to reset your password. Please click the link below to set a new password.",
+		"linkText": "Reset my password",
+		"didNotRequestNewAccount": "If you did not request to reset your password, please ignore this email.",
+		"byeGreetings": "Best regards"
+	},
+	"recoverAccount": {
+		"subject": "Spot in - Recover your account",
+		"helloGreetings": "Hello {username}",
+		"paragraphOne": "You have requested to create a new account on Spot in. However, a previous account under the username {username} already exists with your email address.",
+		"paragraphTwo": "Please click the link below to recover your account. You will be able to update your account details (such as your username) once you set your password.",
+		"linkText": "Reset my password",
+		"didNotRequestNewAccount": "If you did not request to create an account on Spot in, please reply to this email to let us know. We will take care of the rest.",
+		"byeGreetings": "Best regards"
+	}
+}

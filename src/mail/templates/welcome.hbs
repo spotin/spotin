@@ -2,29 +2,25 @@
 	<head>
 		<meta charset='UTF-8' />
 		<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-		<title>Spot in - Welcome to Spot in</title>
+		<title>{{t 'mail.welcome.subject'}}</title>
 	</head>
 	<body>
 		<div>
-			<h1>Spot in - Welcome to Spot in</h1>
+			<h1>{{t 'mail.welcome.subject'}}</h1>
 			<p>
-				Hello
-				<b>{{username}}</b>,
+				{{t 'mail.welcome.helloGreetings' args}},
 			</p>
 			<p>
-				Thank you for signing up to Spot in. Please set your password by
-				clicking the link below. You will be able to use Spot in once you set
-				your password.
+				{{t 'mail.welcome.message'}}
 			</p>
 			<p>
-				<a href='{{link}}'>Set my password and start using Spot in</a>
+				<a href='{{link}}'>{{t 'mail.welcome.linkText'}}</a>
 			</p>
 			<p>
-				If you did not sign up to Spot in, please reply to this email to let us
-				know. We will take care of the rest.
+				{{t 'mail.welcome.didNotRequestNewAccount'}}
 			</p>
 			<p>
-				Best regards,<br />
+				{{t 'mail.welcome.byeGreetings'}},<br />
 				Spot in
 			</p>
 		</div>

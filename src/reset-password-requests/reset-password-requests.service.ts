@@ -67,32 +67,41 @@ export class ResetPasswordRequestsService {
 		};
 	}
 
-	async sendResetPasswordRequestForNewUser(newUser: User): Promise<void> {
+	async sendResetPasswordRequestForNewUser(
+		newUser: User,
+		lang: string,
+	): Promise<void> {
 		const passwordResetRequest =
 			await this.createOrUpdateResetPasswordRequest(newUser);
 
 		await this.mail.sendWelcomeMail(
 			newUser,
+			lang,
 			(passwordResetRequest.resetPasswordRequest as ResetPasswordRequest).token,
 		);
 	}
 
-	async sendResetPasswordRequestForUser(user: User): Promise<void> {
+	async sendResetPasswordRequestForUser(
+		user: User,
+		lang: string,
+	): Promise<void> {
 		const passwordResetRequest =
 			await this.createOrUpdateResetPasswordRequest(user);
 
 		await this.mail.sendResetPasswordMail(
 			user,
+			lang,
 			(passwordResetRequest.resetPasswordRequest as ResetPasswordRequest).token,
 		);
 	}
 
-	async sendRecoverAccountForUser(user: User): Promise<void> {
+	async sendRecoverAccountForUser(user: User, lang: string): Promise<void> {
 		const passwordResetRequest =
 			await this.createOrUpdateResetPasswordRequest(user);
 
 		await this.mail.sendAccountRecoverMail(
 			user,
+			lang,
 			(passwordResetRequest.resetPasswordRequest as ResetPasswordRequest).token,
 		);
 	}

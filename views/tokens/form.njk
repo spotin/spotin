@@ -2,21 +2,28 @@
 {% block body %}
   <h2>
     <i class="fas fa-key"></i>
-    New token
+    {{ t('ui.tokens.form.title') }}
   </h2>
   <form id="form">
     <fieldset>
-      <label for="name">Name</label>
-      <input name="name" id="name" placeholder="Name" autofocus="autofocus" required="required"/>
+      <label for="name">
+        {{ t('ui.tokens.form.name.label') }}
+      </label>
+      <input name="name" id="name" placeholder="{{ t('ui.tokens.form.name.placeholder') }}" autofocus="autofocus" required="required"/>
 
-      <label for="value">Value</label>
-      <input type="value" name="value" id="value" readonly="readonly" autocomplete="off"/>
+      <label for="value">
+        {{ t('ui.tokens.form.value.label') }}
+      </label>
+      <input type="value" name="value" id="value" placeholder="{{ t('ui.tokens.form.value.placeholder') }}" readonly="readonly" autocomplete="off"/>
+      <small>
+        {{ t('ui.tokens.form.value.note') }}
+      </small>
     </fieldset>
     <div id="success"></div>
     <div id="errors"></div>
     <button id="button" name="button" type="submit">
       <i class="fas fa-save"></i>
-      New token
+      {{ t('ui.tokens.form.button') }}
     </button>
   </form>
 {% endblock %}
