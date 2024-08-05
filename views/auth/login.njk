@@ -2,29 +2,37 @@
 {% block body %}
   <h1>
     <i class="fas fa-sign-in-alt"></i>
-    Log in
+    {{ t('ui.auth.login.title') }}
   </h1>
   <form id="form">
     <fieldset>
-      <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Email" autofocus="autofocus" required="required">
+      <label for="email">
+        {{ t('ui.auth.login.email.label') }}
+      </label>
+      <input type="email" name="email" id="email" placeholder="{{ t('ui.auth.login.email.placeholder') }}" autofocus="autofocus" required="required">
 
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" placeholder="Password" autofocus="autofocus" required="required">
+      <label for="password">
+        {{ t('ui.auth.login.password.label') }}
+      </label>
+      <input type="password" name="password" id="password" placeholder="{{ t('ui.auth.login.password.placeholder') }}" autofocus="autofocus" required="required">
     </fieldset>
     <div id="errors"></div>
     <button type="submit">
       <i class="fas fa-sign-in-alt"></i>
-      Log in
+      {{ t('ui.auth.login.button') }}
     </button>
   </form>
   <p>
-    Don't have an account?
-    <a href="/auth/register">Sign up</a>
+    {{ t('ui.auth.register.noAccount.label') }}
+    <a href="/auth/register">
+      {{ t('ui.auth.register.noAccount.register') }}
+    </a>
   </p>
   <p>
-    Forgot your password?
-    <a href="/auth/reset-password-request">Reset your password</a>
+    {{ t('ui.auth.resetPasswordRequest.forgotPassword.label') }}
+    <a href="/auth/reset-password-request">
+      {{ t('ui.auth.resetPasswordRequest.forgotPassword.reset') }}
+    </a>
   </p>
 {% endblock %}
 

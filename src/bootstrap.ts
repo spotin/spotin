@@ -12,6 +12,7 @@ import {
 	PassportStrategy,
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
+import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 
 export async function bootstrap(
 	app: NestExpressApplication,
@@ -19,6 +20,7 @@ export async function bootstrap(
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+	app.useGlobalFilters(new NotFoundExceptionFilter());
 
 	app.useGlobalPipes(
 		new ValidationPipe({
@@ -48,7 +50,7 @@ export async function bootstrap(
 
 	// Inspiration: https://github.com/toonvanstrijp/nestjs-i18n/blob/e0f3398682e540c93bd39fb29a4ceb270d28464c/src/i18n.module.ts#L90-L92
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	app.setLocal('t', (key: string, lang: string | undefined, args: any) => {
+	app.setLocal('t', (key: string, args?: any, lang?: string) => {
 		let detectedLanguage = lang;
 
 		if (I18nContext.current()) {

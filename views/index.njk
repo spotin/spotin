@@ -3,8 +3,7 @@
   <div>
     <h1>
       <i class="fas fa-map-marker-alt"></i>
-      The Internet of
-      <span id="keyword">spots</span>
+      {{ t('ui.index.title') }}
     </h1>
     <p class="text-justify">
       {{ t('ui.index.explanation') }}
@@ -13,23 +12,9 @@
       <a href="/spots/latest">
         <button>
           <i class="fas fa-list"></i>
-          View latest spots</button>
+          {{ t('ui.index.viewLatestSpots') }}
+        </button>
       </a>
     </p>
   </div>
-{% endblock %}
-
-{% block javascript %}
-  <script>
-    let count = 0;
-    let words = ["places", "spots", "events"];
-
-    // Change the keyword every 2 seconds
-    setInterval(function () {
-      count++;
-      document
-        .getElementById("keyword")
-        .innerHTML = words[count % words.length];
-    }, 2000);
-  </script>
 {% endblock %}

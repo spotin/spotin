@@ -137,7 +137,7 @@ export class AuthController {
 	@ApiOperation({
 		summary: 'Request password reset for user',
 		description: 'Request password reset for user.',
-		operationId: 'requestPasswordReset',
+		operationId: 'resetPasswordRequest',
 	})
 	@ApiBody({
 		description: 'The email address of the user.',
@@ -147,7 +147,7 @@ export class AuthController {
 		description:
 			'The user password reset has been successfully requested. Note: if the email is inexistent, nothing will happen.',
 	})
-	async requestPasswordReset(
+	async resetPasswordRequest(
 		@Body() requestPasswordResetDto: ResetPasswordRequestDto,
 		@I18n() i18n: I18nContext,
 	): Promise<void> {

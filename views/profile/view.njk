@@ -2,13 +2,13 @@
 {% block body %}
   <h1>
     <i class="fas fa-user"></i>
-    {{ profile.username }}'s profile
+    {{ t('ui.profile.view.title', { username: profile.username }) }}
   </h1>
-  <p>Member since:
-    {{ profile.createdAt }}
+  <p>
+    {{ t('ui.profile.view.memberSince', { date: profile.createdAt }) }}
   </p>
-  <p>Number of public's spots:
-    {{ profile.spotsStatistics.count }}
+  <p>
+    {{ t('ui.profile.view.numberOfPublicSpots', { count: profile.spotsStatistics.count }) }}
   </p>
   <div id='map' style='width: 100%; height: 400px;'></div>
 {% endblock %}

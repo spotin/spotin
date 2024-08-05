@@ -1,5 +1,216 @@
 {
+	"auth": {
+		"login": {
+			"title": "Login",
+			"haveAccount": {
+				"label": "Already have an account?",
+				"login": "Login"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Enter your email"
+			},
+			"password": {
+				"label": "Password",
+				"placeholder": "Enter your password"
+			},
+			"button": "Login"
+		},
+		"logout": {
+			"title": "Logout",
+			"message": "You have been successfully logged out."
+		},
+		"register": {
+			"title": "Register",
+			"noAccount": {
+				"label": "Don't have an account?",
+				"register": "Register"
+			},
+			"username": {
+				"label": "Username",
+				"placeholder": "Enter your username"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Enter your email"
+			},
+			"button": "Register"
+		},
+		"resetPassword": {
+			"title": "Reset password",
+			"newPassword": {
+				"label": "New password",
+				"placeholder": "Enter your new password"
+			},
+			"confirmPassword": {
+				"label": "Confirm password",
+				"placeholder": "Confirm your new password"
+			},
+			"button": "Reset password"
+		},
+		"resetPasswordRequest": {
+			"title": "Request password reset",
+			"forgotPassword": {
+				"label": "Forgot password?",
+				"reset": "Reset password"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Enter your email"
+			},
+			"button": "Request password reset",
+			"rememberedPassword": {
+				"label": "Remembered your password?",
+				"login": "Login"
+			}
+		}
+	},
+	"header": {
+		"users": "Users",
+		"spots": "Spots",
+		"profile": "Profile",
+		"tokens": "Tokens",
+		"logout": "Logout",
+		"login": "Login",
+		"register": "Register"
+	},
 	"index": {
-		"explanation": "Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed! We power the link, you the content."
-	}
+		"title": "The Internet of places",
+		"explanation": "Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed! We power the link, you the content.",
+		"viewLatestSpots": "View latest spots"
+	},
+	"notFound": {
+		"title": "Page not found",
+		"message": "The page you are looking for does not exist.",
+		"backToHome": "Back to home"
+	},
+	"profile": {
+		"form": {
+			"title": "Profile",
+			"username": {
+				"label": "Username",
+				"placeholder": "Update your username"
+			},
+			"email": {
+				"label": "Email",
+				"note": "Email address cannot be changed."
+			},
+			"currentPassword": {
+				"label": "Current password",
+				"placeholder": "Enter your current password"
+			},
+			"newPassword": {
+				"label": "New password",
+				"placeholder": "Enter your new password"
+			},
+			"button": "Update profile"
+		},
+		"view": {
+			"title": "{username}'s profile",
+			"username": "Username",
+			"memberSince": "Member since: {date}",
+			"numberOfPublicSpots": "Number of public spots: {count}"
+		}
+	},
+	"spots": {
+		"form": {
+			"title": "Create or manage a spot",
+			"name": {
+				"label": "Name",
+				"placeholder": "Enter the name of your spot"
+			},
+			"description": {
+				"label": "Spot description",
+				"placeholder": "Enter the description of your spot"
+			},
+			"latitude": {
+				"label": "Spot latitude (between -90.0 and 90.0)",
+				"placeholder": "Enter the latitude of your spot (e.g. 46.818188)"
+			},
+			"longitude": {
+				"label": "Spot longitude (between -180.0 and 180.0)",
+				"placeholder": "Enter the longitude of your spot (e.g. 8.227511)"
+			},
+			"jsonPayload": {
+				"label": "JSON payload",
+				"placeholder": "Enter the JSON payload of your spot"
+			},
+			"useCurrentLocation": "Use current location",
+			"visibility": {
+				"label": "Spot visibility",
+				"public": "Public",
+				"private": "Private"
+			}
+		},
+		"list": {
+			"title": "Your spots",
+			"subtitle": "Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event.",
+			"name": "Name",
+			"button": "New spot"
+		}
+	},
+	"tokens": {
+		"form": {
+			"title": "Create a new token",
+			"name": {
+				"label": "Token name",
+				"placeholder": "Enter the name of your token"
+			},
+			"value": {
+				"label": "Token value",
+				"placeholder": "The value of your token will be generated automatically",
+				"note": "Once the token is created, you will not be able to see the value again. Save it in a secure place."
+			},
+			"button": "Create token"
+		},
+		"list": {
+			"title": "Your tokens",
+			"subtitle": "The tokens enable you to publish/manage spots from other platform with a REST API. The API documentation is available at the following link:",
+			"apiDocumentation": "API documentation",
+			"name": "Name",
+			"button": "New token"
+		}
+	},
+	"users": {
+		"form": {
+			"title": "Create or manage a user",
+			"username": {
+				"label": "Username",
+				"placeholder": "Enter the username of the user"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Enter the email of the user"
+			},
+			"password": {
+				"label": "Password",
+				"placeholder": "Enter the password of the user"
+			},
+			"role": {
+				"label": "Role",
+				"values": {
+					"standardUser": "Standard user",
+					"certifiedUser": "Certified user",
+					"admin": "Admin"
+				}
+			},
+			"enabled": {
+				"label": "Enabled",
+				"values": {
+					"true": "Yes",
+					"false": "No"
+				},
+				"note": "If the user is not enabled, they will not be able to log in."
+			},
+			"button": "Save"
+		},
+		"list": {
+			"title": "Users",
+			"subtitle": "Manage the users of the platform. You can create, update and delete users.",
+			"username": "Username",
+			"email": "Email",
+			"button": "New user"
+		}
+	},
+	"footer": "A service offered by City of Biel"
 }

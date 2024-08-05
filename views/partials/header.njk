@@ -11,45 +11,46 @@
         <li>
           <a href="/users">
             <i class="fas fa-users"></i>
-            Users
+            {{ t('ui.header.users') }}
           </a>
         </li>
       {% endif %}
       <li>
         <a href="/spots">
           <i class="fas fa-map-marker-alt"></i>
-          Spots
+          {{ t('ui.header.spots') }}
         </a>
       </li>
       <li>
         <a href="/tokens">
           <i class="fas fa-key"></i>
-          Tokens
+          {{ t('ui.header.tokens') }}
         </a>
       </li>
       <li>
         <a href="/profile">
           <i class="fas fa-user"></i>
-          {{ username }}
+          {{ t('ui.header.profile') }}
         </a>
       </li>
       <li>
         <a href="/auth/logout">
           <i class="fas fa-sign-out-alt"></i>
-          Log out
+          {{ t('ui.header.logout') }}
         </a>
       </li>
     {% else %}
       <li>
         <a href="/auth/login">
           <i class="fas fa-sign-in-alt"></i>
-          Log in
+          {{ t('ui.header.login') }}
         </a>
       </li>
       <li>
         <a href="/auth/register">
           <i class="fas fa-edit"></i>
-          Sign up</a>
+          {{ t('ui.header.register') }}
+        </a>
       </li>
     {% endif %}
   </ul>

@@ -2,20 +2,21 @@
 {% block body %}
   <h1>
     <i class="fas fa-key"></i>
-    Your tokens
+    {{ t('ui.tokens.list.title') }}
   </h1>
   <p class="text-justify">
-    The tokens enable you to publish spots from other platform with a REST API. The
+    {{ t('ui.tokens.list.subtitle') }}
     <a href="/api" rel="noreferrer" target="_blank">
       <i class="fas fa-book"></i>
-      documentation
+      {{ t('ui.tokens.list.apiDocumentation') }}
     </a>
-    of the API will help you throughout this integration.
   </p>
   <table>
     <thead>
       <tr>
-        <th class="grow">Name</th>
+        <th class="grow">
+          {{ t('ui.tokens.list.name') }}
+        </th>
         <th></th>
       </tr>
     </thead>
@@ -36,6 +37,6 @@
   </table>
   <a href="/tokens/create" role="button">
     <i class="fas fa-plus-circle"></i>
-    New token
+    {{ t('ui.tokens.list.button') }}
   </a>
 {% endblock %}
