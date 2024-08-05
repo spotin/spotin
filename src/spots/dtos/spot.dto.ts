@@ -31,7 +31,7 @@ export class SpotDto implements Spot {
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
-	title: string | null;
+	name: string | null;
 
 	/**
 	 * Description of the spot
@@ -78,7 +78,7 @@ export class SpotDto implements Spot {
 	@IsOptional()
 	@IsUrl()
 	@MaxLength(255)
-	redirection: string | null;
+	websiteTarget: string | null;
 
 	/**
 	 * Set if the spot will be referenced on the website
@@ -86,7 +86,7 @@ export class SpotDto implements Spot {
 	@ApiPropertyOptional({ default: false })
 	@IsOptional()
 	@IsBoolean()
-	referenced: boolean = false;
+	public: boolean = false;
 
 	/**
 	 * Set if the spot is already configured or not

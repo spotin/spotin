@@ -29,12 +29,15 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { User } from '@/users/types/user';
 import { UserRole } from '@/users/enums/user-role';
 import { I18n, I18nContext } from 'nestjs-i18n';
+import { EnvironmentVariables } from '@/config/config.constants';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('Auth')
 @Controller('api/auth')
 export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
+		private readonly configService: ConfigService<EnvironmentVariables, true>,
 		private readonly usersService: UsersService,
 		private readonly resetPasswordRequestsService: ResetPasswordRequestsService,
 	) {}
@@ -68,7 +71,8 @@ export class AuthController {
 		res.cookie('jwt', jwt.jwt, {
 			httpOnly: true,
 			sameSite: 'strict',
-			secure: process.env.NODE_ENV === 'production',
+			secure:
+				this.configService.get('NODE_ENV', { infer: true }) === 'production',
 		});
 
 		return new JwtDto(jwt);

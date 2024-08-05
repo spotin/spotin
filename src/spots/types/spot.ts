@@ -1,13 +1,13 @@
 export type Spot = {
 	id: string;
-	title: string | null;
+	name: string | null;
 	description: string | null;
 	latitude: number | null;
 	longitude: number | null;
 	payload: string | null;
-	redirection: string | null;
-	referenced: boolean;
+	websiteTarget: string | null;
 	configured: boolean;
+	public: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 };

@@ -1,0 +1,91 @@
+{% extends "public-layout.njk" %}
+
+{% block body %}
+  <article>
+    <header>
+      <h2>
+        <i class="fas fa-map-marker-alt"></i>
+        {{ spot.name if spot.name != null and spot.name != "" else "[No title]" }}
+      </h2>
+      <p>
+        <i class="fas fa-user"></i>
+        Spot created by
+        <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>
+      </p>
+      {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
+        <p>
+          <span style="color: LimeGreen;">
+            <i class="fas fa-check-circle"></i>
+          </span>
+          Verified by Spot in
+        </p>
+      {% endif %}
+      <details>
+        <summary>
+          <span style="color: DodgerBlue;">
+            <i class="fas fa-info-circle"></i>
+          </span>
+          Learn more about Spot in
+        </summary>
+        <p>
+          Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map.
+        </p>
+      </header>
+
+      {% if spot.description %}
+        <p class="description">{{ spot.description }}</p>
+      {% endif %}
+      {% if spot.latitude !== "" and spot.longitude !== "" %}
+        <div id='map' style='width: 100%; height: 400px;'></div>
+      {% endif %}
+
+      <footer>
+        <p>
+          You are about to leave Spot in and visit
+          {{ spot.websiteTarget }}.
+        </p>
+
+        <p>
+          To access this website, click on the button below.
+        </p>
+        <form id="form">
+          <button type="submit">
+            <i class="fas fa-external-link-alt"></i>
+            Access
+            {{ spot.websiteTarget }}
+          </button>
+        </form>
+      </footer>
+    </article>
+  {% endblock %}
+
+  {% block javascript %}
+    <script>
+      const longitude = '{{ spot.longitude }}';
+      const latitude = '{{ spot.latitude }}';
+
+      if (longitude !== '' && latitude !== '') {
+        const map = new maplibregl.Map({
+          container: 'map',
+          style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
+          center: [
+            longitude, latitude
+          ],
+          zoom: 10
+        });
+
+        const marker = new maplibregl
+          .Marker({color: "#e53935"})
+          .setLngLat([longitude, latitude])
+          .addTo(map);
+      }
+
+      const form = document.getElementById("form");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        window.location.href = "{{ spot.websiteTarget }}";
+      });
+    </script>
+  {% endblock %}

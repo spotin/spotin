@@ -4,29 +4,28 @@ import {
 	Controller,
 	Render,
 	Param,
-	Res,
 	UseFilters,
 	Redirect,
+	Res,
 } from '@nestjs/common';
 import {
-	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
-import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { FQDN } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { ReadSpotDto } from '@/spots/dtos/read-spot.dto';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { Spot } from '@/spots/types/spot';
 import { User } from '@/users/types/user';
+import { Response } from 'express';
+import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -111,6 +110,7 @@ export class SpotsViewsController {
 
 	@Get(':id/configure')
 	@UnconfiguredSpotAuth()
+	@UseFilters(ConfiguredSpotViewExceptionFilter)
 	@ApiOperation({
 		summary: 'Render the configure a spot page',
 		description: 'Render the configure a spot page.',
@@ -124,19 +124,16 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/form')
+	@Render('spots/configure')
 	async renderConfigureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-	): Promise<Record<string, string | undefined | Spot | boolean>> {
+	): Promise<Record<string, string | Spot>> {
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
+			title: 'Configure the spot | Spot in',
 			spot,
-			toConfigure: true,
 		};
 	}
 
@@ -178,30 +175,27 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
+	@Render('spots/form')
 	async renderEditSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-		@Res() res: Response,
-	): Promise<void> {
-		try {
-			const spot = await this.spotsService.getSpot(id, user);
+	): Promise<Record<string, string | Spot>> {
+		const spot = await this.spotsService.getSpot(id, user);
 
-			res.render('spots/form', {
-				username: user.username,
-				email: user.email,
-				role: user.role,
-				spot,
-			});
-		} catch (error) {
-			res.redirect(`/spots/${id}/configure`);
-		}
+		return {
+			title: 'Edit the spot | Spot in',
+			username: user.username,
+			email: user.email,
+			role: user.role,
+			spot,
+		};
 	}
 
 	@Get(':id/redirect')
 	@ApiOperation({
-		summary: 'Redirect to the link specified by the spot',
-		description: 'Redirect to the link specified by the spot.',
-		operationId: 'getSpotRedirection',
+		summary: 'Render the redirection page',
+		description: 'Render the redirection page.',
+		operationId: 'renderRedirectSpot',
 	})
 	@ApiParam({
 		name: 'id',
@@ -209,25 +203,22 @@ export class SpotsViewsController {
 		format: 'uuid',
 	})
 	@ApiOkResponse({
-		description: 'Redirect successful.',
-		type: ReadSpotDto,
-	})
-	@ApiNotFoundResponse({
-		description: 'Spot has not been found.',
+		description: 'Render successful.',
 	})
 	async getSpotRedirection(
-		@Res({ passthrough: true }) res: Response,
+		@Res() res: Response,
 		@Param('id') id: string,
 	): Promise<void> {
-		const spot = await this.spotsService.getSpot(id);
+		const spotWithUser = await this.spotsService.getSpotWithUser(id);
 
-		if (!spot.configured) {
-			res.redirect(`/spots/${id}/configure`);
-		} else if (!spot.redirection) {
-			res.redirect(`/spots/${id}`);
-		} else {
-			res.redirect(spot.redirection);
+		if (!spotWithUser.configured) {
+			return res.redirect(`/spots/${id}/configure`);
 		}
+
+		return res.render('spots/redirect', {
+			title: 'Redirecting | Spot in',
+			spot: spotWithUser,
+		});
 	}
 
 	@Get(':id')
@@ -245,34 +236,28 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@ApiNotFoundResponse({
-		description: 'Spot has not been found. Redirect to `/not-found` page.',
-	})
 	@Render('spots/view')
 	async renderSpot(
 		@AuthUser() user: User | undefined,
-		@Res() res: Response,
 		@Param('id') id: string,
-	): Promise<Record<string, string | undefined | Spot>> {
+	): Promise<Record<string, string | undefined | Spot> | void> {
 		const spot = await this.spotsService.getSpot(id);
 		const fqdn = this.configService.get(FQDN, { infer: true });
 		const redirection = `${fqdn}/spots/${spot.id}/redirect`;
 
-		let qrcodeSvg: string | undefined;
-
 		try {
-			qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
+			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
+
+			return {
+				username: user?.username,
+				email: user?.email,
+				role: user?.role,
+				title: 'Spot',
+				spot,
+				qrcode: qrcodeSvg,
+			};
 		} catch (error) {
 			console.error(error);
 		}
-
-		return {
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
-			title: 'Spot',
-			spot,
-			qrcode: qrcodeSvg,
-		};
 	}
 }

@@ -44,7 +44,7 @@ export class UsersService {
 			include: {
 				spots: {
 					where: {
-						referenced: true,
+						public: true,
 					},
 				},
 			},
@@ -53,7 +53,7 @@ export class UsersService {
 		const spotsStatistics = await this.prisma.spot.aggregate({
 			where: {
 				userId: userWithSpots.id,
-				referenced: true,
+				public: true,
 			},
 			_count: true,
 			_min: {
