@@ -65,6 +65,7 @@
 			}
 		}
 	},
+	"footer": "A service offered by City of Biel",
 	"header": {
 		"users": "Users",
 		"spots": "Spots",
@@ -211,6 +212,5 @@
 			"email": "Email",
 			"button": "New user"
 		}
-	},
-	"footer": "A service offered by City of Biel"
+	}
 }
