@@ -74,6 +74,8 @@
         <small>
           {{ t('ui.spots.form.public.note') }}
         </small>
+      {% else %}
+        <input type="hidden" name="public" id="public" value="{{ spot.public }}">
       {% endif %}
 
       <details>
