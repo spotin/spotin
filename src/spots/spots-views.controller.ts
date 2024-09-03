@@ -237,28 +237,32 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/view')
 	async renderSpot(
 		@AuthUser() user: User | undefined,
 		@Param('id') id: string,
+		@Res() res: Response,
 	): Promise<Record<string, string | undefined | Spot> | void> {
-		const spot = await this.spotsService.getSpot(id, user);
-		const fqdn = this.configService.get(FQDN, { infer: true });
-		const redirection = `${fqdn}/spots/${spot.id}/redirect`;
-
 		try {
-			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
+			const spot = await this.spotsService.getSpot(id, user);
+			const fqdn = this.configService.get(FQDN, { infer: true });
+			const redirection = `${fqdn}/spots/${spot.id}/redirect`;
 
-			return {
-				username: user?.username,
-				email: user?.email,
-				role: user?.role,
-				title: 'Spot',
-				spot,
-				qrcode: qrcodeSvg,
-			};
-		} catch (error) {
-			console.error(error);
+			try {
+				const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
+
+				return res.render('spots/view', {
+					username: user?.username,
+					email: user?.email,
+					role: user?.role,
+					title: 'Spot',
+					spot,
+					qrcode: qrcodeSvg,
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		} catch (_) {
+			return res.redirect(`/spots`);
 		}
 	}
 }
