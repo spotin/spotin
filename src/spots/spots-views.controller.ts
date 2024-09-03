@@ -128,7 +128,7 @@ export class SpotsViewsController {
 	async renderConfigureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-	): Promise<{ title: string; spot: Spot; toConfigure: boolean }> {
+	): Promise<Record<string, string | Spot | boolean>> {
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
