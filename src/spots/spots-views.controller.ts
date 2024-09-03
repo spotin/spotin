@@ -176,20 +176,24 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/form')
 	async renderEditSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-	): Promise<Record<string, string | Spot>> {
-		const spot = await this.spotsService.getSpot(id, user);
+		@Res() res: Response,
+	): Promise<void> {
+		try {
+			const spot = await this.spotsService.getSpot(id, user);
 
-		return {
-			title: 'Edit the spot | Spot in',
-			username: user.username,
-			email: user.email,
-			role: user.role,
-			spot,
-		};
+			return res.render('spots/form', {
+				title: 'Edit the spot | Spot in',
+				username: user.username,
+				email: user.email,
+				role: user.role,
+				spot,
+			});
+		} catch (_) {
+			return res.redirect(`/spots`);
+		}
 	}
 
 	@Get(':id/redirect')
