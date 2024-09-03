@@ -4,12 +4,6 @@ import { UpdateSpot } from '@/spots/types/update-spot';
 
 export class ConfigureSpotDto
 	extends PartialType(
-		OmitType(SpotDto, [
-			'id',
-			'configured',
-			'public',
-			'createdAt',
-			'updatedAt',
-		] as const),
+		OmitType(SpotDto, ['id', 'public', 'createdAt', 'updatedAt'] as const),
 	)
 	implements UpdateSpot {}
