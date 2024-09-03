@@ -124,7 +124,7 @@ export class SpotsController {
 
 			if (!isCertifiedOrAdmin) {
 				throw new ForbiddenException(
-					'Standard users cannot create referenced spots',
+					'Standard users cannot create public spots',
 				);
 			}
 		}
@@ -156,7 +156,7 @@ export class SpotsController {
 
 			if (!isCertifiedOrAdmin) {
 				throw new ForbiddenException(
-					'Standard users cannot create referenced spots',
+					'Standard users cannot create public spots',
 				);
 			}
 		}

@@ -24,7 +24,7 @@ export class SpotDto implements Spot {
 	id: string;
 
 	/**
-	 * Title of the spot
+	 * Name of the spot
 	 */
 	@ApiPropertyOptional()
 	@IsOptional()
@@ -81,7 +81,7 @@ export class SpotDto implements Spot {
 	websiteTarget: string | null;
 
 	/**
-	 * Set if the spot will be referenced on the website
+	 * Set if the spot will be public on the website
 	 */
 	@ApiPropertyOptional({ default: false })
 	@IsOptional()
