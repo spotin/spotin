@@ -3,10 +3,22 @@
 {% block body %}
   <article>
     <header>
-      <h2>
-        <i class="fas fa-map-marker-alt"></i>
-        {{ spot.name if spot.name != null and spot.name != "" else "[No title]" }}
-      </h2>
+      {% if spot.name != null %}
+        <h1>
+          <i class="fas fa-map-marker-alt"></i>
+          {{ spot.name }}
+        </h1>
+      {% else %}
+        <h1 class="text-italic">
+          <i class="fas fa-map-marker-alt"></i>
+          {{ t('ui.spots.view.noName') }}
+        </h1>
+      {% endif %}
+      <p>
+        <a href="#">#nature</a>
+        <a href="#">#mountain</a>
+        <a href="#">#switzerland</a>
+      </p>
       <p>
         <i class="fas fa-user"></i>
         Spot created by
@@ -30,16 +42,23 @@
         <p>
           Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map.
         </p>
-      </header>
+      </details>
+    </header>
 
-      {% if spot.description %}
-        <p class="description">{{ spot.description }}</p>
+    <p>
+      {% if spot.description != null %}
+        {{ spot.description }}
+      {% else %}
+        <span class="text-italic">{{ t('ui.spots.view.noDescription') }}</span>
       {% endif %}
-      {% if spot.latitude !== "" and spot.longitude !== "" %}
-        <div id='map' style='width: 100%; height: 400px;'></div>
-      {% endif %}
+    </p>
 
-      <footer>
+    {% if spot.latitude != null and spot.longitude != null %}
+      <div id='map' style='width: 100%; height: 400px;'></div>
+    {% endif %}
+
+    <footer>
+      {% if spot.websiteTarget != null %}
         <p>
           You are about to leave Spot in and visit
           {{ spot.websiteTarget }}.
@@ -55,31 +74,50 @@
             {{ spot.websiteTarget }}
           </button>
         </form>
-      </footer>
-    </article>
-  {% endblock %}
+      {% endif %}
 
-  {% block javascript %}
-    <script>
-      const longitude = '{{ spot.longitude }}';
-      const latitude = '{{ spot.latitude }}';
+      <div role="group">
+        <button class="secondary">
+          <i class="fas fa-flag"></i>
+          Report
+        </button>
+        <button class="secondary">
+          <span style="color: Red;">
+            <i class="fas fa-heart"></i>
+          </span>
+          Like
+        </button>
+        <button class="secondary">
+          <i class="fas fa-share-alt"></i>
+          Share
+        </button>
+      </div>
+    </footer>
+  </article>
+{% endblock %}
 
-      if (longitude !== '' && latitude !== '') {
-        const map = new maplibregl.Map({
-          container: 'map',
-          style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
-          center: [
-            longitude, latitude
-          ],
-          zoom: 10
-        });
+{% block javascript %}
+  <script>
+    const longitude = '{{ spot.longitude }}';
+    const latitude = '{{ spot.latitude }}';
 
-        const marker = new maplibregl
-          .Marker({color: "#e53935"})
-          .setLngLat([longitude, latitude])
-          .addTo(map);
-      }
+    if (longitude !== '' && latitude !== '') {
+      const map = new maplibregl.Map({
+        container: 'map',
+        style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
+        center: [
+          longitude, latitude
+        ],
+        zoom: 10
+      });
 
+      const marker = new maplibregl
+        .Marker({color: "#e53935"})
+        .setLngLat([longitude, latitude])
+        .addTo(map);
+    }
+
+    {% if spot.websiteTarget %}
       const form = document.getElementById("form");
 
       form.addEventListener("submit", async (event) => {
@@ -87,5 +125,6 @@
 
         window.location.href = "{{ spot.websiteTarget }}";
       });
-    </script>
-  {% endblock %}
+    {% endif %}
+  </script>
+{% endblock %}

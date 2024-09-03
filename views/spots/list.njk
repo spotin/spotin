@@ -22,9 +22,15 @@
       {% for spot in spots %}
         <tr>
           <td>
-            <a href="/spots/{{ spot.id }}">
-              {{ spot.name }}
-            </a>
+            {% if spot.name %}
+              <a href="/spots/{{ spot.id }}">
+                {{ spot.name }}
+              </a>
+            {% else %}
+              <a href="/spots/{{ spot.id }}" class="secondary text-italic">
+                {{ t('ui.spots.list.noName') }}
+              </a>
+            {% endif %}
           </td>
           <td>
             <a href="/spots/{{ spot.id }}">

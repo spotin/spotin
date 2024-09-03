@@ -18,6 +18,10 @@
 	text-align: right;
 }
 
+.text-italic {
+	font-style: italic;
+}
+
 .flash {
 	margin-bottom: var(--typography-spacing-vertical);
 	padding: var(--form-element-spacing-vertical)

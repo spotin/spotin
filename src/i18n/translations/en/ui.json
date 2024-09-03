@@ -167,7 +167,16 @@
 			"title": "Your spots",
 			"subtitle": "Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event.",
 			"name": "Name",
+			"noName": "This spot has no name",
 			"button": "New spot"
+		},
+		"view": {
+			"title": "Spot details",
+			"noName": "This spot has no name",
+			"noDescription": "This spot has no description.",
+			"downloadQrCode": "Download QR code",
+			"edit": "Edit",
+			"viewRedirectionPage": "View redirection page"
 		}
 	},
 	"tokens": {

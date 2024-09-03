@@ -24,7 +24,7 @@
       <label for="latitude">
         {{ t('ui.spots.form.latitude.label') }}
       </label>
-      <input id="latitude" type="number" step="0.0000001" name="latitude" lang="en" placeholder="{{ t('ui.spots.form.latitude.placeholder') }}" value="{{ spot.latitude }}" min="-90" max="90">
+      <input id="latitude" type="number" step="0.000000000000001" name="latitude" lang="en" placeholder="{{ t('ui.spots.form.latitude.placeholder') }}" value="{{ spot.latitude }}" min="-90" max="90">
       <small id="get-latitude">
         <i class="fas fa-map-marker-alt"></i>
         {{ t('ui.spots.form.useCurrentLocation') }}
@@ -33,7 +33,7 @@
       <label for="longitude">
         {{ t('ui.spots.form.longitude.label') }}
       </label>
-      <input id="longitude" type="number" step="0.0000001" name="longitude" lang="en" placeholder="{{ t('ui.spots.form.longitude.placeholder') }}" value="{{ spot.longitude }}" min="-180" max="180">
+      <input id="longitude" type="number" step="0.000000000000001" name="longitude" lang="en" placeholder="{{ t('ui.spots.form.longitude.placeholder') }}" value="{{ spot.longitude }}" min="-180" max="180">
       <small id="get-longitude">
         <i class="fas fa-map-marker-alt"></i>
         {{ t('ui.spots.form.useCurrentLocation') }}
@@ -166,8 +166,12 @@
         description: description.value
           ? description.value
           : undefined,
-        latitude: Number(latitude.value),
-        longitude: Number(longitude.value),
+        latitude: latitude.value
+          ? Number(latitude.value)
+          : undefined,
+        longitude: longitude.value
+          ? Number(longitude.value)
+          : undefined,
         websiteTarget: websiteTarget.value
           ? websiteTarget.value
           : undefined,

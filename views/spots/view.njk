@@ -1,33 +1,56 @@
 {% extends "layout.njk" %}
 
 {% block body %}
-  <article class="resource">
-    <a href="#" id="download-qr-code" class="qrcode">
-      <svg id="qrcode" width="150px">{{ qrcode | safe }}</svg>
-    </a>
+  <article>
+    <header>
+      {% if spot.name != null %}
+        <h1>
+          <i class="fas fa-map-marker-alt"></i>
+          {{ spot.name }}
+        </h1>
+      {% else %}
+        <h1 class="text-italic">
+          <i class="fas fa-map-marker-alt"></i>
+          {{ t('ui.spots.view.noName') }}
+        </h1>
+      {% endif %}
+      <svg id="qrcode" hidden="hidden">{{ qrcode | safe }}</svg>
+    </header>
 
-    <hgroup class="head">
-      <h1 class="title">{{ spot.name if spot.name != null and spot.name != "" else "[No title]" }}</h1>
-      <h2 class="uuid">
-        {% if spot.websiteTarget %}
-          <i class="fas fa-external-link-alt"></i>
-          <a href="{{ spot.websiteTarget }}" target="_blank" rel="noreferrer">{{ spot.websiteTarget }}</a>
-        {% else %}
-          <i class="fas fa-link"></i>
-          <a href="/spots/{{ spot.id }}">{{ spot.id }}</a>
-        {% endif %}
-      </h2>
-    </hgroup>
-    {% if spot.description %}
-      <p class="description">{{ spot.description }}</p>
-    {% endif %}
-    {% if spot.latitude !== "" and spot.longitude !== "" %}
+    <p>
+      {% if spot.description != null %}
+        {{ spot.description }}
+      {% else %}
+        <span class="text-italic">{{ t('ui.spots.view.noDescription') }}</span>
+      {% endif %}
+    </p>
+
+    {% if spot.latitude != null and spot.longitude != null %}
       <div id='map' style='width: 100%; height: 400px;'></div>
     {% endif %}
-    {% if spot.payload %}
-      <h5>JSON Payload</h5>
-      <pre>{{ spot.payload }}</pre>
+
+    {% if spot.payload != null %}
+      <p>
+        <pre>{{ spot.payload }}</pre>
+      </p>
     {% endif %}
+
+    <footer>
+      <div role="group">
+        <button id="download-qr-code" class="secondary">
+          <i class="fas fa-qrcode"></i>
+          {{ t('ui.spots.view.downloadQrCode') }}
+        </button>
+        <button id="edit" class="secondary">
+          <i class="fas fa-pen"></i>
+          {{ t('ui.spots.view.edit') }}
+        </button>
+        <button id="view-redirection-page" class="secondary">
+          <i class="fas fa-external-link-alt"></i>
+          {{ t('ui.spots.view.viewRedirectionPage') }}
+        </button>
+      </div>
+    </footer>
   </article>
 {% endblock %}
 
@@ -59,7 +82,7 @@
         const qrcode = document
           .getElementById("qrcode")
           .innerHTML;
-        const blob = new Blob([qrcode.toString()]);
+        const blob = new Blob([qrcode.toString()], {type: "image/svg+xml"});
         const element = document.createElement("a");
         element.download = filename;
         element.href = window
@@ -67,6 +90,18 @@
           .createObjectURL(blob);
         element.click();
         element.remove();
+      });
+
+    document
+      .getElementById("edit")
+      .addEventListener("click", (event) => {
+        window.location.href = "/spots/{{ spot.id }}/edit";
+      });
+
+    document
+      .getElementById("view-redirection-page")
+      .addEventListener("click", (event) => {
+        window.location.href = "/spots/{{ spot.id }}/redirect";
       });
   </script>
 {% endblock %}
