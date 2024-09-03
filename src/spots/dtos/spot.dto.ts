@@ -72,7 +72,7 @@ export class SpotDto implements Spot {
 	payload: string | null;
 
 	/**
-	 * Redirection when the QR code is accessed
+	 * Redirection target of the spot
 	 */
 	@ApiPropertyOptional({ format: 'url' })
 	@IsOptional()
