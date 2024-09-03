@@ -124,16 +124,17 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/configure')
+	@Render('spots/form')
 	async renderConfigureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
-	): Promise<Record<string, string | Spot>> {
+	): Promise<{ title: string; spot: Spot; toConfigure: boolean }> {
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
 			title: 'Configure the spot | Spot in',
 			spot,
+			toConfigure: true,
 		};
 	}
 
