@@ -109,7 +109,7 @@ Each scenario must be tested against the API and the UI.
 6. Open a incognito window
 7. Access localhost:3000 and login with another user's credentials
 8. Access localhost:3000/spots/{id}/edit
-9. The spot's edition page is not displayed and the user is redirected to the spots' list.
+9. The spot's edition page is not displayed and the user is redirected to the spots' list of the user.
 
 ## Scenario 10: an unconfigured spot is created
 
@@ -128,5 +128,29 @@ Each scenario must be tested against the API and the UI.
 
 1. Access localhost:3000/spots/{id}/edit
 2. Fill the form with the following data:
-   - Configuration: Yes
+   - Configured: No
 3. Click on the "Save" button
+
+## Scenario 12: an unauthorized user tries to access a unconfigured spot's redirection page
+
+1. Access localhost:3000/spots/{id}/redirect
+2. The spot's redirection page is not displayed and the user is redirected to the spot's edition page.
+3. Fill the form with the following data:
+   - Name: "Spot 4"
+   - Website target: "https://duckduckgo.com/"
+4. Click on the "Save" button
+5. The spot's summary page is displayed with the spot's details.
+6. Click on the "Edit" button
+7. The spot's edition page is not displayed and the user is redirected to the login page.
+
+## Scenario 13: an authorized user tries to access a unconfigured spot's redirection page
+
+1. Access localhost:3000/spots/{id}/redirect
+2. The spot's redirection page is not displayed and the user is redirected to the spot's edition page.
+3. Fill the form with the following data:
+   - Name: "Spot 5"
+   - Website target: "https://duckduckgo.com/"
+4. Click on the "Save" button
+5. The spot's summary page is displayed with the spot's details.
+6. Click on the "Edit" button
+7. The spot's edition page is not displayed and the user is redirected to the spots' list of the user.
