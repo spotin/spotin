@@ -1,5 +1,7 @@
 # Tests
 
+Each scenario must be tested against the API and the UI.
+
 ## Scenario 1: create a spot
 
 1. Access localhost:3000/spots/create
@@ -90,3 +92,41 @@
 6. Access localhost:3000 and login with another user's credentials
 7. Access localhost:3000/spots/{id}
 8. The spot's page is not displayed and the user is redirected to the spots' list.
+
+## Scenario 9: a user tries to access a spot's edition page of another user
+
+1. Access localhost:3000/spots/create
+2. Fill the form with the following data:
+   - Name: "Spot 3"
+   - Description: "Description of spot 3"
+   - Latitude: 10
+   - Longitude: 20
+   - Website target: "https://spotin.ch"
+   - Public: Yes
+3. Click on the "Save" button
+4. The spot is created and the user is redirected to the spot's page.
+5. Click on edit spot
+6. Open a incognito window
+7. Access localhost:3000 and login with another user's credentials
+8. Access localhost:3000/spots/{id}/edit
+9. The spot's edition page is not displayed and the user is redirected to the spots' list.
+
+## Scenario 10: an unconfigured spot is created
+
+1. Access localhost:3000/spots/create
+2. Fill the form with the following data:
+   - Name: "Spot 4"
+   - Description: "Description of spot 4"
+   - Latitude: 10
+   - Longitude: 20
+   - Website target: "https://spotin.ch"
+   - Public: No
+   - Configuration: No
+3. Click on the "Save" button
+
+## Scenario 11: an unconfigured spot is configured
+
+1. Access localhost:3000/spots/{id}/edit
+2. Fill the form with the following data:
+   - Configuration: Yes
+3. Click on the "Save" button
