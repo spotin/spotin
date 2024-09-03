@@ -39,10 +39,10 @@
         {{ t('ui.spots.form.useCurrentLocation') }}
       </small>
 
-      <label for="website-target">
+      <label for="websiteTarget">
         {{ t('ui.spots.form.websiteTarget.label') }}
       </label>
-      <input id="website-target" type="text" name="website-target" placeholder="{{ t('ui.spots.form.websiteTarget.placeholder') }}" value="{{ spot.websiteTarget }}">
+      <input id="websiteTarget" type="text" name="websiteTarget" placeholder="{{ t('ui.spots.form.websiteTarget.placeholder') }}" value="{{ spot.websiteTarget }}">
 
       <label for="configured">
         {{ t('ui.spots.form.configured.label') }}
@@ -153,7 +153,7 @@
       const description = document.getElementById("description");
       const latitude = document.getElementById("latitude");
       const longitude = document.getElementById("longitude");
-      const websiteTarget = document.getElementById("website-target");
+      const websiteTarget = document.getElementById("websiteTarget");
       const public = document.getElementById("public");
       const configured = document.getElementById("configured");
       const payload = document.getElementById("payload");
