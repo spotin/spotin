@@ -1,4 +1,9 @@
-{% extends "layout.njk" %}
+{% if toConfigure %}
+  {% extends "public-layout.njk" %}
+{% else %}
+  {% extends "layout.njk" %}
+{% endif %}
+
 {% block body %}
   <h2>
     <i class="fas fa-map-marker-alt"></i>
