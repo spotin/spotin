@@ -44,21 +44,6 @@
       </label>
       <input id="websiteTarget" type="text" name="websiteTarget" placeholder="{{ t('ui.spots.form.websiteTarget.placeholder') }}" value="{{ spot.websiteTarget }}">
 
-      <label for="configured">
-        {{ t('ui.spots.form.configured.label') }}
-      </label>
-      <select id="configured" name="configured" required="required">
-        <option value="true" {{ 'selected' if not spot or spot.configured }}>
-          {{ t('ui.spots.form.configured.values.true') }}
-        </option>
-        <option value="false" {{ 'selected' if spot and not spot.configured }}>
-          {{ t('ui.spots.form.configured.values.false') }}
-        </option>
-      </select>
-      <small>
-        {{ t('ui.spots.form.configured.note') }}
-      </small>
-
       {% if role === "CERTIFIED_USER" or role == "ADMIN" %}
         <label for="public">
           {{ t('ui.spots.form.public.label') }}
@@ -91,6 +76,20 @@
         <textarea id="payload" type="text" name="payload" placeholder="{{ t('ui.spots.form.optionsForAdvancedUsers.payload.placeholder') }}">{{ spot.payload }}</textarea>
         <small>
           {{ t('ui.spots.form.optionsForAdvancedUsers.payload.note') }}
+        </small>
+        <label for="configured">
+          {{ t('ui.spots.form.configured.label') }}
+        </label>
+        <select id="configured" name="configured" required="required">
+          <option value="true" {{ 'selected' if not spot or spot.configured or toConfigure}}>
+            {{ t('ui.spots.form.configured.values.true') }}
+          </option>
+          <option value="false" {{ 'selected' if spot and not spot.configured and not toConfigure}}>
+            {{ t('ui.spots.form.configured.values.false') }}
+          </option>
+        </select>
+        <small>
+          {{ t('ui.spots.form.configured.note') }}
         </small>
       </details>
 
