@@ -9,9 +9,9 @@
     <hgroup class="head">
       <h1 class="title">{{ spot.name if spot.name != null and spot.name != "" else "[No title]" }}</h1>
       <h2 class="uuid">
-        {% if spot.redirection %}
+        {% if spot.websiteTarget %}
           <i class="fas fa-external-link-alt"></i>
-          <a href="{{ spot.redirection }}" target="_blank" rel="noreferrer">{{ spot.redirection }}</a>
+          <a href="{{ spot.websiteTarget }}" target="_blank" rel="noreferrer">{{ spot.websiteTarget }}</a>
         {% else %}
           <i class="fas fa-link"></i>
           <a href="/spots/{{ spot.id }}">{{ spot.id }}</a>
