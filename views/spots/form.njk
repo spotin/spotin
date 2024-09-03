@@ -190,10 +190,6 @@
         method = "PATCH";
       }
 
-      if (toConfigure.value) {
-        endpoint += "/configure";
-      }
-
       const response = await fetch(endpoint, {
         method,
         headers: {

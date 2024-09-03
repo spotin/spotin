@@ -223,7 +223,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id')
-	@JwtOrUnrestrictedAuth()
+	@JwtAuth()
 	@ApiOperation({
 		summary: 'Render the specified spot page',
 		description: 'Render the specified spot page.',
@@ -242,7 +242,7 @@ export class SpotsViewsController {
 		@AuthUser() user: User | undefined,
 		@Param('id') id: string,
 	): Promise<Record<string, string | undefined | Spot> | void> {
-		const spot = await this.spotsService.getSpot(id);
+		const spot = await this.spotsService.getSpot(id, user);
 		const fqdn = this.configService.get(FQDN, { infer: true });
 		const redirection = `${fqdn}/spots/${spot.id}/redirect`;
 
