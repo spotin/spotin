@@ -227,7 +227,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id')
-	@JwtAuth()
+	@JwtOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the specified spot page',
 		description: 'Render the specified spot page.',
@@ -246,27 +246,23 @@ export class SpotsViewsController {
 		@Param('id') id: string,
 		@Res() res: Response,
 	): Promise<Record<string, string | undefined | Spot> | void> {
+		const spot = await this.spotsService.getSpot(id);
+		const fqdn = this.configService.get(FQDN, { infer: true });
+		const redirection = `${fqdn}/spots/${spot.id}/redirect`;
+
 		try {
-			const spot = await this.spotsService.getSpot(id, user);
-			const fqdn = this.configService.get(FQDN, { infer: true });
-			const redirection = `${fqdn}/spots/${spot.id}/redirect`;
+			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
-			try {
-				const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
-
-				return res.render('spots/view', {
-					username: user?.username,
-					email: user?.email,
-					role: user?.role,
-					title: 'Spot',
-					spot,
-					qrcode: qrcodeSvg,
-				});
-			} catch (error) {
-				console.error(error);
-			}
-		} catch (_) {
-			return res.redirect(`/spots`);
+			return res.render('spots/view', {
+				username: user?.username,
+				email: user?.email,
+				role: user?.role,
+				title: 'Spot',
+				spot,
+				qrcode: qrcodeSvg,
+			});
+		} catch (error) {
+			console.error(error);
 		}
 	}
 }
