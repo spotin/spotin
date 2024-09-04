@@ -4,14 +4,23 @@ import {
 	AcceptLanguageResolver,
 	I18nModule as NestI18nModule,
 } from 'nestjs-i18n';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EnvironmentVariables } from '@/config/config.constants';
 
 @Module({
 	imports: [
-		NestI18nModule.forRoot({
-			fallbackLanguage: 'en',
-			loaderOptions: {
-				path: path.join(__dirname, './translations'),
-			},
+		NestI18nModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: async (
+				configService: ConfigService<EnvironmentVariables, true>,
+			) => ({
+				fallbackLanguage: 'en',
+				loaderOptions: {
+					path: path.join(__dirname, './translations'),
+					watch: configService.get('NODE_ENV') === 'development',
+				},
+			}),
 			resolvers: [AcceptLanguageResolver],
 		}),
 	],

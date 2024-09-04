@@ -2,15 +2,17 @@
 {% block body %}
   <h1>
     <i class="fas fa-map-marker-alt"></i>
-    Your spots
+    {{ t('ui.spots.list.title') }}
   </h1>
   <p class="text-justify">
-    Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event.
+    {{ t('ui.spots.list.subtitle') }}
   </p>
   <table>
     <thead>
       <tr>
-        <th class="grow">Title</th>
+        <th class="grow">
+          {{ t('ui.spots.list.name') }}
+        </th>
         <th></th>
         <th></th>
         <th></th>
@@ -20,9 +22,15 @@
       {% for spot in spots %}
         <tr>
           <td>
-            <a href="/spots/{{ spot.id }}">
-              {{ spot.title if spot.title != null and spot.title != "" else "[No title]" }}
-            </a>
+            {% if spot.name %}
+              <a href="/spots/{{ spot.id }}">
+                {{ spot.name }}
+              </a>
+            {% else %}
+              <a href="/spots/{{ spot.id }}" class="secondary text-italic">
+                {{ t('ui.spots.list.noName') }}
+              </a>
+            {% endif %}
           </td>
           <td>
             <a href="/spots/{{ spot.id }}">
@@ -36,7 +44,7 @@
           </td>
           <td>
             <a href="/spots/{{ spot.id }}/delete">
-              <i class="fas fa-archive"></i>
+              <i class="fas fa-trash"></i>
             </a>
           </td>
         </tr>
@@ -46,7 +54,7 @@
   <p>
     <a href="/spots/create" role="button">
       <i class="fas fa-plus-circle"></i>
-      New spot
+      {{ t('ui.spots.list.button') }}
     </a>
   </p>
 {% endblock %}

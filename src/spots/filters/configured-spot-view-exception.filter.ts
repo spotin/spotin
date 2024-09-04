@@ -16,6 +16,6 @@ export class ConfiguredSpotViewExceptionFilter implements ExceptionFilter {
 
 		const spotId = request.params.id;
 
-		response.redirect(`/spots/${spotId}`);
+		response.redirect(`/spots/${spotId}/redirect`);
 	}
 }

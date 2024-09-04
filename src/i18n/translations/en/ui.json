@@ -132,22 +132,68 @@
 				"label": "Spot longitude (between -180.0 and 180.0)",
 				"placeholder": "Enter the longitude of your spot (e.g. 8.227511)"
 			},
-			"jsonPayload": {
-				"label": "JSON payload",
-				"placeholder": "Enter the JSON payload of your spot"
+			"websiteTarget": {
+				"label": "Website target",
+				"placeholder": "Enter the target of your spot (e.g. https://www.example.com)"
 			},
 			"useCurrentLocation": "Use current location",
-			"visibility": {
-				"label": "Spot visibility",
-				"public": "Public",
-				"private": "Private"
+			"configured": {
+				"label": "Configured",
+				"note": "If set to \"No\", another user can configure this spot once.",
+				"values": {
+					"true": "Yes",
+					"false": "No"
+				}
+			},
+			"public": {
+				"label": "Public",
+				"note": "If the spot is public, it will be visible to all users.",
+				"values": {
+					"true": "Yes",
+					"false": "No"
+				}
+			},
+			"optionsForAdvancedUsers": {
+				"label": "Options for advanced users",
+				"note": "These options are for advanced users.",
+				"payload": {
+					"label": "Payload",
+					"placeholder": "Enter the payload of your spot in JSON format (e.g. {\"hello\": \"world\"})",
+					"note": "The payload must be a valid JSON object. Refer to the API documentation for more details."
+				}
 			}
 		},
 		"list": {
 			"title": "Your spots",
 			"subtitle": "Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event.",
 			"name": "Name",
+			"noName": "This spot has no name",
 			"button": "New spot"
+		},
+		"redirect": {
+			"title": "Redirection page",
+			"spotCreatedBy": "This spot was created by",
+			"certified": "Verified by Spot in",
+			"learnMore": {
+				"title": "Learn more about Spot in",
+				"details": "Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map."
+			},
+			"leaveSpot": {
+				"title": "You are about to leave Spot in and visit {websiteTarget}.",
+				"details": "To access this website, click on the button below.",
+				"button": "Access {websiteTarget}"
+			},
+			"report": "Report",
+			"like": "Like",
+			"share": "Share"
+		},
+		"view": {
+			"title": "Spot details",
+			"noName": "This spot has no name",
+			"noDescription": "This spot has no description.",
+			"downloadQrCode": "Download QR code",
+			"edit": "Edit",
+			"viewRedirectionPage": "View redirection page"
 		}
 	},
 	"tokens": {

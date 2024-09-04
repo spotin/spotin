@@ -24,14 +24,14 @@ export class SpotDto implements Spot {
 	id: string;
 
 	/**
-	 * Title of the spot
+	 * Name of the spot
 	 */
 	@ApiPropertyOptional()
 	@IsOptional()
 	@IsString()
 	@MinLength(1)
 	@MaxLength(255)
-	title: string | null;
+	name: string | null;
 
 	/**
 	 * Description of the spot
@@ -72,21 +72,21 @@ export class SpotDto implements Spot {
 	payload: string | null;
 
 	/**
-	 * Redirection when the QR code is accessed
+	 * Redirection target of the spot
 	 */
 	@ApiPropertyOptional({ format: 'url' })
 	@IsOptional()
 	@IsUrl()
 	@MaxLength(255)
-	redirection: string | null;
+	websiteTarget: string | null;
 
 	/**
-	 * Set if the spot will be referenced on the website
+	 * Set if the spot will be public on the website
 	 */
 	@ApiPropertyOptional({ default: false })
 	@IsOptional()
 	@IsBoolean()
-	referenced: boolean = false;
+	public: boolean = false;
 
 	/**
 	 * Set if the spot is already configured or not

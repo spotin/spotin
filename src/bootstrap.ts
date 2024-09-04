@@ -13,6 +13,8 @@ import {
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
 import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
+import { ConfigService } from '@nestjs/config';
+import { EnvironmentVariables } from '@/config/config.constants';
 
 export async function bootstrap(
 	app: NestExpressApplication,
@@ -29,24 +31,29 @@ export async function bootstrap(
 		}),
 	);
 
+	const i18n = app.get<I18nService>(I18nService);
+	const configService =
+		app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
+
 	// https://docs.nestjs.com/security/cors
 	app.enableCors();
 
 	// https://docs.nestjs.com/techniques/session
-	app.set('trust proxy', process.env.NODE_ENV === 'production');
+	app.set(
+		'trust proxy',
+		configService.get('NODE_ENV', { infer: true }) === 'production',
+	);
 
 	nunjucks
 		.configure(join(__dirname, '..', 'views'), {
 			express: app,
-			watch: process.env.NODE_ENV === 'development',
+			watch: configService.get('NODE_ENV', { infer: true }) === 'development',
 		})
 		.addGlobal('title', 'Spot in');
 
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.useStaticAssets(join(__dirname, '..', 'public'));
 	app.setViewEngine('njk');
-
-	const i18n = app.get<I18nService>(I18nService);
 
 	// Inspiration: https://github.com/toonvanstrijp/nestjs-i18n/blob/e0f3398682e540c93bd39fb29a4ceb270d28464c/src/i18n.module.ts#L90-L92
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

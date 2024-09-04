@@ -6,6 +6,12 @@ export const AuthUser = createParamDecorator(
 	(_: string, ctx: ExecutionContext): User | undefined => {
 		const request: Request = ctx.switchToHttp().getRequest();
 
-		return request.user as User | undefined;
+		const user = request.user;
+
+		if (typeof user === 'object') {
+			return user as User;
+		}
+
+		return undefined;
 	},
 );

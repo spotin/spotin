@@ -24,10 +24,14 @@
       {% for user in users %}
         <tr>
           <td>
-            {{ user.username }}
+            <a href="/users/{{ user.id }}">
+              {{ user.username }}
+            </a>
           </td>
           <td>
-            {{ user.email }}
+            <a href="mailto:{{ user.email }}">
+              {{ user.email }}
+            </a>
           </td>
           <td>
             <a href="/users/{{ user.id }}">

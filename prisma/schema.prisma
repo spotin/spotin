@@ -15,19 +15,19 @@ enum UserRole {
 }
 
 model Spot {
-  id          String    @id @default(uuid())
-  title       String?   @db.VarChar(255)
-  description String?
-  latitude    Float?    @db.DoublePrecision
-  longitude   Float?    @db.DoublePrecision
-  payload     Json?     @db.Json
-  redirection String?   @db.VarChar(255)
-  referenced  Boolean   @default(false) @db.Boolean
-  configured  Boolean   @default(true) @db.Boolean
-  userId      String    @map(name: "user_id")
-  createdAt   DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
-  updatedAt   DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
-  deletedAt   DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
+  id            String    @id @default(uuid())
+  userId        String    @map(name: "user_id")
+  name          String?   @db.VarChar(255)
+  description   String?
+  latitude      Float?    @db.DoublePrecision
+  longitude     Float?    @db.DoublePrecision
+  websiteTarget String?   @db.VarChar(255)
+  configured    Boolean   @default(true) @db.Boolean
+  public        Boolean   @default(false) @db.Boolean
+  payload       Json?     @db.Json
+  createdAt     DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
 
   users User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 

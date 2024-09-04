@@ -12,9 +12,9 @@ import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
+import { User } from '@/users/types/user';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
-import { User } from '@/users/types/user';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -41,7 +41,6 @@ export class SpotsController {
 
 		return spotsDto;
 	}
-
 	@CustomPatch({
 		path: ':id/configure',
 		name: 'Spot',
@@ -118,13 +117,13 @@ export class SpotsController {
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
 	): Promise<ReadSpotDto> {
-		if (createSpotDto.referenced) {
+		if (createSpotDto.public) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
 
 			if (!isCertifiedOrAdmin) {
 				throw new ForbiddenException(
-					'Standard users cannot create referenced spots',
+					'Standard users cannot create public spots',
 				);
 			}
 		}
@@ -150,13 +149,13 @@ export class SpotsController {
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
 	): Promise<ReadSpotDto> {
-		if (updateSpot.referenced) {
+		if (updateSpot.public) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
 
 			if (!isCertifiedOrAdmin) {
 				throw new ForbiddenException(
-					'Standard users cannot create referenced spots',
+					'Standard users cannot create public spots',
 				);
 			}
 		}

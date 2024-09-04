@@ -1,47 +1,102 @@
-{% extends "layout.njk" %}
+{% if role == "GUEST" %}
+  {% extends "public-layout.njk" %}
+{% else %}
+  {% extends "layout.njk" %}
+{% endif %}
+
 {% block body %}
   <h2>
     <i class="fas fa-map-marker-alt"></i>
-    Create or manage a spot
+    {{ t('ui.spots.form.title') }}
   </h2>
   <form id="form">
     <fieldset>
       <input type="hidden" name="id" id="id" value="{{ spot.id }}">
-      <input type="hidden" name="to-configure" id="to-configure" value="{{ toConfigure }}">
 
-      <label for="title">Title</label>
-      <input name="title" id="title" placeholder="Title" value="{{ spot.title }}" autofocus="autofocus">
+      <label for="name">
+        {{ t('ui.spots.form.name.label') }}
+      </label>
+      <input name="name" id="name" placeholder="{{ t('ui.spots.form.name.placeholder') }}" value="{{ spot.name }}" autofocus="autofocus">
 
-      <label for="description">Description</label>
-      <textarea id="description" type="text" name="description" placeholder="Description">{{ spot.description }}</textarea>
+      <label for="description">
+        {{ t('ui.spots.form.description.label') }}
+      </label>
+      <textarea id="description" type="text" name="description" placeholder="{{ t('ui.spots.form.description.placeholder') }}">{{ spot.description }}</textarea>
 
       <!-- Prompt user for current location -->
-      <button type="button" id="get-location-button">
+
+      <label for="latitude">
+        {{ t('ui.spots.form.latitude.label') }}
+      </label>
+      <input id="latitude" type="number" step="0.000000000000001" name="latitude" lang="en" placeholder="{{ t('ui.spots.form.latitude.placeholder') }}" value="{{ spot.latitude }}" min="-90" max="90">
+      <small id="get-latitude">
         <i class="fas fa-map-marker-alt"></i>
-        Use current location
-      </button>
+        {{ t('ui.spots.form.useCurrentLocation') }}
+      </small>
 
-      <label for="latitude">Latitude (between -90.0 and 90.0)</label>
-      <input id="latitude" type="number" step="0.00001" name="latitude" lang="en" placeholder="46.818188" value="{{ spot.latitude }}" min="-90" max="90">
-
-      <label for="longitude">Longitude (between -180.0 and 180.0)</label>
-      <input id="longitude" type="number" step="0.00001" name="longitude" lang="en" placeholder="8.227511" value="{{ spot.longitude }}" min="-180" max="180">
-
-      <label for="payload">JSON payload</label>
-      <textarea id="payload" type="text" name="payload" placeholder="JSON payload">{{ spot.payload }}</textarea>
-
-      <label for="redirection">Redirection URL</label>
-      <input id="redirection" type="text" name="redirection" placeholder="http(s)://" value="{{ spot.redirection }}">
-
-      <label for="referenced" {{ 'hidden' if role == "GUEST" or role == "STANDARD_USER" }}>
-        <input id="referenced" type="checkbox" role="switch" name="referenced" {% if spot.referenced %} checked="checked" {% endif %}>
-        Referenced
+      <label for="longitude">
+        {{ t('ui.spots.form.longitude.label') }}
       </label>
+      <input id="longitude" type="number" step="0.000000000000001" name="longitude" lang="en" placeholder="{{ t('ui.spots.form.longitude.placeholder') }}" value="{{ spot.longitude }}" min="-180" max="180">
+      <small id="get-longitude">
+        <i class="fas fa-map-marker-alt"></i>
+        {{ t('ui.spots.form.useCurrentLocation') }}
+      </small>
 
-      <label for="configured" {{ 'hidden' if role == "GUEST" }}>
-        <input id="configured" type="checkbox" role="switch" name="configured" {% if spot.configured %} checked="checked" {% endif %}>
-        Configured
+      <label for="websiteTarget">
+        {{ t('ui.spots.form.websiteTarget.label') }}
       </label>
+      <input id="websiteTarget" type="text" name="websiteTarget" placeholder="{{ t('ui.spots.form.websiteTarget.placeholder') }}" value="{{ spot.websiteTarget }}">
+
+      {% if role === "CERTIFIED_USER" or role == "ADMIN" %}
+        <label for="public">
+          {{ t('ui.spots.form.public.label') }}
+        </label>
+        <select id="public" name="public" required="required">
+          <option value="true" {{ 'selected' if spot.public }}>
+            {{ t('ui.spots.form.public.values.true') }}
+          </option>
+          <option value="false" {{ 'selected' if not spot.public }}>
+            {{ t('ui.spots.form.public.values.false') }}
+          </option>
+        </select>
+        <small>
+          {{ t('ui.spots.form.public.note') }}
+        </small>
+      {% else %}
+        <input type="hidden" name="public" id="public" value="{{ spot.public }}">
+      {% endif %}
+
+      <details>
+        <summary>
+          {{ t('ui.spots.form.optionsForAdvancedUsers.label') }}
+        </summary>
+        <p>
+          {{ t('ui.spots.form.optionsForAdvancedUsers.note') }}
+        </p>
+        <label for="payload">
+          {{ t('ui.spots.form.optionsForAdvancedUsers.payload.label') }}
+        </label>
+        <textarea id="payload" type="text" name="payload" placeholder="{{ t('ui.spots.form.optionsForAdvancedUsers.payload.placeholder') }}">{{ spot.payload }}</textarea>
+        <small>
+          {{ t('ui.spots.form.optionsForAdvancedUsers.payload.note') }}
+        </small>
+        <label for="configured">
+          {{ t('ui.spots.form.configured.label') }}
+        </label>
+        <select id="configured" name="configured" required="required">
+          <option value="true" {{ 'selected' if not spot or spot.configured or role == "GUEST"}}>
+            {{ t('ui.spots.form.configured.values.true') }}
+          </option>
+          <option value="false" {{ 'selected' if spot and not spot.configured and role != "GUEST" }}>
+            {{ t('ui.spots.form.configured.values.false') }}
+          </option>
+        </select>
+        <small>
+          {{ t('ui.spots.form.configured.note') }}
+        </small>
+      </details>
+
     </fieldset>
     <div id="success"></div>
     <div id="errors"></div>
@@ -54,30 +109,27 @@
 
 {% block javascript %}
   <script>
-    const getLocationButton = document.getElementById("get-location-button");
+    const getLatitude = document.getElementById("get-latitude");
+    const getLongitude = document.getElementById("get-longitude");
 
-    getLocationButton.addEventListener("click", async () => {
-      if (!navigator.geolocation) {
-        return;
-      }
+    [getLatitude, getLongitude].forEach(elem => {
+      elem.addEventListener("click", async () => {
+        if (!navigator.geolocation) {
+          return;
+        }
 
-      const position = await new Promise((resolve, reject) => {
-        navigator
-          .geolocation
-          .getCurrentPosition(resolve, reject);
+        const position = await new Promise((resolve, reject) => {
+          navigator
+            .geolocation
+            .getCurrentPosition(resolve, reject);
+        });
+
+        const latitude = document.getElementById("latitude");
+        const longitude = document.getElementById("longitude");
+
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
       });
-
-      const latitude = document.getElementById("latitude");
-      const longitude = document.getElementById("longitude");
-
-      latitude.value = position
-        .coords
-        .latitude
-        .toFixed(5);
-      longitude.value = position
-        .coords
-        .longitude
-        .toFixed(5);
     });
 
     const form = document.getElementById("form");
@@ -100,46 +152,50 @@
       errors.innerHTML = "";
 
       // Get the form data
-      const toConfigure = document.getElementById("to-configure");
       const id = document.getElementById("id");
-      const title = document.getElementById("title");
+      const name = document.getElementById("name");
       const description = document.getElementById("description");
       const latitude = document.getElementById("latitude");
       const longitude = document.getElementById("longitude");
-      const payload = document.getElementById("payload");
-      const redirection = document.getElementById("redirection");
-      const referenced = document.getElementById("referenced");
+      const websiteTarget = document.getElementById("websiteTarget");
+      const public = document.getElementById("public");
       const configured = document.getElementById("configured");
+      const payload = document.getElementById("payload");
 
       const body = JSON.stringify({
-        title: title.value
-          ? title.value
+        name: name.value
+          ? name.value
           : undefined,
         description: description.value
           ? description.value
           : undefined,
-        latitude: Number(latitude.value),
-        longitude: Number(longitude.value),
+        latitude: latitude.value
+          ? Number(latitude.value)
+          : undefined,
+        longitude: longitude.value
+          ? Number(longitude.value)
+          : undefined,
+        websiteTarget: websiteTarget.value
+          ? websiteTarget.value
+          : undefined,
+        public: public.value === "true",
+        configured: configured.value === "true",
         payload: payload.value
           ? payload.value
-          : undefined,
-        redirection: redirection.value
-          ? redirection.value
-          : undefined,
-        referenced: referenced.checked,
-        configured: configured.checked
+          : undefined
       });
 
       let endpoint = "/api/spots";
       let method = "POST";
 
       if (id.value) {
-        endpoint += `/${id.value}`;
-        method = "PATCH";
-      }
+        {% if role != "GUEST" %}
+          endpoint += `/${id.value}`;
+        {% else %}
+          endpoint += `/${id.value}/configure`;
+        {% endif %}
 
-      if (toConfigure.value) {
-        endpoint += "/configure";
+        method = "PATCH";
       }
 
       const response = await fetch(endpoint, {
