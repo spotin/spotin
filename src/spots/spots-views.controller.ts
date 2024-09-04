@@ -193,7 +193,7 @@ export class SpotsViewsController {
 				spot,
 			});
 		} catch (_) {
-			res.redirect(`/spots/${id}/redirect`);
+			res.redirect(`/spots`);
 		}
 	}
 

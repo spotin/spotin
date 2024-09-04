@@ -21,6 +21,26 @@ import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
 export class SpotsController {
 	constructor(private readonly spotsService: SpotsService) {}
 
+	@GetMany({
+		path: 'public',
+		name: 'Spots',
+		summary: 'Get the public spots',
+		operationId: 'getPublicSpots',
+		responseType: [ReadSpotDto],
+	})
+	async getPublicSpots(): Promise<ReadSpotDto[]> {
+		const spots = await this.spotsService.getPublicSpots();
+
+		const spotsDto = spots.map(
+			(spot) =>
+				new ReadSpotDto({
+					...spot,
+					payload: spot.payload ? JSON.stringify(spot.payload) : null,
+				}),
+		);
+
+		return spotsDto;
+	}
 	@CustomPatch({
 		path: ':id/configure',
 		name: 'Spot',
@@ -47,26 +67,6 @@ export class SpotsController {
 				? configuredSpotDto.payload.toString()
 				: null,
 		});
-	}
-	@GetMany({
-		path: 'public',
-		name: 'Spots',
-		summary: 'Get the public spots',
-		operationId: 'getPublicSpots',
-		responseType: [ReadSpotDto],
-	})
-	async getPublicSpots(): Promise<ReadSpotDto[]> {
-		const spots = await this.spotsService.getPublicSpots();
-
-		const spotsDto = spots.map(
-			(spot) =>
-				new ReadSpotDto({
-					...spot,
-					payload: spot.payload ? JSON.stringify(spot.payload) : null,
-				}),
-		);
-
-		return spotsDto;
 	}
 
 	@GetMany({
