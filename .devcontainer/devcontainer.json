@@ -27,6 +27,15 @@
 	"mounts": [
 		"type=bind,source=${localEnv:HOME}/.ssh,target=${localEnv:HOME}/.ssh,type=bind,consistency=cached"
 	],
+	// Forward the ports used by the apps
+	"forwardPorts": [
+		// NestJS
+		3000,
+		// Postgres
+		5432,
+		// Mailpit
+		1025, 8025
+	],
 	// Execute the post-create.sh script once the container is created
 	"postCreateCommand": "./.devcontainer/post-create.sh"
 }

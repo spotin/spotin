@@ -13,13 +13,41 @@ import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
 import { User } from '@/users/types/user';
-import { UnconfiguredSpotOrTokenOrJwtAuth } from '@/auth/unconfigured-spot-or-token-or-jwt/unconfigured-spot-or-token-or-jwt-auth.decorators';
+import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
+import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
 
 @ApiTags('Spots')
 @Controller('api/spots')
 export class SpotsController {
 	constructor(private readonly spotsService: SpotsService) {}
 
+	@CustomPatch({
+		path: ':id/configure',
+		name: 'Spot',
+		summary: 'Configure the specified spot',
+		bodyType: ConfigureSpotDto,
+		responseType: ReadSpotDto,
+		operationId: 'configureSpot',
+	})
+	@UnconfiguredSpotAuth()
+	async configureSpot(
+		@AuthUser() user: User,
+		@Param('id') id: string,
+		@Body() configureSpotDto: ConfigureSpotDto,
+	): Promise<ReadSpotDto> {
+		const configuredSpotDto = await this.spotsService.updateSpot(
+			id,
+			configureSpotDto,
+			user,
+		);
+
+		return new ReadSpotDto({
+			...configuredSpotDto,
+			payload: configuredSpotDto.payload
+				? configuredSpotDto.payload.toString()
+				: null,
+		});
+	}
 	@GetMany({
 		path: 'public',
 		name: 'Spots',
@@ -115,7 +143,7 @@ export class SpotsController {
 		responseType: ReadSpotDto,
 		operationId: 'updateSpot',
 	})
-	@UnconfiguredSpotOrTokenOrJwtAuth()
+	@TokenOrJwtAuth()
 	async updateSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,

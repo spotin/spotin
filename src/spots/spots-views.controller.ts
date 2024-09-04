@@ -26,6 +26,7 @@ import { Spot } from '@/spots/types/spot';
 import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
+import { UserRole } from '@/users/enums/user-role';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -134,7 +135,7 @@ export class SpotsViewsController {
 		return {
 			title: 'Configure the spot | Spot in',
 			spot,
-			toConfigure: true,
+			role: UserRole.GUEST,
 		};
 	}
 
@@ -192,7 +193,7 @@ export class SpotsViewsController {
 				spot,
 			});
 		} catch (_) {
-			return res.redirect(`/spots`);
+			res.redirect(`/spots/${id}/redirect`);
 		}
 	}
 
@@ -241,10 +242,10 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
+	@Render('spots/view')
 	async renderSpot(
 		@AuthUser() user: User | undefined,
 		@Param('id') id: string,
-		@Res() res: Response,
 	): Promise<Record<string, string | undefined | Spot> | void> {
 		const spot = await this.spotsService.getSpot(id);
 		const fqdn = this.configService.get(FQDN, { infer: true });
@@ -253,14 +254,14 @@ export class SpotsViewsController {
 		try {
 			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
-			return res.render('spots/view', {
+			return {
 				username: user?.username,
 				email: user?.email,
 				role: user?.role,
 				title: 'Spot',
 				spot,
 				qrcode: qrcodeSvg,
-			});
+			};
 		} catch (error) {
 			console.error(error);
 		}

@@ -1,4 +1,4 @@
-{% if toConfigure %}
+{% if role == "GUEST" %}
   {% extends "public-layout.njk" %}
 {% else %}
   {% extends "layout.njk" %}
@@ -12,7 +12,6 @@
   <form id="form">
     <fieldset>
       <input type="hidden" name="id" id="id" value="{{ spot.id }}">
-      <input type="hidden" name="to-configure" id="to-configure" value="{{ toConfigure }}">
 
       <label for="name">
         {{ t('ui.spots.form.name.label') }}
@@ -86,10 +85,10 @@
           {{ t('ui.spots.form.configured.label') }}
         </label>
         <select id="configured" name="configured" required="required">
-          <option value="true" {{ 'selected' if not spot or spot.configured or toConfigure}}>
+          <option value="true" {{ 'selected' if not spot or spot.configured or role == "GUEST"}}>
             {{ t('ui.spots.form.configured.values.true') }}
           </option>
-          <option value="false" {{ 'selected' if spot and not spot.configured and not toConfigure}}>
+          <option value="false" {{ 'selected' if spot and not spot.configured and role != "GUEST" }}>
             {{ t('ui.spots.form.configured.values.false') }}
           </option>
         </select>
@@ -153,7 +152,6 @@
       errors.innerHTML = "";
 
       // Get the form data
-      const toConfigure = document.getElementById("to-configure");
       const id = document.getElementById("id");
       const name = document.getElementById("name");
       const description = document.getElementById("description");
@@ -191,7 +189,12 @@
       let method = "POST";
 
       if (id.value) {
-        endpoint += `/${id.value}`;
+        {% if role != "GUEST" %}
+          endpoint += `/${id.value}`;
+        {% else %}
+          endpoint += `/${id.value}/configure`;
+        {% endif %}
+
         method = "PATCH";
       }
 

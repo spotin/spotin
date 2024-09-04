@@ -170,6 +170,23 @@
 			"noName": "This spot has no name",
 			"button": "New spot"
 		},
+		"redirect": {
+			"title": "Redirection page",
+			"spotCreatedBy": "This spot was created by",
+			"certified": "Verified by Spot in",
+			"learnMore": {
+				"title": "Learn more about Spot in",
+				"details": "Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map."
+			},
+			"leaveSpot": {
+				"title": "You are about to leave Spot in and visit {websiteTarget}.",
+				"details": "To access this website, click on the button below.",
+				"button": "Access {websiteTarget}"
+			},
+			"report": "Report",
+			"like": "Like",
+			"share": "Share"
+		},
 		"view": {
 			"title": "Spot details",
 			"noName": "This spot has no name",

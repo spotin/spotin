@@ -16,7 +16,7 @@
       {% endif %}
       <p>
         <i class="fas fa-user"></i>
-        Spot created by
+        {{ t('ui.spots.redirect.spotCreatedBy') }}
         <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>
       </p>
       {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
@@ -24,7 +24,7 @@
           <span style="color: LimeGreen;">
             <i class="fas fa-check-circle"></i>
           </span>
-          Verified by Spot in
+          {{ t('ui.spots.redirect.certified') }}
         </p>
       {% endif %}
       <details>
@@ -32,10 +32,10 @@
           <span style="color: DodgerBlue;">
             <i class="fas fa-info-circle"></i>
           </span>
-          Learn more about Spot in
+          {{ t('ui.spots.redirect.learnMore.title') }}
         </summary>
         <p>
-          Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map.
+          {{ t('ui.spots.redirect.learnMore.details') }}
         </p>
       </details>
     </header>
@@ -55,18 +55,15 @@
     <footer>
       {% if spot.websiteTarget != null %}
         <p>
-          You are about to leave Spot in and visit
-          {{ spot.websiteTarget }}.
+          {{ t('ui.spots.redirect.leaveSpot.title', { websiteTarget: spot.websiteTarget }) }}
         </p>
-
         <p>
-          To access this website, click on the button below.
+          {{ t('ui.spots.redirect.leaveSpot.details') }}
         </p>
         <form id="form">
           <button type="submit">
             <i class="fas fa-external-link-alt"></i>
-            Access
-            {{ spot.websiteTarget }}
+            {{ t('ui.spots.redirect.leaveSpot.button', { websiteTarget: spot.websiteTarget }) }}
           </button>
         </form>
       {% endif %}
@@ -74,17 +71,17 @@
       <div role="group">
         <button class="secondary">
           <i class="fas fa-flag"></i>
-          Report
+          {{ t('ui.spots.redirect.report') }}
         </button>
         <button class="secondary">
           <span style="color: Red;">
             <i class="fas fa-heart"></i>
           </span>
-          Like
+          {{ t('ui.spots.redirect.like') }}
         </button>
         <button class="secondary">
           <i class="fas fa-share-alt"></i>
-          Share
+          {{ t('ui.spots.redirect.share') }}
         </button>
       </div>
     </footer>
