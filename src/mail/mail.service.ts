@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables, FQDN } from '@/config/config.constants';
+import { EnvironmentVariables, BASE_URL } from '@/config/config.constants';
 import { MailTemplate } from '@/mail/mail.constants';
 import { User } from '@/users/types/user';
 import { I18nService } from 'nestjs-i18n';
@@ -23,7 +23,7 @@ export class MailService {
 			lang,
 		});
 
-		const link = `${this.configService.get(FQDN, {
+		const link = `${this.configService.get(BASE_URL, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
 
@@ -54,7 +54,7 @@ export class MailService {
 			},
 		);
 
-		const link = `${this.configService.get(FQDN, {
+		const link = `${this.configService.get(BASE_URL, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
 
@@ -85,7 +85,7 @@ export class MailService {
 			},
 		);
 
-		const link = `${this.configService.get(FQDN, {
+		const link = `${this.configService.get(BASE_URL, {
 			infer: true,
 		})}/auth/reset-password?token=${tokenId}`;
 

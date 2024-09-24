@@ -1,4 +1,5 @@
 export const FQDN = 'SPOT_IN_FQDN';
+export const BASE_URL = 'SPOT_IN_BASE_URL';
 export const JWT_SECRET = 'SPOT_IN_JWT_SECRET';
 export const JWT_EXPIRATION_TIME = 'SPOT_IN_JWT_EXPIRATION_TIME';
 export const MAIL_HOST = 'SPOT_IN_MAIL_HOST';
@@ -11,6 +12,7 @@ export const NODE_ENV = 'NODE_ENV';
 
 export interface EnvironmentVariables {
 	[FQDN]: string;
+	[BASE_URL]: string;
 	[JWT_SECRET]: string;
 	[JWT_EXPIRATION_TIME]: string;
 	[MAIL_HOST]: string;
