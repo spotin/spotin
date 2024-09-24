@@ -58,12 +58,8 @@
       const password = document.getElementById("password");
 
       const body = JSON.stringify({
-        email: email.value
-          ? email.value
-          : undefined,
-        password: password.value
-          ? password.value
-          : undefined
+        email: email.value || undefined,
+        password: password.value || undefined
       });
 
       const response = await fetch("/api/auth/login", {
