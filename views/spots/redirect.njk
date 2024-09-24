@@ -40,13 +40,11 @@
       </details>
     </header>
 
-    <p>
-      {% if spot.description != null %}
+    {% if spot.description != null %}
+      <p>
         {{ spot.description }}
-      {% else %}
-        <span class="text-italic">{{ t('ui.spots.view.noDescription') }}</span>
-      {% endif %}
-    </p>
+      </p>
+    {% endif %}
 
     {% if spot.latitude != null and spot.longitude != null %}
       <div id='map' style='width: 100%; height: 400px;'></div>

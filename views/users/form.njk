@@ -80,12 +80,8 @@
       const enabled = document.getElementById("enabled");
 
       const body = JSON.stringify({
-        username: username.value
-          ? username.value
-          : undefined,
-        email: email.value
-          ? email.value
-          : undefined,
+        username: username.value || undefined,
+        email: email.value || undefined,
         role: role.value,
         enabled: enabled.value === "true"
       });

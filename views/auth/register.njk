@@ -61,12 +61,8 @@
       const email = document.getElementById("email");
 
       const body = JSON.stringify({
-        username: username.value
-          ? username.value
-          : undefined,
-        email: email.value
-          ? email.value
-          : undefined
+        username: username.value || undefined,
+        email: email.value || undefined
       });
 
       const response = await fetch("/api/auth/register", {

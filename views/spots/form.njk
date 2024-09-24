@@ -136,8 +136,6 @@
     const success = document.getElementById("success");
     const errors = document.getElementById("errors");
 
-    const latitude = document.getElementById("latitude");
-
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
@@ -163,26 +161,14 @@
       const payload = document.getElementById("payload");
 
       const body = JSON.stringify({
-        name: name.value
-          ? name.value
-          : undefined,
-        description: description.value
-          ? description.value
-          : undefined,
-        latitude: latitude.value
-          ? Number(latitude.value)
-          : undefined,
-        longitude: longitude.value
-          ? Number(longitude.value)
-          : undefined,
-        websiteTarget: websiteTarget.value
-          ? websiteTarget.value
-          : undefined,
+        name: name.value || null,
+        description: description.value || null,
+        latitude: Number(latitude.value) || null,
+        longitude: Number(longitude.value) || null,
+        websiteTarget: websiteTarget.value || null,
         public: public.value === "true",
         configured: configured.value === "true",
-        payload: payload.value
-          ? payload.value
-          : undefined
+        payload: payload.value || null
       });
 
       let endpoint = "/api/spots";

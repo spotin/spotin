@@ -63,15 +63,9 @@
       const newPassword = document.getElementById("new-password");
 
       const body = JSON.stringify({
-        username: username.value
-          ? username.value
-          : undefined,
-        currentPassword: currentPassword.value
-          ? currentPassword.value
-          : undefined,
-        newPassword: newPassword.value
-          ? newPassword.value
-          : undefined
+        username: username.value || undefined,
+        currentPassword: currentPassword.value || undefined,
+        newPassword: newPassword.value || undefined
       });
 
       const response = await fetch("/api/profile", {

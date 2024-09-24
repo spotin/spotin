@@ -56,9 +56,7 @@
       button.removeAttribute('disabled');
 
       const body = JSON.stringify({
-        name: name.value
-          ? name.value
-          : undefined
+        name: name.value || undefined
       });
 
       const response = await fetch("/api/tokens", {
