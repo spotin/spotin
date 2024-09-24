@@ -9,7 +9,6 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import { AuthService } from '@/auth/auth.service';
 import { UsersService } from '@/users/users.service';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
@@ -17,6 +16,7 @@ import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { ReadProfileDto } from '@/profile/dtos/read-profile.dto';
 import { UpdateProfileDto } from '@/profile/dtos/update-profile.dto';
 import { ReadProfileWithPublicSpotsDto } from '@/profile/dtos/read-profile-with-public-spots.dto';
+import { User } from '@/users/types/user';
 
 @ApiTags('Profile')
 @Controller('api/profile')
