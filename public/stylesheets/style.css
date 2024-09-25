@@ -64,14 +64,33 @@
 #keyword {
 	color: #e53935;
 }
+.dropdown-menu {
+	display: block !important;
+}
 
-@media (max-width: 991px) {
+.menu {
+	display: none !important;
+}
+
+/* @media (min-width: 991px) {
 	.site-footer [class^='col-'] {
 		margin-bottom: 30px;
 	}
-}
 
-@media (max-width: 767px) {
+	.dropdown-menu {
+		display: block;
+	}
+} */
+
+@media (min-width: 768px) {
+	.dropdown-menu {
+		display: none !important;
+	}
+
+	.menu {
+		display: block !important;
+	}
+
 	.site-footer {
 		padding-bottom: 0;
 	}
