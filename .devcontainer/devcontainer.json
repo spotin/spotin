@@ -10,9 +10,9 @@
 		"vscode": {
 			"extensions": [
 				"dbaeumer.vscode-eslint",
-				"douglaszaltron.nunjucks-vscode-extensionpack",
 				"esbenp.prettier-vscode",
 				"EditorConfig.EditorConfig",
+				"eseom.nunjucks-template",
 				"GitHub.copilot",
 				"GitHub.vscode-github-actions",
 				"ms-azuretools.vscode-docker",

@@ -9,7 +9,7 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[njk]": {
-		"editor.defaultFormatter": "douglaszaltron.nunjucks-vscode-extensionpack"
+		"editor.defaultFormatter": "eseom.nunjucks-template"
 	},
 	"[prisma]": {
 		"editor.defaultFormatter": "Prisma.prisma"
