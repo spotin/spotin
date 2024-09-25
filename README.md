@@ -46,7 +46,7 @@ npm run dev
 The application should start and be accessible at <http://localhost:3000>. The
 API documentation is accessible at <http://localhost:3000/api>. You can log in
 with the credentials defined in the `.env` file (`SPOT_IN_ADMIN_EMAIL` and
-`SPOT_IN_ADMIN_PASSWORD`).
+`SPOT_IN_ADMIN_PASSWORD`). The mail server interface is accessible at <http://localhost:8025>.
 
 ## Try out the application in development with Docker
 

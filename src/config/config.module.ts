@@ -2,23 +2,23 @@ import * as Joi from 'joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import {
-	FQDN,
-	JWT_SECRET,
+	BASE_URL,
 	JWT_EXPIRATION_TIME,
-	NODE_ENV,
+	JWT_SECRET,
 	MAIL_HOST,
 	MAIL_PASS,
 	MAIL_PORT,
 	MAIL_SECURE,
 	MAIL_USER,
 	MAIL_SENDER_NAME,
+	NODE_ENV,
 } from '@/config/config.constants';
 
 @Module({
 	imports: [
 		NestConfigModule.forRoot({
 			validationSchema: Joi.object({
-				[FQDN]: Joi.string().required(),
+				[BASE_URL]: Joi.string().required(),
 				[JWT_SECRET]: Joi.string().required(),
 				[JWT_EXPIRATION_TIME]: Joi.string().required(),
 				[MAIL_HOST]: Joi.string().required(),
