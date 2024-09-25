@@ -17,7 +17,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { FQDN } from '@/config/config.constants';
+import { BASE_URL } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
@@ -248,8 +248,8 @@ export class SpotsViewsController {
 		@Param('id') id: string,
 	): Promise<Record<string, string | undefined | Spot> | void> {
 		const spot = await this.spotsService.getSpot(id);
-		const fqdn = this.configService.get(FQDN, { infer: true });
-		const redirection = `${fqdn}/spots/${spot.id}/redirect`;
+		const baseUrl = this.configService.get(BASE_URL, { infer: true });
+		const redirection = `${baseUrl}/spots/${spot.id}/redirect`;
 
 		try {
 			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
