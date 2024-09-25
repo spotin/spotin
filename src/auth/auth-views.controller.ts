@@ -60,12 +60,13 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
+	@JwtOrUnrestrictedAuth()
 	async renderRegister(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
 	): Promise<void | Record<string, string>> {
 		if (user?.id) {
-			return res.redirect('/');
+			return res.redirect('/spots');
 		}
 
 		return res.render('auth/register', {
