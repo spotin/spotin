@@ -28,7 +28,8 @@
 			},
 			"username": {
 				"label": "Username",
-				"placeholder": "Enter your username"
+				"placeholder": "Enter your username",
+				"warning": "The username will be public for all users."
 			},
 			"email": {
 				"label": "Email",
@@ -190,7 +191,6 @@
 		"view": {
 			"title": "Spot details",
 			"noName": "This spot has no name",
-			"noDescription": "This spot has no description.",
 			"downloadQrCode": "Download QR code",
 			"edit": "Edit",
 			"viewRedirectionPage": "View redirection page"
