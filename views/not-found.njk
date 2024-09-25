@@ -7,12 +7,17 @@
     <p class="text-justify">
       {{ t('ui.notFound.message') }}
     </p>
-    <p class="text-center">
-      <a href="/">
-        <button>
-          {{ t('ui.notFound.backToHome') }}
-        </button>
-      </a>
+    <p>
+      {{ t('ui.notFound.latestSpotsDescription') }}
+      <a href="/spots/latest">{{ t('ui.notFound.latestSpots') }}</a>.
+    </p>
+    <p>
+      {{ t('ui.notFound.registerPageDescription') }}
+      <a href="/auth/register">{{ t('ui.notFound.registerPage') }}</a>.
+    </p>
+    <p>
+      {{ t('ui.notFound.homePageDescription') }}
+      <a href="/">{{ t('ui.notFound.homePage') }}</a>.
     </p>
   </div>
 {% endblock %}
