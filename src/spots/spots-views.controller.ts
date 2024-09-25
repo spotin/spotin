@@ -27,10 +27,11 @@ import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
+import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 
 @ApiTags('Views')
 @Controller('spots')
-@UseFilters(UnauthorizedViewExceptionFilter)
+@UseFilters(UnauthorizedViewExceptionFilter, NotFoundExceptionFilter)
 export class SpotsViewsController {
 	constructor(
 		private readonly spotsService: SpotsService,

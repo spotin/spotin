@@ -1,5 +1,6 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
 import { Token } from '@/tokens/types/token';
@@ -22,7 +23,7 @@ import {
 
 @ApiTags('Views')
 @Controller('tokens')
-@UseFilters(UnauthorizedViewExceptionFilter)
+@UseFilters(UnauthorizedViewExceptionFilter, NotFoundExceptionFilter)
 export class TokensViewsController {
 	constructor(private readonly tokensService: TokensService) {}
 

@@ -1,11 +1,13 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 import { User } from '@/users/types/user';
-import { Get, Controller, Render } from '@nestjs/common';
+import { Get, Controller, Render, UseFilters } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Views')
 @Controller()
+@UseFilters(NotFoundExceptionFilter)
 export class AppController {
 	@Get()
 	@JwtOrUnrestrictedAuth()

@@ -2,6 +2,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
 import { User } from '@/users/types/user';
@@ -26,7 +27,7 @@ import {
 @Controller('users')
 @JwtAuth(RolesGuard)
 @Roles(UserRole.ADMIN)
-@UseFilters(UnauthorizedViewExceptionFilter)
+@UseFilters(UnauthorizedViewExceptionFilter, NotFoundExceptionFilter)
 export class UsersViewsController {
 	constructor(private readonly usersService: UsersService) {}
 
