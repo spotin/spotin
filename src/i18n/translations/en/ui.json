@@ -191,7 +191,6 @@
 		"view": {
 			"title": "Spot details",
 			"noName": "This spot has no name",
-			"noDescription": "This spot has no description.",
 			"downloadQrCode": "Download QR code",
 			"edit": "Edit",
 			"viewRedirectionPage": "View redirection page"
