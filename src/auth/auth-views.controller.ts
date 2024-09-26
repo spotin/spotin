@@ -66,7 +66,7 @@ export class AuthViewsController {
 		@Res() res: Response,
 	): Promise<void | Record<string, string>> {
 		if (user?.id) {
-			return res.redirect('/spots');
+			return res.redirect('/');
 		}
 
 		return res.render('auth/register', {
