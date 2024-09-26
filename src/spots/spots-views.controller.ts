@@ -27,16 +27,10 @@ import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
-import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
-import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 @ApiTags('Views')
 @Controller('spots')
-@UseFilters(
-	UnauthorizedViewExceptionFilter,
-	PrismaClientExceptionFilter,
-	NotFoundViewExceptionFilter,
-)
+@UseFilters(UnauthorizedViewExceptionFilter)
 export class SpotsViewsController {
 	constructor(
 		private readonly spotsService: SpotsService,

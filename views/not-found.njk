@@ -2,7 +2,10 @@
 {% block body %}
   <div>
     <h1>
-      {{ t('ui.notFound.title') }}
+      {{ t('ui.notFound.title') -}}
+      {% if url %}:
+        {{ url }}
+      {% endif %}
     </h1>
     <p class="text-justify">
       {{ t('ui.notFound.message') }}
