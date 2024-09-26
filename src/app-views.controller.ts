@@ -8,7 +8,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 @ApiTags('Views')
 @Controller()
 @UseFilters(NotFoundExceptionFilter)
-export class AppController {
+export class AppViewsController {
 	@Get()
 	@JwtOrUnrestrictedAuth()
 	@ApiOperation({

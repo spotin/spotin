@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SpotsModule } from '@/spots/spots.module';
 import { AuthModule } from '@/auth/auth.module';
 import { UsersModule } from '@/users/users.module';
-import { AppController } from '@/app-views.controller';
+import { AppViewsController } from '@/app-views.controller';
 import { ConfigModule } from './config/config.module';
 import { TokensModule } from './tokens/tokens.module';
 import { ResetPasswordRequestsModule } from '@/reset-password-requests/reset-password-requests.module';
@@ -22,6 +22,6 @@ import { I18nModule } from '@/i18n/i18n.module';
 		UsersModule,
 		TokensModule,
 	],
-	controllers: [AppController],
+	controllers: [AppViewsController],
 })
 export class AppModule {}

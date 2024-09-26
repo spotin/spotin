@@ -4,7 +4,7 @@ import { AppModule } from '@/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { bootstrap } from '@/bootstrap';
 
-describe('AppController (e2e)', () => {
+describe('AppViewsController (e2e)', () => {
 	let app: NestExpressApplication;
 
 	beforeEach(async () => {
