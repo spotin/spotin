@@ -1,17 +1,22 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
+import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { ProfileWithPublicSpots } from '@/profile/types/profile-with-public-spots';
 import { User } from '@/users/types/user';
 import { UsersService } from '@/users/users.service';
 import { Controller, Get, Param, Render, UseFilters } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 @ApiTags('Views')
 @Controller('profile')
-@UseFilters(UnauthorizedViewExceptionFilter, NotFoundExceptionFilter)
+@UseFilters(
+	UnauthorizedViewExceptionFilter,
+	PrismaClientExceptionFilter,
+	NotFoundViewExceptionFilter,
+)
 export class ProfileViewsController {
 	constructor(private readonly usersService: UsersService) {}
 	@Get()

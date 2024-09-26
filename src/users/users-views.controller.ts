@@ -2,7 +2,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
+import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
 import { User } from '@/users/types/user';
@@ -22,12 +22,17 @@ import {
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
+import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 @ApiTags('Views')
 @Controller('users')
 @JwtAuth(RolesGuard)
 @Roles(UserRole.ADMIN)
-@UseFilters(UnauthorizedViewExceptionFilter, NotFoundExceptionFilter)
+@UseFilters(
+	UnauthorizedViewExceptionFilter,
+	PrismaClientExceptionFilter,
+	NotFoundViewExceptionFilter,
+)
 export class UsersViewsController {
 	constructor(private readonly usersService: UsersService) {}
 
