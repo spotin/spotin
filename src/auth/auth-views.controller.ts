@@ -60,6 +60,7 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
+	@JwtOrUnrestrictedAuth()
 	async renderRegister(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,

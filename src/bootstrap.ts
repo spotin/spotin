@@ -12,9 +12,9 @@ import {
 	PassportStrategy,
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
-import { NotFoundExceptionFilter } from '@/common/filters/not-found-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/config.constants';
+import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
 
 export async function bootstrap(
 	app: NestExpressApplication,
@@ -22,7 +22,7 @@ export async function bootstrap(
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
-	app.useGlobalFilters(new NotFoundExceptionFilter());
+	app.useGlobalFilters(new NotFoundViewExceptionFilter());
 
 	app.useGlobalPipes(
 		new ValidationPipe({
