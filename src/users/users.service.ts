@@ -185,6 +185,10 @@ export class UsersService {
 	}
 
 	async deleteUser(userId: string): Promise<void> {
+		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
+			await this.getUser(userId),
+		);
+
 		await this.prisma.user.delete({
 			where: {
 				id: userId,
