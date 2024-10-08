@@ -15,11 +15,27 @@ ALTER TABLE "tokens" DROP CONSTRAINT "tokens_user_id_fkey";
 -- DropForeignKey
 ALTER TABLE "users" DROP CONSTRAINT "users_reset_password_request_id_fkey";
 
+/** So in order to not loose the data in the reset_password_request_id column,
+we need to first create a new column in the reset_password_requests table, then
+copy the data from the users table to the reset_password_requests table, then
+drop the reset_password_request_id column from the users table, then create a
+foreign key from the reset_password_requests table to the users table, then
+create a foreign key from the spots table to the users table, then create a
+foreign key from the tokens table to the users table. **/
+
+ALTER TABLE "reset_password_requests" ADD COLUMN "user_id" TEXT;
+
+UPDATE reset_password_requests
+SET user_id = (
+  SELECT id
+  FROM users
+  WHERE reset_password_requests.id = users.reset_password_request_id
+);
+
+ALTER TABLE "reset_password_requests" ALTER COLUMN "user_id" SET NOT NULL;
+
 -- DropIndex
 DROP INDEX "users_reset_password_request_id_key";
-
--- AlterTable
-ALTER TABLE "reset_password_requests" ADD COLUMN     "user_id" TEXT NOT NULL;
 
 -- AlterTable
 ALTER TABLE "users" DROP COLUMN "reset_password_request_id";
