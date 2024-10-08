@@ -38,26 +38,46 @@ export class ResetPasswordRequestsService {
 	): Promise<UserWithResetPasswordRequest> {
 		const token = randomUUID();
 
-		const userWithResetPasswordRequest = await this.prisma.user.update({
-			where: {
-				id: user.id,
-			},
-			data: {
-				resetPasswordRequest: {
-					upsert: {
-						create: {
-							token,
-						},
-						update: {
-							token,
+		const { id: userId } = user;
+
+		const reserPasswordRequest =
+			await this.prisma.resetPasswordRequest.findFirst({
+				where: {
+					userId: userId,
+				},
+			});
+
+		if (reserPasswordRequest) {
+			await this.prisma.resetPasswordRequest.update({
+				where: {
+					id: reserPasswordRequest.id,
+				},
+				data: {
+					token,
+				},
+			});
+		} else {
+			await this.prisma.resetPasswordRequest.create({
+				data: {
+					token,
+					user: {
+						connect: {
+							id: userId,
 						},
 					},
 				},
-			},
-			include: {
-				resetPasswordRequest: true,
-			},
-		});
+			});
+		}
+
+		const userWithResetPasswordRequest =
+			await this.prisma.user.findFirstOrThrow({
+				where: {
+					id: user.id,
+				},
+				include: {
+					resetPasswordRequest: true,
+				},
+			});
 
 		return {
 			...userWithResetPasswordRequest,

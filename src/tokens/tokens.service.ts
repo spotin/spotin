@@ -49,7 +49,7 @@ export class TokensService {
 			data: {
 				...createToken,
 				hash,
-				users: {
+				user: {
 					connect: {
 						id: user.id,
 					},

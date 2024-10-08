@@ -55,15 +55,15 @@ export class SpotsService {
 				},
 			},
 			include: {
-				users: true,
+				user: true,
 			},
 		});
 
 		return {
 			...spot,
 			user: {
-				...spot.users,
-				role: UserRole[spot.users.role],
+				...spot.user,
+				role: UserRole[spot.user.role],
 			},
 			payload: spot.payload ? JSON.stringify(spot.payload) : null,
 		};
@@ -76,7 +76,7 @@ export class SpotsService {
 				payload: createSpot.payload
 					? JSON.parse(createSpot.payload)
 					: undefined,
-				users: {
+				user: {
 					connect: {
 						id: user.id,
 					},
