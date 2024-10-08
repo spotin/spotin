@@ -7,6 +7,12 @@
 
 */
 -- DropForeignKey
+ALTER TABLE "spots" DROP CONSTRAINT "spots_user_id_fkey";
+
+-- DropForeignKey
+ALTER TABLE "tokens" DROP CONSTRAINT "tokens_user_id_fkey";
+
+-- DropForeignKey
 ALTER TABLE "users" DROP CONSTRAINT "users_reset_password_request_id_fkey";
 
 -- DropIndex
@@ -20,6 +26,12 @@ ALTER TABLE "users" DROP COLUMN "reset_password_request_id";
 
 -- CreateIndex
 CREATE UNIQUE INDEX "reset_password_requests_user_id_key" ON "reset_password_requests"("user_id");
+
+-- AddForeignKey
+ALTER TABLE "spots" ADD CONSTRAINT "spots_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "tokens" ADD CONSTRAINT "tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "reset_password_requests" ADD CONSTRAINT "reset_password_requests_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
