@@ -29,7 +29,7 @@ model Spot {
   updatedAt     DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
   deletedAt     DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
 
-  users User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map(name: "spots")
 }
@@ -43,36 +43,36 @@ model Token {
   updatedAt DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
 
-  users User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map(name: "tokens")
 }
 
 model User {
-  id                     String    @id @default(uuid())
-  username               String    @unique @db.VarChar(255)
-  email                  String    @unique @db.VarChar(255)
-  resetPasswordRequestId String?   @unique @map(name: "reset_password_request_id")
-  password               String    @db.VarChar(255)
-  spots                  Spot[]
-  tokens                 Token[]
-  role                   UserRole  @default(STANDARD_USER)
-  enabled                Boolean   @default(true)
-  createdAt              DateTime  @default(now()) @map(name: "created_at") @db.Timestamptz(6)
-  updatedAt              DateTime  @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
-  deletedAt              DateTime? @map(name: "deleted_at") @db.Timestamptz(6)
-
-  resetPasswordRequest ResetPasswordRequest? @relation(fields: [resetPasswordRequestId], references: [id])
+  id                   String                @id @default(uuid())
+  username             String                @unique @db.VarChar(255)
+  email                String                @unique @db.VarChar(255)
+  resetPasswordRequest ResetPasswordRequest?
+  password             String                @db.VarChar(255)
+  spots                Spot[]
+  tokens               Token[]
+  role                 UserRole              @default(STANDARD_USER)
+  enabled              Boolean               @default(true)
+  createdAt            DateTime              @default(now()) @map(name: "created_at") @db.Timestamptz(6)
+  updatedAt            DateTime              @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
+  deletedAt            DateTime?             @map(name: "deleted_at") @db.Timestamptz(6)
 
   @@map(name: "users")
 }
 
 model ResetPasswordRequest {
   id        String   @id @default(uuid())
-  user      User?
+  userId    String   @unique @map(name: "user_id")
   token     String   @unique @db.VarChar(255)
   createdAt DateTime @default(now()) @map(name: "created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map(name: "updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map(name: "reset_password_requests")
 }
