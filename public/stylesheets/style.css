@@ -72,15 +72,11 @@
 	display: none !important;
 }
 
-/* @media (min-width: 991px) {
+@media (max-width: 991px) {
 	.site-footer [class^='col-'] {
 		margin-bottom: 30px;
 	}
-
-	.dropdown-menu {
-		display: block;
-	}
-} */
+}
 
 @media (min-width: 768px) {
 	.dropdown-menu {
