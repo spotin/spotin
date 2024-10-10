@@ -65,7 +65,7 @@
 	color: #e53935;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
 	.site-footer [class^='col-'] {
 		margin-bottom: 30px;
 	}
