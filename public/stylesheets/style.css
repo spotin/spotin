@@ -65,6 +65,12 @@
 	color: #e53935;
 }
 
+@media (max-width: 991px) {
+	.site-footer [class^='col-'] {
+		margin-bottom: 30px;
+	}
+}
+
 .dropdown-menu {
 	display: block !important;
 }
@@ -89,11 +95,5 @@
 	.site-footer .copyright-text,
 	.site-footer .social-icons {
 		text-align: center;
-	}
-}
-
-@media (max-width: 991px) {
-	.site-footer [class^='col-'] {
-		margin-bottom: 30px;
 	}
 }
