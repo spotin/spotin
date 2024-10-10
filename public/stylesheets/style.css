@@ -72,12 +72,6 @@
 	display: none !important;
 }
 
-@media (max-width: 991px) {
-	.site-footer [class^='col-'] {
-		margin-bottom: 30px;
-	}
-}
-
 @media (min-width: 768px) {
 	.dropdown-menu {
 		display: none !important;
@@ -94,5 +88,11 @@
 	.site-footer .copyright-text,
 	.site-footer .social-icons {
 		text-align: center;
+	}
+}
+
+@media (max-width: 991px) {
+	.site-footer [class^='col-'] {
+		margin-bottom: 30px;
 	}
 }
