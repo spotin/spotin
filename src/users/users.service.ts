@@ -122,19 +122,10 @@ export class UsersService {
 	}
 
 	async getUserByResetPasswordRequestToken(token: string): Promise<User> {
-		const requestToken =
-			await this.prisma.resetPasswordRequest.findFirstOrThrow({
-				where: {
-					token: {
-						equals: token,
-					},
-				},
-			});
-
 		const user = await this.prisma.user.findFirstOrThrow({
 			where: {
-				id: {
-					equals: requestToken.userId,
+				resetPasswordRequest: {
+					token,
 				},
 			},
 		});
