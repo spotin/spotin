@@ -65,13 +65,31 @@
 	color: #e53935;
 }
 
-@media (max-width: 991px) {
+nav ol:first-of-type,
+nav ul:first-of-type {
+	margin-left: 0 !important;
+}
+
+nav ol:last-of-type,
+nav ul:last-of-type {
+	margin-right: 0 !important;
+}
+
+@media (max-width: 1024px) {
 	.site-footer [class^='col-'] {
 		margin-bottom: 30px;
 	}
 }
 
-@media (max-width: 767px) {
+.dropdown-menu {
+	display: block !important;
+}
+
+.menu {
+	display: none !important;
+}
+
+@media (max-width: 768px) {
 	.site-footer {
 		padding-bottom: 0;
 	}
@@ -79,5 +97,15 @@
 	.site-footer .copyright-text,
 	.site-footer .social-icons {
 		text-align: center;
+	}
+}
+
+@media (min-width: 768px) {
+	.dropdown-menu {
+		display: none !important;
+	}
+
+	.menu {
+		display: block !important;
 	}
 }
