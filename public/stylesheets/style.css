@@ -79,15 +79,7 @@
 	display: none !important;
 }
 
-@media (min-width: 768px) {
-	.dropdown-menu {
-		display: none !important;
-	}
-
-	.menu {
-		display: block !important;
-	}
-
+@media (max-width: 768px) {
 	.site-footer {
 		padding-bottom: 0;
 	}
@@ -95,5 +87,15 @@
 	.site-footer .copyright-text,
 	.site-footer .social-icons {
 		text-align: center;
+	}
+}
+
+@media (min-width: 768px) {
+	.dropdown-menu {
+		display: none !important;
+	}
+
+	.menu {
+		display: block !important;
 	}
 }
