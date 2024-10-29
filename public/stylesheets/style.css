@@ -85,6 +85,11 @@ nav ul:last-of-type {
 	display: block !important;
 }
 
+.dropdown-menu > ul {
+	right: 0 !important;
+	left: auto !important;
+}
+
 .menu {
 	display: none !important;
 }
