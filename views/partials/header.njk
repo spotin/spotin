@@ -4,54 +4,16 @@
       <img src="/images/logo.svg" alt="Spot in logo" width="200"/>
     </a>
   </ul>
+
   <ul>
-    <!-- if is authenticated -->
-    {% if username %}
-      {% if role == "ADMIN" %}
-        <li>
-          <a href="/users">
-            <i class="fas fa-users"></i>
-            {{ t('ui.header.users') }}
-          </a>
-        </li>
-      {% endif %}
-      <li>
-        <a href="/spots">
-          <i class="fas fa-map-marker-alt"></i>
-          {{ t('ui.header.spots') }}
-        </a>
-      </li>
-      <li>
-        <a href="/tokens">
-          <i class="fas fa-key"></i>
-          {{ t('ui.header.tokens') }}
-        </a>
-      </li>
-      <li>
-        <a href="/profile">
-          <i class="fas fa-user"></i>
-          {{ t('ui.header.profile') }}
-        </a>
-      </li>
-      <li>
-        <a href="/auth/logout">
-          <i class="fas fa-sign-out-alt"></i>
-          {{ t('ui.header.logout') }}
-        </a>
-      </li>
-    {% else %}
-      <li>
-        <a href="/auth/login">
-          <i class="fas fa-sign-in-alt"></i>
-          {{ t('ui.header.login') }}
-        </a>
-      </li>
-      <li>
-        <a href="/auth/register">
-          <i class="fas fa-edit"></i>
-          {{ t('ui.header.register') }}
-        </a>
-      </li>
-    {% endif %}
+    <details class="dropdown mobile-dropdown-menu">
+      <summary role="button">
+        <i class="fas fa-bars"></i>
+      </summary>
+      {% include "partials/menu.njk" %}
+    </details>
+    <div class="menu">
+      {% include "partials/menu.njk" %}
+    </div>
   </ul>
 </nav>
