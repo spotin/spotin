@@ -81,11 +81,11 @@ nav ul:last-of-type {
 	}
 }
 
-.dropdown-menu {
+.mobile-dropdown-menu {
 	display: block !important;
 }
 
-.dropdown-menu > ul {
+.mobile-dropdown-menu > ul {
 	right: 0 !important;
 	left: auto !important;
 }
@@ -106,7 +106,7 @@ nav ul:last-of-type {
 }
 
 @media (min-width: 768px) {
-	.dropdown-menu {
+	.mobile-dropdown-menu {
 		display: none !important;
 	}
 
