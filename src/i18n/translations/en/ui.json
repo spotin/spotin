@@ -1,4 +1,8 @@
 {
+	"about": {
+		"title": "Learn more about Spot in",
+		"details": "Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map."
+	},
 	"auth": {
 		"login": {
 			"title": "Login",
@@ -66,7 +70,7 @@
 			}
 		}
 	},
-	"footer": "A service offered by City of Biel",
+	"footer": "A service offered by",
 	"header": {
 		"users": "Users",
 		"spots": "Spots",
@@ -186,7 +190,7 @@
 			},
 			"leaveSpot": {
 				"title": "You are about to leave Spot in and visit {websiteTarget}.",
-				"details": "To access this website, click on the button below.",
+				"details": "To access this content, click on the button below.",
 				"button": "Access {websiteTarget}"
 			},
 			"report": "Report",

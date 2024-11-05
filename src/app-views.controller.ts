@@ -29,6 +29,28 @@ export class AppViewsController {
 		};
 	}
 
+	@Get('about')
+	@JwtOrUnrestrictedAuth()
+	@ApiOperation({
+		summary: 'Render the about page',
+		description: 'Render the about page.',
+		operationId: 'about',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	@Render('about')
+	async about(
+		@AuthUser() user: User | undefined,
+	): Promise<Record<string, string | undefined>> {
+		return {
+			title: 'About | Spot in',
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+		};
+	}
+
 	@Get('api')
 	@ApiOperation({
 		summary: 'Render the Swagger UI page',
