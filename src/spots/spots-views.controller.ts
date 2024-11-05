@@ -215,16 +215,15 @@ export class SpotsViewsController {
 		@Res() res: Response,
 		@Param('id') id: string,
 	): Promise<void> {
-		const spotWithUser = await this.spotsService.getSpotWithUser(id);
+		const spot = await this.spotsService.getSpot(id);
 
-		if (!spotWithUser.configured) {
+		if (!spot.configured) {
 			return res.redirect(`/spots/${id}/configure`);
+		} else if (!spot.websiteTarget) {
+			return res.redirect(`/spots/${id}`);
+		} else {
+			return res.redirect(spot.websiteTarget);
 		}
-
-		return res.render('spots/redirect', {
-			title: 'Redirecting | Spot in',
-			spot: spotWithUser,
-		});
 	}
 
 	@Get(':id')
