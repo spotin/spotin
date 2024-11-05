@@ -223,6 +223,7 @@ export class SpotsViewsController {
 			// TODO: remove this behavior when the redirection page is implemented
 			return res.redirect(spotWithUser.websiteTarget);
 		}
+
 		return res.render('spots/redirect', {
 			title: 'Redirecting | Spot in',
 			spot: spotWithUser,
