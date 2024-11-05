@@ -220,13 +220,13 @@ export class SpotsViewsController {
 		if (!spotWithUser.configured) {
 			return res.redirect(`/spots/${id}/configure`);
 		} else if (spotWithUser.websiteTarget) {
+			// TODO: remove this behavior when the redirection is implemented
 			return res.redirect(spotWithUser.websiteTarget);
-		} else {
-			return res.render('spots/redirect', {
-				title: 'Redirecting | Spot in',
-				spot: spotWithUser,
-			});
 		}
+		return res.render('spots/redirect', {
+			title: 'Redirecting | Spot in',
+			spot: spotWithUser,
+		});
 	}
 
 	@Get(':id')
