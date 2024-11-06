@@ -1,89 +1,132 @@
 {% extends "public-layout.njk" %}
-
 {% block body %}
   <article>
-    <header>
-      {% if spot.name != null %}
-        <h1>
-          <i class="fas fa-map-marker-alt"></i>
+    <header class="text-center">
+      <div class="cursor-pointer" data-target="modal-access-content" onclick="toggleModal(event)">
+        <img src="/images/logo.svg" alt="Spot in logo" width="200"/>
+      </div>
+      <h1>
+        {% if spot.name != null %}
           {{ spot.name }}
-        </h1>
-      {% else %}
-        <h1 class="text-italic">
-          <i class="fas fa-map-marker-alt"></i>
-          {{ t('ui.spots.view.noName') }}
-        </h1>
-      {% endif %}
-      <p>
-        <i class="fas fa-user"></i>
-        {{ t('ui.spots.redirect.spotCreatedBy') }}
-        <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>
-      </p>
-      {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
-        <p>
-          <span style="color: LimeGreen;">
-            <i class="fas fa-check-circle"></i>
-          </span>
-          {{ t('ui.spots.redirect.certified') }}
-        </p>
-      {% endif %}
-      <details>
-        <summary>
-          <span style="color: DodgerBlue;">
-            <i class="fas fa-info-circle"></i>
-          </span>
-          {{ t('ui.spots.redirect.learnMore.title') }}
-        </summary>
-        <p>
-          {{ t('ui.spots.redirect.learnMore.details') }}
-        </p>
-      </details>
+        {% else %}
+          <i>{{ t('ui.spots.view.noName') }}</i>
+        {% endif %}
+      </h1>
     </header>
 
-    {% if spot.description != null %}
+    <details>
+      <summary>
+        {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
+          <span>
+            <i class="fas fa-check-circle" style="color: LimeGreen;"></i>
+            {{ t('ui.spots.redirect.certified') }}
+          </span>
+        {% else %}
+          <span>
+            <i class="fas fa-exclamation-circle" style="color: Orange;"></i>
+            {{ t('ui.spots.redirect.unverified') }}
+          </span>
+        {% endif %}
+        <small>
+          <i>{{ t('ui.spots.redirect.whatDoesThatMean.button') }}</i>
+        </small>
+      </summary>
       <p>
-        {{ spot.description }}
+        {{ t('ui.spots.redirect.whatDoesThatMean.modal.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
       </p>
-    {% endif %}
+      <p>
+        {{ t('ui.spots.redirect.whatDoesThatMean.modal.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
+      </p>
+    </details>
+
+    <hr>
+
+    <details>
+      <summary>
+        <span>
+          <i class="fas fa-info-circle" "></i>
+        </span>
+        {{ t('ui.spots.redirect.showSpotInformation') }}
+      </summary>
+      <p>
+        {{ t('ui.spots.redirect.createdBy') }}
+        <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>.
+      </p>
+      {% if spot.description != null %}
+        <p>{{ spot.description }}</p>
+      {% endif %}
+    </details>
+
+    <hr>
 
     {% if spot.latitude != null and spot.longitude != null %}
-      <div id='map' style='width: 100%; height: 400px;'></div>
+      <details>
+        <summary>
+          <span>
+            <i class="fas fa-map"></i>
+          </span>
+          {{ t('ui.spots.redirect.showMap') }}
+        </summary>
+        <div id='map' style='width: 100%; height: 400px;'></div>
+      </details>
+
+      <hr>
+    {% endif %}
+
+    {% if spot.websiteTarget != null %}
+      <form id="form">
+        <button type="submit" data-target="modal-access-content" onclick="toggleModal(event)">
+          <i class="fas fa-external-link-alt"></i>
+          {{ t('ui.spots.redirect.accessContent.button') }}
+        </button>
+      </form>
     {% endif %}
 
     <footer>
-      {% if spot.websiteTarget != null %}
-        <p>
-          {{ t('ui.spots.redirect.leaveSpot.title', { websiteTarget: spot.websiteTarget }) }}
-        </p>
-        <p>
-          {{ t('ui.spots.redirect.leaveSpot.details') }}
-        </p>
-        <form id="form">
-          <button type="submit">
-            <i class="fas fa-external-link-alt"></i>
-            {{ t('ui.spots.redirect.leaveSpot.button', { websiteTarget: spot.websiteTarget }) }}
-          </button>
-        </form>
-      {% endif %}
-
       {# <div role="group">
         <button class="secondary">
-          <i class="fas fa-flag"></i>
-          {{ t('ui.spots.redirect.report') }}
+          <small>
+            <i class="fas fa-flag"></i>
+            {{ t('ui.spots.redirect.report') }}
+          </small>
         </button>
         <button class="secondary">
-          <span style="color: Red;">
-            <i class="fas fa-heart"></i>
-          </span>
-          {{ t('ui.spots.redirect.like') }}
+          <small>
+            <span style="color: Red;">
+              <i class="fas fa-heart"></i>
+            </span>
+            {{ t('ui.spots.redirect.like') }}
+          </small>
         </button>
         <button class="secondary">
-          <i class="fas fa-share-alt"></i>
-          {{ t('ui.spots.redirect.share') }}
+          <small>
+            <i class="fas fa-share-alt"></i>
+            {{ t('ui.spots.redirect.share') }}
+          </small>
         </button>
       </div> #}
     </footer>
   </article>
+
+  <dialog id="modal-access-content">
+    <article>
+      <header>
+        <button aria-label="Close" rel="prev" data-target="modal-access-content" onclick="toggleModal(event)"></button>
+        <h2>{{ t('ui.spots.redirect.accessContent.modal.title') }}</h2>
+      </header>
+      <p>
+        {{ t('ui.spots.redirect.accessContent.modal.details', { websiteTarget: spot.websiteTarget }) }}
+      </p>
+      <footer>
+        <button class="secondary" data-target="modal-access-content" onclick="toggleModal(event)">
+          {{ t('ui.spots.redirect.accessContent.modal.cancel') }}
+        </button>
+        <a role="button" href="{{ spot.websiteTarget }}" autofocus="autofocus" target="_self">
+          {{ t('ui.spots.redirect.accessContent.modal.confirm') }}
+        </a>
+      </footer>
+    </article>
+  </dialog>
 {% endblock %}
 
 {% block javascript %}
@@ -98,7 +141,7 @@
         center: [
           longitude, latitude
         ],
-        zoom: 10
+        zoom: 16
       });
 
       const marker = new maplibregl
@@ -106,15 +149,5 @@
         .setLngLat([longitude, latitude])
         .addTo(map);
     }
-
-    {% if spot.websiteTarget %}
-      const form = document.getElementById("form");
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        window.location.href = "{{ spot.websiteTarget }}";
-      });
-    {% endif %}
   </script>
 {% endblock %}
