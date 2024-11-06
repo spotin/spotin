@@ -185,14 +185,10 @@
 			"certified": "Certified",
 			"unverified": "Unverified",
 			"whatDoesThatMean": {
-				"button": "What does that mean?",
-				"modal": {
-					"title": "What does that mean?",
-					"details": {
-						"part1": "Spots marked with a checkmark ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.",
-						"part2": "Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these users."
-					},
-					"confirm": "OK, got it!"
+				"title": "What does that mean?",
+				"details": {
+					"part1": "Spots marked with a checkmark ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.",
+					"part2": "Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these users."
 				}
 			},
 			"showSpotInformation": "Show spot information",
