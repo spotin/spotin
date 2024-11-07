@@ -1,10 +1,8 @@
 {% extends "public-layout.njk" %}
 {% block body %}
-  <article>
+  <article class="m-8">
     <header class="text-center">
-      <div class="cursor-pointer" data-target="modal-access-content" onclick="toggleModal(event)">
-        <img src="/images/logo.svg" alt="Spot in logo" width="200"/>
-      </div>
+      <img src="/images/logo.svg" alt="Spot in logo" width="200"/>
       <h1>
         {% if spot.name != null %}
           {{ spot.name }}
@@ -12,34 +10,10 @@
           <i>{{ t('ui.spots.view.noName') }}</i>
         {% endif %}
       </h1>
+
+      <p>{{ t('ui.spots.redirect.spotScanned') }}</p>
+      <p>{{ t('ui.spots.redirect.spotExplanation', { spotIn: '<strong><i><a href="/about">Spot in</a></i></strong>' })|safe }}</p>
     </header>
-
-    <details>
-      <summary>
-        {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
-          <span>
-            <i class="fas fa-check-circle" style="color: LimeGreen;"></i>
-            {{ t('ui.spots.redirect.certified') }}
-          </span>
-        {% else %}
-          <span>
-            <i class="fas fa-exclamation-circle" style="color: Orange;"></i>
-            {{ t('ui.spots.redirect.unverified') }}
-          </span>
-        {% endif %}
-        <small>
-          <i>{{ t('ui.spots.redirect.whatDoesThatMean.title') }}</i>
-        </small>
-      </summary>
-      <p>
-        {{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
-      </p>
-      <p>
-        {{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
-      </p>
-    </details>
-
-    <hr>
 
     <details>
       <summary>
@@ -72,6 +46,32 @@
 
       <hr>
     {% endif %}
+
+    <details>
+      <summary>
+        {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
+          <span>
+            <i class="fas fa-check-circle" style="color: LimeGreen;"></i>
+            {{ t('ui.spots.redirect.certified') }}
+          </span>
+        {% else %}
+          <span>
+            <i class="fas fa-exclamation-circle" style="color: Orange;"></i>
+            {{ t('ui.spots.redirect.unverified') }}
+          </span>
+        {% endif %}
+
+        <i>({{ t('ui.spots.redirect.whatDoesThatMean.title') }})</i>
+      </summary>
+      <p class="text-justify">
+        {{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
+      </p>
+      <p class="text-justify">
+        {{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
+      </p>
+    </details>
+
+    <hr>
 
     {% if spot.websiteTarget != null %}
       <form id="form">
@@ -114,7 +114,7 @@
         <button aria-label="Close" rel="prev" data-target="modal-access-content" onclick="toggleModal(event)"></button>
         <h2>{{ t('ui.spots.redirect.accessContent.modal.title') }}</h2>
       </header>
-      <p>
+      <p class="text-justify">
         {{ t('ui.spots.redirect.accessContent.modal.details', { websiteTarget: spot.websiteTarget }) }}
       </p>
       <footer>
@@ -131,10 +131,10 @@
 
 {% block javascript %}
   <script>
-    const longitude = '{{ spot.longitude }}';
-    const latitude = '{{ spot.latitude }}';
+    {% if spot.latitude != null and spot.longitude != null %}
+      const latitude = '{{ spot.latitude }}';
+      const longitude = '{{ spot.longitude }}';
 
-    if (longitude !== '' && latitude !== '') {
       const map = new maplibregl.Map({
         container: 'map',
         style: "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte_world.vt/style.json",
@@ -148,6 +148,6 @@
         .Marker({color: "#e53935"})
         .setLngLat([longitude, latitude])
         .addTo(map);
-    }
+    {% endif %}
   </script>
 {% endblock %}

@@ -50,6 +50,10 @@
 	align-content: center;
 }
 
+.m-8 {
+	margin: 2rem;
+}
+
 .flash {
 	margin-bottom: var(--typography-spacing-vertical);
 	padding: var(--form-element-spacing-vertical)

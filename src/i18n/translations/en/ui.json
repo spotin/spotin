@@ -70,7 +70,10 @@
 			}
 		}
 	},
-	"footer": "A service offered by",
+	"footer": {
+		"offeredBy": "A service offered by Spot in.",
+		"about": "More about Spot in"
+	},
 	"header": {
 		"users": "Users",
 		"spots": "Spots",
@@ -182,20 +185,22 @@
 		},
 		"redirect": {
 			"title": "Redirection page",
+			"spotScanned": "You just have scanned a spot!",
+			"spotExplanation": "{spotIn} adds digital information to our physical world with the help of 'spots'.<br>Share spots with your friends and discover new places and things!",
 			"certified": "Certified",
 			"unverified": "Unverified",
 			"whatDoesThatMean": {
 				"title": "What does that mean?",
 				"details": {
 					"part1": "Spots marked with a checkmark ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.",
-					"part2": "Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these users."
+					"part2": "Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these spots."
 				}
 			},
-			"showSpotInformation": "Show spot information",
+			"showSpotInformation": "Show spot details",
 			"createdBy": "Spot created by",
 			"showMap": "Show on map",
 			"accessContent": {
-				"button": "Access the content!",
+				"button": "Learn more about this spot",
 				"modal": {
 					"title": "You are about to leave Spot in",
 					"details": "You are about to leave Spot in and visit {websiteTarget}. Please use caution when interacting with this external content. To access this content, click on the button below.",
