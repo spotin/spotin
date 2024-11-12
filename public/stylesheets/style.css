@@ -22,6 +22,38 @@
 	font-style: italic;
 }
 
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-col {
+	flex-direction: column;
+}
+
+.grow {
+	flex-grow: 1;
+}
+
+.min-h-screen {
+	min-height: 100vh;
+}
+
+.justify-center {
+	justify-content: center;
+}
+
+.content-center {
+	align-content: center;
+}
+
+.m-8 {
+	margin: 2rem;
+}
+
 .flash {
 	margin-bottom: var(--typography-spacing-vertical);
 	padding: var(--form-element-spacing-vertical)

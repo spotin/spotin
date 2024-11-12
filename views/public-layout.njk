@@ -8,20 +8,24 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.0.1/build/cookieconsent.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.red.min.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^2.4/dist/maplibre-gl.css"/>
+    {# <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^2.4/dist/maplibre-gl.css"/> #}
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.css"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
     <link rel="stylesheet" href="/stylesheets/style.css"/>
-    <script src="https://unpkg.com/maplibre-gl@^2.4/dist/maplibre-gl.js"></script>
+    {# <script src="https://unpkg.com/maplibre-gl@^2.4/dist/maplibre-gl.js"></script> #}
+    <script src="https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.0.1/build/cookieconsent.min.js"></script>
+    <script defer="defer" src="/javascripts/modal.js"></script>
     <script defer="defer" src="/javascripts/script.js"></script>
   </head>
   <body>
-    {% include "partials/public-header.njk" %}
-    <main class="container">
-      {% include "partials/flash.njk" %}
-      {% block body %}{% endblock %}
-    </main>
-    {% include "partials/public-footer.njk" %}
+    <div class="flex flex-col min-h-screen">
+      <div class="container grow content-center justify-center">
+        {% include "partials/flash.njk" %}
+        {% block body %}{% endblock %}
+      </div>
+      {% include "partials/footer.njk" %}
+    </div>
     {% block javascript %}{% endblock %}
   </body>
 </html>

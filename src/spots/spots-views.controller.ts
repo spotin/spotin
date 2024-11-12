@@ -219,9 +219,6 @@ export class SpotsViewsController {
 
 		if (!spotWithUser.configured) {
 			return res.redirect(`/spots/${id}/configure`);
-		} else if (spotWithUser.websiteTarget) {
-			// TODO: remove this behavior when the redirection page is implemented
-			return res.redirect(spotWithUser.websiteTarget);
 		}
 
 		return res.render('spots/redirect', {
