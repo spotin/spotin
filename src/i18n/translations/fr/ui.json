@@ -1,7 +1,7 @@
 {
 	"about": {
 		"title": "En savoir plus sur Spot in",
-		"details": "Spot in est une plateforme qui vous permet de partager vos lieux préférés avec le monde entier. Vous pouvez créer un lieu en fournissant un nom, une description et une cible de site web. Vous pouvez également indiquer la latitude et la longitude du lieu pour l'afficher sur une carte."
+		"details": "Spot in est une plateforme qui vous permet de partager vos spots préférés avec le monde entier. Vous pouvez créer un spot en fournissant un nom, une description et une cible de site web. Vous pouvez également indiquer la latitude et la longitude du spot pour l'afficher sur une carte."
 	},
 	"auth": {
 		"login": {
@@ -76,7 +76,7 @@
 	},
 	"header": {
 		"users": "Utilisateurs",
-		"spots": "Lieux",
+		"spots": "spots",
 		"profile": "Profil",
 		"tokens": "Jetons",
 		"logout": "Déconnexion",
@@ -85,15 +85,15 @@
 	},
 	"index": {
 		"title": "L'Internet des lieux",
-		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.",
-		"viewLatestSpots": "Voir les derniers lieux"
+		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des spots, cette plateforme transforme chaque spot, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.",
+		"viewLatestSpots": "Voir les derniers spots"
 	},
 	"notFound": {
 		"title": "La page que vous avez demandée n'existe pas",
-		"message": "Cela peut être dû aux raisons suivantes : le lieu ou le profil a été volontairement supprimé ou le code QR est invalide (dégradé, mauvaise configuration, etc.).",
-		"latestSpotsDescription": "Vous pouvez trouver les autres lieux disponibles sur la",
-		"latestSpots": "page des derniers lieux",
-		"registerPageDescription": "Pour créer vos propres lieux, inscrivez-vous sur la",
+		"message": "Cela peut être dû aux raisons suivantes : le spot ou le profil a été volontairement supprimé ou le code QR est invalide (dégradé, mauvaise configuration, etc.).",
+		"latestSpotsDescription": "Vous pouvez trouver les autres spots disponibles sur la",
+		"latestSpots": "page des derniers spots",
+		"registerPageDescription": "Pour créer vos propres spots, inscrivez-vous sur la",
 		"registerPage": "page d'inscription",
 		"homePageDescription": "Pour en savoir plus sur Spot in, visitez",
 		"homePage": "la page d'accueil"
@@ -123,36 +123,36 @@
 			"title": "Profil de {username}",
 			"username": "Nom d'utilisateur",
 			"memberSince": "Membre depuis : {date}",
-			"numberOfPublicSpots": "Nombre de lieux publics : {count}"
+			"numberOfPublicSpots": "Nombre de spots publics : {count}"
 		}
 	},
 	"spots": {
 		"form": {
-			"title": "Créer ou gérer un lieu",
+			"title": "Créer ou gérer un spot",
 			"name": {
 				"label": "Nom",
-				"placeholder": "Entrez le nom de votre lieu"
+				"placeholder": "Entrez le nom de votre spot"
 			},
 			"description": {
-				"label": "Description du lieu",
-				"placeholder": "Entrez la description de votre lieu"
+				"label": "Description du spot",
+				"placeholder": "Entrez la description de votre spot"
 			},
 			"latitude": {
-				"label": "Latitude du lieu (entre -90.0 et 90.0)",
-				"placeholder": "Entrez la latitude de votre lieu (ex. 46.818188)"
+				"label": "Latitude du spot (entre -90.0 et 90.0)",
+				"placeholder": "Entrez la latitude de votre spot (ex. 46.818188)"
 			},
 			"longitude": {
-				"label": "Longitude du lieu (entre -180.0 et 180.0)",
-				"placeholder": "Entrez la longitude de votre lieu (ex. 8.227511)"
+				"label": "Longitude du spot (entre -180.0 et 180.0)",
+				"placeholder": "Entrez la longitude de votre spot (ex. 8.227511)"
 			},
 			"websiteTarget": {
 				"label": "Cible du site web",
-				"placeholder": "Entrez la cible de votre lieu (ex. https://www.exemple.com)"
+				"placeholder": "Entrez la cible de votre spot (ex. https://www.exemple.com)"
 			},
 			"useCurrentLocation": "Utiliser la position actuelle",
 			"configured": {
 				"label": "Configuré",
-				"note": "Si \"Non\", un autre utilisateur pourra configurer ce lieu une fois.",
+				"note": "Si \"Non\", un autre utilisateur pourra configurer ce spot une fois.",
 				"values": {
 					"true": "Oui",
 					"false": "Non"
@@ -160,7 +160,7 @@
 			},
 			"public": {
 				"label": "Public",
-				"note": "Si le lieu est public, il sera visible par tous les utilisateurs.",
+				"note": "Si le spot est public, il sera visible par tous les utilisateurs.",
 				"values": {
 					"true": "Oui",
 					"false": "Non"
@@ -171,36 +171,36 @@
 				"note": "Ces options sont réservées aux utilisateurs avancés.",
 				"payload": {
 					"label": "Payload",
-					"placeholder": "Entrez le payload de votre lieu au format JSON (ex. {\"hello\": \"world\"})",
+					"placeholder": "Entrez le payload de votre spot au format JSON (ex. {\"hello\": \"world\"})",
 					"note": "Le payload doit être un objet JSON valide. Consultez la documentation de l'API pour plus de détails."
 				}
 			}
 		},
 		"list": {
-			"title": "Vos lieux",
-			"subtitle": "Les lieux peuvent exister dans le monde virtuel ou physique. Ils capturent le contexte et les circonstances qui forment le cadre d'un événement.",
+			"title": "Vos spots",
+			"subtitle": "Les spots peuvent exister dans le monde virtuel ou physique. Ils capturent le contexte et les circonstances qui forment le cadre d'un événement.",
 			"name": "Nom",
-			"noName": "Ce lieu n'a pas de nom",
-			"button": "Nouveau lieu"
+			"noName": "Ce spot n'a pas de nom",
+			"button": "Nouveau spot"
 		},
 		"redirect": {
 			"title": "Page de redirection",
-			"spotScanned": "Vous venez de scanner un lieu !",
-			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux 'lieux'.<br>Partagez des lieux avec vos amis et découvrez de nouveaux endroits et objets !",
+			"spotScanned": "Vous venez de scanner un spot !",
+			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux 'spots'.<br>Partagez des spots avec vos amis et découvrez de nouveaux endroits et objets !",
 			"certified": "Certifié",
 			"unverified": "Non vérifié",
 			"whatDoesThatMean": {
 				"title": "Qu'est-ce que cela signifie ?",
 				"details": {
-					"part1": "Les lieux marqués d'une coche ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré comme fiable.",
-					"part2": "Les lieux marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Veuillez faire preuve de prudence lorsque vous interagissez avec ces lieux."
+					"part1": "Les spots marqués d'une coche ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré comme fiable.",
+					"part2": "Les spots marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Veuillez faire preuve de prudence lorsque vous interagissez avec ces spots."
 				}
 			},
-			"showSpotInformation": "Afficher les détails du lieu",
-			"createdBy": "Lieu créé par",
+			"showSpotInformation": "Afficher les détails du spot",
+			"createdBy": "spot créé par",
 			"showMap": "Afficher sur la carte",
 			"accessContent": {
-				"button": "En savoir plus sur ce lieu",
+				"button": "En savoir plus sur ce spot",
 				"modal": {
 					"title": "Vous vous apprêtez à quitter Spot in",
 					"details": "Vous allez quitter Spot in et visiter {websiteTarget}. Veuillez faire preuve de prudence lors de l'interaction avec ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
@@ -213,8 +213,8 @@
 			"share": "Partager"
 		},
 		"view": {
-			"title": "Détails du lieu",
-			"noName": "Ce lieu n'a pas de nom",
+			"title": "Détails du spot",
+			"noName": "Ce spot n'a pas de nom",
 			"download": "Télécharger",
 			"edit": "Modifier",
 			"view": "Voir"
@@ -236,7 +236,7 @@
 		},
 		"list": {
 			"title": "Vos jetons",
-			"subtitle": "Les jetons vous permettent de publier/gérer des lieux depuis d'autres plateformes avec une API REST. La documentation de l'API est disponible au lien suivant :",
+			"subtitle": "Les jetons vous permettent de publier/gérer des spots depuis d'autres plateformes avec une API REST. La documentation de l'API est disponible au lien suivant :",
 			"apiDocumentation": "Documentation de l'API",
 			"name": "Nom",
 			"button": "Nouveau jeton"
