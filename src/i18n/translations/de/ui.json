@@ -76,7 +76,7 @@
 	},
 	"header": {
 		"users": "Benutzer",
-		"spots": "Orte",
+		"spots": "Spots",
 		"profile": "Profil",
 		"tokens": "Tokens",
 		"logout": "Abmelden",
@@ -84,16 +84,16 @@
 		"register": "Registrieren"
 	},
 	"index": {
-		"title": "Das Internet der Orte",
-		"explanation": "Spot in® ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im Herzen des Internets der Orte verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkundet, dokumentiert, entdeckt, lernt und lasst Euch verzaubern! Wir sorgen für den link, ihr für den Inhalt.",
-		"viewLatestSpots": "Neueste Orte anzeigen"
+		"title": "Das Internet der Spots",
+		"explanation": "Spot in® ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im Herzen des Internets der Spots verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkundet, dokumentiert, entdeckt, lernt und lasst Euch verzaubern! Wir sorgen für den link, ihr für den Inhalt.",
+		"viewLatestSpots": "Neueste Spots anzeigen"
 	},
 	"notFound": {
 		"title": "Die angeforderte Seite existiert nicht",
-		"message": "Dies kann folgende Gründe haben: Der Ort oder das Profil wurde absichtlich gelöscht oder der QR-Code ist ungültig (beschädigt, falsch konfiguriert, etc.).",
-		"latestSpotsDescription": "Weitere verfügbare Orte finden Sie auf der",
-		"latestSpots": "Seite mit den neuesten Orten",
-		"registerPageDescription": "Um Ihre eigenen Orte zu erstellen, registrieren Sie sich auf der",
+		"message": "Dies kann folgende Gründe haben: Der Spot oder das Profil wurde absichtlich gelöscht oder der QR-Code ist ungültig (beschädigt, falsch konfiguriert, etc.).",
+		"latestSpotsDescription": "Weitere verfügbare Spots finden Sie auf der",
+		"latestSpots": "Seite mit den neuesten Spots",
+		"registerPageDescription": "Um Ihre eigenen Spots zu erstellen, registrieren Sie sich auf der",
 		"registerPage": "Registrierungsseite",
 		"homePageDescription": "Um mehr über Spot in zu erfahren, besuchen Sie die",
 		"homePage": "Startseite"
@@ -123,7 +123,7 @@
 			"title": "Profil von {username}",
 			"username": "Benutzername",
 			"memberSince": "Mitglied seit: {date}",
-			"numberOfPublicSpots": "Anzahl öffentlicher Orte: {count}"
+			"numberOfPublicSpots": "Anzahl öffentlicher Spots: {count}"
 		}
 	},
 	"spots": {
@@ -131,19 +131,19 @@
 			"title": "Ort erstellen oder verwalten",
 			"name": {
 				"label": "Name",
-				"placeholder": "Geben Sie den Namen Ihres Ortes ein"
+				"placeholder": "Geben Sie den Namen Ihres Spots ein"
 			},
 			"description": {
-				"label": "Beschreibung des Ortes",
-				"placeholder": "Geben Sie die Beschreibung Ihres Ortes ein"
+				"label": "Beschreibung des Spots",
+				"placeholder": "Geben Sie die Beschreibung Ihres Spots ein"
 			},
 			"latitude": {
-				"label": "Breitengrad des Ortes (zwischen -90.0 und 90.0)",
-				"placeholder": "Geben Sie den Breitengrad Ihres Ortes ein (z.B. 46.818188)"
+				"label": "Breitengrad des Spots (zwischen -90.0 und 90.0)",
+				"placeholder": "Geben Sie den Breitengrad Ihres Spots ein (z.B. 46.818188)"
 			},
 			"longitude": {
-				"label": "Längengrad des Ortes (zwischen -180.0 und 180.0)",
-				"placeholder": "Geben Sie den Längengrad Ihres Ortes ein (z.B. 8.227511)"
+				"label": "Längengrad des Spots (zwischen -180.0 und 180.0)",
+				"placeholder": "Geben Sie den Längengrad Ihres Spots ein (z.B. 8.227511)"
 			},
 			"websiteTarget": {
 				"label": "Website-Ziel",
@@ -152,7 +152,7 @@
 			"useCurrentLocation": "Aktuellen Standort verwenden",
 			"configured": {
 				"label": "Konfiguriert",
-				"note": "Wenn \"Nein\", kann ein anderer Nutzer diesen Ort einmalig konfigurieren.",
+				"note": "Wenn \"Nein\", kann ein anderer Nutzer diesen Spot einmalig konfigurieren.",
 				"values": {
 					"true": "Ja",
 					"false": "Nein"
@@ -160,7 +160,7 @@
 			},
 			"public": {
 				"label": "Öffentlich",
-				"note": "Wenn der Ort öffentlich ist, wird er für alle Nutzer sichtbar.",
+				"note": "Wenn der Spot öffentlich ist, wird er für alle Nutzer sichtbar.",
 				"values": {
 					"true": "Ja",
 					"false": "Nein"
@@ -171,36 +171,36 @@
 				"note": "Diese Optionen sind für fortgeschrittene Nutzer reserviert.",
 				"payload": {
 					"label": "Payload",
-					"placeholder": "Geben Sie das Payload Ihres Ortes im JSON-Format ein (z.B. {\"hello\": \"world\"})",
+					"placeholder": "Geben Sie das Payload Ihres Spots im JSON-Format ein (z.B. {\"hello\": \"world\"})",
 					"note": "Das Payload muss ein gültiges JSON-Objekt sein. Weitere Details finden Sie in der API-Dokumentation."
 				}
 			}
 		},
 		"list": {
-			"title": "Ihre Orte",
-			"subtitle": "Orte können sowohl in der virtuellen als auch in der physischen Welt existieren. Sie erfassen den Kontext und die Umstände, die den Rahmen für ein Ereignis bilden.",
+			"title": "Ihre Spots",
+			"subtitle": "Spots können sowohl in der virtuellen als auch in der physischen Welt existieren. Sie erfassen den Kontext und die Umstände, die den Rahmen für ein Ereignis bilden.",
 			"name": "Name",
-			"noName": "Dieser Ort hat keinen Namen",
-			"button": "Neuen Ort erstellen"
+			"noName": "Dieser Spot hat keinen Namen",
+			"button": "Neuen Spot erstellen"
 		},
 		"redirect": {
 			"title": "Weiterleitungsseite",
-			"spotScanned": "Sie haben gerade einen Ort gescannt!",
-			"spotExplanation": "{spotIn} fügt unserer physischen Welt digitale Informationen durch \"Orte\" hinzu.<br>Teilen Sie Orte mit Ihren Freunden und entdecken Sie neue Plätze und Objekte!",
+			"spotScanned": "Sie haben gerade einen Spot gescannt!",
+			"spotExplanation": "{SpotIn} fügt unserer physischen Welt digitale Informationen durch \"Spots\" hinzu.<br>Teilen Sie Spots mit Ihren Freunden und entdecken Sie neue Plätze und Objekte!",
 			"certified": "Zertifiziert",
 			"unverified": "Unverifiziert",
 			"whatDoesThatMean": {
 				"title": "Was bedeutet das?",
 				"details": {
-					"part1": "Orte mit einem Häkchen ({icon}) wurden von zertifizierten Nutzern oder Administratoren erstellt. Dies bedeutet, dass der Nutzer von der Plattform überprüft und als vertrauenswürdig eingestuft wurde.",
-					"part2": "Orte mit einem Ausrufezeichen ({icon}) wurden von nicht verifizierten Nutzern erstellt. Das bedeutet, dass der Nutzer nicht von der Plattform überprüft wurde und möglicherweise nicht vertrauenswürdig ist. Bitte seien Sie vorsichtig, wenn Sie mit diesen Orten interagieren."
+					"part1": "Spots mit einem Häkchen ({icon}) wurden von zertifizierten Nutzern oder Administratoren erstellt. Dies bedeutet, dass der Nutzer von der Plattform überprüft und als vertrauenswürdig eingestuft wurde.",
+					"part2": "Spots mit einem Ausrufezeichen ({icon}) wurden von nicht verifizierten Nutzern erstellt. Das bedeutet, dass der Nutzer nicht von der Plattform überprüft wurde und möglicherweise nicht vertrauenswürdig ist. Bitte seien Sie vorsichtig, wenn Sie mit diesen Spots interagieren."
 				}
 			},
-			"showSpotInformation": "Details des Ortes anzeigen",
+			"showSpotInformation": "Details des Spots anzeigen",
 			"createdBy": "Ort erstellt von",
 			"showMap": "Auf Karte anzeigen",
 			"accessContent": {
-				"button": "Mehr über diesen Ort erfahren",
+				"button": "Mehr über diesen Spot erfahren",
 				"modal": {
 					"title": "Sie verlassen Spot in",
 					"details": "Sie verlassen Spot in und besuchen {websiteTarget}. Bitte seien Sie vorsichtig, wenn Sie mit diesen externen Inhalten interagieren. Klicken Sie auf die Schaltfläche unten, um fortzufahren.",
@@ -213,8 +213,8 @@
 			"share": "Teilen"
 		},
 		"view": {
-			"title": "Details des Ortes",
-			"noName": "Dieser Ort hat keinen Namen",
+			"title": "Details des Spots",
+			"noName": "Dieser Spot hat keinen Namen",
 			"download": "Herunterladen",
 			"edit": "Bearbeiten",
 			"view": "Anzeigen"
@@ -236,7 +236,7 @@
 		},
 		"list": {
 			"title": "Ihre Tokens",
-			"subtitle": "Tokens ermöglichen es Ihnen, Orte über andere Plattformen mit einer REST-API zu veröffentlichen/verwalten. Die API-Dokumentation finden Sie unter folgendem Link:",
+			"subtitle": "Tokens ermöglichen es Ihnen, Spots über andere Plattformen mit einer REST-API zu veröffentlichen/verwalten. Die API-Dokumentation finden Sie unter folgendem Link:",
 			"apiDocumentation": "API-Dokumentation",
 			"name": "Name",
 			"button": "Neuen Token erstellen"
