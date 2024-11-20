@@ -1,17 +1,286 @@
 {
-	"index": {
-		"title": "L'internet des lieux",
-		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.",
-		"viewLatestSpots": "Voir les derniers spots"
+	"about": {
+		"title": "En savoir plus sur Spot in",
+		"details": "Spot in est une plateforme qui vous permet de partager vos lieux préférés avec le monde entier. Vous pouvez créer un lieu en fournissant un nom, une description et une cible de site web. Vous pouvez également indiquer la latitude et la longitude du lieu pour l'afficher sur une carte."
 	},
-	"footer": "Un service offert par",
+	"auth": {
+		"login": {
+			"title": "Connexion",
+			"haveAccount": {
+				"label": "Vous avez déjà un compte ?",
+				"login": "Se connecter"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez votre email"
+			},
+			"password": {
+				"label": "Mot de passe",
+				"placeholder": "Entrez votre mot de passe"
+			},
+			"button": "Se connecter"
+		},
+		"logout": {
+			"title": "Déconnexion",
+			"message": "Vous avez été déconnecté avec succès."
+		},
+		"register": {
+			"title": "Inscription",
+			"noAccount": {
+				"label": "Vous n'avez pas de compte ?",
+				"register": "S'inscrire"
+			},
+			"username": {
+				"label": "Nom d'utilisateur",
+				"placeholder": "Entrez votre nom d'utilisateur",
+				"warning": "Le nom d'utilisateur sera visible par tous les utilisateurs."
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez votre email"
+			},
+			"button": "S'inscrire"
+		},
+		"resetPassword": {
+			"title": "Réinitialiser le mot de passe",
+			"newPassword": {
+				"label": "Nouveau mot de passe",
+				"placeholder": "Entrez votre nouveau mot de passe"
+			},
+			"confirmPassword": {
+				"label": "Confirmer le mot de passe",
+				"placeholder": "Confirmez votre nouveau mot de passe"
+			},
+			"button": "Réinitialiser le mot de passe"
+		},
+		"resetPasswordRequest": {
+			"title": "Demander une réinitialisation du mot de passe",
+			"forgotPassword": {
+				"label": "Mot de passe oublié ?",
+				"reset": "Réinitialiser le mot de passe"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez votre email"
+			},
+			"button": "Demander une réinitialisation",
+			"rememberedPassword": {
+				"label": "Vous avez retrouvé votre mot de passe ?",
+				"login": "Se connecter"
+			}
+		}
+	},
+	"footer": {
+		"offeredBy": "Un service offert par Spot in.",
+		"about": "En savoir plus sur Spot in"
+	},
 	"header": {
 		"users": "Utilisateurs",
-		"spots": "Spots",
+		"spots": "Lieux",
 		"profile": "Profil",
-		"tokens": "Tokens",
+		"tokens": "Jetons",
 		"logout": "Déconnexion",
 		"login": "Connexion",
 		"register": "Inscription"
+	},
+	"index": {
+		"title": "L'Internet des lieux",
+		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.",
+		"viewLatestSpots": "Voir les derniers lieux"
+	},
+	"notFound": {
+		"title": "La page que vous avez demandée n'existe pas",
+		"message": "Cela peut être dû aux raisons suivantes : le lieu ou le profil a été volontairement supprimé ou le code QR est invalide (dégradé, mauvaise configuration, etc.).",
+		"latestSpotsDescription": "Vous pouvez trouver les autres lieux disponibles sur la",
+		"latestSpots": "page des derniers lieux",
+		"registerPageDescription": "Pour créer vos propres lieux, inscrivez-vous sur la",
+		"registerPage": "page d'inscription",
+		"homePageDescription": "Pour en savoir plus sur Spot in, visitez",
+		"homePage": "la page d'accueil"
+	},
+	"profile": {
+		"form": {
+			"title": "Profil",
+			"username": {
+				"label": "Nom d'utilisateur",
+				"placeholder": "Mettez à jour votre nom d'utilisateur"
+			},
+			"email": {
+				"label": "Email",
+				"note": "L'adresse email ne peut pas être modifiée."
+			},
+			"currentPassword": {
+				"label": "Mot de passe actuel",
+				"placeholder": "Entrez votre mot de passe actuel"
+			},
+			"newPassword": {
+				"label": "Nouveau mot de passe",
+				"placeholder": "Entrez votre nouveau mot de passe"
+			},
+			"button": "Mettre à jour le profil"
+		},
+		"view": {
+			"title": "Profil de {username}",
+			"username": "Nom d'utilisateur",
+			"memberSince": "Membre depuis : {date}",
+			"numberOfPublicSpots": "Nombre de lieux publics : {count}"
+		}
+	},
+	"spots": {
+		"form": {
+			"title": "Créer ou gérer un lieu",
+			"name": {
+				"label": "Nom",
+				"placeholder": "Entrez le nom de votre lieu"
+			},
+			"description": {
+				"label": "Description du lieu",
+				"placeholder": "Entrez la description de votre lieu"
+			},
+			"latitude": {
+				"label": "Latitude du lieu (entre -90.0 et 90.0)",
+				"placeholder": "Entrez la latitude de votre lieu (ex. 46.818188)"
+			},
+			"longitude": {
+				"label": "Longitude du lieu (entre -180.0 et 180.0)",
+				"placeholder": "Entrez la longitude de votre lieu (ex. 8.227511)"
+			},
+			"websiteTarget": {
+				"label": "Cible du site web",
+				"placeholder": "Entrez la cible de votre lieu (ex. https://www.exemple.com)"
+			},
+			"useCurrentLocation": "Utiliser la position actuelle",
+			"configured": {
+				"label": "Configuré",
+				"note": "Si \"Non\", un autre utilisateur pourra configurer ce lieu une fois.",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				}
+			},
+			"public": {
+				"label": "Public",
+				"note": "Si le lieu est public, il sera visible par tous les utilisateurs.",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				}
+			},
+			"optionsForAdvancedUsers": {
+				"label": "Options pour utilisateurs avancés",
+				"note": "Ces options sont réservées aux utilisateurs avancés.",
+				"payload": {
+					"label": "Payload",
+					"placeholder": "Entrez le payload de votre lieu au format JSON (ex. {\"hello\": \"world\"})",
+					"note": "Le payload doit être un objet JSON valide. Consultez la documentation de l'API pour plus de détails."
+				}
+			}
+		},
+		"list": {
+			"title": "Vos lieux",
+			"subtitle": "Les lieux peuvent exister dans le monde virtuel ou physique. Ils capturent le contexte et les circonstances qui forment le cadre d'un événement.",
+			"name": "Nom",
+			"noName": "Ce lieu n'a pas de nom",
+			"button": "Nouveau lieu"
+		},
+		"redirect": {
+			"title": "Page de redirection",
+			"spotScanned": "Vous venez de scanner un lieu !",
+			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux 'lieux'.<br>Partagez des lieux avec vos amis et découvrez de nouveaux endroits et objets !",
+			"certified": "Certifié",
+			"unverified": "Non vérifié",
+			"whatDoesThatMean": {
+				"title": "Qu'est-ce que cela signifie ?",
+				"details": {
+					"part1": "Les lieux marqués d'une coche ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré comme fiable.",
+					"part2": "Les lieux marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Veuillez faire preuve de prudence lorsque vous interagissez avec ces lieux."
+				}
+			},
+			"showSpotInformation": "Afficher les détails du lieu",
+			"createdBy": "Lieu créé par",
+			"showMap": "Afficher sur la carte",
+			"accessContent": {
+				"button": "En savoir plus sur ce lieu",
+				"modal": {
+					"title": "Vous vous apprêtez à quitter Spot in",
+					"details": "Vous allez quitter Spot in et visiter {websiteTarget}. Veuillez faire preuve de prudence lors de l'interaction avec ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
+					"confirm": "Confirmer",
+					"cancel": "Annuler"
+				}
+			},
+			"report": "Signaler",
+			"like": "Aimer",
+			"share": "Partager"
+		},
+		"view": {
+			"title": "Détails du lieu",
+			"noName": "Ce lieu n'a pas de nom",
+			"download": "Télécharger",
+			"edit": "Modifier",
+			"view": "Voir"
+		}
+	},
+	"tokens": {
+		"form": {
+			"title": "Créer un nouveau jeton",
+			"name": {
+				"label": "Nom du jeton",
+				"placeholder": "Entrez le nom de votre jeton"
+			},
+			"value": {
+				"label": "Valeur du jeton",
+				"placeholder": "La valeur de votre jeton sera générée automatiquement",
+				"note": "Une fois le jeton créé, vous ne pourrez plus voir sa valeur. Enregistrez-le dans un endroit sécurisé."
+			},
+			"button": "Créer un jeton"
+		},
+		"list": {
+			"title": "Vos jetons",
+			"subtitle": "Les jetons vous permettent de publier/gérer des lieux depuis d'autres plateformes avec une API REST. La documentation de l'API est disponible au lien suivant :",
+			"apiDocumentation": "Documentation de l'API",
+			"name": "Nom",
+			"button": "Nouveau jeton"
+		}
+	},
+	"users": {
+		"form": {
+			"title": "Créer ou gérer un utilisateur",
+			"username": {
+				"label": "Nom d'utilisateur",
+				"placeholder": "Entrez le nom d'utilisateur de l'utilisateur"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez l'email de l'utilisateur"
+			},
+			"password": {
+				"label": "Mot de passe",
+				"placeholder": "Entrez le mot de passe de l'utilisateur"
+			},
+			"role": {
+				"label": "Rôle",
+				"values": {
+					"standardUser": "Utilisateur standard",
+					"certifiedUser": "Utilisateur certifié",
+					"admin": "Administrateur"
+				}
+			},
+			"enabled": {
+				"label": "Activé",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				},
+				"note": "Si l'utilisateur n'est pas activé, il ne pourra pas se connecter."
+			},
+			"button": "Enregistrer"
+		},
+		"list": {
+			"title": "Utilisateurs",
+			"subtitle": "Gérez les utilisateurs de la plateforme. Vous pouvez créer, modifier et supprimer des utilisateurs.",
+			"username": "Nom d'utilisateur",
+			"email": "Email",
+			"button": "Nouvel utilisateur"
+		}
 	}
 }

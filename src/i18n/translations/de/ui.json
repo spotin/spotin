@@ -1,5 +1,286 @@
 {
+	"about": {
+		"title": "Mehr über Spot in erfahren",
+		"details": "Spot in ist eine Plattform, mit der Sie Ihre Lieblingsorte mit der Welt teilen können. Sie können einen Ort erstellen, indem Sie einen Namen, eine Beschreibung und ein Website-Ziel angeben. Außerdem können Sie die Breiten- und Längengrade des Ortes angeben, um ihn auf einer Karte anzuzeigen."
+	},
+	"auth": {
+		"login": {
+			"title": "Anmeldung",
+			"haveAccount": {
+				"label": "Haben Sie bereits ein Konto?",
+				"login": "Einloggen"
+			},
+			"email": {
+				"label": "E-Mail",
+				"placeholder": "Geben Sie Ihre E-Mail-Adresse ein"
+			},
+			"password": {
+				"label": "Passwort",
+				"placeholder": "Geben Sie Ihr Passwort ein"
+			},
+			"button": "Einloggen"
+		},
+		"logout": {
+			"title": "Abmeldung",
+			"message": "Sie wurden erfolgreich abgemeldet."
+		},
+		"register": {
+			"title": "Registrierung",
+			"noAccount": {
+				"label": "Haben Sie noch kein Konto?",
+				"register": "Registrieren"
+			},
+			"username": {
+				"label": "Benutzername",
+				"placeholder": "Geben Sie Ihren Benutzernamen ein",
+				"warning": "Der Benutzername wird für alle Nutzer sichtbar sein."
+			},
+			"email": {
+				"label": "E-Mail",
+				"placeholder": "Geben Sie Ihre E-Mail-Adresse ein"
+			},
+			"button": "Registrieren"
+		},
+		"resetPassword": {
+			"title": "Passwort zurücksetzen",
+			"newPassword": {
+				"label": "Neues Passwort",
+				"placeholder": "Geben Sie Ihr neues Passwort ein"
+			},
+			"confirmPassword": {
+				"label": "Passwort bestätigen",
+				"placeholder": "Bestätigen Sie Ihr neues Passwort"
+			},
+			"button": "Passwort zurücksetzen"
+		},
+		"resetPasswordRequest": {
+			"title": "Passwortrücksetzung anfordern",
+			"forgotPassword": {
+				"label": "Passwort vergessen?",
+				"reset": "Passwort zurücksetzen"
+			},
+			"email": {
+				"label": "E-Mail",
+				"placeholder": "Geben Sie Ihre E-Mail-Adresse ein"
+			},
+			"button": "Rücksetzung anfordern",
+			"rememberedPassword": {
+				"label": "Haben Sie Ihr Passwort wiedergefunden?",
+				"login": "Einloggen"
+			}
+		}
+	},
+	"footer": {
+		"offeredBy": "Ein Service von Spot in.",
+		"about": "Mehr über Spot in erfahren"
+	},
+	"header": {
+		"users": "Benutzer",
+		"spots": "Orte",
+		"profile": "Profil",
+		"tokens": "Tokens",
+		"logout": "Abmelden",
+		"login": "Anmelden",
+		"register": "Registrieren"
+	},
 	"index": {
-		"explanation": "Spot in® ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im Herzen des Internets der Orte verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkundet, dokumentiert, entdeckt, lernt und lasst Euch verzaubern! Wir sorgen für den link, ihr für den Inhalt."
+		"title": "Das Internet der Orte",
+		"explanation": "Spot in® ist die fehlende Verbindung zwischen der physischen Welt und den verborgenen Informationsschätzen der digitalen Welt. Im Herzen des Internets der Orte verwandelt diese Plattform jeden Ort, jeden 'Spot', in eine Open-Air-Galerie. Erkundet, dokumentiert, entdeckt, lernt und lasst Euch verzaubern! Wir sorgen für den link, ihr für den Inhalt.",
+		"viewLatestSpots": "Neueste Orte anzeigen"
+	},
+	"notFound": {
+		"title": "Die angeforderte Seite existiert nicht",
+		"message": "Dies kann folgende Gründe haben: Der Ort oder das Profil wurde absichtlich gelöscht oder der QR-Code ist ungültig (beschädigt, falsch konfiguriert, etc.).",
+		"latestSpotsDescription": "Weitere verfügbare Orte finden Sie auf der",
+		"latestSpots": "Seite mit den neuesten Orten",
+		"registerPageDescription": "Um Ihre eigenen Orte zu erstellen, registrieren Sie sich auf der",
+		"registerPage": "Registrierungsseite",
+		"homePageDescription": "Um mehr über Spot in zu erfahren, besuchen Sie die",
+		"homePage": "Startseite"
+	},
+	"profile": {
+		"form": {
+			"title": "Profil",
+			"username": {
+				"label": "Benutzername",
+				"placeholder": "Aktualisieren Sie Ihren Benutzernamen"
+			},
+			"email": {
+				"label": "E-Mail",
+				"note": "Die E-Mail-Adresse kann nicht geändert werden."
+			},
+			"currentPassword": {
+				"label": "Aktuelles Passwort",
+				"placeholder": "Geben Sie Ihr aktuelles Passwort ein"
+			},
+			"newPassword": {
+				"label": "Neues Passwort",
+				"placeholder": "Geben Sie Ihr neues Passwort ein"
+			},
+			"button": "Profil aktualisieren"
+		},
+		"view": {
+			"title": "Profil von {username}",
+			"username": "Benutzername",
+			"memberSince": "Mitglied seit: {date}",
+			"numberOfPublicSpots": "Anzahl öffentlicher Orte: {count}"
+		}
+	},
+	"spots": {
+		"form": {
+			"title": "Ort erstellen oder verwalten",
+			"name": {
+				"label": "Name",
+				"placeholder": "Geben Sie den Namen Ihres Ortes ein"
+			},
+			"description": {
+				"label": "Beschreibung des Ortes",
+				"placeholder": "Geben Sie die Beschreibung Ihres Ortes ein"
+			},
+			"latitude": {
+				"label": "Breitengrad des Ortes (zwischen -90.0 und 90.0)",
+				"placeholder": "Geben Sie den Breitengrad Ihres Ortes ein (z.B. 46.818188)"
+			},
+			"longitude": {
+				"label": "Längengrad des Ortes (zwischen -180.0 und 180.0)",
+				"placeholder": "Geben Sie den Längengrad Ihres Ortes ein (z.B. 8.227511)"
+			},
+			"websiteTarget": {
+				"label": "Website-Ziel",
+				"placeholder": "Geben Sie das Ziel Ihrer Website ein (z.B. https://www.beispiel.com)"
+			},
+			"useCurrentLocation": "Aktuellen Standort verwenden",
+			"configured": {
+				"label": "Konfiguriert",
+				"note": "Wenn \"Nein\", kann ein anderer Nutzer diesen Ort einmalig konfigurieren.",
+				"values": {
+					"true": "Ja",
+					"false": "Nein"
+				}
+			},
+			"public": {
+				"label": "Öffentlich",
+				"note": "Wenn der Ort öffentlich ist, wird er für alle Nutzer sichtbar.",
+				"values": {
+					"true": "Ja",
+					"false": "Nein"
+				}
+			},
+			"optionsForAdvancedUsers": {
+				"label": "Optionen für fortgeschrittene Nutzer",
+				"note": "Diese Optionen sind für fortgeschrittene Nutzer reserviert.",
+				"payload": {
+					"label": "Payload",
+					"placeholder": "Geben Sie das Payload Ihres Ortes im JSON-Format ein (z.B. {\"hello\": \"world\"})",
+					"note": "Das Payload muss ein gültiges JSON-Objekt sein. Weitere Details finden Sie in der API-Dokumentation."
+				}
+			}
+		},
+		"list": {
+			"title": "Ihre Orte",
+			"subtitle": "Orte können sowohl in der virtuellen als auch in der physischen Welt existieren. Sie erfassen den Kontext und die Umstände, die den Rahmen für ein Ereignis bilden.",
+			"name": "Name",
+			"noName": "Dieser Ort hat keinen Namen",
+			"button": "Neuen Ort erstellen"
+		},
+		"redirect": {
+			"title": "Weiterleitungsseite",
+			"spotScanned": "Sie haben gerade einen Ort gescannt!",
+			"spotExplanation": "{spotIn} fügt unserer physischen Welt digitale Informationen durch \"Orte\" hinzu.<br>Teilen Sie Orte mit Ihren Freunden und entdecken Sie neue Plätze und Objekte!",
+			"certified": "Zertifiziert",
+			"unverified": "Unverifiziert",
+			"whatDoesThatMean": {
+				"title": "Was bedeutet das?",
+				"details": {
+					"part1": "Orte mit einem Häkchen ({icon}) wurden von zertifizierten Nutzern oder Administratoren erstellt. Dies bedeutet, dass der Nutzer von der Plattform überprüft und als vertrauenswürdig eingestuft wurde.",
+					"part2": "Orte mit einem Ausrufezeichen ({icon}) wurden von nicht verifizierten Nutzern erstellt. Das bedeutet, dass der Nutzer nicht von der Plattform überprüft wurde und möglicherweise nicht vertrauenswürdig ist. Bitte seien Sie vorsichtig, wenn Sie mit diesen Orten interagieren."
+				}
+			},
+			"showSpotInformation": "Details des Ortes anzeigen",
+			"createdBy": "Ort erstellt von",
+			"showMap": "Auf Karte anzeigen",
+			"accessContent": {
+				"button": "Mehr über diesen Ort erfahren",
+				"modal": {
+					"title": "Sie verlassen Spot in",
+					"details": "Sie verlassen Spot in und besuchen {websiteTarget}. Bitte seien Sie vorsichtig, wenn Sie mit diesen externen Inhalten interagieren. Klicken Sie auf die Schaltfläche unten, um fortzufahren.",
+					"confirm": "Bestätigen",
+					"cancel": "Abbrechen"
+				}
+			},
+			"report": "Melden",
+			"like": "Gefällt mir",
+			"share": "Teilen"
+		},
+		"view": {
+			"title": "Details des Ortes",
+			"noName": "Dieser Ort hat keinen Namen",
+			"download": "Herunterladen",
+			"edit": "Bearbeiten",
+			"view": "Anzeigen"
+		}
+	},
+	"tokens": {
+		"form": {
+			"title": "Neuen Token erstellen",
+			"name": {
+				"label": "Token-Name",
+				"placeholder": "Geben Sie den Namen Ihres Tokens ein"
+			},
+			"value": {
+				"label": "Token-Wert",
+				"placeholder": "Der Wert Ihres Tokens wird automatisch generiert",
+				"note": "Sobald der Token erstellt wurde, können Sie seinen Wert nicht mehr sehen. Speichern Sie ihn an einem sicheren Ort."
+			},
+			"button": "Token erstellen"
+		},
+		"list": {
+			"title": "Ihre Tokens",
+			"subtitle": "Tokens ermöglichen es Ihnen, Orte über andere Plattformen mit einer REST-API zu veröffentlichen/verwalten. Die API-Dokumentation finden Sie unter folgendem Link:",
+			"apiDocumentation": "API-Dokumentation",
+			"name": "Name",
+			"button": "Neuen Token erstellen"
+		}
+	},
+	"users": {
+		"form": {
+			"title": "Benutzer erstellen oder verwalten",
+			"username": {
+				"label": "Benutzername",
+				"placeholder": "Geben Sie den Benutzernamen des Benutzers ein"
+			},
+			"email": {
+				"label": "E-Mail",
+				"placeholder": "Geben Sie die E-Mail des Benutzers ein"
+			},
+			"password": {
+				"label": "Passwort",
+				"placeholder": "Geben Sie das Passwort des Benutzers ein"
+			},
+			"role": {
+				"label": "Rolle",
+				"values": {
+					"standardUser": "Standard-Benutzer",
+					"certifiedUser": "Zertifizierter Benutzer",
+					"admin": "Administrator"
+				}
+			},
+			"enabled": {
+				"label": "Aktiviert",
+				"values": {
+					"true": "Ja",
+					"false": "Nein"
+				},
+				"note": "Wenn der Benutzer nicht aktiviert ist, kann er sich nicht anmelden."
+			},
+			"button": "Speichern"
+		},
+		"list": {
+			"title": "Benutzer",
+			"subtitle": "Verwalten Sie die Benutzer der Plattform. Sie können Benutzer erstellen, bearbeiten und löschen.",
+			"username": "Benutzername",
+			"email": "E-Mail",
+			"button": "Neuen Benutzer erstellen"
+		}
 	}
 }
