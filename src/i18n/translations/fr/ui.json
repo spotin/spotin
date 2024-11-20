@@ -76,9 +76,9 @@
 	},
 	"header": {
 		"users": "Utilisateurs",
-		"spots": "spots",
+		"spots": "Spots",
 		"profile": "Profil",
-		"tokens": "Jetons",
+		"tokens": "Tokens",
 		"logout": "Déconnexion",
 		"login": "Connexion",
 		"register": "Inscription"
@@ -222,24 +222,24 @@
 	},
 	"tokens": {
 		"form": {
-			"title": "Créer un nouveau jeton",
+			"title": "Créer un nouveau token",
 			"name": {
-				"label": "Nom du jeton",
-				"placeholder": "Entrez le nom de votre jeton"
+				"label": "Nom du token",
+				"placeholder": "Entrez le nom de votre token"
 			},
 			"value": {
-				"label": "Valeur du jeton",
-				"placeholder": "La valeur de votre jeton sera générée automatiquement",
-				"note": "Une fois le jeton créé, vous ne pourrez plus voir sa valeur. Enregistrez-le dans un endroit sécurisé."
+				"label": "Valeur du token",
+				"placeholder": "La valeur de votre token sera générée automatiquement",
+				"note": "Une fois le token créé, vous ne pourrez plus voir sa valeur. Enregistrez-le dans un endroit sécurisé."
 			},
-			"button": "Créer un jeton"
+			"button": "Créer un token"
 		},
 		"list": {
-			"title": "Vos jetons",
-			"subtitle": "Les jetons vous permettent de publier/gérer des spots depuis d'autres plateformes avec une API REST. La documentation de l'API est disponible au lien suivant :",
+			"title": "Vos tokens",
+			"subtitle": "Les tokens vous permettent de publier/gérer des spots depuis d'autres plateformes avec une API REST. La documentation de l'API est disponible au lien suivant :",
 			"apiDocumentation": "Documentation de l'API",
 			"name": "Nom",
-			"button": "Nouveau jeton"
+			"button": "Nouveau token"
 		}
 	},
 	"users": {
