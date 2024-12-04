@@ -221,6 +221,12 @@ export class SpotsViewsController {
 			return res.redirect(`/spots/${id}/configure`);
 		}
 
+		if (
+			spotWithUser.directAccessToWebsiteTarget &&
+			spotWithUser.websiteTarget !== null
+		) {
+			return res.redirect(spotWithUser.websiteTarget);
+		}
 		return res.render('spots/redirect', {
 			title: 'Redirecting | Spot in',
 			spot: spotWithUser,
