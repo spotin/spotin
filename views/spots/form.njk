@@ -101,10 +101,10 @@
           {{ t('ui.spots.form.directAccessToWebsiteTarget.label') }}
         </label>
         <select id="directAccessToWebsiteTarget" name="directAccessToWebsiteTarget" required="required">
-          <option value="true" {{ 'selected' if not spot or spot.directAccessToWebsiteTarget }}>
+          <option value="true" {{ 'selected' if spot and spot.directAccessToWebsiteTarget }}>
             {{ t('ui.spots.form.directAccessToWebsiteTarget.values.true') }}
           </option>
-          <option value="false" {{ 'selected' if spot and not spot.directAccessToWebsiteTarget }}>
+          <option value="false" {{ 'selected' if not spot or not spot.directAccessToWebsiteTarget }}>
             {{ t('ui.spots.form.directAccessToWebsiteTarget.values.false') }}
           </option>
         </select>
