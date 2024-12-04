@@ -33,6 +33,7 @@ async function main() {
 			websiteTarget: 'https://www.biel-bienne.ch/',
 			public: true,
 			configured: true,
+			directAccessToWebsiteTarget: false,
 			userId: admin.id,
 		},
 	});
@@ -43,6 +44,7 @@ async function main() {
 		create: {
 			id: '00000000-0000-0000-0000-000000000002',
 			configured: false,
+			directAccessToWebsiteTarget: false,
 			userId: admin.id,
 		},
 	});

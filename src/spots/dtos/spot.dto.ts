@@ -14,6 +14,7 @@ import {
 	IsOptional,
 } from 'class-validator';
 import { Spot } from '@/spots/types/spot';
+import { IsDirectAccessAllowedIfWebsiteTargetExists } from '@/spots/decorators/is-direct-access-allowed-if-website-target-exists.decorator';
 
 export class SpotDto implements Spot {
 	/**
@@ -79,6 +80,15 @@ export class SpotDto implements Spot {
 	@IsUrl()
 	@MaxLength(255)
 	websiteTarget: string | null;
+
+	/**
+	 * Set if the spot will be redirected directly to the website target
+	 */
+	@ApiPropertyOptional({ default: false })
+	@IsOptional()
+	@IsBoolean()
+	@IsDirectAccessAllowedIfWebsiteTargetExists()
+	directAccessToWebsiteTarget: boolean = false;
 
 	/**
 	 * Set if the spot will be public on the website

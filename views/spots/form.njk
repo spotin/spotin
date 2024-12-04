@@ -81,6 +81,7 @@
         <small>
           {{ t('ui.spots.form.optionsForAdvancedUsers.payload.note') }}
         </small>
+
         <label for="configured">
           {{ t('ui.spots.form.configured.label') }}
         </label>
@@ -94,6 +95,21 @@
         </select>
         <small>
           {{ t('ui.spots.form.configured.note') }}
+        </small>
+
+        <label for="directAccessToWebsiteTarget">
+          {{ t('ui.spots.form.directAccessToWebsiteTarget.label') }}
+        </label>
+        <select id="directAccessToWebsiteTarget" name="directAccessToWebsiteTarget" required="required">
+          <option value="true" {{ 'selected' if spot and spot.directAccessToWebsiteTarget }}>
+            {{ t('ui.spots.form.directAccessToWebsiteTarget.values.true') }}
+          </option>
+          <option value="false" {{ 'selected' if not spot or not spot.directAccessToWebsiteTarget }}>
+            {{ t('ui.spots.form.directAccessToWebsiteTarget.values.false') }}
+          </option>
+        </select>
+        <small>
+          {{ t('ui.spots.form.directAccessToWebsiteTarget.note') }}
         </small>
       </details>
 
@@ -158,6 +174,7 @@
       const websiteTarget = document.getElementById("websiteTarget");
       const public = document.getElementById("public");
       const configured = document.getElementById("configured");
+      const directAccessToWebsiteTarget = document.getElementById("directAccessToWebsiteTarget");
       const payload = document.getElementById("payload");
 
       const body = JSON.stringify({
@@ -166,6 +183,7 @@
         latitude: Number(latitude.value) || null,
         longitude: Number(longitude.value) || null,
         websiteTarget: websiteTarget.value || null,
+        directAccessToWebsiteTarget: directAccessToWebsiteTarget.value === "true",
         public: public.value === "true",
         configured: configured.value === "true",
         payload: payload.value || null
