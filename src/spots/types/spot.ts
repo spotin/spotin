@@ -6,6 +6,7 @@ export type Spot = {
 	longitude: number | null;
 	payload: string | null;
 	websiteTarget: string | null;
+	directAccessToWebsiteTarget: boolean;
 	configured: boolean;
 	public: boolean;
 	createdAt: Date;

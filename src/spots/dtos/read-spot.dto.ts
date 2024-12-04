@@ -13,6 +13,7 @@ export class ReadSpotDto extends SpotDto implements ReadSpot {
 		this.longitude = entity.longitude;
 		this.payload = entity.payload;
 		this.websiteTarget = entity.websiteTarget;
+		this.directAccessToWebsiteTarget = entity.directAccessToWebsiteTarget;
 		this.public = entity.public;
 		this.createdAt = entity.createdAt;
 		this.updatedAt = entity.updatedAt;

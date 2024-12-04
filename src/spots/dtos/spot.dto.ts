@@ -81,6 +81,14 @@ export class SpotDto implements Spot {
 	websiteTarget: string | null;
 
 	/**
+	 * Set if the spot will be redirected directly to the website target
+	 */
+	@ApiPropertyOptional({ default: false })
+	@IsOptional()
+	@IsBoolean()
+	directAccessToWebsiteTarget: boolean = false;
+
+	/**
 	 * Set if the spot will be public on the website
 	 */
 	@ApiPropertyOptional({ default: false })
