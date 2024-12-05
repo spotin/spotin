@@ -21,7 +21,7 @@ model Spot {
   description                 String?
   latitude                    Float?    @db.DoublePrecision
   longitude                   Float?    @db.DoublePrecision
-  websiteTarget               String?   @db.VarChar(255) // TODO add mapping
+  websiteTarget               String?   @map(name: "website_target") @db.VarChar(255)
   directAccessToWebsiteTarget Boolean   @default(false) @map(name: "direct_access_to_website_target") @db.Boolean
   configured                  Boolean   @default(true) @db.Boolean
   public                      Boolean   @default(false) @db.Boolean
