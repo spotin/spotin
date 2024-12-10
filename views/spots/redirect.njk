@@ -234,6 +234,13 @@
 
       map.addControl(new maplibregl.NavigationControl({showCompass: false}), 'bottom-right');
 
+      map.addControl(new maplibregl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: false
+        },
+        trackUserLocation: true
+      }), 'bottom-right');
+
       const marker = new maplibregl
         .Marker({color: "#e53935"})
         .setLngLat([longitude, latitude])
