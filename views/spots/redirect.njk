@@ -225,8 +225,14 @@
         center: [
           longitude, latitude
         ],
-        zoom: 16
+        dragPan: false,
+        dragRotate: false,
+        touchPitch: false,
+        pitchWithRotate: false,
+        zoom: 18
       });
+
+      map.addControl(new maplibregl.NavigationControl({showCompass: false}), 'bottom-right');
 
       const marker = new maplibregl
         .Marker({color: "#e53935"})
@@ -274,3 +280,10 @@
     };
   </script>
 {% endblock %}
+
+{# block the view on the single spot
+    zoom more
+    add the other spots (with a gray color)
+    add meta tags for sharing and good practice
+    add bold URL for the redirection
+    where does the text of the modal go ? below ? #}
