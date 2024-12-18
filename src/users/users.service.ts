@@ -88,9 +88,22 @@ export class UsersService {
 	}
 
 	async getUserByEmail(email: string): Promise<User> {
-		const user = await this.prisma.user.findFirstOrThrow({
+		const user = await this.prisma.user.findFirst({
 			where: { email },
 		});
+
+		if (!user) {
+			return {
+				id: '',
+				username: '',
+				password: '',
+				email: '',
+				role: UserRole.GUEST,
+				enabled: false,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			};
+		}
 
 		return {
 			...user,

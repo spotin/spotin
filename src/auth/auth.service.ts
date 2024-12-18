@@ -31,7 +31,6 @@ export class AuthService {
 
 	async generateJwt(user: User): Promise<Jwt> {
 		const payload: JwtPayload = {
-			sub: user.id,
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -42,8 +41,8 @@ export class AuthService {
 		};
 	}
 
-	async validateJwtPayload({ sub }: JwtPayload): Promise<User> {
-		const user = await this.usersService.getUser(sub);
+	async validateJwtPayload({ email }: JwtPayload): Promise<User> {
+		const user = await this.usersService.getUserByEmail(email);
 
 		if (!user.enabled) {
 			throw new UnauthorizedException();
