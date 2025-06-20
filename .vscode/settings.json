@@ -41,7 +41,7 @@
 	"javascript.updateImportsOnFileMove.enabled": "always",
 	"nunjucksTemplate.preserveEmptyLine": 1,
 	"typescript.preferences.importModuleSpecifier": "non-relative",
-	"typescript.updateImportsOnFileMove.enabled": "always",
+	"typescript.updateImportsOnFileMove.enabled": "always"
 	// "yaml.schemas": {
 	// 	"https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
 	// }
