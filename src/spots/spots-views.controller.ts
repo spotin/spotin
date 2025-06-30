@@ -17,7 +17,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { BASE_URL } from '@/config/config.constants';
+import { BASE_URL, EnvironmentVariables } from '@/config/config.constants';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
@@ -34,7 +34,7 @@ import { UserRole } from '@/users/enums/user-role';
 export class SpotsViewsController {
 	constructor(
 		private readonly spotsService: SpotsService,
-		private readonly configService: ConfigService,
+		private readonly configService: ConfigService<EnvironmentVariables, true>,
 	) {}
 
 	@Get('create')
@@ -48,9 +48,7 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	async renderCreateSpot(
-		@AuthUser() user: User,
-	): Promise<Record<string, string>> {
+	renderCreateSpot(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'Create a new spot | Spot in',
 			username: user.username,
@@ -192,7 +190,7 @@ export class SpotsViewsController {
 				role: user.role,
 				spot,
 			});
-		} catch (_) {
+		} catch {
 			res.redirect(`/spots`);
 		}
 	}

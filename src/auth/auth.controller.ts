@@ -127,7 +127,7 @@ export class AuthController {
 							i18n.lang,
 						);
 					}
-				} catch (e) {
+				} catch {
 					// Do nothing
 				}
 			} else {
@@ -166,7 +166,7 @@ export class AuthController {
 					i18n.lang,
 				);
 			}
-		} catch (e) {
+		} catch {
 			// Do nothing
 		}
 	}

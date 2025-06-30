@@ -22,7 +22,7 @@ import { PrismaModule } from 'nestjs-prisma';
 		MailerModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService, I18nService],
-			useFactory: async (
+			useFactory: (
 				configService: ConfigService<EnvironmentVariables, true>,
 				i18n: I18nService,
 			) => ({

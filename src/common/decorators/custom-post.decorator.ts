@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { MissingOrIncorrectFieldsResponse } from '@/common/openapi/responses';
 import { applyDecorators, Post } from '@nestjs/common';
 import {
@@ -16,7 +13,9 @@ type PostDecoratorOptions = {
 	name: string;
 	summary: string;
 	description?: string;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 	bodyType: Function;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 	responseType: Function | [Function];
 	operationId: string;
 };

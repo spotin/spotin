@@ -19,10 +19,10 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	async renderLogin(
+	renderLogin(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
-	): Promise<void | Record<string, string>> {
+	): void | Record<string, string> {
 		if (user) {
 			return res.redirect('/');
 		}
@@ -43,7 +43,7 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/logout')
-	async renderLogout(@Res() res: Response): Promise<Record<string, string>> {
+	renderLogout(@Res() res: Response): Record<string, string> {
 		res.clearCookie('jwt');
 
 		return {
@@ -61,10 +61,10 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@JwtOrUnrestrictedAuth()
-	async renderRegister(
+	renderRegister(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
-	): Promise<void | Record<string, string>> {
+	): void | Record<string, string> {
 		if (user?.id) {
 			return res.redirect('/');
 		}
@@ -84,10 +84,10 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	async renderResetPasswordRequest(
+	renderResetPasswordRequest(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
-	): Promise<void | Record<string, string>> {
+	): void | Record<string, string> {
 		if (user?.id) {
 			return res.redirect('/');
 		}
@@ -107,11 +107,11 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	async renderResetPassword(
+	renderResetPassword(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
 		@Query('token') token: string,
-	): Promise<void | Record<string, string>> {
+	): void | Record<string, string> {
 		if (user?.id) {
 			return res.redirect('/');
 		}

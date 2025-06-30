@@ -32,7 +32,7 @@ export class JwtStrategy extends NestPassportStrategy(
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([
 				ExtractJwt.fromAuthHeaderAsBearerToken(),
-				(request: Request): string => request.cookies?.jwt,
+				(request: Request): string => (request.cookies as { jwt: string }).jwt,
 			]),
 			ignoreExpiration: false,
 			secretOrKey: configService.get(JWT_SECRET, { infer: true }),

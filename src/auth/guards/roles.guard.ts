@@ -8,7 +8,7 @@ import { Request } from 'express';
 export class RolesGuard implements CanActivate {
 	constructor(private reflector: Reflector) {}
 
-	async canActivate(context: ExecutionContext): Promise<boolean> {
+	canActivate(context: ExecutionContext): boolean {
 		const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
 			context.getHandler(),
 			context.getClass(),

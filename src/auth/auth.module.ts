@@ -26,7 +26,7 @@ import { ResetPasswordStrategy } from '@/auth/reset-password/reset-password.stra
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: async (
+			useFactory: (
 				configService: ConfigService<EnvironmentVariables, true>,
 			) => ({
 				secret: configService.get(JWT_SECRET, { infer: true }),

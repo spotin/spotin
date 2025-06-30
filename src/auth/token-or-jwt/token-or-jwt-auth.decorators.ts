@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { PassportStrategy } from '@/auth/auth.constants';
 import { TokenOrJwtAuthGuard } from '@/auth/token-or-jwt/token-or-jwt-auth.guard';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
@@ -9,7 +8,7 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const TokenOrJwtAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(TokenOrJwtAuthGuard, ...guards),

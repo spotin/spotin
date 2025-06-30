@@ -15,7 +15,7 @@ describe('AppViewsController (e2e)', () => {
 		const instance =
 			moduleFixture.createNestApplication<NestExpressApplication>();
 
-		app = await bootstrap(instance);
+		app = bootstrap(instance);
 
 		await app.init();
 	});

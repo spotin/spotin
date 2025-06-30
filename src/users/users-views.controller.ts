@@ -40,9 +40,7 @@ export class UsersViewsController {
 		description: 'Render successful.',
 	})
 	@Render('users/form')
-	async renderCreateUser(
-		@AuthUser() user: User,
-	): Promise<Record<string, string>> {
+	renderCreateUser(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'Create a new user | Spot in',
 			username: user.username,
