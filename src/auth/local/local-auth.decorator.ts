@@ -7,7 +7,7 @@ import {
 import { LocalAuthGuard } from '@/auth/local/local-auth.guard';
 import { PassportStrategy } from '@/auth/auth.constants';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/explicit-function-return-type
 export const LocalAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(LocalAuthGuard, ...guards),

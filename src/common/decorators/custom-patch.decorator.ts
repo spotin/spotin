@@ -30,6 +30,7 @@ export const CustomPatch = ({
 	bodyType,
 	responseType,
 	operationId,
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: PatchDecoratorOptions) =>
 	applyDecorators(
 		Patch(path ?? ':id'),

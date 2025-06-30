@@ -20,6 +20,7 @@ export const CustomDelete = ({
 	summary,
 	description,
 	operationId,
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: DeleteDecoratorOptions) =>
 	applyDecorators(
 		Delete(path ?? ':id'),

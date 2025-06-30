@@ -24,7 +24,7 @@ export class UnrestrictedStrategy extends NestPassportStrategy(
 	}
 
 	// Signature from https://www.passportjs.org/packages/passport-custom/
-	validate(_: Request, done: DoneCallback) {
+	validate(_: Request, done: DoneCallback): void {
 		done(null, true, authInfo);
 	}
 }

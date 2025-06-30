@@ -23,6 +23,7 @@ export const GetOne = ({
 	description,
 	responseType,
 	operationId,
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: GetOneDecoratorOptions) =>
 	applyDecorators(
 		Get(path ?? ':id'),

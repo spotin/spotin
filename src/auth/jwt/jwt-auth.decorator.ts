@@ -7,7 +7,7 @@ import {
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { PassportStrategy } from '@/auth/auth.constants';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/explicit-function-return-type
 export const JwtAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(JwtAuthGuard, ...guards),

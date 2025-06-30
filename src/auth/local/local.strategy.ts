@@ -29,7 +29,11 @@ export class LocalStrategy extends NestPassportStrategy(
 	}
 
 	// Signature from https://www.passportjs.org/packages/passport-local/
-	async validate(email: string, password: string, done: DoneCallback) {
+	async validate(
+		email: string,
+		password: string,
+		done: DoneCallback,
+	): Promise<void> {
 		try {
 			const user = await this.authService.validateCredentials({
 				email,

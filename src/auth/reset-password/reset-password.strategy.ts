@@ -29,7 +29,7 @@ export class ResetPasswordStrategy extends NestPassportStrategy(
 	}
 
 	// Signature from http://www.passportjs.org/packages/passport-headerapikey/
-	async validate(value: string, done: DoneCallback) {
+	async validate(value: string, done: DoneCallback): Promise<void> {
 		try {
 			const user =
 				await this.authService.validatePasswordResetRequestToken(value);

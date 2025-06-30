@@ -28,7 +28,7 @@ export class UnconfiguredSpotStrategy extends NestPassportStrategy(
 	}
 
 	// Signature from https://www.passportjs.org/packages/passport-custom/
-	async validate(request: Request, done: DoneCallback) {
+	async validate(request: Request, done: DoneCallback): Promise<void> {
 		try {
 			const spotId = request.params.id;
 

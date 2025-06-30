@@ -18,6 +18,7 @@ export const GetMany = ({
 	description,
 	responseType,
 	operationId,
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: GetManyDecoratorOptions) =>
 	applyDecorators(
 		Get(path ?? ''),

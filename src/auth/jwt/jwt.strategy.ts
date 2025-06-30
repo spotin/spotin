@@ -40,7 +40,7 @@ export class JwtStrategy extends NestPassportStrategy(
 	}
 
 	// Signature from https://www.passportjs.org/packages/passport-jwt/
-	async validate(payload: JwtPayload, done: DoneCallback) {
+	async validate(payload: JwtPayload, done: DoneCallback): Promise<void> {
 		try {
 			const user = await this.authService.validateJwtPayload(payload);
 

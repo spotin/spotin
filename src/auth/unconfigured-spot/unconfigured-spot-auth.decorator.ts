@@ -3,7 +3,7 @@ import { UnconfiguredSpotAuthGuard } from '@/auth/unconfigured-spot/unconfigured
 import { CanActivate, UseGuards, applyDecorators } from '@nestjs/common';
 import { ApiSecurity, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/explicit-function-return-type
 export const UnconfiguredSpotAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(UnconfiguredSpotAuthGuard, ...guards),
