@@ -22,24 +22,23 @@ export class LocalStrategy extends NestPassportStrategy(
 	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
-		// Signature from https://www.passportjs.org/packages/passport-local/
-		super(
-			{
-				usernameField: 'email',
-				passwordField: 'password',
-			},
-			async (email: string, password: string, done: DoneCallback) => {
-				try {
-					const user = await this.authService.validateCredentials({
-						email,
-						password,
-					});
+		super({
+			usernameField: 'email',
+			passwordField: 'password',
+		});
+	}
 
-					done(null, user, authInfo);
-				} catch (error) {
-					done(null, false, authInfo);
-				}
-			},
-		);
+	// Signature from https://www.passportjs.org/packages/passport-local/
+	async validate(email: string, password: string, done: DoneCallback) {
+		try {
+			const user = await this.authService.validateCredentials({
+				email,
+				password,
+			});
+
+			done(null, user, authInfo);
+		} catch {
+			done(null, false, authInfo);
+		}
 	}
 }

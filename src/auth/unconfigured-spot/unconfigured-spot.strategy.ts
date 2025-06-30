@@ -24,25 +24,27 @@ export class UnconfiguredSpotStrategy extends NestPassportStrategy(
 	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
-		// Signature from https://www.passportjs.org/packages/passport-custom/
-		super(async (request: Request, done: DoneCallback) => {
-			try {
-				const spotId = request.params.id;
+		super();
+	}
 
-				const user = await this.authService.validateSpot(spotId);
+	// Signature from https://www.passportjs.org/packages/passport-custom/
+	async validate(request: Request, done: DoneCallback) {
+		try {
+			const spotId = request.params.id;
 
-				// Only keep the owner's ID and switch the role to GUEST
-				done(
-					null,
-					{
-						id: user.id,
-						role: UserRole.GUEST,
-					},
-					authInfo,
-				);
-			} catch {
-				done(null, false, authInfo);
-			}
-		});
+			const user = await this.authService.validateSpot(spotId);
+
+			// Only keep the owner's ID and switch the role to GUEST
+			done(
+				null,
+				{
+					id: user.id,
+					role: UserRole.GUEST,
+				},
+				authInfo,
+			);
+		} catch {
+			done(null, false, authInfo);
+		}
 	}
 }

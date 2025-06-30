@@ -6,9 +6,9 @@ import { AppModule } from '@/app.module';
 const main = async (): Promise<void> => {
 	const instance = await NestFactory.create<NestExpressApplication>(AppModule);
 
-	const app = await bootstrap(instance);
+	const app = bootstrap(instance);
 
 	await app.listen(3000);
 };
 
-main();
+void main();

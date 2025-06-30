@@ -16,9 +16,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@/config/config.constants';
 import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
 
-export async function bootstrap(
-	app: NestExpressApplication,
-): Promise<NestExpressApplication> {
+export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
@@ -56,7 +54,6 @@ export async function bootstrap(
 	app.setViewEngine('njk');
 
 	// Inspiration: https://github.com/toonvanstrijp/nestjs-i18n/blob/e0f3398682e540c93bd39fb29a4ceb270d28464c/src/i18n.module.ts#L90-L92
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	app.setLocal('t', (key: string, args?: any, lang?: string) => {
 		let detectedLanguage = lang;
 
@@ -64,6 +61,7 @@ export async function bootstrap(
 			detectedLanguage = I18nContext.current()?.lang;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		return i18n.t(key, { lang: detectedLanguage, args });
 	});
 
