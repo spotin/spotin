@@ -15,4 +15,5 @@
 npm install --global @nestjs/cli
 
 # Project
-npm install
+# `--legacy-peer-deps` is used until `nunjucks` is updated.
+npm install --legacy-peer-deps

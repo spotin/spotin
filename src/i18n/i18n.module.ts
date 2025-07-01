@@ -12,7 +12,7 @@ import { EnvironmentVariables } from '@/config/config.constants';
 		NestI18nModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: async (
+			useFactory: (
 				configService: ConfigService<EnvironmentVariables, true>,
 			) => ({
 				fallbackLanguage: 'en',

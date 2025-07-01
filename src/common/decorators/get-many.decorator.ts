@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { applyDecorators, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
@@ -9,6 +6,7 @@ type GetManyDecoratorOptions = {
 	name: string;
 	summary: string;
 	description?: string;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 	responseType: Function | [Function];
 	operationId: string;
 };
@@ -20,6 +18,7 @@ export const GetMany = ({
 	description,
 	responseType,
 	operationId,
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: GetManyDecoratorOptions) =>
 	applyDecorators(
 		Get(path ?? ''),

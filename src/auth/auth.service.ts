@@ -18,12 +18,9 @@ export class AuthService {
 	) {}
 
 	async validateCredentials({ email, password }: LoginUser): Promise<User> {
-		const user = (await this.usersService.getUserByEmail(email)) as User;
+		const user = await this.usersService.getUserByEmail(email);
 
-		const passwordsMatch = await argon2id.verify(
-			user.password,
-			password as string,
-		);
+		const passwordsMatch = await argon2id.verify(user.password, password);
 
 		if (!user.enabled || !passwordsMatch) {
 			throw new UnauthorizedException();
@@ -46,7 +43,7 @@ export class AuthService {
 	}
 
 	async validateJwtPayload({ sub }: JwtPayload): Promise<User> {
-		const user = (await this.usersService.getUser(sub)) as User;
+		const user = await this.usersService.getUser(sub);
 
 		if (!user.enabled) {
 			throw new UnauthorizedException();
@@ -58,7 +55,7 @@ export class AuthService {
 	async validateToken(value: string): Promise<User> {
 		const hash = crypto.createHash('sha256').update(value).digest('hex');
 
-		const user = (await this.usersService.getUserByTokenHash(hash)) as User;
+		const user = await this.usersService.getUserByTokenHash(hash);
 
 		if (!user.enabled) {
 			throw new UnauthorizedException();
@@ -80,9 +77,8 @@ export class AuthService {
 	}
 
 	async validatePasswordResetRequestToken(token: string): Promise<User> {
-		const user = (await this.usersService.getUserByResetPasswordRequestToken(
-			token,
-		)) as User;
+		const user =
+			await this.usersService.getUserByResetPasswordRequestToken(token);
 
 		if (!user.enabled) {
 			throw new UnauthorizedException();

@@ -73,6 +73,7 @@ export class SpotsService {
 		const newSpot = await this.prisma.spot.create({
 			data: {
 				...createSpot,
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				payload: createSpot.payload
 					? JSON.parse(createSpot.payload)
 					: undefined,
@@ -103,6 +104,7 @@ export class SpotsService {
 			},
 			data: {
 				...updateSpot,
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				payload: updateSpot.payload
 					? JSON.parse(updateSpot.payload)
 					: undefined,

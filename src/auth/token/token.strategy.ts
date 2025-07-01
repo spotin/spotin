@@ -22,19 +22,17 @@ export class TokenStrategy extends NestPassportStrategy(
 	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
-		// Signature from http://www.passportjs.org/packages/passport-headerapikey/
-		super(
-			{ header: TOKEN_HEADER_NAME },
-			false,
-			async (value: string, done: DoneCallback) => {
-				try {
-					const user = await this.authService.validateToken(value);
+		super({ header: TOKEN_HEADER_NAME, prefix: '' }, false);
+	}
 
-					done(null, user, authInfo);
-				} catch (error) {
-					done(null, false, authInfo);
-				}
-			},
-		);
+	// Signature from http://www.passportjs.org/packages/passport-headerapikey/
+	async validate(value: string, done: DoneCallback): Promise<void> {
+		try {
+			const user = await this.authService.validateToken(value);
+
+			done(null, user, authInfo);
+		} catch {
+			done(null, false, authInfo);
+		}
 	}
 }

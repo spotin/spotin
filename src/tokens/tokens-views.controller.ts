@@ -37,9 +37,7 @@ export class TokensViewsController {
 		description: 'Render successful.',
 	})
 	@Render('tokens/form')
-	async renderCreateToken(
-		@AuthUser() user: User,
-	): Promise<Record<string, string>> {
+	renderCreateToken(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'Create a new token | Spot in',
 			username: user.username,

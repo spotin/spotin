@@ -113,7 +113,7 @@ export class ResetPasswordRequestsService {
 		const { resetPasswordRequest } = userWithResetPasswordRequest;
 
 		if (resetPasswordRequest) {
-			await await this.prisma.resetPasswordRequest.delete({
+			await this.prisma.resetPasswordRequest.delete({
 				where: {
 					id: resetPasswordRequest.id,
 				},

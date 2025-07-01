@@ -19,7 +19,7 @@ export class MailService {
 		lang: string,
 		tokenId: string,
 	): Promise<void> {
-		const subject = await this.i18nService.translate('mail.welcome.subject', {
+		const subject = this.i18nService.translate('mail.welcome.subject', {
 			lang,
 		});
 
@@ -47,12 +47,9 @@ export class MailService {
 		lang: string,
 		tokenId: string,
 	): Promise<void> {
-		const subject = await this.i18nService.translate(
-			'mail.passwordReset.subject',
-			{
-				lang,
-			},
-		);
+		const subject = this.i18nService.translate('mail.passwordReset.subject', {
+			lang,
+		});
 
 		const link = `${this.configService.get(BASE_URL, {
 			infer: true,
@@ -78,12 +75,9 @@ export class MailService {
 		lang: string,
 		tokenId: string,
 	): Promise<void> {
-		const subject = await this.i18nService.translate(
-			'mail.recoverAccount.subject',
-			{
-				lang,
-			},
-		);
+		const subject = this.i18nService.translate('mail.recoverAccount.subject', {
+			lang,
+		});
 
 		const link = `${this.configService.get(BASE_URL, {
 			infer: true,

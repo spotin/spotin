@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { applyDecorators, HttpCode, Delete } from '@nestjs/common';
 import {
 	ApiNoContentResponse,
@@ -23,6 +20,7 @@ export const CustomDelete = ({
 	summary,
 	description,
 	operationId,
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: DeleteDecoratorOptions) =>
 	applyDecorators(
 		Delete(path ?? ':id'),

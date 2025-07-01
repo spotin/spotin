@@ -24,9 +24,7 @@ export class ProfileViewsController {
 		description: 'Render successful.',
 	})
 	@Render('profile/form')
-	async renderMyProfile(
-		@AuthUser() user: User,
-	): Promise<Record<string, string>> {
+	renderMyProfile(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'My profile | Spot in',
 			username: user.username,

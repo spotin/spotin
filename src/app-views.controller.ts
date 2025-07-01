@@ -18,9 +18,7 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('index')
-	async root(
-		@AuthUser() user: User | undefined,
-	): Promise<Record<string, string | undefined>> {
+	root(@AuthUser() user: User | undefined): Record<string, string | undefined> {
 		return {
 			title: 'Home | Spot in',
 			username: user?.username,
@@ -40,9 +38,9 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('about')
-	async about(
+	about(
 		@AuthUser() user: User | undefined,
-	): Promise<Record<string, string | undefined>> {
+	): Record<string, string | undefined> {
 		return {
 			title: 'About | Spot in',
 			username: user?.username,
@@ -60,7 +58,7 @@ export class AppViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	async api(): Promise<void> {}
+	api(): void {}
 
 	@Get('not-found')
 	@JwtOrUnrestrictedAuth()
@@ -73,9 +71,9 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('not-found')
-	async notFound(
+	notFound(
 		@AuthUser() user: User | undefined,
-	): Promise<Record<string, string | undefined>> {
+	): Record<string, string | undefined> {
 		return {
 			title: 'Not Found | Spot in',
 			username: user?.username,

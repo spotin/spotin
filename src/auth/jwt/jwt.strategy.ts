@@ -29,25 +29,24 @@ export class JwtStrategy extends NestPassportStrategy(
 		private authService: AuthService,
 		configService: ConfigService<EnvironmentVariables, true>,
 	) {
-		// Signature from https://www.passportjs.org/packages/passport-jwt/
-		super(
-			{
-				jwtFromRequest: ExtractJwt.fromExtractors([
-					ExtractJwt.fromAuthHeaderAsBearerToken(),
-					(request: Request): string => request.cookies.jwt,
-				]),
-				ignoreExpiration: false,
-				secretOrKey: configService.get(JWT_SECRET, { infer: true }),
-			},
-			async (payload: JwtPayload, done: DoneCallback) => {
-				try {
-					const user = await this.authService.validateJwtPayload(payload);
+		super({
+			jwtFromRequest: ExtractJwt.fromExtractors([
+				ExtractJwt.fromAuthHeaderAsBearerToken(),
+				(request: Request): string => (request.cookies as { jwt: string }).jwt,
+			]),
+			ignoreExpiration: false,
+			secretOrKey: configService.get(JWT_SECRET, { infer: true }),
+		});
+	}
 
-					done(null, user, authInfo);
-				} catch (error) {
-					done(null, false, authInfo);
-				}
-			},
-		);
+	// Signature from https://www.passportjs.org/packages/passport-jwt/
+	async validate(payload: JwtPayload, done: DoneCallback): Promise<void> {
+		try {
+			const user = await this.authService.validateJwtPayload(payload);
+
+			done(null, user, authInfo);
+		} catch {
+			done(null, false, authInfo);
+		}
 	}
 }

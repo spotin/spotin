@@ -37,7 +37,7 @@ export class ProfileController {
 		type: ReadProfileDto,
 	})
 	@JwtAuth()
-	async getProfile(@AuthUser() user: User): Promise<ReadProfileDto> {
+	getProfile(@AuthUser() user: User): ReadProfileDto {
 		return new ReadProfileDto(user);
 	}
 

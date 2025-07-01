@@ -25,20 +25,18 @@ export class ResetPasswordStrategy extends NestPassportStrategy(
 	authInfo.strategy,
 ) {
 	constructor(private authService: AuthService) {
-		// Signature from http://www.passportjs.org/packages/passport-headerapikey/
-		super(
-			{ header: PASSWORD_RESET_HEADER_NAME },
-			false,
-			async (value: string, done: DoneCallback) => {
-				try {
-					const user =
-						await this.authService.validatePasswordResetRequestToken(value);
+		super({ header: PASSWORD_RESET_HEADER_NAME, prefix: '' }, false);
+	}
 
-					done(null, user, authInfo);
-				} catch (error) {
-					done(null, false, authInfo);
-				}
-			},
-		);
+	// Signature from http://www.passportjs.org/packages/passport-headerapikey/
+	async validate(value: string, done: DoneCallback): Promise<void> {
+		try {
+			const user =
+				await this.authService.validatePasswordResetRequestToken(value);
+
+			done(null, user, authInfo);
+		} catch {
+			done(null, false, authInfo);
+		}
 	}
 }
