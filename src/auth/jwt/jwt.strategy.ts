@@ -38,6 +38,7 @@ export class JwtStrategy extends NestPassportStrategy(
 				]),
 				ignoreExpiration: false,
 				secretOrKey: configService.get(JWT_SECRET, { infer: true }),
+				// TODO: Add issuer and audience
 			},
 			async (payload: JwtPayload, done: DoneCallback) => {
 				try {
@@ -48,6 +49,10 @@ export class JwtStrategy extends NestPassportStrategy(
 					done(null, false, authInfo);
 				}
 			},
+			// TODO:  async (payload: JwtPayload): Promise<User> => ({
+			// 	...payload,
+			// 	id: payload.sub,
+			// }),
 		);
 	}
 }
