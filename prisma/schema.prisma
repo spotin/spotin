@@ -55,6 +55,7 @@ model User {
   email                String                @unique @db.VarChar(255)
   resetPasswordRequest ResetPasswordRequest?
   password             String                @db.VarChar(255)
+  refreshToken         String?               @map(name: "refresh_token") @db.VarChar(255)
   spots                Spot[]
   tokens               Token[]
   role                 UserRole              @default(STANDARD_USER)

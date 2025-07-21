@@ -18,7 +18,7 @@ import { LoginUserDto } from '@/auth/local/dtos/login-user.dto';
 import { UsersService } from '@/users/users.service';
 import { LocalAuth } from '@/auth/local/local-auth.decorator';
 import { JwtDto } from '@/auth/jwt/dtos/jwt.dto';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
 import { RegisterUserDto } from '@/auth/local/dtos/register-user.dto';
 import { ResetPasswordAuth } from '@/auth/reset-password/reset-password.decorator';
 import { ResetPasswordDto } from '@/auth/reset-password/dtos/reset-password.dto';
@@ -26,11 +26,19 @@ import { ResetPasswordRequestsService } from '@/reset-password-requests/reset-pa
 import { ResetPasswordRequestDto } from '@/auth/reset-password/dtos/reset-password-request.dto';
 import { Response } from 'express';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { User } from '@/users/types/user';
 import { UserRole } from '@/users/enums/user-role';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { EnvironmentVariables } from '@/config/config.constants';
+import {
+	EnvironmentVariables,
+	JWT_ACCESS_TOKEN_COOKIE_NAME,
+	JWT_REFRESH_TOKEN_COOKIE_NAME,
+	NODE_ENV,
+} from '@/config/config.constants';
 import { ConfigService } from '@nestjs/config';
+import { JwtRefreshTokenAuth } from '@/auth/jwt/jwt-refresh-token-auth.decorator';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { User } from '@/users/types/user';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -41,6 +49,35 @@ export class AuthController {
 		private readonly usersService: UsersService,
 		private readonly resetPasswordRequestsService: ResetPasswordRequestsService,
 	) {}
+
+	private async getJwtTokens(userId: string, res: Response): Promise<JwtDto> {
+		const jwtTokens = await this.authService.generateJwtTokens(userId);
+
+		res.cookie(
+			this.configService.get(JWT_ACCESS_TOKEN_COOKIE_NAME, { infer: true }),
+			jwtTokens.accessToken,
+			{
+				httpOnly: true,
+				sameSite: 'strict',
+				secure:
+					this.configService.get(NODE_ENV, { infer: true }) === 'production',
+			},
+		);
+
+		res.cookie(
+			this.configService.get(JWT_REFRESH_TOKEN_COOKIE_NAME, { infer: true }),
+			jwtTokens.refreshToken,
+			{
+				httpOnly: true,
+				sameSite: 'strict',
+				path: '/api/auth/refresh',
+				secure:
+					this.configService.get(NODE_ENV, { infer: true }) === 'production',
+			},
+		);
+
+		return new JwtDto(jwtTokens);
+	}
 
 	@Post('login')
 	@LocalAuth()
@@ -62,20 +99,34 @@ export class AuthController {
 		@AuthUser() user: User,
 		@Res({ passthrough: true }) res: Response,
 	): Promise<JwtDto> {
-		const jwt = await this.authService.generateJwt(user);
-
 		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
-			user,
+			user.id,
 		);
 
-		res.cookie('jwt', jwt.jwt, {
-			httpOnly: true,
-			sameSite: 'strict',
-			secure:
-				this.configService.get('NODE_ENV', { infer: true }) === 'production',
-		});
+		const jwtTokens = await this.getJwtTokens(user.id, res);
 
-		return new JwtDto(jwt);
+		return jwtTokens;
+	}
+
+	@Post('refresh')
+	@HttpCode(200)
+	@ApiOperation({
+		summary: 'Refresh the JWT access token',
+		description: 'Refresh the JWT access token.',
+		operationId: 'refresh',
+	})
+	@ApiOkResponse({
+		description: 'The JWT access token has been successfully refreshed.',
+		type: JwtDto,
+	})
+	@JwtRefreshTokenAuth()
+	async refresh(
+		@AuthJwtPayload() payload: JwtPayload,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<JwtDto> {
+		const jwtTokens = await this.getJwtTokens(payload.sub, res);
+
+		return jwtTokens;
 	}
 
 	@Post('register')
@@ -187,14 +238,14 @@ export class AuthController {
 		description: 'The user password has been successfully reset.',
 	})
 	async resetPassword(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Body() resetPasswordDto: ResetPasswordDto,
 	): Promise<void> {
 		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
-			user,
+			payload.sub,
 		);
 
-		await this.usersService.updateUser(user.id, {
+		await this.usersService.updateUser(payload.sub, {
 			password: resetPasswordDto.password,
 		});
 	}

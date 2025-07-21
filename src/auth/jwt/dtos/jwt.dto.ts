@@ -8,9 +8,17 @@ export class JwtDto implements Jwt {
 	 */
 	@ApiProperty({ format: 'jwt' })
 	@IsString()
-	jwt: string;
+	accessToken: string;
+
+	/**
+	 * The JWT to refresh the access token
+	 */
+	@ApiProperty({ format: 'jwt' })
+	@IsString()
+	refreshToken: string;
 
 	constructor(entity: Jwt) {
-		this.jwt = entity.jwt;
+		this.accessToken = entity.accessToken;
+		this.refreshToken = entity.refreshToken;
 	}
 }

@@ -1,14 +1,17 @@
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { User } from '@/users/types/user';
+import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
+import { JwtAccessTokenOrUnrestrictedAuth } from '@/auth/jwt-access-token-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { UsersService } from '@/users/users.service';
 import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Views')
 @Controller()
 export class AppViewsController {
+	constructor(private readonly usersService: UsersService) {}
+
 	@Get()
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the main page',
 		description: 'Render the main page.',
@@ -18,17 +21,31 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('index')
-	root(@AuthUser() user: User | undefined): Record<string, string | undefined> {
-		return {
+	async root(
+		@AuthJwtPayload() payload: JwtPayload | undefined,
+	): Promise<Record<string, string | undefined>> {
+		let params: Record<string, string | undefined> = {
 			title: 'Home | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
 		};
+
+		console.log('payload', payload);
+
+		if (payload?.sub) {
+			const user = await this.usersService.getUser(payload.sub);
+
+			params = {
+				...params,
+				username: user.username,
+				email: user.email,
+				role: user.role,
+			};
+		}
+
+		return params;
 	}
 
 	@Get('about')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the about page',
 		description: 'Render the about page.',
@@ -38,15 +55,25 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('about')
-	about(
-		@AuthUser() user: User | undefined,
-	): Record<string, string | undefined> {
-		return {
+	async about(
+		@AuthJwtPayload() payload: JwtPayload,
+	): Promise<Record<string, string | undefined>> {
+		let params: Record<string, string | undefined> = {
 			title: 'About | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
 		};
+
+		if (payload?.sub) {
+			const user = await this.usersService.getUser(payload.sub);
+
+			params = {
+				...params,
+				username: user.username,
+				email: user.email,
+				role: user.role,
+			};
+		}
+
+		return params;
 	}
 
 	@Get('api')
@@ -61,7 +88,7 @@ export class AppViewsController {
 	api(): void {}
 
 	@Get('not-found')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the not found page',
 		description: 'Render the not found page.',
@@ -71,14 +98,24 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('not-found')
-	notFound(
-		@AuthUser() user: User | undefined,
-	): Record<string, string | undefined> {
-		return {
+	async notFound(
+		@AuthJwtPayload() payload: JwtPayload,
+	): Promise<Record<string, string | undefined>> {
+		let params: Record<string, string | undefined> = {
 			title: 'Not Found | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
 		};
+
+		if (payload?.sub) {
+			const user = await this.usersService.getUser(payload.sub);
+
+			params = {
+				...params,
+				username: user.username,
+				email: user.email,
+				role: user.role,
+			};
+		}
+
+		return params;
 	}
 }

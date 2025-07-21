@@ -1,16 +1,26 @@
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { User } from '@/users/types/user';
+import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
+import { JwtAccessTokenOrUnrestrictedAuth } from '@/auth/jwt-access-token-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import {
+	EnvironmentVariables,
+	JWT_ACCESS_TOKEN_COOKIE_NAME,
+	JWT_REFRESH_TOKEN_COOKIE_NAME,
+} from '@/config/config.constants';
 import { Controller, Get, Query, Render, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 @ApiTags('Views')
 @Controller('auth')
 export class AuthViewsController {
+	constructor(
+		private readonly configService: ConfigService<EnvironmentVariables, true>,
+	) {}
+
 	@Get('login')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the login page',
 		description: 'Render the login page.',
@@ -20,10 +30,10 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	renderLogin(
-		@AuthUser() user: User | undefined,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Res() res: Response,
 	): void | Record<string, string> {
-		if (user) {
+		if (payload?.sub) {
 			return res.redirect('/');
 		}
 
@@ -33,7 +43,7 @@ export class AuthViewsController {
 	}
 
 	@Get('logout')
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	@ApiOperation({
 		summary: 'Render the logout page',
 		description: 'Render the logout page.',
@@ -44,7 +54,17 @@ export class AuthViewsController {
 	})
 	@Render('auth/logout')
 	renderLogout(@Res() res: Response): Record<string, string> {
-		res.clearCookie('jwt');
+		const accessTokenCookieName = this.configService.get(
+			JWT_ACCESS_TOKEN_COOKIE_NAME,
+			{ infer: true },
+		);
+		const refreshTokenCookieName = this.configService.get(
+			JWT_REFRESH_TOKEN_COOKIE_NAME,
+			{ infer: true },
+		);
+
+		res.clearCookie(accessTokenCookieName);
+		res.clearCookie(refreshTokenCookieName);
 
 		return {
 			title: 'Logout | Spot in',
@@ -52,6 +72,7 @@ export class AuthViewsController {
 	}
 
 	@Get('register')
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the signup page',
 		description: 'Render the signup page.',
@@ -60,12 +81,11 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@JwtOrUnrestrictedAuth()
 	renderRegister(
-		@AuthUser() user: User | undefined,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Res() res: Response,
 	): void | Record<string, string> {
-		if (user?.id) {
+		if (payload?.sub) {
 			return res.redirect('/');
 		}
 
@@ -75,7 +95,7 @@ export class AuthViewsController {
 	}
 
 	@Get('reset-password-request')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the reset password request page',
 		description: 'Render the reset password request page.',
@@ -85,10 +105,10 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	renderResetPasswordRequest(
-		@AuthUser() user: User | undefined,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Res() res: Response,
 	): void | Record<string, string> {
-		if (user?.id) {
+		if (payload?.sub) {
 			return res.redirect('/');
 		}
 
@@ -98,7 +118,7 @@ export class AuthViewsController {
 	}
 
 	@Get('reset-password')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the reset password page',
 		description: 'Render the reset password page.',
@@ -108,11 +128,11 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	renderResetPassword(
-		@AuthUser() user: User | undefined,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Res() res: Response,
 		@Query('token') token: string,
 	): void | Record<string, string> {
-		if (user?.id) {
+		if (payload?.sub) {
 			return res.redirect('/');
 		}
 

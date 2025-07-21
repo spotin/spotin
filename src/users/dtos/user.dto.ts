@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
 	IsBoolean,
 	IsDateString,
@@ -44,6 +44,15 @@ export class UserDto implements User {
 	@MinLength(8)
 	@MaxLength(255)
 	password: string;
+
+	/**
+	 * Refresh token of the user
+	 */
+	@ApiPropertyOptional({ format: 'password' })
+	@IsString()
+	@MinLength(8)
+	@MaxLength(255)
+	refreshToken: string | null;
 
 	/**
 	 * Role of the user

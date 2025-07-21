@@ -6,6 +6,7 @@ export class CreateUserDto
 	extends OmitType(UserDto, [
 		'id',
 		'password',
+		'refreshToken',
 		'createdAt',
 		'updatedAt',
 	] as const)

@@ -13,7 +13,7 @@ import {
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
 import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '@/config/config.constants';
+import { EnvironmentVariables, NODE_ENV } from '@/config/config.constants';
 import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
 
 export function bootstrap(app: NestExpressApplication): NestExpressApplication {
@@ -39,13 +39,13 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 	// https://docs.nestjs.com/techniques/session
 	app.set(
 		'trust proxy',
-		configService.get('NODE_ENV', { infer: true }) === 'production',
+		configService.get(NODE_ENV, { infer: true }) === 'production',
 	);
 
 	nunjucks
 		.configure(join(__dirname, '..', 'views'), {
 			express: app,
-			watch: configService.get('NODE_ENV', { infer: true }) === 'development',
+			watch: configService.get(NODE_ENV, { infer: true }) === 'development',
 		})
 		.addGlobal('title', 'Spot in');
 
@@ -72,9 +72,16 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		.addBearerAuth(
 			{
 				type: 'http',
-				description: 'The JWT to access protected endpoints',
+				description: 'The JWT access token to access protected endpoints',
 			},
-			PassportStrategy.JWT,
+			PassportStrategy.JWT_ACCESS_TOKEN,
+		)
+		.addBearerAuth(
+			{
+				type: 'http',
+				description: 'The JWT refresh token to access protected endpoints',
+			},
+			PassportStrategy.JWT_REFRESH_TOKEN,
 		)
 		.addApiKey(
 			{

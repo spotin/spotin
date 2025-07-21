@@ -1,9 +1,9 @@
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
+import { JwtAccessTokenOrUnrestrictedAuth } from '@/auth/jwt-access-token-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { ProfileWithPublicSpots } from '@/profile/types/profile-with-public-spots';
-import { User } from '@/users/types/user';
 import { UsersService } from '@/users/users.service';
 import { Controller, Get, Param, Render, UseFilters } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -13,8 +13,9 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class ProfileViewsController {
 	constructor(private readonly usersService: UsersService) {}
+
 	@Get()
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	@ApiOperation({
 		summary: 'Render the my profile page',
 		description: 'Render the my profile page.',
@@ -24,7 +25,11 @@ export class ProfileViewsController {
 		description: 'Render successful.',
 	})
 	@Render('profile/form')
-	renderMyProfile(@AuthUser() user: User): Record<string, string> {
+	async renderMyProfile(
+		@AuthJwtPayload() payload: JwtPayload,
+	): Promise<Record<string, string>> {
+		const user = await this.usersService.getUser(payload.sub);
+
 		return {
 			title: 'My profile | Spot in',
 			username: user.username,
@@ -34,7 +39,7 @@ export class ProfileViewsController {
 	}
 
 	@Get(':username')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the specified profile with their public spots page',
 		description:
@@ -46,18 +51,26 @@ export class ProfileViewsController {
 	})
 	@Render('profile/view')
 	async renderProfile(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload | undefined,
 		@Param('username') username: string,
 	): Promise<Record<string, string | ProfileWithPublicSpots>> {
 		const profileWithPublicSpots =
 			await this.usersService.getUserWithPublicSpotsByUsername(username);
 
+		if (payload?.sub) {
+			const user = await this.usersService.getUser(payload.sub);
+
+			return {
+				title: 'Profile | Spot in',
+				username: user.username,
+				email: user.email,
+				role: user.role,
+				profile: profileWithPublicSpots,
+			};
+		}
+
 		return {
 			title: 'Profile | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
-			profile: profileWithPublicSpots,
 		};
 	}
 }

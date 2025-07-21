@@ -1,3 +1,4 @@
 export type Jwt = {
-	jwt: string;
+	accessToken: string;
+	refreshToken: string;
 };

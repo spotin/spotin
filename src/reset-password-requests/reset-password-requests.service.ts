@@ -106,9 +106,9 @@ export class ResetPasswordRequestsService {
 		);
 	}
 
-	async deleteResetPasswordRequestForUser(user: User): Promise<void> {
+	async deleteResetPasswordRequestForUser(userId: string): Promise<void> {
 		const userWithResetPasswordRequest =
-			await this.getUserWithResetPasswordRequest(user.id);
+			await this.getUserWithResetPasswordRequest(userId);
 
 		const { resetPasswordRequest } = userWithResetPasswordRequest;
 

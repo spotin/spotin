@@ -3,8 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import {
 	BASE_URL,
-	JWT_EXPIRATION_TIME,
-	JWT_SECRET,
 	MAIL_HOST,
 	MAIL_PASS,
 	MAIL_PORT,
@@ -12,6 +10,14 @@ import {
 	MAIL_USER,
 	MAIL_SENDER_NAME,
 	NODE_ENV,
+	JWT_ISSUER,
+	JWT_AUDIENCE,
+	JWT_ACCESS_TOKEN_SECRET,
+	JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+	JWT_ACCESS_TOKEN_COOKIE_NAME,
+	JWT_REFRESH_TOKEN_COOKIE_NAME,
+	JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+	JWT_REFRESH_TOKEN_SECRET,
 } from '@/config/config.constants';
 
 @Module({
@@ -19,8 +25,14 @@ import {
 		NestConfigModule.forRoot({
 			validationSchema: Joi.object({
 				[BASE_URL]: Joi.string().required(),
-				[JWT_SECRET]: Joi.string().required(),
-				[JWT_EXPIRATION_TIME]: Joi.string().required(),
+				[JWT_ISSUER]: Joi.string().required(),
+				[JWT_AUDIENCE]: Joi.string().required(),
+				[JWT_ACCESS_TOKEN_SECRET]: Joi.string().required(),
+				[JWT_ACCESS_TOKEN_EXPIRATION_TIME]: Joi.string().required(),
+				[JWT_ACCESS_TOKEN_COOKIE_NAME]: Joi.string().required(),
+				[JWT_REFRESH_TOKEN_SECRET]: Joi.string().required(),
+				[JWT_REFRESH_TOKEN_EXPIRATION_TIME]: Joi.string().required(),
+				[JWT_REFRESH_TOKEN_COOKIE_NAME]: Joi.string().required(),
 				[MAIL_HOST]: Joi.string().required(),
 				[MAIL_PORT]: Joi.number().required().default(587),
 				[MAIL_USER]: Joi.string().required(),

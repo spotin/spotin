@@ -5,17 +5,21 @@ import { CreateTokenDto } from './dtos/create-token.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
+import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
 import { ReadTokenDto } from '@/tokens/dtos/read-token.dto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { CreatedTokenDto } from '@/tokens/dtos/created-token.dto';
-import { User } from '@/users/types/user';
+import { UsersService } from '@/users/users.service';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 
 @ApiTags('Tokens')
 @Controller('api/tokens')
 export class TokensController {
-	constructor(private readonly tokensService: TokensService) {}
+	constructor(
+		private readonly usersService: UsersService,
+		private readonly tokensService: TokensService,
+	) {}
 
 	@GetMany({
 		name: 'Tokens',
@@ -23,8 +27,11 @@ export class TokensController {
 		operationId: 'getTokens',
 		responseType: [ReadTokenDto],
 	})
-	@JwtAuth()
-	async getTokens(@AuthUser() user: User): Promise<ReadTokenDto[]> {
+	@JwtAccessTokenAuth()
+	async getTokens(
+		@AuthJwtPayload() payload: JwtPayload,
+	): Promise<ReadTokenDto[]> {
+		const user = await this.usersService.getUser(payload.sub);
 		const tokens = await this.tokensService.getTokens(user);
 
 		const tokensDto = tokens.map((token) => new ReadTokenDto(token));
@@ -38,11 +45,12 @@ export class TokensController {
 		operationId: 'getToken',
 		responseType: ReadTokenDto,
 	})
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	async getToken(
 		@Param('id') id: string,
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 	): Promise<ReadTokenDto> {
+		const user = await this.usersService.getUser(payload.sub);
 		const token = await this.tokensService.getToken(id, user);
 
 		return new ReadTokenDto(token);
@@ -55,11 +63,12 @@ export class TokensController {
 		responseType: CreatedTokenDto,
 		operationId: 'createToken',
 	})
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	async createToken(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Body() createTokenDto: CreateTokenDto,
 	): Promise<CreatedTokenDto> {
+		const user = await this.usersService.getUser(payload.sub);
 		const createdToken = await this.tokensService.createToken(
 			{ ...createTokenDto },
 			user,
@@ -73,11 +82,12 @@ export class TokensController {
 		summary: 'Delete the specified token',
 		operationId: 'deleteToken',
 	})
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	async deleteToken(
 		@Param('id') id: string,
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 	): Promise<void> {
+		const user = await this.usersService.getUser(payload.sub);
 		await this.tokensService.deleteToken(id, user);
 	}
 }

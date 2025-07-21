@@ -10,14 +10,14 @@ import { CustomPost } from '@/common/decorators/custom-post.decorator';
 import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { UserRole } from '@/users/enums/user-role';
 import { I18n, I18nContext } from 'nestjs-i18n';
 
 @ApiTags('Users')
 @Controller('api/users')
-@JwtAuth(RolesGuard)
+@JwtAccessTokenAuth(RolesGuard)
 @Roles(UserRole.ADMIN)
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}

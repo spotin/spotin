@@ -4,9 +4,10 @@ import { PrismaModule } from 'nestjs-prisma';
 import { SpotsService } from '@/spots/spots.service';
 import { SpotsController } from '@/spots/spots.controller';
 import { SpotsViewsController } from '@/spots/spots-views.controller';
+import { UsersModule } from '@/users/users.module';
 
 @Module({
-	imports: [ConfigModule, PrismaModule],
+	imports: [ConfigModule, PrismaModule, UsersModule],
 	providers: [SpotsService],
 	controllers: [SpotsController, SpotsViewsController],
 	exports: [SpotsService],

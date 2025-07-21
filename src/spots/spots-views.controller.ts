@@ -16,29 +16,31 @@ import {
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
 import { BASE_URL, EnvironmentVariables } from '@/config/config.constants';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { JwtAccessTokenOrUnrestrictedAuth } from '@/auth/jwt-access-token-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { Spot } from '@/spots/types/spot';
-import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
+import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { UsersService } from '@/users/users.service';
 
 @ApiTags('Views')
 @Controller('spots')
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class SpotsViewsController {
 	constructor(
+		private readonly usersService: UsersService,
 		private readonly spotsService: SpotsService,
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
 	) {}
 
 	@Get('create')
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	@ApiOperation({
 		summary: 'Render the create a new spot page',
 		description: 'Render the create a new spot page.',
@@ -48,7 +50,11 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	renderCreateSpot(@AuthUser() user: User): Record<string, string> {
+	async renderCreateSpot(
+		@AuthJwtPayload() payload: JwtPayload,
+	): Promise<Record<string, string>> {
+		const user = await this.usersService.getUser(payload.sub);
+
 		return {
 			title: 'Create a new spot | Spot in',
 			username: user.username,
@@ -58,7 +64,7 @@ export class SpotsViewsController {
 	}
 
 	@Get('latest')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the list of latest public spots page',
 		description: 'Render the list of latest public spots page.',
@@ -69,21 +75,30 @@ export class SpotsViewsController {
 	})
 	@Render('spots/latest')
 	async renderLatestSpots(
-		@AuthUser() user: User | undefined,
+		@AuthJwtPayload() payload: JwtPayload,
 	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getPublicSpots();
 
+		if (payload?.sub) {
+			const user = await this.usersService.getUser(payload.sub);
+
+			return {
+				title: 'Latest spots | Spot in',
+				username: user.username,
+				email: user.email,
+				role: user.role,
+				spots,
+			};
+		}
+
 		return {
 			title: 'Latest spots | Spot in',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
 			spots,
 		};
 	}
 
 	@Get()
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	@ApiOperation({
 		summary: 'Render the spots page',
 		description: 'Render the spots page.',
@@ -94,8 +109,10 @@ export class SpotsViewsController {
 	})
 	@Render('spots/list')
 	async renderSpotsList(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 	): Promise<Record<string, string | Spot[]>> {
+		const user = await this.usersService.getUser(payload.sub);
+
 		const spots = await this.spotsService.getSpots(user);
 
 		return {
@@ -125,9 +142,11 @@ export class SpotsViewsController {
 	})
 	@Render('spots/form')
 	async renderConfigureSpot(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Param('id') id: string,
 	): Promise<Record<string, boolean | string | Spot>> {
+		const user = await this.usersService.getUser(payload.sub);
+
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
@@ -138,7 +157,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id/delete')
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	@ApiOperation({
 		summary: 'Delete the specified spot',
 		description: 'Delete the specified spot. Redirect to `/spots` page.',
@@ -154,14 +173,16 @@ export class SpotsViewsController {
 	})
 	@Redirect('/spots')
 	async deleteSpot(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Param('id') id: string,
 	): Promise<void> {
+		const user = await this.usersService.getUser(payload.sub);
+
 		await this.spotsService.deleteSpot(id, user);
 	}
 
 	@Get(':id/edit')
-	@JwtAuth()
+	@JwtAccessTokenAuth()
 	@ApiOperation({
 		summary: 'Render the edit a spot page',
 		description: 'Render the edit a spot page.',
@@ -176,11 +197,13 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	async renderEditSpot(
-		@AuthUser() user: User,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Param('id') id: string,
 		@Res() res: Response,
 	): Promise<void> {
 		try {
+			const user = await this.usersService.getUser(payload.sub);
+
 			const spot = await this.spotsService.getSpot(id, user);
 
 			return res.render('spots/form', {
@@ -225,6 +248,7 @@ export class SpotsViewsController {
 		) {
 			return res.redirect(spotWithUser.websiteTarget);
 		}
+
 		return res.render('spots/redirect', {
 			title: 'Redirecting | Spot in',
 			spot: spotWithUser,
@@ -232,7 +256,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id')
-	@JwtOrUnrestrictedAuth()
+	@JwtAccessTokenOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the specified spot page',
 		description: 'Render the specified spot page.',
@@ -248,7 +272,7 @@ export class SpotsViewsController {
 	})
 	@Render('spots/view')
 	async renderSpot(
-		@AuthUser() user: User | undefined,
+		@AuthJwtPayload() payload: JwtPayload,
 		@Param('id') id: string,
 	): Promise<Record<string, string | undefined | Spot> | void> {
 		const spot = await this.spotsService.getSpot(id);
@@ -258,10 +282,20 @@ export class SpotsViewsController {
 		try {
 			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
+			if (payload?.sub) {
+				const user = await this.usersService.getUser(payload.sub);
+
+				return {
+					title: 'Spot | Spot in',
+					username: user.username,
+					email: user.email,
+					role: user.role,
+					spot,
+					qrcode: qrcodeSvg,
+				};
+			}
+
 			return {
-				username: user?.username,
-				email: user?.email,
-				role: user?.role,
 				title: 'Spot',
 				spot,
 				qrcode: qrcodeSvg,
