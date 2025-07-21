@@ -10,14 +10,10 @@ import {
 	MAIL_USER,
 	MAIL_SENDER_NAME,
 	NODE_ENV,
-	JWT_ISSUER,
-	JWT_AUDIENCE,
-	JWT_ACCESS_TOKEN_SECRET,
-	JWT_ACCESS_TOKEN_EXPIRATION_TIME,
-	JWT_ACCESS_TOKEN_COOKIE_NAME,
-	JWT_REFRESH_TOKEN_COOKIE_NAME,
-	JWT_REFRESH_TOKEN_EXPIRATION_TIME,
-	JWT_REFRESH_TOKEN_SECRET,
+	SESSION_CLEANUP_INTERVAL,
+	SESSION_MAX_AGE,
+	SESSION_COOKIE_NAME,
+	SESSION_SECRET,
 } from '@/config/config.constants';
 
 @Module({
@@ -25,14 +21,10 @@ import {
 		NestConfigModule.forRoot({
 			validationSchema: Joi.object({
 				[BASE_URL]: Joi.string().required(),
-				[JWT_ISSUER]: Joi.string().required(),
-				[JWT_AUDIENCE]: Joi.string().required(),
-				[JWT_ACCESS_TOKEN_SECRET]: Joi.string().required(),
-				[JWT_ACCESS_TOKEN_EXPIRATION_TIME]: Joi.string().required(),
-				[JWT_ACCESS_TOKEN_COOKIE_NAME]: Joi.string().required(),
-				[JWT_REFRESH_TOKEN_SECRET]: Joi.string().required(),
-				[JWT_REFRESH_TOKEN_EXPIRATION_TIME]: Joi.string().required(),
-				[JWT_REFRESH_TOKEN_COOKIE_NAME]: Joi.string().required(),
+				[SESSION_SECRET]: Joi.string().required(),
+				[SESSION_COOKIE_NAME]: Joi.string().required(),
+				[SESSION_MAX_AGE]: Joi.number().required(),
+				[SESSION_CLEANUP_INTERVAL]: Joi.number().required(),
 				[MAIL_HOST]: Joi.string().required(),
 				[MAIL_PORT]: Joi.number().required().default(587),
 				[MAIL_USER]: Joi.string().required(),

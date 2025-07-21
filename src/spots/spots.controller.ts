@@ -10,12 +10,12 @@ import { GetOne } from '@/common/decorators/get-one.decorator';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
-import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
-import { TokenOrJwtAuth } from '@/auth/token-or-jwt-access-token/token-or-jwt-access-token-auth.decorators';
+import { TokenOrSessionAuth } from '@/auth/token-or-session/token-or-session-auth.decorators';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
-import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { UsersService } from '@/users/users.service';
+import { User } from '@/users/types/user';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -55,12 +55,10 @@ export class SpotsController {
 	})
 	@UnconfiguredSpotAuth()
 	async configureSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Body() configureSpotDto: ConfigureSpotDto,
 	): Promise<ReadSpotDto> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const configuredSpotDto = await this.spotsService.updateSpot(
 			id,
 			configureSpotDto,
@@ -81,12 +79,8 @@ export class SpotsController {
 		operationId: 'getSpots',
 		responseType: [ReadSpotDto],
 	})
-	@TokenOrJwtAuth()
-	async getSpots(
-		@AuthJwtPayload() payload: JwtPayload,
-	): Promise<ReadSpotDto[]> {
-		const user = await this.usersService.getUser(payload.sub);
-
+	@TokenOrSessionAuth()
+	async getSpots(@AuthUser() user: User): Promise<ReadSpotDto[]> {
 		const spots = await this.spotsService.getSpots(user);
 
 		const spotsDto = spots.map(
@@ -122,13 +116,11 @@ export class SpotsController {
 		responseType: ReadSpotDto,
 		operationId: 'createSpot',
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async createSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
 	): Promise<ReadSpotDto> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		if (createSpotDto.public) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
@@ -155,14 +147,12 @@ export class SpotsController {
 		responseType: ReadSpotDto,
 		operationId: 'updateSpot',
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async updateSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Body() updateSpot: UpdateSpotDto,
 	): Promise<ReadSpotDto> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		if (updateSpot.public) {
 			const isCertifiedOrAdmin =
 				user.role === UserRole.CERTIFIED_USER || user.role === UserRole.ADMIN;
@@ -191,13 +181,11 @@ export class SpotsController {
 		summary: 'Delete the specified spot',
 		operationId: 'deleteSpot',
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async deleteSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<void> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		await this.spotsService.deleteSpot(id, user);
 	}
 }

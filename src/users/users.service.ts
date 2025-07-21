@@ -97,7 +97,6 @@ export class UsersService {
 				id: '',
 				username: '',
 				password: '',
-				refreshToken: null,
 				email: '',
 				role: UserRole.GUEST,
 				enabled: false,

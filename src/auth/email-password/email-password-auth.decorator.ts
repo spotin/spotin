@@ -1,21 +1,19 @@
-import { PassportStrategy } from '@/auth/auth.constants';
-import { TokenOrJwtAuthGuard } from '@/auth/token-or-jwt-access-token/token-or-jwt-access-token-auth.guard';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
-	ApiBearerAuth,
 	ApiForbiddenResponse,
 	ApiSecurity,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { EmailPasswordAuthGuard } from '@/auth/email-password/email-password-auth.guard';
+import { PassportStrategy } from '@/auth/auth.constants';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/explicit-function-return-type
-export const TokenOrJwtAuth = (...guards: (Function | CanActivate)[]) =>
+export const EmailPasswordAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
-		UseGuards(TokenOrJwtAuthGuard, ...guards),
-		ApiBearerAuth(PassportStrategy.JWT_ACCESS_TOKEN),
-		ApiSecurity(PassportStrategy.TOKEN),
+		UseGuards(EmailPasswordAuthGuard, ...guards),
+		ApiSecurity(PassportStrategy.EMAIL_PASSWORD),
 		ApiUnauthorizedResponse({
-			description: 'Wrong JWT or token.',
+			description: 'Invalid user ID or password.',
 		}),
 		ApiForbiddenResponse({
 			description: 'Insufficient roles or permissions.',

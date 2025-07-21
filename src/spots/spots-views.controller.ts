@@ -16,18 +16,18 @@ import {
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
-import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
 import { BASE_URL, EnvironmentVariables } from '@/config/config.constants';
-import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
-import { JwtAccessTokenOrUnrestrictedAuth } from '@/auth/jwt-access-token-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { Spot } from '@/spots/types/spot';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
-import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
 import { UsersService } from '@/users/users.service';
+import { User } from '@/users/types/user';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { SessionOrUnrestrictedAuth } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -40,7 +40,7 @@ export class SpotsViewsController {
 	) {}
 
 	@Get('create')
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the create a new spot page',
 		description: 'Render the create a new spot page.',
@@ -50,11 +50,7 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	@Render('spots/form')
-	async renderCreateSpot(
-		@AuthJwtPayload() payload: JwtPayload,
-	): Promise<Record<string, string>> {
-		const user = await this.usersService.getUser(payload.sub);
-
+	renderCreateSpot(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'Create a new spot | Spot in',
 			username: user.username,
@@ -64,7 +60,7 @@ export class SpotsViewsController {
 	}
 
 	@Get('latest')
-	@JwtAccessTokenOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the list of latest public spots page',
 		description: 'Render the list of latest public spots page.',
@@ -75,30 +71,21 @@ export class SpotsViewsController {
 	})
 	@Render('spots/latest')
 	async renderLatestSpots(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getPublicSpots();
 
-		if (payload?.sub) {
-			const user = await this.usersService.getUser(payload.sub);
-
-			return {
-				title: 'Latest spots | Spot in',
-				username: user.username,
-				email: user.email,
-				role: user.role,
-				spots,
-			};
-		}
-
 		return {
 			title: 'Latest spots | Spot in',
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
 			spots,
 		};
 	}
 
 	@Get()
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the spots page',
 		description: 'Render the spots page.',
@@ -109,10 +96,8 @@ export class SpotsViewsController {
 	})
 	@Render('spots/list')
 	async renderSpotsList(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 	): Promise<Record<string, string | Spot[]>> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const spots = await this.spotsService.getSpots(user);
 
 		return {
@@ -142,11 +127,9 @@ export class SpotsViewsController {
 	})
 	@Render('spots/form')
 	async renderConfigureSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<Record<string, boolean | string | Spot>> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
@@ -157,7 +140,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id/delete')
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Delete the specified spot',
 		description: 'Delete the specified spot. Redirect to `/spots` page.',
@@ -173,16 +156,14 @@ export class SpotsViewsController {
 	})
 	@Redirect('/spots')
 	async deleteSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<void> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		await this.spotsService.deleteSpot(id, user);
 	}
 
 	@Get(':id/edit')
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the edit a spot page',
 		description: 'Render the edit a spot page.',
@@ -197,13 +178,11 @@ export class SpotsViewsController {
 		description: 'Render successful.',
 	})
 	async renderEditSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 		@Res() res: Response,
 	): Promise<void> {
 		try {
-			const user = await this.usersService.getUser(payload.sub);
-
 			const spot = await this.spotsService.getSpot(id, user);
 
 			return res.render('spots/form', {
@@ -256,7 +235,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id')
-	@JwtAccessTokenOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the specified spot page',
 		description: 'Render the specified spot page.',
@@ -272,7 +251,7 @@ export class SpotsViewsController {
 	})
 	@Render('spots/view')
 	async renderSpot(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<Record<string, string | undefined | Spot> | void> {
 		const spot = await this.spotsService.getSpot(id);
@@ -282,20 +261,10 @@ export class SpotsViewsController {
 		try {
 			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
-			if (payload?.sub) {
-				const user = await this.usersService.getUser(payload.sub);
-
-				return {
-					title: 'Spot | Spot in',
-					username: user.username,
-					email: user.email,
-					role: user.role,
-					spot,
-					qrcode: qrcodeSvg,
-				};
-			}
-
 			return {
+				username: user?.username,
+				email: user?.email,
+				role: user?.role,
 				title: 'Spot',
 				spot,
 				qrcode: qrcodeSvg,

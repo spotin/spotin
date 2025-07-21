@@ -1,9 +1,9 @@
-import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
-import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
-import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
 import { Token } from '@/tokens/types/token';
+import { User } from '@/users/types/user';
 import { UsersService } from '@/users/users.service';
 import {
 	Controller,
@@ -31,7 +31,7 @@ export class TokensViewsController {
 	) {}
 
 	@Get('create')
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the create a new token page',
 		description: 'Render the create a new token page.',
@@ -41,11 +41,7 @@ export class TokensViewsController {
 		description: 'Render successful.',
 	})
 	@Render('tokens/form')
-	async renderCreateToken(
-		@AuthJwtPayload() payload: JwtPayload,
-	): Promise<Record<string, string>> {
-		const user = await this.usersService.getUser(payload.sub);
-
+	renderCreateToken(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'Create a new token | Spot in',
 			username: user.username,
@@ -55,7 +51,7 @@ export class TokensViewsController {
 	}
 
 	@Get()
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the tokens page',
 		description: 'Render the tokens page.',
@@ -66,10 +62,8 @@ export class TokensViewsController {
 	})
 	@Render('tokens/list')
 	async renderTokensList(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 	): Promise<Record<string, string | Token[]>> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const tokens = await this.tokensService.getTokens(user);
 
 		return {
@@ -82,7 +76,7 @@ export class TokensViewsController {
 	}
 
 	@Get(':id/delete')
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Delete the specified token',
 		description: 'Delete the specified token. Redirect to `/tokens`.',
@@ -98,16 +92,14 @@ export class TokensViewsController {
 	})
 	@Redirect('/tokens', HttpStatus.PERMANENT_REDIRECT)
 	async deleteToken(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<void> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		await this.tokensService.deleteToken(id, user);
 	}
 
 	@Get(':id')
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the token page',
 		description: 'Render the token page.',
@@ -123,11 +115,9 @@ export class TokensViewsController {
 	})
 	@Render('tokens/view')
 	async renderToken(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<Record<string, string | Token>> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const token = await this.tokensService.getToken(id, user);
 
 		return {

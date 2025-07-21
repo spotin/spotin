@@ -1,8 +1,7 @@
-import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
-import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
-import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
 import { User } from '@/users/types/user';
@@ -25,7 +24,7 @@ import {
 
 @ApiTags('Views')
 @Controller('users')
-@JwtAccessTokenAuth(RolesGuard)
+@SessionAuth(RolesGuard)
 @Roles(UserRole.ADMIN)
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class UsersViewsController {
@@ -41,11 +40,7 @@ export class UsersViewsController {
 		description: 'Render successful.',
 	})
 	@Render('users/form')
-	async renderCreateUser(
-		@AuthJwtPayload() payload: JwtPayload,
-	): Promise<Record<string, string>> {
-		const user = await this.usersService.getUser(payload.sub);
-
+	renderCreateUser(@AuthUser() user: User): Record<string, string> {
 		return {
 			title: 'Create a new user | Spot in',
 			username: user.username,
@@ -65,10 +60,8 @@ export class UsersViewsController {
 	})
 	@Render('users/list')
 	async renderUsersList(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 	): Promise<Record<string, string | User[]>> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const users = await this.usersService.getUsers();
 
 		return {
@@ -115,11 +108,9 @@ export class UsersViewsController {
 	})
 	@Render('users/form')
 	async renderUser(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<Record<string, string | User>> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		const foundUser = await this.usersService.getUser(id);
 
 		return {

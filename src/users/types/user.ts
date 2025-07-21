@@ -5,7 +5,6 @@ export type User = {
 	username: string;
 	email: string;
 	password: string;
-	refreshToken: string | null;
 	role: UserRole;
 	enabled: boolean;
 	createdAt: Date;

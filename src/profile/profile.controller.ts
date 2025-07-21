@@ -11,12 +11,12 @@ import {
 } from '@nestjs/swagger';
 import { AuthService } from '@/auth/auth.service';
 import { UsersService } from '@/users/users.service';
-import { AuthJwtPayload } from '@/auth/decorators/auth-jwt-payload.decorator';
-import { JwtAccessTokenAuth } from '@/auth/jwt/jwt-access-token-auth.decorator';
 import { ReadProfileDto } from '@/profile/dtos/read-profile.dto';
 import { UpdateProfileDto } from '@/profile/dtos/update-profile.dto';
 import { ReadProfileWithPublicSpotsDto } from '@/profile/dtos/read-profile-with-public-spots.dto';
-import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { User } from '@/users/types/user';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 
 @ApiTags('Profile')
 @Controller('api/profile')
@@ -36,12 +36,8 @@ export class ProfileController {
 		description: `The user has been successfully retrieved.`,
 		type: ReadProfileDto,
 	})
-	@JwtAccessTokenAuth()
-	async getProfile(
-		@AuthJwtPayload() { sub: userId }: JwtPayload,
-	): Promise<ReadProfileDto> {
-		const user = await this.usersService.getUser(userId);
-
+	@SessionAuth()
+	getProfile(@AuthUser() user: User): ReadProfileDto {
 		return new ReadProfileDto(user);
 	}
 
@@ -65,13 +61,11 @@ export class ProfileController {
 	@ApiUnauthorizedResponse({
 		description: 'The current password is incorrect.',
 	})
-	@JwtAccessTokenAuth()
+	@SessionAuth()
 	async updateProfile(
-		@AuthJwtPayload() payload: JwtPayload,
+		@AuthUser() user: User,
 		@Body() profileDto: UpdateProfileDto,
 	): Promise<ReadProfileDto> {
-		const user = await this.usersService.getUser(payload.sub);
-
 		await this.authService.validateCredentials({
 			email: user.email,
 			password: profileDto.currentPassword,
