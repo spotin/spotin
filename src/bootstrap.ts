@@ -111,13 +111,13 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 
 	const config = new DocumentBuilder()
 		.setTitle('Spot in API')
-		.setDescription('The Spot in API description')
+		.setDescription('The Spot in API')
 		.setVersion(process.env.npm_package_version as string)
 		.addCookieAuth(
 			configService.get(SESSION_COOKIE_NAME, { infer: true }),
 			{
 				type: 'apiKey',
-				description: 'The session cookie for the user',
+				description: 'The session cookie to access protected endpoints.',
 				name: configService.get(SESSION_COOKIE_NAME, { infer: true }),
 			},
 			PassportStrategy.SESSION,
@@ -125,7 +125,7 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		.addApiKey(
 			{
 				type: 'apiKey',
-				description: 'The token to access protected endpoints',
+				description: 'The token to access protected endpoints.',
 				name: TOKEN_HEADER_NAME,
 			},
 			PassportStrategy.TOKEN,
@@ -133,7 +133,7 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		.addApiKey(
 			{
 				type: 'apiKey',
-				description: 'The token to reset the password',
+				description: 'The token to reset the password.',
 				name: PASSWORD_RESET_HEADER_NAME,
 			},
 			PassportStrategy.RESET_PASSWORD,

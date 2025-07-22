@@ -10,7 +10,7 @@ import {
 import {
 	ApiBody,
 	ApiConflictResponse,
-	ApiOkResponse,
+	ApiNoContentResponse,
 	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
@@ -33,6 +33,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { User } from '@/users/types/user';
 import { Request, Response } from 'express';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -45,7 +46,7 @@ export class AuthController {
 
 	@Post('login')
 	@EmailPasswordAuth()
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Log in with email and password',
 		description: 'Log in with email and password.',
@@ -55,7 +56,7 @@ export class AuthController {
 		description: "The user's credentials.",
 		type: LoginUserDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user has been successfully logged in.',
 		headers: {
 			'Set-Cookie': {
@@ -75,13 +76,14 @@ export class AuthController {
 	}
 
 	@Post('logout')
-	@HttpCode(200)
+	@HttpCode(204)
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Log out the user',
 		description: 'Log out the user.',
 		operationId: 'logout',
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user has been successfully logged out.',
 		headers: {
 			'Set-Cookie': {
@@ -92,18 +94,24 @@ export class AuthController {
 			},
 		},
 	})
-	logout(@Req() req: Request, @Res({ passthrough: true }) res: Response): void {
+	async logout(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<void> {
 		const sessionName = this.configService.get(SESSION_COOKIE_NAME, {
 			infer: true,
 		});
 
 		res.clearCookie(sessionName);
 
-		req.session.destroy(() => req.logOut(() => {}));
+		await Promise.all([
+			new Promise<void>((resolve) => req.session.destroy(() => resolve())),
+			new Promise<void>((resolve) => req.logOut(() => resolve())),
+		]);
 	}
 
 	@Post('register')
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Register a new user',
 		description: 'Register a new user.',
@@ -113,7 +121,7 @@ export class AuthController {
 		description: "The user's details.",
 		type: RegisterUserDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user has been successfully signed up.',
 	})
 	@ApiConflictResponse({
@@ -161,7 +169,7 @@ export class AuthController {
 	}
 
 	@Post('reset-password-request')
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Request password reset for user',
 		description: 'Request password reset for user.',
@@ -171,7 +179,7 @@ export class AuthController {
 		description: 'The email address of the user.',
 		type: ResetPasswordRequestDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description:
 			'The user password reset has been successfully requested. Note: if the email is inexistent, nothing will happen.',
 	})
@@ -197,7 +205,7 @@ export class AuthController {
 
 	@Post('reset-password')
 	@ResetPasswordAuth()
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Reset password for user',
 		description: 'Reset password for user.',
@@ -207,7 +215,7 @@ export class AuthController {
 		description: 'The new password.',
 		type: ResetPasswordDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user password has been successfully reset.',
 	})
 	async resetPassword(

@@ -1,15 +1,12 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { SessionOrUnrestrictedAuth } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.decorator';
 import { User } from '@/users/types/user';
-import { UsersService } from '@/users/users.service';
 import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Views')
 @Controller()
 export class AppViewsController {
-	constructor(private readonly usersService: UsersService) {}
-
 	@Get()
 	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
