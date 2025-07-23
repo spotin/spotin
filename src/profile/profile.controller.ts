@@ -66,14 +66,17 @@ export class ProfileController {
 		@AuthUser() user: User,
 		@Body() profileDto: UpdateProfileDto,
 	): Promise<ReadProfileDto> {
+		const { currentPassword, newPassword, ...profileDtoWithoutPasswords } =
+			profileDto;
+
 		await this.authService.validateCredentials({
 			email: user.email,
-			password: profileDto.currentPassword,
+			password: currentPassword,
 		});
 
 		const updatedProfile = await this.usersService.updateUser(user.id, {
-			username: profileDto.username,
-			password: profileDto.newPassword,
+			...profileDtoWithoutPasswords,
+			password: newPassword,
 		});
 
 		return new ReadProfileDto(updatedProfile);

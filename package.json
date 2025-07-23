@@ -29,7 +29,7 @@
 		"start": "npm run prisma:migrate && node .nest/main",
 		"prisma:migrate": "prisma migrate dev --name spotin",
 		"prisma:generate": "prisma generate",
-		"prisma:seed": "tsc prisma/seed.ts"
+		"prisma:seed": "tsx prisma/seed.ts"
 	},
 	"dependencies": {
 		"@nestjs-modules/mailer": "^2.0.2",
@@ -56,7 +56,8 @@
 		"passport-local": "^1.0.0",
 		"qrcode": "^1.5.4",
 		"reflect-metadata": "^0.2.2",
-		"rxjs": "^7.8.1"
+		"rxjs": "^7.8.1",
+		"tsx": "^4.20.3"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.2.0",
