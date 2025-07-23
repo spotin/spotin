@@ -1,86 +1,86 @@
 {% extends "layout.njk" %}
 {% block body %}
-		<h1>
-				<i class="fas fa-user"></i>
-				{{ t('ui.profile.edit.title') }}
-		</h1>
-		<form id="form">
-				<fieldset>
-						<label for="username">
-								{{ t('ui.profile.edit.username.label') }}
-						</label>
-						<input name="username" id="username" placeholder="{{ t('ui.profile.edit.username.placeholder') }}" value="{{ username }}" autofocus="autofocus">
+  <h1>
+    <i class="fas fa-user"></i>
+    {{ t('ui.profile.edit.title') }}
+  </h1>
+  <form id="form">
+    <fieldset>
+      <label for="username">
+        {{ t('ui.profile.edit.username.label') }}
+      </label>
+      <input name="username" id="username" placeholder="{{ t('ui.profile.edit.username.placeholder') }}" value="{{ username }}" autofocus="autofocus">
 
-						<label for="email">
-								{{ t('ui.profile.edit.email.label') }}
-						</label>
-						<input type="email" name="email" id="email" value="{{ email }}" autofocus="autofocus" readonly="readonly">
-						<small>
-								{{ t('ui.profile.edit.email.note') }}
-						</small>
+      <label for="email">
+        {{ t('ui.profile.edit.email.label') }}
+      </label>
+      <input type="email" name="email" id="email" value="{{ email }}" autofocus="autofocus" readonly="readonly">
+      <small>
+        {{ t('ui.profile.edit.email.note') }}
+      </small>
 
-						<label for="current-password">
-								{{ t('ui.profile.edit.currentPassword.label') }}
-						</label>
-						<input type="password" name="current-password" id="current-password" placeholder="{{ t('ui.profile.edit.currentPassword.placeholder') }}" autofocus="autofocus" required="required">
+      <label for="current-password">
+        {{ t('ui.profile.edit.currentPassword.label') }}
+      </label>
+      <input type="password" name="current-password" id="current-password" placeholder="{{ t('ui.profile.edit.currentPassword.placeholder') }}" autofocus="autofocus" required="required">
 
-						<label for="new-password">
-								{{ t('ui.profile.edit.newPassword.label') }}
-						</label>
-						<input type="password" name="new-password" id="new-password" placeholder="{{ t('ui.profile.edit.newPassword.placeholder') }}" autofocus="autofocus">
-				</fieldset>
-				<div id="success"></div>
-				<div id="errors"></div>
-				<button type="submit">
-						<i class="fas fa-edit"></i>
-						{{ t('ui.profile.edit.button') }}
-				</button>
-		</form>
+      <label for="new-password">
+        {{ t('ui.profile.edit.newPassword.label') }}
+      </label>
+      <input type="password" name="new-password" id="new-password" placeholder="{{ t('ui.profile.edit.newPassword.placeholder') }}" autofocus="autofocus">
+    </fieldset>
+    <div id="success"></div>
+    <div id="errors"></div>
+    <button type="submit">
+      <i class="fas fa-edit"></i>
+      {{ t('ui.profile.edit.button') }}
+    </button>
+  </form>
 {% endblock %}
 
 {% block javascript %}
-		<script>
-				const form = document.getElementById("form");
-				const success = document.getElementById("success");
-				const errors = document.getElementById("errors");
+  <script>
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const errors = document.getElementById("errors");
 
-				form.addEventListener("submit", async (event) => {
-						event.preventDefault();
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-						// Remove aria-invalid from all fields
-						document
-								.querySelectorAll('[aria-invalid]')
-								.forEach((elem) => {
-										elem.setAttribute('aria-invalid', 'false');
-								});
+      // Remove aria-invalid from all fields
+      document
+        .querySelectorAll('[aria-invalid]')
+        .forEach((elem) => {
+          elem.setAttribute('aria-invalid', 'false');
+        });
 
-						success.innerHTML = "";
-						errors.innerHTML = "";
+      success.innerHTML = "";
+      errors.innerHTML = "";
 
-						// Get the form data
-						const username = document.getElementById("username");
-						const currentPassword = document.getElementById("current-password");
-						const newPassword = document.getElementById("new-password");
+      // Get the form data
+      const username = document.getElementById("username");
+      const currentPassword = document.getElementById("current-password");
+      const newPassword = document.getElementById("new-password");
 
-						const body = JSON.stringify({
-								username: username.value || undefined,
-								currentPassword: currentPassword.value || undefined,
-								newPassword: newPassword.value || undefined
-						});
+      const body = JSON.stringify({
+        username: username.value || undefined,
+        currentPassword: currentPassword.value || undefined,
+        newPassword: newPassword.value || undefined
+      });
 
-						const response = await fetch("/api/profile", {
-								method: "PATCH",
-								headers: {
-										"Content-Type": "application/json"
-								},
-								body
-						});
+      const response = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });
 
-						if (response.ok) {
-								success.innerHTML += "<p class=\"success\">You have successfully updated your profile.<p>";
-						} else {
-								await manageErrors(response, errors);
-						}
-				});
-		</script>
+      if (response.ok) {
+        success.innerHTML += "<p class=\"success\">You have successfully updated your profile.<p>";
+      } else {
+        await manageErrors(response, errors);
+      }
+    });
+  </script>
 {% endblock %}
