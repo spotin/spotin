@@ -8,7 +8,7 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 
 # Install dependencies
-RUN npm ci --omit=dev
+RUN npm ci --legacy-peer-deps --omit=dev
 
 # Copy source files
 COPY .nest .nest
