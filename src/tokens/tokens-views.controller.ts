@@ -1,9 +1,10 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { TokensService } from '@/tokens/tokens.service';
 import { Token } from '@/tokens/types/token';
 import { User } from '@/users/types/user';
+import { UsersService } from '@/users/users.service';
 import {
 	Controller,
 	Get,
@@ -24,10 +25,13 @@ import {
 @Controller('tokens')
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class TokensViewsController {
-	constructor(private readonly tokensService: TokensService) {}
+	constructor(
+		private readonly tokensService: TokensService,
+		private readonly usersService: UsersService,
+	) {}
 
 	@Get('create')
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the create a new token page',
 		description: 'Render the create a new token page.',
@@ -47,7 +51,7 @@ export class TokensViewsController {
 	}
 
 	@Get()
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the tokens page',
 		description: 'Render the tokens page.',
@@ -72,7 +76,7 @@ export class TokensViewsController {
 	}
 
 	@Get(':id/delete')
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Delete the specified token',
 		description: 'Delete the specified token. Redirect to `/tokens`.',
@@ -95,7 +99,7 @@ export class TokensViewsController {
 	}
 
 	@Get(':id')
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the token page',
 		description: 'Render the token page.',

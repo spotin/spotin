@@ -5,7 +5,7 @@ import {
 	I18nModule as NestI18nModule,
 } from 'nestjs-i18n';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '@/config/config.constants';
+import { EnvironmentVariables, NODE_ENV } from '@/config/config.constants';
 
 @Module({
 	imports: [
@@ -18,7 +18,7 @@ import { EnvironmentVariables } from '@/config/config.constants';
 				fallbackLanguage: 'en',
 				loaderOptions: {
 					path: path.join(__dirname, './translations'),
-					watch: configService.get('NODE_ENV') === 'development',
+					watch: configService.get(NODE_ENV, { infer: true }) === 'development',
 				},
 			}),
 			resolvers: [AcceptLanguageResolver],

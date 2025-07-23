@@ -1,18 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '@/users/users.service';
-import { LoginUser } from '@/auth/local/types/login-user.type';
-import { JwtPayload } from '@/auth/jwt/types/jwt-payload.type';
+import { LoginUser } from '@/auth/email-password/types/login-user.type';
 import { SpotsService } from '@/spots/spots.service';
 import * as argon2id from 'argon2';
 import * as crypto from 'crypto';
-import { Jwt } from '@/auth/jwt/types/jwt.type';
 import { User } from '@/users/types/user';
+import { EnvironmentVariables } from '@/config/config.constants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly jwtService: JwtService,
+		private readonly configService: ConfigService<EnvironmentVariables, true>,
 		private readonly spotsService: SpotsService,
 		private readonly usersService: UsersService,
 	) {}
@@ -29,23 +28,10 @@ export class AuthService {
 		return user;
 	}
 
-	async generateJwt(user: User): Promise<Jwt> {
-		const payload: JwtPayload = {
-			sub: user.id,
-			username: user.username,
-			email: user.email,
-			role: user.role,
-		};
+	async validateSession(userId: string): Promise<User> {
+		const user = await this.usersService.getUser(userId);
 
-		return {
-			jwt: await this.jwtService.signAsync(payload),
-		};
-	}
-
-	async validateJwtPayload({ sub }: JwtPayload): Promise<User> {
-		const user = await this.usersService.getUser(sub);
-
-		if (!user.enabled) {
+		if (!user || !user.enabled) {
 			throw new UnauthorizedException();
 		}
 

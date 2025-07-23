@@ -1,6 +1,6 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { SessionOrUnrestrictedAuth } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { ProfileWithPublicSpots } from '@/profile/types/profile-with-public-spots';
 import { User } from '@/users/types/user';
@@ -13,8 +13,9 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class ProfileViewsController {
 	constructor(private readonly usersService: UsersService) {}
+
 	@Get()
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the my profile page',
 		description: 'Render the my profile page.',
@@ -34,7 +35,7 @@ export class ProfileViewsController {
 	}
 
 	@Get(':username')
-	@JwtOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the specified profile with their public spots page',
 		description:

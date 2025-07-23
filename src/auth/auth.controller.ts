@@ -3,48 +3,50 @@ import {
 	Post,
 	Body,
 	HttpCode,
-	Res,
 	ConflictException,
+	Req,
+	Res,
 } from '@nestjs/common';
 import {
 	ApiBody,
 	ApiConflictResponse,
-	ApiOkResponse,
+	ApiNoContentResponse,
 	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
-import { AuthService } from '@/auth/auth.service';
-import { LoginUserDto } from '@/auth/local/dtos/login-user.dto';
+import { LoginUserDto } from '@/auth/email-password/dtos/login-user.dto';
 import { UsersService } from '@/users/users.service';
-import { LocalAuth } from '@/auth/local/local-auth.decorator';
-import { JwtDto } from '@/auth/jwt/dtos/jwt.dto';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { RegisterUserDto } from '@/auth/local/dtos/register-user.dto';
+import { EmailPasswordAuth } from '@/auth/email-password/email-password-auth.decorator';
+import { RegisterUserDto } from '@/auth/email-password/dtos/register-user.dto';
 import { ResetPasswordAuth } from '@/auth/reset-password/reset-password.decorator';
 import { ResetPasswordDto } from '@/auth/reset-password/dtos/reset-password.dto';
 import { ResetPasswordRequestsService } from '@/reset-password-requests/reset-password-requests.service';
 import { ResetPasswordRequestDto } from '@/auth/reset-password/dtos/reset-password-request.dto';
-import { Response } from 'express';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { User } from '@/users/types/user';
 import { UserRole } from '@/users/enums/user-role';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { EnvironmentVariables } from '@/config/config.constants';
+import {
+	EnvironmentVariables,
+	SESSION_COOKIE_NAME,
+} from '@/config/config.constants';
 import { ConfigService } from '@nestjs/config';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { User } from '@/users/types/user';
+import { Request, Response } from 'express';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 
 @ApiTags('Auth')
 @Controller('api/auth')
 export class AuthController {
 	constructor(
-		private readonly authService: AuthService,
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
 		private readonly usersService: UsersService,
 		private readonly resetPasswordRequestsService: ResetPasswordRequestsService,
 	) {}
 
 	@Post('login')
-	@LocalAuth()
-	@HttpCode(200)
+	@EmailPasswordAuth()
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Log in with email and password',
 		description: 'Log in with email and password.',
@@ -54,32 +56,62 @@ export class AuthController {
 		description: "The user's credentials.",
 		type: LoginUserDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user has been successfully logged in.',
-		type: JwtDto,
+		headers: {
+			'Set-Cookie': {
+				description: 'The session cookie for the user.',
+				schema: {
+					type: 'string',
+				},
+			},
+		},
 	})
-	async login(
-		@AuthUser() user: User,
-		@Res({ passthrough: true }) res: Response,
-	): Promise<JwtDto> {
-		const jwt = await this.authService.generateJwt(user);
-
+	async login(@AuthUser() user: User, @Req() req: Request): Promise<void> {
 		await this.resetPasswordRequestsService.deleteResetPasswordRequestForUser(
 			user,
 		);
 
-		res.cookie('jwt', jwt.jwt, {
-			httpOnly: true,
-			sameSite: 'strict',
-			secure:
-				this.configService.get('NODE_ENV', { infer: true }) === 'production',
+		return new Promise((resolve) => req.logIn(user, () => resolve()));
+	}
+
+	@Post('logout')
+	@HttpCode(204)
+	@SessionAuth()
+	@ApiOperation({
+		summary: 'Log out the user',
+		description: 'Log out the user.',
+		operationId: 'logout',
+	})
+	@ApiNoContentResponse({
+		description: 'The user has been successfully logged out.',
+		headers: {
+			'Set-Cookie': {
+				description: 'Clear the session cookie for the user.',
+				schema: {
+					type: 'string',
+				},
+			},
+		},
+	})
+	async logout(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<void> {
+		const sessionName = this.configService.get(SESSION_COOKIE_NAME, {
+			infer: true,
 		});
 
-		return new JwtDto(jwt);
+		res.clearCookie(sessionName);
+
+		await Promise.all([
+			new Promise<void>((resolve) => req.session.destroy(() => resolve())),
+			new Promise<void>((resolve) => req.logOut(() => resolve())),
+		]);
 	}
 
 	@Post('register')
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Register a new user',
 		description: 'Register a new user.',
@@ -89,7 +121,7 @@ export class AuthController {
 		description: "The user's details.",
 		type: RegisterUserDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user has been successfully signed up.',
 	})
 	@ApiConflictResponse({
@@ -137,7 +169,7 @@ export class AuthController {
 	}
 
 	@Post('reset-password-request')
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Request password reset for user',
 		description: 'Request password reset for user.',
@@ -147,7 +179,7 @@ export class AuthController {
 		description: 'The email address of the user.',
 		type: ResetPasswordRequestDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description:
 			'The user password reset has been successfully requested. Note: if the email is inexistent, nothing will happen.',
 	})
@@ -173,7 +205,7 @@ export class AuthController {
 
 	@Post('reset-password')
 	@ResetPasswordAuth()
-	@HttpCode(200)
+	@HttpCode(204)
 	@ApiOperation({
 		summary: 'Reset password for user',
 		description: 'Reset password for user.',
@@ -183,7 +215,7 @@ export class AuthController {
 		description: 'The new password.',
 		type: ResetPasswordDto,
 	})
-	@ApiOkResponse({
+	@ApiNoContentResponse({
 		description: 'The user password has been successfully reset.',
 	})
 	async resetPassword(

@@ -1,17 +1,11 @@
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
-import {
-	ApiForbiddenResponse,
-	ApiSecurity,
-	ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
-import { LocalAuthGuard } from '@/auth/local/local-auth.guard';
-import { PassportStrategy } from '@/auth/auth.constants';
+import { ApiForbiddenResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { EmailPasswordAuthGuard } from '@/auth/email-password/email-password-auth.guard';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/explicit-function-return-type
-export const LocalAuth = (...guards: (Function | CanActivate)[]) =>
+export const EmailPasswordAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
-		UseGuards(LocalAuthGuard, ...guards),
-		ApiSecurity(PassportStrategy.LOCAL),
+		UseGuards(EmailPasswordAuthGuard, ...guards),
 		ApiUnauthorizedResponse({
 			description: 'Invalid user ID or password.',
 		}),

@@ -25,7 +25,7 @@ terminal, run the following commands:
 
 ```bash
 # Install dependencies
-# `--legacy-peer-deps` is used until `nunjucks` is updated.
+# TODO: Use `--legacy-peer-deps` until `nunjucks` is updated.
 npm install --legacy-peer-deps
 
 # Copy the default environment variables file

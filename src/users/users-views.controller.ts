@@ -1,7 +1,7 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { RolesGuard } from '@/auth/guards/roles.guard';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
 import { User } from '@/users/types/user';
@@ -24,7 +24,7 @@ import {
 
 @ApiTags('Views')
 @Controller('users')
-@JwtAuth(RolesGuard)
+@SessionAuth(RolesGuard)
 @Roles(UserRole.ADMIN)
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class UsersViewsController {
@@ -88,10 +88,7 @@ export class UsersViewsController {
 		description: 'Redirect successful.',
 	})
 	@Redirect('/users', HttpStatus.PERMANENT_REDIRECT)
-	async deleteUser(
-		@AuthUser() user: User,
-		@Param('id') id: string,
-	): Promise<void> {
+	async deleteUser(@Param('id') id: string): Promise<void> {
 		await this.usersService.deleteUser(id);
 	}
 

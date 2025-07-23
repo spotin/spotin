@@ -10,16 +10,20 @@ import { GetOne } from '@/common/decorators/get-one.decorator';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomPatch } from '@/common/decorators/custom-patch.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators';
-import { User } from '@/users/types/user';
+import { TokenOrSessionAuth } from '@/auth/token-or-session/token-or-session-auth.decorators';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
+import { UsersService } from '@/users/users.service';
+import { User } from '@/users/types/user';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 
 @ApiTags('Spots')
 @Controller('api/spots')
 export class SpotsController {
-	constructor(private readonly spotsService: SpotsService) {}
+	constructor(
+		private readonly usersService: UsersService,
+		private readonly spotsService: SpotsService,
+	) {}
 
 	@GetMany({
 		path: 'public',
@@ -75,7 +79,7 @@ export class SpotsController {
 		operationId: 'getSpots',
 		responseType: [ReadSpotDto],
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async getSpots(@AuthUser() user: User): Promise<ReadSpotDto[]> {
 		const spots = await this.spotsService.getSpots(user);
 
@@ -112,7 +116,7 @@ export class SpotsController {
 		responseType: ReadSpotDto,
 		operationId: 'createSpot',
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async createSpot(
 		@AuthUser() user: User,
 		@Body() createSpotDto: CreateSpotDto,
@@ -143,7 +147,7 @@ export class SpotsController {
 		responseType: ReadSpotDto,
 		operationId: 'updateSpot',
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async updateSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
@@ -177,7 +181,7 @@ export class SpotsController {
 		summary: 'Delete the specified spot',
 		operationId: 'deleteSpot',
 	})
-	@TokenOrJwtAuth()
+	@TokenOrSessionAuth()
 	async deleteSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,

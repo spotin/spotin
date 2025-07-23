@@ -35,6 +35,15 @@ model Spot {
   @@map(name: "spots")
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime @map(name: "expires_at") @db.Timestamptz(6)
+
+  @@map(name: "sessions")
+}
+
 model Token {
   id        String    @id @default(uuid())
   hash      String    @unique @db.VarChar(255)

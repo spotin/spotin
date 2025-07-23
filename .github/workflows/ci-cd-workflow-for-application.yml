@@ -24,7 +24,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        # `--legacy-peer-deps` is used until `nunjucks` is updated.
+        # TODO: Use `--legacy-peer-deps` until `nunjucks` is updated.
         run: npm install --legacy-peer-deps
 
       - name: Check formatting
@@ -43,7 +43,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        # `--legacy-peer-deps` is used until `nunjucks` is updated.
+        # TODO: Use `--legacy-peer-deps` until `nunjucks` is updated.
         run: npm install --legacy-peer-deps
 
       - name: Check linting
@@ -62,7 +62,7 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        # `--legacy-peer-deps` is used until `nunjucks` is updated.
+        # TODO: Use `--legacy-peer-deps` until `nunjucks` is updated.
         run: npm install --legacy-peer-deps
 
       - name: Build application

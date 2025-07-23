@@ -16,29 +16,31 @@ import {
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { SpotsService } from '@/spots/spots.service';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { BASE_URL, EnvironmentVariables } from '@/config/config.constants';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { Spot } from '@/spots/types/spot';
-import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
+import { UsersService } from '@/users/users.service';
+import { User } from '@/users/types/user';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { SessionOrUnrestrictedAuth } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 
 @ApiTags('Views')
 @Controller('spots')
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class SpotsViewsController {
 	constructor(
+		private readonly usersService: UsersService,
 		private readonly spotsService: SpotsService,
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
 	) {}
 
 	@Get('create')
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the create a new spot page',
 		description: 'Render the create a new spot page.',
@@ -58,7 +60,7 @@ export class SpotsViewsController {
 	}
 
 	@Get('latest')
-	@JwtOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the list of latest public spots page',
 		description: 'Render the list of latest public spots page.',
@@ -69,7 +71,7 @@ export class SpotsViewsController {
 	})
 	@Render('spots/latest')
 	async renderLatestSpots(
-		@AuthUser() user: User | undefined,
+		@AuthUser() user: User,
 	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getPublicSpots();
 
@@ -83,7 +85,7 @@ export class SpotsViewsController {
 	}
 
 	@Get()
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the spots page',
 		description: 'Render the spots page.',
@@ -138,7 +140,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id/delete')
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Delete the specified spot',
 		description: 'Delete the specified spot. Redirect to `/spots` page.',
@@ -161,7 +163,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id/edit')
-	@JwtAuth()
+	@SessionAuth()
 	@ApiOperation({
 		summary: 'Render the edit a spot page',
 		description: 'Render the edit a spot page.',
@@ -225,6 +227,7 @@ export class SpotsViewsController {
 		) {
 			return res.redirect(spotWithUser.websiteTarget);
 		}
+
 		return res.render('spots/redirect', {
 			title: 'Redirecting | Spot in',
 			spot: spotWithUser,
@@ -232,7 +235,7 @@ export class SpotsViewsController {
 	}
 
 	@Get(':id')
-	@JwtOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the specified spot page',
 		description: 'Render the specified spot page.',
@@ -248,7 +251,7 @@ export class SpotsViewsController {
 	})
 	@Render('spots/view')
 	async renderSpot(
-		@AuthUser() user: User | undefined,
+		@AuthUser() user: User,
 		@Param('id') id: string,
 	): Promise<Record<string, string | undefined | Spot> | void> {
 		const spot = await this.spotsService.getSpot(id);

@@ -1,9 +1,9 @@
 export enum PassportStrategy {
-	JWT = 'jwt',
-	LOCAL = 'local',
-	UNCONFIGURED_SPOT = 'unconfigured-spot',
+	EMAIL_PASSWORD = 'email-password',
 	RESET_PASSWORD = 'reset-password',
+	SESSION = 'session',
 	TOKEN = 'token',
+	UNCONFIGURED_SPOT = 'unconfigured-spot',
 	UNRESTRICTED = 'unrestricted',
 }
 

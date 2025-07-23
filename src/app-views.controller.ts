@@ -1,5 +1,5 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
-import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
+import { SessionOrUnrestrictedAuth } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.decorator';
 import { User } from '@/users/types/user';
 import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -8,7 +8,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller()
 export class AppViewsController {
 	@Get()
-	@JwtOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the main page',
 		description: 'Render the main page.',
@@ -28,7 +28,7 @@ export class AppViewsController {
 	}
 
 	@Get('about')
-	@JwtOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the about page',
 		description: 'Render the about page.',
@@ -61,7 +61,7 @@ export class AppViewsController {
 	api(): void {}
 
 	@Get('not-found')
-	@JwtOrUnrestrictedAuth()
+	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
 		summary: 'Render the not found page',
 		description: 'Render the not found page.',

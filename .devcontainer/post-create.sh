@@ -15,5 +15,5 @@
 npm install --global @nestjs/cli
 
 # Project
-# `--legacy-peer-deps` is used until `nunjucks` is updated.
+# TODO: Use `--legacy-peer-deps` until `nunjucks` is updated.
 npm install --legacy-peer-deps

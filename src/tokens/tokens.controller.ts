@@ -5,17 +5,21 @@ import { CreateTokenDto } from './dtos/create-token.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
-import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { ReadTokenDto } from '@/tokens/dtos/read-token.dto';
 import { GetOne } from '@/common/decorators/get-one.decorator';
 import { CreatedTokenDto } from '@/tokens/dtos/created-token.dto';
+import { UsersService } from '@/users/users.service';
 import { User } from '@/users/types/user';
+import { AuthUser } from '@/auth/decorators/auth-user.decorator';
+import { SessionAuth } from '@/auth/session/session-auth.decorator';
 
 @ApiTags('Tokens')
 @Controller('api/tokens')
 export class TokensController {
-	constructor(private readonly tokensService: TokensService) {}
+	constructor(
+		private readonly usersService: UsersService,
+		private readonly tokensService: TokensService,
+	) {}
 
 	@GetMany({
 		name: 'Tokens',
@@ -23,7 +27,7 @@ export class TokensController {
 		operationId: 'getTokens',
 		responseType: [ReadTokenDto],
 	})
-	@JwtAuth()
+	@SessionAuth()
 	async getTokens(@AuthUser() user: User): Promise<ReadTokenDto[]> {
 		const tokens = await this.tokensService.getTokens(user);
 
@@ -38,7 +42,7 @@ export class TokensController {
 		operationId: 'getToken',
 		responseType: ReadTokenDto,
 	})
-	@JwtAuth()
+	@SessionAuth()
 	async getToken(
 		@Param('id') id: string,
 		@AuthUser() user: User,
@@ -55,7 +59,7 @@ export class TokensController {
 		responseType: CreatedTokenDto,
 		operationId: 'createToken',
 	})
-	@JwtAuth()
+	@SessionAuth()
 	async createToken(
 		@AuthUser() user: User,
 		@Body() createTokenDto: CreateTokenDto,
@@ -73,7 +77,7 @@ export class TokensController {
 		summary: 'Delete the specified token',
 		operationId: 'deleteToken',
 	})
-	@JwtAuth()
+	@SessionAuth()
 	async deleteToken(
 		@Param('id') id: string,
 		@AuthUser() user: User,

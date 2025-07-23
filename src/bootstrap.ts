@@ -1,11 +1,13 @@
-import * as nunjucks from 'nunjucks';
-import { I18nContext, I18nService } from 'nestjs-i18n';
 import * as cookieParser from 'cookie-parser';
+import * as nunjucks from 'nunjucks';
+import * as passport from 'passport';
+import * as session from 'express-session';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { PrismaClientExceptionFilter } from 'nestjs-prisma';
+import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
 	PASSWORD_RESET_HEADER_NAME,
@@ -13,10 +15,26 @@ import {
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
 import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '@/config/config.constants';
+import {
+	EnvironmentVariables,
+	NODE_ENV,
+	SESSION_CLEANUP_INTERVAL,
+	SESSION_MAX_AGE,
+	SESSION_COOKIE_NAME,
+	SESSION_SECRET,
+} from '@/config/config.constants';
 import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+import helmet from 'helmet';
 
 export function bootstrap(app: NestExpressApplication): NestExpressApplication {
+	// https://docs.nestjs.com/security/helmet
+	app.use(
+		helmet({
+			contentSecurityPolicy: false,
+		}),
+	);
+
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
 	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
@@ -30,6 +48,7 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 	);
 
 	const i18n = app.get<I18nService>(I18nService);
+	const prisma = app.get<PrismaService>(PrismaService);
 	const configService =
 		app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 
@@ -39,13 +58,13 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 	// https://docs.nestjs.com/techniques/session
 	app.set(
 		'trust proxy',
-		configService.get('NODE_ENV', { infer: true }) === 'production',
+		configService.get(NODE_ENV, { infer: true }) === 'production',
 	);
 
 	nunjucks
 		.configure(join(__dirname, '..', 'views'), {
 			express: app,
-			watch: configService.get('NODE_ENV', { infer: true }) === 'development',
+			watch: configService.get(NODE_ENV, { infer: true }) === 'development',
 		})
 		.addGlobal('title', 'Spot in');
 
@@ -65,33 +84,60 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		return i18n.t(key, { lang: detectedLanguage, args });
 	});
 
+	app.use(
+		// https://github.com/expressjs/session
+		session({
+			name: configService.get(SESSION_COOKIE_NAME, { infer: true }),
+			cookie: {
+				maxAge: configService.get(SESSION_MAX_AGE, { infer: true }),
+				secure: configService.get(NODE_ENV, { infer: true }) === 'production',
+				httpOnly: true,
+				sameSite: 'lax',
+			},
+			secret: configService.get(SESSION_SECRET, { infer: true }),
+			resave: false,
+			saveUninitialized: false,
+			rolling: true,
+			unset: 'destroy',
+			// https://github.com/kleydon/prisma-session-store
+			store: new PrismaSessionStore(prisma, {
+				checkPeriod: configService.get(SESSION_CLEANUP_INTERVAL, {
+					infer: true,
+				}),
+				dbRecordIdIsSessionId: undefined,
+				dbRecordIdFunction: (): string => crypto.randomUUID(),
+			}),
+		}),
+	);
+
+	// https://www.passportjs.org/concepts/authentication/sessions/
+	app.use(passport.session());
+
 	const config = new DocumentBuilder()
 		.setTitle('Spot in API')
-		.setDescription('The Spot in API description')
+		.setDescription('The Spot in API')
 		.setVersion(process.env.npm_package_version as string)
-		.addBearerAuth(
-			{
-				type: 'http',
-				description: 'The JWT to access protected endpoints',
-			},
-			PassportStrategy.JWT,
-		)
-		.addApiKey(
-			{
-				type: 'apiKey',
-				description: 'The token to access protected endpoints',
-				name: TOKEN_HEADER_NAME,
-			},
-			PassportStrategy.TOKEN,
-		)
-		.addApiKey(
-			{
-				type: 'apiKey',
-				description: 'The token to reset the password',
-				name: PASSWORD_RESET_HEADER_NAME,
-			},
-			PassportStrategy.RESET_PASSWORD,
-		)
+		.addSecurity(PassportStrategy.SESSION, {
+			type: 'apiKey',
+			in: 'cookie',
+			description: 'The session cookie to access protected endpoints.',
+			name: configService.get(SESSION_COOKIE_NAME, { infer: true }),
+		})
+		.addSecurity(PassportStrategy.TOKEN, {
+			type: 'apiKey',
+			in: 'header',
+			description: 'The token to access protected endpoints.',
+			name: TOKEN_HEADER_NAME,
+		})
+		.addSecurity(PassportStrategy.RESET_PASSWORD, {
+			type: 'apiKey',
+			in: 'header',
+			description: 'The token to reset the password.',
+			name: PASSWORD_RESET_HEADER_NAME,
+		})
+		.addSecurity(PassportStrategy.UNCONFIGURED_SPOT, {
+			type: 'apiKey',
+		})
 		.build();
 
 	const document = SwaggerModule.createDocument(app, config);

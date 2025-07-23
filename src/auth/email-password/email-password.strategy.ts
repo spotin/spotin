@@ -13,11 +13,11 @@ type DoneCallback = (
 ) => void;
 
 const authInfo: ExpressAuthInfo = {
-	strategy: PassportStrategy.LOCAL,
+	strategy: PassportStrategy.EMAIL_PASSWORD,
 };
 
 @Injectable()
-export class LocalStrategy extends NestPassportStrategy(
+export class EmailPasswordStrategy extends NestPassportStrategy(
 	Strategy,
 	authInfo.strategy,
 ) {
