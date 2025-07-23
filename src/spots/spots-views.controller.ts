@@ -47,10 +47,11 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/form')
+	@Render('spots/create')
 	renderCreateSpot(@AuthUser() user: User): Record<string, string> {
 		return {
-			title: 'Create a new spot | Spot in',
+			title: 'ui.spots.create.title',
+			description: 'ui.spots.create.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -92,14 +93,15 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/list')
+	@Render('spots/index')
 	async renderSpotsList(
 		@AuthUser() user: User,
 	): Promise<Record<string, string | Spot[]>> {
 		const spots = await this.spotsService.getSpots(user);
 
 		return {
-			title: 'Spots | Spot in',
+			title: 'ui.spots.index.title',
+			description: 'ui.spots.index.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -123,7 +125,7 @@ export class SpotsViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/form')
+	@Render('spots/configure')
 	async renderConfigureSpot(
 		@AuthUser() user: User,
 		@Param('id') id: string,
@@ -131,7 +133,8 @@ export class SpotsViewsController {
 		const spot = await this.spotsService.getSpot(id, user);
 
 		return {
-			title: 'Configure the spot | Spot in',
+			title: 'ui.spots.configure.title',
+			description: 'ui.spots.configure.description',
 			spot,
 			role: UserRole.GUEST,
 		};
@@ -183,8 +186,9 @@ export class SpotsViewsController {
 		try {
 			const spot = await this.spotsService.getSpot(id, user);
 
-			return res.render('spots/form', {
-				title: 'Edit the spot | Spot in',
+			return res.render('spots/edit', {
+				title: 'ui.spots.edit.title',
+				description: 'ui.spots.edit.description',
 				username: user.username,
 				email: user.email,
 				role: user.role,
@@ -225,8 +229,10 @@ export class SpotsViewsController {
 		) {
 			return res.redirect(spotWithUser.websiteTarget);
 		}
+
 		return res.render('spots/redirect', {
-			title: 'Redirecting | Spot in',
+			title: 'ui.spots.redirect.title',
+			description: 'ui.spots.redirect.description',
 			spot: spotWithUser,
 		});
 	}
@@ -259,10 +265,11 @@ export class SpotsViewsController {
 			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
 
 			return {
+				title: 'ui.spots.view.title',
+				description: 'ui.spots.view.description',
 				username: user?.username,
 				email: user?.email,
 				role: user?.role,
-				title: 'Spot',
 				spot,
 				qrcode: qrcodeSvg,
 			};

@@ -1,8 +1,7 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
-import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { User } from '@/users/types/user';
-import { Controller, Get, Query, Render, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
@@ -19,21 +18,18 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	renderLogin(
-		@AuthUser() user: User | undefined,
-		@Res() res: Response,
-	): void | Record<string, string> {
+	renderLogin(@AuthUser() user: User | undefined, @Res() res: Response): void {
 		if (user) {
 			return res.redirect('/');
 		}
 
 		return res.render('auth/login', {
-			title: 'Log in | Spot in',
+			title: 'ui.auth.login.title',
+			description: 'ui.auth.login.description',
 		});
 	}
 
 	@Get('logout')
-	@JwtAuth()
 	@ApiOperation({
 		summary: 'Render the logout page',
 		description: 'Render the logout page.',
@@ -42,13 +38,18 @@ export class AuthViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('auth/logout')
-	renderLogout(@Res() res: Response): Record<string, string> {
+	@JwtOrUnrestrictedAuth()
+	renderLogout(@AuthUser() user: User | undefined, @Res() res: Response): void {
+		if (!user?.id) {
+			return res.redirect('/auth/login');
+		}
+
 		res.clearCookie('jwt');
 
-		return {
-			title: 'Logout | Spot in',
-		};
+		return res.render('auth/logout', {
+			title: 'ui.auth.logout.title',
+			description: 'ui.auth.logout.description',
+		});
 	}
 
 	@Get('register')
@@ -64,13 +65,14 @@ export class AuthViewsController {
 	renderRegister(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
-	): void | Record<string, string> {
+	): void {
 		if (user?.id) {
 			return res.redirect('/');
 		}
 
 		return res.render('auth/register', {
-			title: 'Register | Spot in',
+			title: 'ui.auth.register.title',
+			description: 'ui.auth.register.description',
 		});
 	}
 
@@ -87,13 +89,14 @@ export class AuthViewsController {
 	renderResetPasswordRequest(
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
-	): void | Record<string, string> {
+	): void {
 		if (user?.id) {
 			return res.redirect('/');
 		}
 
 		return res.render('auth/reset-password-request', {
-			title: 'Reset password request | Spot in',
+			title: 'ui.auth.resetPasswordRequest.title',
+			description: 'ui.auth.resetPasswordRequest.description',
 		});
 	}
 
@@ -111,7 +114,7 @@ export class AuthViewsController {
 		@AuthUser() user: User | undefined,
 		@Res() res: Response,
 		@Query('token') token: string,
-	): void | Record<string, string> {
+	): void {
 		if (user?.id) {
 			return res.redirect('/');
 		}
@@ -121,7 +124,8 @@ export class AuthViewsController {
 		}
 
 		return res.render('auth/reset-password', {
-			title: 'Reset password | Spot in',
+			title: 'ui.auth.resetPassword.title',
+			description: 'ui.auth.resetPassword.description',
 			token,
 		});
 	}

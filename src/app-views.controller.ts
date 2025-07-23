@@ -20,7 +20,8 @@ export class AppViewsController {
 	@Render('index')
 	root(@AuthUser() user: User | undefined): Record<string, string | undefined> {
 		return {
-			title: 'Home | Spot in',
+			title: 'ui.index.title',
+			description: 'ui.index.description',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
@@ -42,7 +43,8 @@ export class AppViewsController {
 		@AuthUser() user: User | undefined,
 	): Record<string, string | undefined> {
 		return {
-			title: 'About | Spot in',
+			title: 'ui.about.title',
+			description: 'ui.about.description',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
@@ -75,7 +77,8 @@ export class AppViewsController {
 		@AuthUser() user: User | undefined,
 	): Record<string, string | undefined> {
 		return {
-			title: 'Not Found | Spot in',
+			title: 'ui.notFound.title',
+			description: 'ui.notFound.description',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,

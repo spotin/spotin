@@ -2,16 +2,16 @@
 {% block body %}
   <h1>
     <i class="fas fa-map-marker-alt"></i>
-    {{ t('ui.spots.list.title') }}
+    {{ t('ui.spots.index.title') }}
   </h1>
   <p class="text-justify">
-    {{ t('ui.spots.list.subtitle') }}
+    {{ t('ui.spots.index.paragraphOne') }}
   </p>
   <table>
     <thead>
       <tr>
         <th class="grow">
-          {{ t('ui.spots.list.name') }}
+          {{ t('ui.spots.index.name') }}
         </th>
         <th></th>
         <th></th>
@@ -28,7 +28,7 @@
               </a>
             {% else %}
               <a href="/spots/{{ spot.id }}" class="secondary text-italic">
-                {{ t('ui.spots.list.noName') }}
+                {{ t('ui.spots.index.noName') }}
               </a>
             {% endif %}
           </td>
@@ -54,7 +54,7 @@
   <p>
     <a href="/spots/create" role="button">
       <i class="fas fa-plus-circle"></i>
-      {{ t('ui.spots.list.button') }}
+      {{ t('ui.spots.index.button') }}
     </a>
   </p>
 {% endblock %}

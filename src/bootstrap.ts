@@ -42,12 +42,10 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		configService.get('NODE_ENV', { infer: true }) === 'production',
 	);
 
-	nunjucks
-		.configure(join(__dirname, '..', 'views'), {
-			express: app,
-			watch: configService.get('NODE_ENV', { infer: true }) === 'development',
-		})
-		.addGlobal('title', 'Spot in');
+	nunjucks.configure(join(__dirname, '..', 'views'), {
+		express: app,
+		watch: configService.get('NODE_ENV', { infer: true }) === 'development',
+	});
 
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.useStaticAssets(join(__dirname, '..', 'public'));

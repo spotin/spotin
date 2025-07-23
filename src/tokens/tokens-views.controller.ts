@@ -36,10 +36,11 @@ export class TokensViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('tokens/form')
+	@Render('tokens/create')
 	renderCreateToken(@AuthUser() user: User): Record<string, string> {
 		return {
-			title: 'Create a new token | Spot in',
+			title: 'ui.tokens.create.title',
+			description: 'ui.tokens.create.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -56,14 +57,15 @@ export class TokensViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('tokens/list')
+	@Render('tokens/index')
 	async renderTokensList(
 		@AuthUser() user: User,
 	): Promise<Record<string, string | Token[]>> {
 		const tokens = await this.tokensService.getTokens(user);
 
 		return {
-			title: 'Tokens | Spot in',
+			title: 'ui.tokens.index.title',
+			description: 'ui.tokens.index.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -92,36 +94,5 @@ export class TokensViewsController {
 		@Param('id') id: string,
 	): Promise<void> {
 		await this.tokensService.deleteToken(id, user);
-	}
-
-	@Get(':id')
-	@JwtAuth()
-	@ApiOperation({
-		summary: 'Render the token page',
-		description: 'Render the token page.',
-		operationId: 'renderToken',
-	})
-	@ApiOkResponse({
-		description: 'Render successful.',
-	})
-	@ApiParam({
-		name: 'id',
-		description: 'The spot ID.',
-		format: 'uuid',
-	})
-	@Render('tokens/view')
-	async renderToken(
-		@AuthUser() user: User,
-		@Param('id') id: string,
-	): Promise<Record<string, string | Token>> {
-		const token = await this.tokensService.getToken(id, user);
-
-		return {
-			title: 'Token | Spot in',
-			username: user.username,
-			email: user.email,
-			role: user.role,
-			token,
-		};
 	}
 }

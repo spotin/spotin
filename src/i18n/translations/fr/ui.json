@@ -1,10 +1,85 @@
 {
-	"index": {
-		"title": "L'internet des lieux",
-		"explanation": "Spot in® est le lien manquant entre l'espace physique et les trésors d'informations dissimulés dans le monde numérique. Au cœur de l'Internet des lieux, cette plateforme transforme chaque lieu, chaque 'spot', en une galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous fournissons le lien, vous le contenu.",
-		"viewLatestSpots": "Voir les derniers spots"
+	"about": {
+		"title": "À propos",
+		"description": "En savoir plus sur Spot in.",
+		"paragraphOne": "Spot in est une plateforme qui vous permet de partager vos lieux favoris avec le monde. Vous pouvez créer un spot en fournissant un nom, une description et une URL cible. Vous pouvez également renseigner la latitude et la longitude du spot pour l'afficher sur une carte."
 	},
-	"footer": "Un service offert par",
+	"auth": {
+		"login": {
+			"title": "Connexion",
+			"description": "Connectez-vous à votre compte Spot in.",
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez votre email"
+			},
+			"password": {
+				"label": "Mot de passe",
+				"placeholder": "Entrez votre mot de passe"
+			},
+			"button": "Connexion",
+			"haveAccount": {
+				"label": "Vous avez déjà un compte ?",
+				"login": "Connexion"
+			}
+		},
+		"logout": {
+			"title": "Déconnexion",
+			"description": "Déconnexion de votre compte Spot in.",
+			"paragraphOne": "Vous avez été déconnecté avec succès."
+		},
+		"register": {
+			"title": "Inscription",
+			"description": "Créez un nouveau compte Spot in.",
+			"username": {
+				"label": "Nom d'utilisateur",
+				"placeholder": "Entrez votre nom d'utilisateur",
+				"warning": "Le nom d'utilisateur sera public pour tous les utilisateurs."
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez votre email"
+			},
+			"button": "S'inscrire",
+			"noAccount": {
+				"label": "Pas encore de compte ?",
+				"register": "Inscription"
+			}
+		},
+		"resetPassword": {
+			"title": "Réinitialiser le mot de passe",
+			"description": "Réinitialisez le mot de passe de votre compte Spot in.",
+			"newPassword": {
+				"label": "Nouveau mot de passe",
+				"placeholder": "Entrez votre nouveau mot de passe"
+			},
+			"confirmPassword": {
+				"label": "Confirmez le mot de passe",
+				"placeholder": "Confirmez votre nouveau mot de passe"
+			},
+			"button": "Réinitialiser le mot de passe"
+		},
+		"resetPasswordRequest": {
+			"title": "Demander la réinitialisation du mot de passe",
+			"description": "Demandez une réinitialisation du mot de passe pour votre compte Spot in.",
+			"forgotPassword": {
+				"label": "Mot de passe oublié ?",
+				"reset": "Réinitialiser le mot de passe"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez votre email"
+			},
+			"button": "Demander la réinitialisation",
+			"rememberedPassword": {
+				"label": "Vous vous êtes souvenu de votre mot de passe ?",
+				"login": "Connexion"
+			}
+		}
+	},
+	"footer": {
+		"offeredBy": "Un service proposé par Spot in.",
+		"about": "En savoir plus sur Spot in"
+	},
 	"header": {
 		"users": "Utilisateurs",
 		"spots": "Spots",
@@ -13,5 +88,254 @@
 		"logout": "Déconnexion",
 		"login": "Connexion",
 		"register": "Inscription"
+	},
+	"index": {
+		"title": "Page d'accueil",
+		"subtitle": "L'internet des lieux",
+		"description": "La page d'accueil de Spot in.",
+		"paragraphOne": "Spot in® est le maillon manquant entre l'espace physique et les trésors d'information cachés du monde numérique. Au cœur de l'internet des lieux, cette plateforme transforme chaque endroit, chaque « spot », en galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous alimentons le lien, vous le contenu.",
+		"viewLatestSpots": "Voir les derniers spots"
+	},
+	"notFound": {
+		"title": "Introuvable",
+		"description": "La page demandée est introuvable.",
+		"paragraphOne": "Cela peut être dû aux raisons suivantes : le spot ou le profil a été supprimé volontairement ou le QR code est invalide (détérioré, mal configuré, etc.).",
+		"latestSpotsDescription": "Vous pouvez consulter les autres spots disponibles sur la",
+		"latestSpots": "page des derniers spots",
+		"registerPageDescription": "Pour créer vos propres spots, créez un compte sur la",
+		"registerPage": "page d'inscription",
+		"homePageDescription": "Pour en savoir plus sur Spot in, visitez",
+		"homePage": "la page d'accueil"
+	},
+	"profile": {
+		"edit": {
+			"title": "Modifier le profil",
+			"description": "Modifiez votre profil.",
+			"username": {
+				"label": "Nom d'utilisateur",
+				"placeholder": "Mettez à jour votre nom d'utilisateur"
+			},
+			"email": {
+				"label": "Email",
+				"note": "L'adresse email ne peut pas être modifiée."
+			},
+			"currentPassword": {
+				"label": "Mot de passe actuel",
+				"placeholder": "Entrez votre mot de passe actuel"
+			},
+			"newPassword": {
+				"label": "Nouveau mot de passe",
+				"placeholder": "Entrez votre nouveau mot de passe"
+			},
+			"button": "Mettre à jour le profil"
+		},
+		"view": {
+			"title": "Voir le profil",
+			"description": "Consultez un profil.",
+			"username": "Nom d'utilisateur",
+			"memberSince": "Membre depuis : {date}",
+			"numberOfPublicSpots": "Nombre de spots publics : {count}"
+		}
+	},
+	"spots": {
+		"create": {
+			"title": "Créer un nouveau spot",
+			"description": "Créez un nouveau spot."
+		},
+		"configure": {
+			"title": "Configurer le spot",
+			"description": "Configurez un spot.",
+			"paragraphOne": "Vous pouvez configurer ce spot une seule fois. Après cela, il sera verrouillé et personne d'autre ne pourra le reconfigurer."
+		},
+		"edit": {
+			"title": "Modifier le spot",
+			"description": "Modifiez un spot."
+		},
+		"index": {
+			"title": "Vos spots",
+			"description": "Gérez vos spots.",
+			"paragraphOne": "Les spots peuvent exister dans le monde virtuel ou physique. Ils captent le contexte et les circonstances qui forment le cadre d'un événement.",
+			"name": "Nom",
+			"noName": "Ce spot n'a pas de nom",
+			"button": "Nouveau spot"
+		},
+		"redirect": {
+			"title": "Page de redirection",
+			"description": "La page de redirection du spot.",
+			"spotScanned": "Vous venez de scanner un spot !",
+			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux « spots ».<br>Partagez des spots avec vos amis et découvrez de nouveaux lieux et choses !",
+			"certified": "Certifié",
+			"unverified": "Non vérifié",
+			"whatDoesThatMean": {
+				"title": "Qu'est‑ce que cela signifie ?",
+				"details": {
+					"part1": "Les spots marqués d'un check ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré fiable.",
+					"part2": "Les spots marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Merci d'être prudent lorsque vous interagissez avec ces spots."
+				}
+			},
+			"showSpotInformation": "Afficher les détails du spot",
+			"createdBy": "Spot créé par",
+			"showMap": "Afficher sur la carte",
+			"accessContent": {
+				"button": "Accéder au contenu externe",
+				"modal": {
+					"title": "Vous êtes sur le point de quitter Spot in",
+					"details": "Vous êtes sur le point de quitter Spot in et de visiter {websiteTarget}. Merci d'être prudent lors de l'accès à ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
+					"confirm": "Confirmer",
+					"cancel": "Annuler"
+				}
+			},
+			"report": "Signaler",
+			"like": "J'aime",
+			"share": "Partager"
+		},
+		"view": {
+			"title": "Détails du spot",
+			"description": "Afficher un spot.",
+			"noName": "Ce spot n'a pas de nom",
+			"download": "Télécharger",
+			"edit": "Modifier",
+			"view": "Afficher"
+		},
+		"form": {
+			"name": {
+				"label": "Nom",
+				"placeholder": "Entrez le nom de votre spot"
+			},
+			"description": {
+				"label": "Description du spot",
+				"placeholder": "Entrez la description de votre spot"
+			},
+			"latitude": {
+				"label": "Latitude du spot (entre -90.0 et 90.0)",
+				"placeholder": "Entrez la latitude de votre spot (ex. 46.818188)"
+			},
+			"longitude": {
+				"label": "Longitude du spot (entre -180.0 et 180.0)",
+				"placeholder": "Entrez la longitude de votre spot (ex. 8.227511)"
+			},
+			"websiteTarget": {
+				"label": "URL cible",
+				"placeholder": "Entrez l'URL cible de votre spot (ex. https://www.example.com)"
+			},
+			"useCurrentLocation": "Utiliser l'emplacement actuel",
+			"configured": {
+				"label": "Configuré",
+				"note": "Si réglé sur « Non », un autre utilisateur pourra configurer ce spot une seule fois.",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				}
+			},
+			"public": {
+				"label": "Public",
+				"note": "Si le spot est public, il sera visible par tous les utilisateurs.",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				}
+			},
+			"optionsForAdvancedUsers": {
+				"label": "Options pour utilisateurs avancés",
+				"note": "Ces options sont destinées aux utilisateurs avancés.",
+				"payload": {
+					"label": "Payload",
+					"placeholder": "Entrez le payload de votre spot au format JSON (ex. {\"hello\": \"world\"})",
+					"note": "Le payload doit être un objet JSON valide. Référez-vous à la documentation de l'API pour plus de détails."
+				}
+			},
+			"directAccessToWebsiteTarget": {
+				"label": "Accès direct à l'URL cible",
+				"note": "Si réglé sur « Oui », l'utilisateur sera redirigé vers l'URL cible lors du scan du spot. Si réglé sur « Non », il sera redirigé vers la page de redirection du spot.",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				}
+			},
+			"button": "Enregistrer"
+		}
+	},
+	"tokens": {
+		"create": {
+			"title": "Créer un nouveau token",
+			"description": "Créez un nouveau token."
+		},
+		"view": {
+			"title": "Détails du token",
+			"description": "Afficher un token."
+		},
+		"index": {
+			"title": "Vos tokens",
+			"description": "Gérez vos tokens.",
+			"paragraphOne": "Les tokens vous permettent de publier/gérer des spots depuis une autre plateforme via une API REST. La documentation de l'API est disponible au lien suivant :",
+			"apiDocumentation": "Documentation de l'API",
+			"name": "Nom",
+			"button": "Nouveau token"
+		},
+		"form": {
+			"name": {
+				"label": "Nom du token",
+				"placeholder": "Entrez le nom de votre token"
+			},
+			"value": {
+				"label": "Valeur du token",
+				"placeholder": "La valeur de votre token sera générée automatiquement",
+				"note": "Une fois le token créé, vous ne pourrez plus la voir. Conservez-la en lieu sûr."
+			},
+			"button": "Créer le token"
+		}
+	},
+	"users": {
+		"create": {
+			"title": "Créer un nouvel utilisateur",
+			"description": "Créez un nouvel utilisateur."
+		},
+		"edit": {
+			"title": "Modifier l'utilisateur",
+			"description": "Modifiez un utilisateur."
+		},
+		"index": {
+			"title": "Utilisateurs",
+			"description": "Gérez les utilisateurs.",
+			"paragraphOne": "Gérez les utilisateurs de la plateforme. Vous pouvez créer, mettre à jour et supprimer des utilisateurs.",
+			"username": "Nom d'utilisateur",
+			"email": "Email",
+			"button": "Nouvel utilisateur"
+		},
+		"view": {
+			"title": "Détails de l'utilisateur",
+			"description": "Afficher un utilisateur."
+		},
+		"form": {
+			"username": {
+				"label": "Nom d'utilisateur",
+				"placeholder": "Entrez le nom d'utilisateur"
+			},
+			"email": {
+				"label": "Email",
+				"placeholder": "Entrez l'email"
+			},
+			"password": {
+				"label": "Mot de passe",
+				"placeholder": "Entrez le mot de passe de l'utilisateur"
+			},
+			"role": {
+				"label": "Rôle",
+				"values": {
+					"standardUser": "Utilisateur standard",
+					"certifiedUser": "Utilisateur certifié",
+					"admin": "Administrateur"
+				}
+			},
+			"enabled": {
+				"label": "Activé",
+				"values": {
+					"true": "Oui",
+					"false": "Non"
+				},
+				"note": "Si l'utilisateur n'est pas activé, il ne pourra pas se connecter."
+			},
+			"button": "Enregistrer"
+		}
 	}
 }

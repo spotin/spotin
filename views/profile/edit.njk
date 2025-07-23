@@ -2,38 +2,38 @@
 {% block body %}
   <h1>
     <i class="fas fa-user"></i>
-    {{ t('ui.profile.form.title') }}
+    {{ t('ui.profile.edit.title') }}
   </h1>
   <form id="form">
     <fieldset>
       <label for="username">
-        {{ t('ui.profile.form.username.label') }}
+        {{ t('ui.profile.edit.username.label') }}
       </label>
-      <input name="username" id="username" placeholder="{{ t('ui.profile.form.username.placeholder') }}" value="{{ username }}" autofocus="autofocus">
+      <input name="username" id="username" placeholder="{{ t('ui.profile.edit.username.placeholder') }}" value="{{ username }}" autofocus="autofocus">
 
       <label for="email">
-        {{ t('ui.profile.form.email.label') }}
+        {{ t('ui.profile.edit.email.label') }}
       </label>
       <input type="email" name="email" id="email" value="{{ email }}" autofocus="autofocus" readonly="readonly">
       <small>
-        {{ t('ui.profile.form.email.note') }}
+        {{ t('ui.profile.edit.email.note') }}
       </small>
 
       <label for="current-password">
-        {{ t('ui.profile.form.currentPassword.label') }}
+        {{ t('ui.profile.edit.currentPassword.label') }}
       </label>
-      <input type="password" name="current-password" id="current-password" placeholder="{{ t('ui.profile.form.currentPassword.placeholder') }}" autofocus="autofocus" required="required">
+      <input type="password" name="current-password" id="current-password" placeholder="{{ t('ui.profile.edit.currentPassword.placeholder') }}" autofocus="autofocus" required="required">
 
       <label for="new-password">
-        {{ t('ui.profile.form.newPassword.label') }}
+        {{ t('ui.profile.edit.newPassword.label') }}
       </label>
-      <input type="password" name="new-password" id="new-password" placeholder="{{ t('ui.profile.form.newPassword.placeholder') }}" autofocus="autofocus">
+      <input type="password" name="new-password" id="new-password" placeholder="{{ t('ui.profile.edit.newPassword.placeholder') }}" autofocus="autofocus">
     </fieldset>
     <div id="success"></div>
     <div id="errors"></div>
     <button type="submit">
       <i class="fas fa-edit"></i>
-      {{ t('ui.profile.form.button') }}
+      {{ t('ui.profile.edit.button') }}
     </button>
   </form>
 {% endblock %}

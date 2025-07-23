@@ -1,0 +1,27 @@
+{
+	"welcome": {
+		"subject": "Spot in - Willkommen bei Spot in",
+		"helloGreetings": "Hallo {username}",
+		"message": "Vielen Dank für Ihre Registrierung bei Spot in. Bitte legen Sie Ihr Passwort fest, indem Sie auf den untenstehenden Link klicken. Sie können Spot in verwenden, sobald Sie Ihr Passwort gesetzt haben.",
+		"linkText": "Passwort festlegen und Spot in nutzen",
+		"didNotRequestNewAccount": "Wenn Sie sich nicht bei Spot in registriert haben, ignorieren Sie bitte diese E-Mail.",
+		"byeGreetings": "Mit freundlichen Grüßen"
+	},
+	"passwordReset": {
+		"subject": "Spot in - Setzen Sie Ihr Passwort zurück",
+		"helloGreetings": "Hallo {username}",
+		"message": "Sie haben die Zurücksetzung Ihres Passworts angefordert. Bitte klicken Sie auf den untenstehenden Link, um ein neues Passwort festzulegen.",
+		"linkText": "Passwort zurücksetzen",
+		"didNotRequestNewAccount": "Wenn Sie keine Zurücksetzung Ihres Passworts angefordert haben, ignorieren Sie bitte diese E-Mail.",
+		"byeGreetings": "Mit freundlichen Grüßen"
+	},
+	"recoverAccount": {
+		"subject": "Spot in - Wiederherstellung Ihres Kontos",
+		"helloGreetings": "Hallo {username}",
+		"paragraphOne": "Sie haben versucht, ein neues Konto bei Spot in zu erstellen. Es existiert jedoch bereits ein Konto mit dem Benutzernamen {username} unter Ihrer E-Mail-Adresse.",
+		"paragraphTwo": "Bitte klicken Sie auf den untenstehenden Link, um Ihr Konto wiederherzustellen. Nachdem Sie Ihr Passwort festgelegt haben, können Sie Ihre Kontodaten (wie z. B. Ihren Benutzernamen) aktualisieren.",
+		"linkText": "Passwort zurücksetzen",
+		"didNotRequestNewAccount": "Wenn Sie kein Konto bei Spot in erstellen wollten, antworten Sie bitte auf diese E-Mail, um uns zu informieren. Wir kümmern uns um den Rest.",
+		"byeGreetings": "Mit freundlichen Grüßen"
+	}
+}

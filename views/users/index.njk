@@ -2,19 +2,19 @@
 {% block body %}
   <h1>
     <i class="fas fa-users"></i>
-    {{ t('ui.users.list.title') }}
+    {{ t('ui.users.index.title') }}
   </h1>
   <p class="text-justify">
-    {{ t('ui.users.list.subtitle') }}
+    {{ t('ui.users.index.paragraphOne') }}
   </p>
   <table>
     <thead>
       <tr>
         <th class="grow">
-          {{ t('ui.users.list.username') }}
+          {{ t('ui.users.index.username') }}
         </th>
         <th>
-          {{ t('ui.users.list.email') }}
+          {{ t('ui.users.index.email') }}
         </th>
         <th></th>
         <th></th>
@@ -49,6 +49,6 @@
   </table>
   <a href="/users/create" role="button">
     <i class="fas fa-plus-circle"></i>
-    {{ t('ui.users.list.button') }}
+    {{ t('ui.users.index.button') }}
   </a>
 {% endblock %}

@@ -1,0 +1,76 @@
+<form id="form">
+  <fieldset>
+    <label for="name">
+      {{ t('ui.tokens.form.name.label') }}
+    </label>
+    <input name="name" id="name" placeholder="{{ t('ui.tokens.form.name.placeholder') }}" autofocus="autofocus" required="required"/>
+
+    <label for="value">
+      {{ t('ui.tokens.form.value.label') }}
+    </label>
+    <input type="value" name="value" id="value" placeholder="{{ t('ui.tokens.form.value.placeholder') }}" readonly="readonly" autocomplete="off"/>
+    <small>
+      {{ t('ui.tokens.form.value.note') }}
+    </small>
+  </fieldset>
+  <div id="success"></div>
+  <div id="errors"></div>
+  <button id="button" name="button" type="submit">
+    <i class="fas fa-save"></i>
+    {{ t('ui.tokens.form.button') }}
+  </button>
+</form>
+
+<script>
+  const form = document.getElementById("form");
+  const success = document.getElementById("success");
+  const errors = document.getElementById("errors");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Remove aria-invalid from all fields
+    document
+      .querySelectorAll('[aria-invalid]')
+      .forEach((elem) => {
+        elem.setAttribute('aria-invalid', 'false');
+      });
+
+    success.innerHTML = "";
+    errors.innerHTML = "";
+
+    // Get the form data
+    const name = document.getElementById("name");
+    const value = document.getElementById("value");
+    const button = document.getElementById("button");
+
+    name.removeAttribute('disabled');
+    button.removeAttribute('disabled');
+
+    const body = JSON.stringify({
+      name: name.value || undefined
+    });
+
+    const response = await fetch("/api/tokens", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body
+    });
+
+    if (response.ok) {
+      const token = await response.json();
+
+      value.value = token.value;
+
+      name.setAttribute('disabled', 'disabled');
+      button.setAttribute('disabled', 'disabled');
+
+      success.innerHTML = "<p class=\"success\">Token created successfully. Please copy it to a safe location. You will not be able to view it again.</p>";
+
+    } else {
+      await manageErrors(response, errors);
+    }
+  });
+</script>
