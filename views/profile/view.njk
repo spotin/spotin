@@ -2,7 +2,7 @@
 {% block body %}
   <h1>
     <i class="fas fa-user"></i>
-    {{ t('ui.profile.view.title', { username: profile.username }) }}
+    {{ profile.username }}
   </h1>
   <p>
     {{ t('ui.profile.view.memberSince', { date: profile.createdAt }) }}

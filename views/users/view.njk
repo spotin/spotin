@@ -1,0 +1,9 @@
+{% extends "layout.njk" %}
+{% block body %}
+  <h2>
+    <i class="fas fa-users"></i>
+    {{ t('ui.users.view.title') }}
+  </h2>
+
+  {% include "users/partials/form.njk" %}
+{% endblock %}

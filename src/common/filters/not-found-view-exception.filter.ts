@@ -1,3 +1,4 @@
+import { User } from '@/users/types/user';
 import {
 	ExceptionFilter,
 	Catch,
@@ -14,9 +15,17 @@ export class NotFoundViewExceptionFilter implements ExceptionFilter {
 		const ctx = host.switchToHttp();
 		const request = ctx.getRequest<Request>();
 		const response = ctx.getResponse<Response>();
+		// TODO: This does not work at the moment. Interceptor might be a better solution.
+		// It is kept here for future investigation.
+		const user = request.user as User | undefined;
 
 		response.render('not-found', {
-			url: request.protocol + '://' + request.get('host') + request.originalUrl,
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+			title: 'ui.notFound.title',
+			description: 'ui.notFound.description',
+			url: `${request.protocol}://${request.get('host')}${request.originalUrl}`,
 		});
 	}
 }

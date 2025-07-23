@@ -2,20 +2,20 @@
 {% block body %}
   <h1>
     <i class="fas fa-key"></i>
-    {{ t('ui.tokens.list.title') }}
+    {{ t('ui.tokens.index.title') }}
   </h1>
   <p class="text-justify">
-    {{ t('ui.tokens.list.subtitle') }}
+    {{ t('ui.tokens.index.paragraphOne') }}
     <a href="/api" rel="noreferrer" target="_blank">
       <i class="fas fa-book"></i>
-      {{ t('ui.tokens.list.apiDocumentation') }}
+      {{ t('ui.tokens.index.apiDocumentation') }}
     </a>
   </p>
   <table>
     <thead>
       <tr>
         <th class="grow">
-          {{ t('ui.tokens.list.name') }}
+          {{ t('ui.tokens.index.name') }}
         </th>
         <th></th>
       </tr>
@@ -24,7 +24,7 @@
       {% for token in tokens %}
         <tr>
           <td>
-            <a href="/tokens/{{ token.id }}">{{ token.name }}</a>
+            {{ token.name }}
           </td>
           <td>
             <a href="/tokens/{{ token.id }}/delete">
@@ -37,6 +37,6 @@
   </table>
   <a href="/tokens/create" role="button">
     <i class="fas fa-plus-circle"></i>
-    {{ t('ui.tokens.list.button') }}
+    {{ t('ui.tokens.index.button') }}
   </a>
 {% endblock %}

@@ -1,89 +1,76 @@
 {% extends "public-layout.njk" %}
 {% block body %}
-  <article class="m-8">
-    <header class="text-center">
-      <img src="/images/logo.svg" alt="Spot in logo" width="200"/>
-      <h1>
-        {% if spot.name != null %}
-          {{ spot.name }}
-        {% else %}
-          <i>{{ t('ui.spots.view.noName') }}</i>
-        {% endif %}
-      </h1>
 
-      <p>{{ t('ui.spots.redirect.spotScanned') }}</p>
-      <p>{{ t('ui.spots.redirect.spotExplanation', { spotIn: '<strong><i><a href="/about">Spot in</a></i></strong>' })|safe }}</p>
-    </header>
+  <details>
+    <summary>
+      <span>
+        <i class="fas fa-info-circle" "></i>
+      </span>
+      {{ t('ui.spots.redirect.showSpotInformation') }}
+    </summary>
+    <p>
+      {{ t('ui.spots.redirect.createdBy') }}
+      <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>.
+    </p>
+    {% if spot.description != null %}
+      <p>{{ spot.description }}</p>
+    {% endif %}
+  </details>
 
+  <hr>
+
+  {% if spot.latitude != null and spot.longitude != null %}
     <details>
       <summary>
         <span>
-          <i class="fas fa-info-circle" "></i>
+          <i class="fas fa-map"></i>
         </span>
-        {{ t('ui.spots.redirect.showSpotInformation') }}
+        {{ t('ui.spots.redirect.showMap') }}
       </summary>
-      <p>
-        {{ t('ui.spots.redirect.createdBy') }}
-        <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>.
-      </p>
-      {% if spot.description != null %}
-        <p>{{ spot.description }}</p>
+      <div id='map' style='width: 100%; height: 400px;'></div>
+    </details>
+
+    <hr>
+  {% endif %}
+
+  <details>
+    <summary>
+      {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
+        <span>
+          <i class="fas fa-check-circle" style="color: LimeGreen;"></i>
+          {{ t('ui.spots.redirect.certified') }}
+        </span>
+      {% else %}
+        <span>
+          <i class="fas fa-exclamation-circle" style="color: Orange;"></i>
+          {{ t('ui.spots.redirect.unverified') }}
+        </span>
       {% endif %}
-    </details>
+
+      <i>({{ t('ui.spots.redirect.whatDoesThatMean.title') }})</i>
+    </summary>
+    <p class="text-justify">
+      {{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
+    </p>
+    <p class="text-justify">
+      {{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
+    </p>
+  </details>
+
+  {% if spot.websiteTarget != null %}
 
     <hr>
 
-    {% if spot.latitude != null and spot.longitude != null %}
-      <details>
-        <summary>
-          <span>
-            <i class="fas fa-map"></i>
-          </span>
-          {{ t('ui.spots.redirect.showMap') }}
-        </summary>
-        <div id='map' style='width: 100%; height: 400px;'></div>
-      </details>
+    <form id="form">
+      <button type="submit" data-target="modal-access-content" onclick="toggleModal(event)">
+        <i class="fas fa-external-link-alt"></i>
+        {{ t('ui.spots.redirect.accessContent.button') }}
+      </button>
+    </form>
+  {% endif %}
 
-      <hr>
-    {% endif %}
-
-    <details>
-      <summary>
-        {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
-          <span>
-            <i class="fas fa-check-circle" style="color: LimeGreen;"></i>
-            {{ t('ui.spots.redirect.certified') }}
-          </span>
-        {% else %}
-          <span>
-            <i class="fas fa-exclamation-circle" style="color: Orange;"></i>
-            {{ t('ui.spots.redirect.unverified') }}
-          </span>
-        {% endif %}
-
-        <i>({{ t('ui.spots.redirect.whatDoesThatMean.title') }})</i>
-      </summary>
-      <p class="text-justify">
-        {{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
-      </p>
-      <p class="text-justify">
-        {{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
-      </p>
-    </details>
-
-    <hr>
-
-    {% if spot.websiteTarget != null %}
-      <form id="form">
-        <button type="submit" data-target="modal-access-content" onclick="toggleModal(event)">
-          <i class="fas fa-external-link-alt"></i>
-          {{ t('ui.spots.redirect.accessContent.button') }}
-        </button>
-      </form>
-    {% endif %}
-
-    <footer>
-      {# <div role="group">
+  <footer>
+    {# <div role="group">
         <button class="secondary">
           <small>
             <i class="fas fa-flag"></i>
@@ -105,8 +92,7 @@
           </small>
         </button>
       </div> #}
-    </footer>
-  </article>
+  </footer>
 
   <dialog id="modal-access-content">
     <article>

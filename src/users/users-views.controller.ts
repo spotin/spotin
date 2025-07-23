@@ -39,10 +39,11 @@ export class UsersViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('users/form')
+	@Render('users/create')
 	renderCreateUser(@AuthUser() user: User): Record<string, string> {
 		return {
-			title: 'Create a new user | Spot in',
+			title: 'ui.users.create.title',
+			description: 'ui.users.create.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -58,14 +59,15 @@ export class UsersViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('users/list')
+	@Render('users/index')
 	async renderUsersList(
 		@AuthUser() user: User,
 	): Promise<Record<string, string | User[]>> {
 		const users = await this.usersService.getUsers();
 
 		return {
-			title: 'Users | Spot in',
+			title: 'ui.users.index.title',
+			description: 'ui.users.index.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -109,7 +111,7 @@ export class UsersViewsController {
 		description: 'The user ID.',
 		format: 'uuid',
 	})
-	@Render('users/form')
+	@Render('users/edit')
 	async renderUser(
 		@AuthUser() user: User,
 		@Param('id') id: string,
@@ -117,7 +119,8 @@ export class UsersViewsController {
 		const foundUser = await this.usersService.getUser(id);
 
 		return {
-			title: 'User | Spot in',
+			title: 'ui.users.edit.title',
+			description: 'ui.users.edit.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,

@@ -13,6 +13,7 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class ProfileViewsController {
 	constructor(private readonly usersService: UsersService) {}
+
 	@Get()
 	@JwtAuth()
 	@ApiOperation({
@@ -23,10 +24,11 @@ export class ProfileViewsController {
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('profile/form')
+	@Render('profile/edit')
 	renderMyProfile(@AuthUser() user: User): Record<string, string> {
 		return {
-			title: 'My profile | Spot in',
+			title: 'ui.profile.edit.title',
+			description: 'ui.profile.edit.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
@@ -53,7 +55,8 @@ export class ProfileViewsController {
 			await this.usersService.getUserWithPublicSpotsByUsername(username);
 
 		return {
-			title: 'Profile | Spot in',
+			title: 'ui.profile.view.title',
+			description: `ui.profile.view.description`,
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
