@@ -22,10 +22,12 @@ export class SessionSerializer extends PassportSerializer {
 	}
 
 	serializeUser(user: User, done: DoneCallback): void {
+		console.log('Serializing user...');
 		done(null, user.id, authInfo);
 	}
 
 	async deserializeUser(userId: string, done: DoneCallback): Promise<void> {
+		console.log('Deserializing user...');
 		try {
 			const user = await this.authService.validateSession(userId);
 

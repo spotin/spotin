@@ -2,7 +2,6 @@ import { PassportStrategy } from '@/auth/auth.constants';
 import { TokenOrSessionAuthGuard } from '@/auth/token-or-session/token-or-session-auth.guard';
 import { applyDecorators, UseGuards, CanActivate } from '@nestjs/common';
 import {
-	ApiBearerAuth,
 	ApiForbiddenResponse,
 	ApiSecurity,
 	ApiUnauthorizedResponse,
@@ -12,10 +11,10 @@ import {
 export const TokenOrSessionAuth = (...guards: (Function | CanActivate)[]) =>
 	applyDecorators(
 		UseGuards(TokenOrSessionAuthGuard, ...guards),
-		ApiBearerAuth(PassportStrategy.SESSION),
 		ApiSecurity(PassportStrategy.TOKEN),
+		ApiSecurity(PassportStrategy.SESSION),
 		ApiUnauthorizedResponse({
-			description: 'Wrong Session ID or token.',
+			description: 'Wrong token or Session ID.',
 		}),
 		ApiForbiddenResponse({
 			description: 'Insufficient roles or permissions.',

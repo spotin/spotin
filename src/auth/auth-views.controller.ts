@@ -1,23 +1,14 @@
 import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { SessionOrUnrestrictedAuth } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.decorator';
 import { SessionAuth } from '@/auth/session/session-auth.decorator';
-import {
-	EnvironmentVariables,
-	SESSION_COOKIE_NAME,
-} from '@/config/config.constants';
 import { User } from '@/users/types/user';
 import { Controller, Get, Query, Render, Req, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 @ApiTags('Views')
 @Controller('auth')
 export class AuthViewsController {
-	constructor(
-		private readonly configService: ConfigService<EnvironmentVariables, true>,
-	) {}
-
 	@Get('login')
 	@SessionOrUnrestrictedAuth()
 	@ApiOperation({
@@ -52,19 +43,10 @@ export class AuthViewsController {
 		description: 'Render successful.',
 	})
 	@Render('auth/logout')
-	renderLogout(
-		@Req() req: Request,
-		@Res({ passthrough: true }) res: Response,
-	): void {
-		const sessionName = this.configService.get(SESSION_COOKIE_NAME, {
-			infer: true,
-		});
-
-		res.clearCookie(sessionName);
-
-		req.session.destroy(() => ({
+	renderLogout(): Record<string, string> {
+		return {
 			title: 'Logout | Spot in',
-		}));
+		};
 	}
 
 	@Get('register')

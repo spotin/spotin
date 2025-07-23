@@ -29,7 +29,11 @@ import helmet from 'helmet';
 
 export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 	// https://docs.nestjs.com/security/helmet
-	app.use(helmet());
+	app.use(
+		helmet({
+			contentSecurityPolicy: false,
+		}),
+	);
 
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
@@ -113,31 +117,27 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		.setTitle('Spot in API')
 		.setDescription('The Spot in API')
 		.setVersion(process.env.npm_package_version as string)
-		.addCookieAuth(
-			configService.get(SESSION_COOKIE_NAME, { infer: true }),
-			{
-				type: 'apiKey',
-				description: 'The session cookie to access protected endpoints.',
-				name: configService.get(SESSION_COOKIE_NAME, { infer: true }),
-			},
-			PassportStrategy.SESSION,
-		)
-		.addApiKey(
-			{
-				type: 'apiKey',
-				description: 'The token to access protected endpoints.',
-				name: TOKEN_HEADER_NAME,
-			},
-			PassportStrategy.TOKEN,
-		)
-		.addApiKey(
-			{
-				type: 'apiKey',
-				description: 'The token to reset the password.',
-				name: PASSWORD_RESET_HEADER_NAME,
-			},
-			PassportStrategy.RESET_PASSWORD,
-		)
+		.addSecurity(PassportStrategy.SESSION, {
+			type: 'apiKey',
+			in: 'cookie',
+			description: 'The session cookie to access protected endpoints.',
+			name: configService.get(SESSION_COOKIE_NAME, { infer: true }),
+		})
+		.addSecurity(PassportStrategy.TOKEN, {
+			type: 'apiKey',
+			in: 'header',
+			description: 'The token to access protected endpoints.',
+			name: TOKEN_HEADER_NAME,
+		})
+		.addSecurity(PassportStrategy.RESET_PASSWORD, {
+			type: 'apiKey',
+			in: 'header',
+			description: 'The token to reset the password.',
+			name: PASSWORD_RESET_HEADER_NAME,
+		})
+		.addSecurity(PassportStrategy.UNCONFIGURED_SPOT, {
+			type: 'apiKey',
+		})
 		.build();
 
 	const document = SwaggerModule.createDocument(app, config);

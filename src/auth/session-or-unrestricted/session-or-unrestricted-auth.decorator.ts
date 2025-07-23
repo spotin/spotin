@@ -1,7 +1,11 @@
 import { PassportStrategy } from '@/auth/auth.constants';
 import { SessionOrUnrestrictedAuthGuard } from '@/auth/session-or-unrestricted/session-or-unrestricted-auth.guard';
 import { CanActivate, UseGuards, applyDecorators } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+	ApiForbiddenResponse,
+	ApiSecurity,
+	ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 export const SessionOrUnrestrictedAuth = (
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
@@ -10,5 +14,11 @@ export const SessionOrUnrestrictedAuth = (
 ) =>
 	applyDecorators(
 		UseGuards(SessionOrUnrestrictedAuthGuard, ...guards),
-		ApiBearerAuth(PassportStrategy.SESSION),
+		ApiSecurity(PassportStrategy.SESSION),
+		ApiUnauthorizedResponse({
+			description: 'Wrong Session ID.',
+		}),
+		ApiForbiddenResponse({
+			description: 'Insufficient roles or permissions.',
+		}),
 	);
