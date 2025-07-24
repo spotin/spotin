@@ -8,6 +8,7 @@ export const MAIL_PASS = 'SPOT_IN_MAIL_PASS';
 export const MAIL_SECURE = 'SPOT_IN_MAIL_SECURE';
 export const MAIL_SENDER_NAME = 'SPOT_IN_MAIL_SENDER_NAME';
 export const NODE_ENV = 'NODE_ENV';
+export const PLAUSIBLE_DOMAIN_NAME = 'SPOT_IN_PLAUSIBLE_DOMAIN_NAME';
 
 export interface EnvironmentVariables {
 	[BASE_URL]: string;
@@ -20,4 +21,5 @@ export interface EnvironmentVariables {
 	[MAIL_SECURE]: boolean;
 	[MAIL_SENDER_NAME]: string;
 	[NODE_ENV]: string;
+	[PLAUSIBLE_DOMAIN_NAME]: string;
 }

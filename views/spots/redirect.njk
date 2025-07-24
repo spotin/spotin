@@ -70,49 +70,119 @@
   {% endif %}
 
   <footer>
-    {# <div role="group">
-        <button class="secondary">
-          <small>
-            <i class="fas fa-flag"></i>
-            {{ t('ui.spots.redirect.report') }}
-          </small>
-        </button>
-        <button class="secondary">
-          <small>
-            <span style="color: Red;">
-              <i class="fas fa-heart"></i>
-            </span>
-            {{ t('ui.spots.redirect.like') }}
-          </small>
-        </button>
-        <button class="secondary">
-          <small>
-            <i class="fas fa-share-alt"></i>
-            {{ t('ui.spots.redirect.share') }}
-          </small>
-        </button>
-      </div> #}
+    <div role="group">
+      <button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
+        <small>
+          <i class="fas fa-flag"></i>
+          {{ t('ui.spots.redirect.report.button') }}
+        </small>
+      </button>
+      <button class="secondary" data-target="modal-like-spot" onclick="toggleModal(event)">
+        <small>
+          <span style="color: Red;">
+            <i class="fas fa-heart"></i>
+          </span>
+          {{ t('ui.spots.redirect.like.button') }}
+        </small>
+      </button>
+      <button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event)">
+        <small>
+          <i class="fas fa-share-alt"></i>
+          {{ t('ui.spots.redirect.share.button') }}
+        </small>
+      </button>
+    </div>
   </footer>
 
   <dialog id="modal-access-content">
     <article>
       <header>
-        <button aria-label="Close" rel="prev" data-target="modal-access-content" onclick="toggleModal(event)"></button>
-        <h2>{{ t('ui.spots.redirect.accessContent.modal.title') }}</h2>
+        <button aria-label="{{ t('ui.spots.redirect.accessContent.modal.actions.cancel') }}" rel="prev" data-target="modal-access-content" onclick="toggleModal(event)"></button>
+        <h2>
+          {{ t('ui.spots.redirect.accessContent.modal.title') }}
+        </h2>
       </header>
       <p class="text-justify">
-        {{ t('ui.spots.redirect.accessContent.modal.details', { websiteTarget: spot.websiteTarget }) }}
+        {{ t('ui.spots.redirect.accessContent.modal.description', { websiteTarget: spot.websiteTarget }) }}
       </p>
       <footer>
         <button class="secondary" data-target="modal-access-content" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.accessContent.modal.cancel') }}
+          {{ t('ui.spots.redirect.accessContent.modal.actions.cancel') }}
         </button>
         <a role="button" href="{{ spot.websiteTarget }}" autofocus="autofocus" target="_self">
-          {{ t('ui.spots.redirect.accessContent.modal.confirm') }}
+          {{ t('ui.spots.redirect.accessContent.modal.actions.access') }}
         </a>
       </footer>
     </article>
   </dialog>
+
+  <dialog id="modal-report-spot">
+    <article>
+      <header>
+        <button aria-label="{{ t('ui.spots.redirect.report.modal.actions.close') }}" rel="prev" data-target="modal-report-spot" onclick="toggleModal(event)"></button>
+        <h2>
+          {{ t('ui.spots.redirect.report.modal.title') }}
+        </h2>
+      </header>
+      <p class="text-justify">
+        {{ t('ui.spots.redirect.report.modal.description', { websiteTarget: spot.websiteTarget }) }}
+      </p>
+      <footer>
+        <button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
+          {{ t('ui.spots.redirect.report.modal.actions.close') }}
+        </button>
+        <button class="plausible-event-name=report-spot" autofocus="autofocus" data-target="modal-report-spot" onclick="toggleModal(event)">
+          {{ t('ui.spots.redirect.report.modal.actions.report') }}
+        </button>
+      </footer>
+    </article>
+  </dialog>
+
+  <dialog id="modal-like-spot">
+    <article>
+      <header>
+        <button aria-label="{{ t('ui.spots.redirect.like.modal.actions.close') }}" rel="prev" data-target="modal-like-spot" onclick="toggleModal(event)"></button>
+        <h2>
+          {{ t('ui.spots.redirect.like.modal.title') }}
+        </h2>
+      </header>
+      <p class="text-justify">
+        {{ t('ui.spots.redirect.like.modal.description', { websiteTarget: spot.websiteTarget }) }}
+      </p>
+      <footer>
+        <button class="secondary" data-target="modal-like-spot" onclick="toggleModal(event)">
+          {{ t('ui.spots.redirect.like.modal.actions.close') }}
+        </button>
+        <button class="plausible-event-name=like-spot" autofocus="autofocus" data-target="modal-like-spot" onclick="toggleModal(event)">
+          {{ t('ui.spots.redirect.like.modal.actions.like') }}
+        </button>
+      </footer>
+    </article>
+  </dialog>
+
+  <dialog id="modal-share-spot">
+    <article>
+      <header>
+        <button aria-label="{{ t('ui.spots.redirect.share.modal.actions.close') }}" rel="prev" data-target="modal-share-spot" onclick="toggleModal(event)"></button>
+        <h2>
+          {{ t('ui.spots.redirect.share.modal.title') }}
+        </h2>
+      </header>
+      <p class="text-justify">
+        {{ t('ui.spots.redirect.share.modal.description', { websiteTarget: spot.websiteTarget }) }}
+      </p>
+      <footer>
+        <!-- On close, enable the share button again -->
+        <button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event); enableShareSpot(event)">
+          {{ t('ui.spots.redirect.share.modal.actions.close') }}
+        </button>
+        <button id="share-button" class="plausible-event-name=share-spot" autofocus="autofocus" onclick="shareSpot(event)">
+          {{ t('ui.spots.redirect.share.modal.actions.share') }}
+        </button>
+      </footer>
+    </article>
+  </dialog>
+
 {% endblock %}
 
 {% block javascript %}
@@ -157,5 +227,44 @@
         .setLngLat([longitude, latitude])
         .addTo(map);
     {% endif %}
+
+    const shareSpot = (event) => {
+      event.preventDefault();
+
+      const shareButton = event.currentTarget;
+
+      if (navigator.share) {
+        navigator
+          .share({title: document.title, url: window.location.href})
+          .then(() => {
+            shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.shared') }}";
+          })
+          .catch(() => {
+            // Do nothing
+          });
+      } else {
+        navigator
+          .clipboard
+          .writeText(window.location.href)
+          .then(() => {
+            shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.copied') }}";
+          })
+          .catch(() => {
+            // Do nothing
+          });
+      }
+
+      shareButton.disabled = true;
+    };
+
+    const enableShareSpot = (event) => {
+      event.preventDefault();
+
+      const shareButton = document.getElementById("share-button");
+
+      shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.share') }}";
+
+      shareButton.disabled = false;
+    };
   </script>
 {% endblock %}

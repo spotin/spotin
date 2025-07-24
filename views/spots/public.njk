@@ -2,12 +2,19 @@
 {% block body %}
   <h1>
     <i class="fas fa-list"></i>
-    Latest spots
+    {{ t('ui.spots.public.title') }}
   </h1>
+
+  <p class="text-justify">
+    {{ t('ui.spots.public.paragraphOne') }}
+  </p>
+
   <table>
     <thead>
       <tr>
-        <th class="grow">Title</th>
+        <th class="grow">
+          {{ t('ui.spots.public.tableHeaders.title') }}
+        </th>
         <th></th>
       </tr>
     </thead>
