@@ -1,4 +1,5 @@
 import * as qrcode from 'qrcode';
+import * as markdownit from 'markdown-it';
 import {
 	Get,
 	Controller,
@@ -27,15 +28,58 @@ import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
+import * as markdownItAttrs from 'markdown-it-attrs';
 
 @ApiTags('Views')
 @Controller('spots')
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class SpotsViewsController {
+	private readonly md: markdownit;
+
 	constructor(
 		private readonly spotsService: SpotsService,
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
-	) {}
+	) {
+		this.md = markdownit({
+			typographer: false,
+			linkify: true,
+		});
+
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+		this.md.use(markdownItAttrs, {
+			allowedAttributes: ['class', 'style'],
+		});
+
+		// Customize heading rendering to shift all headings down by one level.
+		// This allows to keep the h1 for the spot title
+		this.md.renderer.rules.heading_open = (
+			tokens,
+			idx,
+			options,
+			env,
+			renderer,
+		): string => {
+			const token = tokens[idx];
+
+			// Extract number from h1, h2, etc.
+			const level = parseInt(token.tag.slice(1));
+
+			// Shift down by 1, max h6
+			const newLevel = Math.min(level + 1, 6);
+
+			return `<h${newLevel}${renderer.renderAttrs(token)}>`;
+		};
+
+		this.md.renderer.rules.heading_close = (tokens, idx): string => {
+			const token = tokens[idx];
+
+			const level = parseInt(token.tag.slice(1));
+
+			const newLevel = Math.min(level + 1, 6);
+
+			return `</h${newLevel}>`;
+		};
+	}
 
 	@Get('create')
 	@JwtAuth()
@@ -74,13 +118,23 @@ export class SpotsViewsController {
 	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getPublicSpots();
 
+		const mdSpots = spots.map((spot) => {
+			const mdDescription =
+				spot.description && this.md.render(spot.description);
+
+			return {
+				...spot,
+				description: mdDescription,
+			};
+		});
+
 		return {
 			title: 'ui.spots.public.title',
 			description: 'ui.spots.public.description',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
-			spots,
+			spots: mdSpots,
 		};
 	}
 
@@ -100,13 +154,23 @@ export class SpotsViewsController {
 	): Promise<Record<string, string | Spot[]>> {
 		const spots = await this.spotsService.getSpots(user);
 
+		const mdSpots = spots.map((spot) => {
+			const mdDescription =
+				spot.description && this.md.render(spot.description);
+
+			return {
+				...spot,
+				description: mdDescription,
+			};
+		});
+
 		return {
 			title: 'ui.spots.index.title',
 			description: 'ui.spots.index.description',
 			username: user.username,
 			email: user.email,
 			role: user.role,
-			spots,
+			spots: mdSpots,
 		};
 	}
 
@@ -218,7 +282,8 @@ export class SpotsViewsController {
 		@Res() res: Response,
 		@Param('id') id: string,
 	): Promise<void> {
-		const spotWithUser = await this.spotsService.getSpotWithUser(id);
+		const { description, ...spotWithUser } =
+			await this.spotsService.getSpotWithUser(id);
 
 		if (!spotWithUser.configured) {
 			return res.redirect(`/spots/${id}/configure`);
@@ -231,10 +296,15 @@ export class SpotsViewsController {
 			return res.redirect(spotWithUser.websiteTarget);
 		}
 
+		const mdDescription = description && this.md.render(description);
+
 		return res.render('spots/redirect', {
 			title: 'ui.spots.redirect.title',
 			description: 'ui.spots.redirect.description',
-			spot: spotWithUser,
+			spot: {
+				...spotWithUser,
+				description: mdDescription,
+			},
 		});
 	}
 
@@ -258,7 +328,10 @@ export class SpotsViewsController {
 		@AuthUser() user: User | undefined,
 		@Param('id') id: string,
 	): Promise<Record<string, string | undefined | Spot> | void> {
-		const spot = await this.spotsService.getSpot(id);
+		const { description, ...spot } = await this.spotsService.getSpot(id);
+
+		const mdDescription = description && this.md.render(description);
+
 		const baseUrl = this.configService.get(BASE_URL, { infer: true });
 		const redirection = `${baseUrl}/spots/${spot.id}/redirect`;
 
@@ -271,7 +344,10 @@ export class SpotsViewsController {
 				username: user?.username,
 				email: user?.email,
 				role: user?.role,
-				spot,
+				spot: {
+					...spot,
+					description: mdDescription,
+				},
 				qrcode: qrcodeSvg,
 			};
 		} catch (error) {
