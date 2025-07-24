@@ -19,7 +19,7 @@
 
     {% if spot.description != null %}
       <p>
-        {{ spot.description }}
+        {{ spot.description|safe }}
       </p>
     {% endif %}
 
