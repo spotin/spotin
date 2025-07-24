@@ -58,24 +58,25 @@ export class SpotsViewsController {
 		};
 	}
 
-	@Get('latest')
+	@Get('public')
 	@JwtOrUnrestrictedAuth()
 	@ApiOperation({
-		summary: 'Render the list of latest public spots page',
-		description: 'Render the list of latest public spots page.',
-		operationId: 'renderLatestSpots',
+		summary: 'Render the list of all public spots page',
+		description: 'Render the list of all public spots page.',
+		operationId: 'renderPublicSpots',
 	})
 	@ApiOkResponse({
 		description: 'Render successful.',
 	})
-	@Render('spots/latest')
-	async renderLatestSpots(
+	@Render('spots/public')
+	async renderPublicSpots(
 		@AuthUser() user: User | undefined,
 	): Promise<Record<string, string | undefined | Spot[]>> {
 		const spots = await this.spotsService.getPublicSpots();
 
 		return {
-			title: 'Latest spots | Spot in',
+			title: 'ui.spots.public.title',
+			description: 'ui.spots.public.description',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,

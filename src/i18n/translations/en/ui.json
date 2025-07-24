@@ -94,14 +94,14 @@
 		"subtitle": "The Internet of places",
 		"description": "The homepage of Spot in.",
 		"paragraphOne": "Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed! We power the link, you the content.",
-		"viewLatestSpots": "View latest spots"
+		"viewPublicSpots": "View all public spots"
 	},
 	"notFound": {
 		"title": "Not Found",
 		"description": "The requested page could not be found.",
 		"paragraphOne": "This may be due to the following reasons: the spot or profile has been deliberately deleted or the QR code is invalid (degradation, incorrect configuration, etc.).",
-		"latestSpotsDescription": "You can find the other spots available on the",
-		"latestSpots": "latest spots page",
+		"publicSpotsDescription": "You can find all public spots available on the",
+		"publicSpots": "public spots page",
 		"registerPageDescription": "To create your own spots, create an account on the",
 		"registerPage": "register page",
 		"homePageDescription": "To find out more about Spot in, visit",
@@ -159,6 +159,14 @@
 			"noName": "This spot has no name",
 			"button": "New spot"
 		},
+		"public": {
+			"title": "Public spots",
+			"description": "View all public spots.",
+			"paragraphOne": "Discover the public spots shared by users of Spot in. You can view the details of each spot and interact with them.",
+			"tableHeaders": {
+				"title": "Title"
+			}
+		},
 		"redirect": {
 			"title": "Redirection page",
 			"description": "The redirection page of the spot.",
@@ -180,14 +188,48 @@
 				"button": "Access external content",
 				"modal": {
 					"title": "You are about to leave Spot in",
-					"details": "You are about to leave Spot in and visit {websiteTarget}. Please use caution when interacting with this external content. To access this content, click on the button below.",
-					"confirm": "Confirm",
-					"cancel": "Cancel"
+					"description": "You are about to leave Spot in and visit {websiteTarget}. Please use caution when interacting with this external content. To access this content, click on the button below.",
+					"actions": {
+						"access": "Access external content",
+						"cancel": "Cancel"
+					}
 				}
 			},
-			"report": "Report",
-			"like": "Like",
-			"share": "Share"
+			"report": {
+				"button": "Report",
+				"modal": {
+					"title": "Report an inappropriate spot",
+					"description": "If you think this spot is inappropriate and/or damaged, please report it. The Spot in team will review your report and take appropriate action.",
+					"actions": {
+						"report": "Report spot",
+						"close": "Close"
+					}
+				}
+			},
+			"like": {
+				"button": "Like",
+				"modal": {
+					"title": "Like this spot",
+					"description": "If you like this spot, please give it some love. This action will help the Spot in team to identify the most popular spots.",
+					"actions": {
+						"like": "Like this spot",
+						"close": "Close"
+					}
+				}
+			},
+			"share": {
+				"button": "Share",
+				"modal": {
+					"title": "Share this spot",
+					"description": "Share this spot with your friends so they can discover it too!",
+					"actions": {
+						"share": "Share this spot",
+						"shared": "Link shared successfully!",
+						"copied": "Link copied to clipboard!",
+						"close": "Close"
+					}
+				}
+			}
 		},
 		"view": {
 			"title": "Spot details",

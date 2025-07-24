@@ -93,15 +93,15 @@
 		"title": "Page d'accueil",
 		"subtitle": "L'internet des lieux",
 		"description": "La page d'accueil de Spot in.",
-		"paragraphOne": "Spot in® est le maillon manquant entre l'espace physique et les trésors d'information cachés du monde numérique. Au cœur de l'internet des lieux, cette plateforme transforme chaque endroit, chaque « spot », en galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous alimentons le lien, vous le contenu.",
-		"viewLatestSpots": "Voir les derniers spots"
+		"paragraphOne": "Spot in® est le maillon manquant entre l'espace physique et les trésors d'information cachés du monde numérique. Au cœur de l'internet des lieux, cette plateforme transforme chaque endroit, chaque « spot », en galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous alimentons le lien, vous le contenu.",
+		"viewPublicSpots": "Voir tous les spots publics"
 	},
 	"notFound": {
 		"title": "Introuvable",
 		"description": "La page demandée est introuvable.",
-		"paragraphOne": "Cela peut être dû aux raisons suivantes : le spot ou le profil a été supprimé volontairement ou le QR code est invalide (détérioré, mal configuré, etc.).",
-		"latestSpotsDescription": "Vous pouvez consulter les autres spots disponibles sur la",
-		"latestSpots": "page des derniers spots",
+		"paragraphOne": "Cela peut être dû aux raisons suivantes : le spot ou le profil a été supprimé volontairement ou le QR code est invalide (détérioré, mal configuré, etc.).",
+		"publicSpotsDescription": "Vous pouvez trouver tous les spots publics disponibles sur la",
+		"publicSpots": "page des spots publics",
 		"registerPageDescription": "Pour créer vos propres spots, créez un compte sur la",
 		"registerPage": "page d'inscription",
 		"homePageDescription": "Pour en savoir plus sur Spot in, visitez",
@@ -133,8 +133,8 @@
 			"title": "Voir le profil",
 			"description": "Consultez un profil.",
 			"username": "Nom d'utilisateur",
-			"memberSince": "Membre depuis : {date}",
-			"numberOfPublicSpots": "Nombre de spots publics : {count}"
+			"memberSince": "Membre depuis : {date}",
+			"numberOfPublicSpots": "Nombre de spots publics : {count}"
 		}
 	},
 	"spots": {
@@ -159,15 +159,23 @@
 			"noName": "Ce spot n'a pas de nom",
 			"button": "Nouveau spot"
 		},
+		"public": {
+			"title": "Spots publics",
+			"description": "Voir tous les spots publics.",
+			"paragraphOne": "Découvrez les spots publics partagés par les utilisateurs de Spot in. Vous pouvez consulter les détails de chaque spot et interagir avec eux.",
+			"tableHeaders": {
+				"title": "Titre"
+			}
+		},
 		"redirect": {
 			"title": "Page de redirection",
 			"description": "La page de redirection du spot.",
-			"spotScanned": "Vous venez de scanner un spot !",
-			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux « spots ».<br>Partagez des spots avec vos amis et découvrez de nouveaux lieux et choses !",
+			"spotScanned": "Vous venez de scanner un spot !",
+			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux « spots ».<br>Partagez des spots avec vos amis et découvrez de nouveaux lieux et choses !",
 			"certified": "Certifié",
 			"unverified": "Non vérifié",
 			"whatDoesThatMean": {
-				"title": "Qu'est‑ce que cela signifie ?",
+				"title": "Qu'est-ce que cela signifie ?",
 				"details": {
 					"part1": "Les spots marqués d'un check ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré fiable.",
 					"part2": "Les spots marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Merci d'être prudent lorsque vous interagissez avec ces spots."
@@ -180,14 +188,48 @@
 				"button": "Accéder au contenu externe",
 				"modal": {
 					"title": "Vous êtes sur le point de quitter Spot in",
-					"details": "Vous êtes sur le point de quitter Spot in et de visiter {websiteTarget}. Merci d'être prudent lors de l'accès à ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
-					"confirm": "Confirmer",
-					"cancel": "Annuler"
+					"description": "Vous êtes sur le point de quitter Spot in et de visiter {websiteTarget}. Veuillez faire preuve de prudence lors de l'interaction avec ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
+					"actions": {
+						"access": "Accéder au contenu externe",
+						"cancel": "Annuler"
+					}
 				}
 			},
-			"report": "Signaler",
-			"like": "J'aime",
-			"share": "Partager"
+			"report": {
+				"button": "Signaler",
+				"modal": {
+					"title": "Signaler un spot inapproprié",
+					"description": "Si vous pensez que ce spot est inapproprié et/ou endommagé, veuillez le signaler. L'équipe de Spot in examinera votre signalement et prendra les mesures appropriées.",
+					"actions": {
+						"report": "Signaler le spot",
+						"close": "Fermer"
+					}
+				}
+			},
+			"like": {
+				"button": "J'aime",
+				"modal": {
+					"title": "Aimer ce spot",
+					"description": "Si vous aimez ce spot, montrez-lui un peu d'amour. Cette action aidera l'équipe de Spot in à identifier les spots les plus populaires.",
+					"actions": {
+						"like": "Aimer ce spot",
+						"close": "Fermer"
+					}
+				}
+			},
+			"share": {
+				"button": "Partager",
+				"modal": {
+					"title": "Partager ce spot",
+					"description": "Partagez ce spot avec vos amis pour qu'ils puissent le découvrir eux aussi !",
+					"actions": {
+						"share": "Partager ce spot",
+						"shared": "Lien partagé avec succès !",
+						"copied": "Lien copié dans le presse-papiers !",
+						"close": "Fermer"
+					}
+				}
+			}
 		},
 		"view": {
 			"title": "Détails du spot",
@@ -221,7 +263,7 @@
 			"useCurrentLocation": "Utiliser l'emplacement actuel",
 			"configured": {
 				"label": "Configuré",
-				"note": "Si réglé sur « Non », un autre utilisateur pourra configurer ce spot une seule fois.",
+				"note": "Si réglé sur « Non », un autre utilisateur pourra configurer ce spot une seule fois.",
 				"values": {
 					"true": "Oui",
 					"false": "Non"
@@ -246,7 +288,7 @@
 			},
 			"directAccessToWebsiteTarget": {
 				"label": "Accès direct à l'URL cible",
-				"note": "Si réglé sur « Oui », l'utilisateur sera redirigé vers l'URL cible lors du scan du spot. Si réglé sur « Non », il sera redirigé vers la page de redirection du spot.",
+				"note": "Si réglé sur « Oui », l'utilisateur sera redirigé vers l'URL cible lors du scan du spot. Si réglé sur « Non », il sera redirigé vers la page de redirection du spot.",
 				"values": {
 					"true": "Oui",
 					"false": "Non"

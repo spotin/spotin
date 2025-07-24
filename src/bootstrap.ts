@@ -13,7 +13,10 @@ import {
 	TOKEN_HEADER_NAME,
 } from '@/auth/auth.constants';
 import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '@/config/config.constants';
+import {
+	EnvironmentVariables,
+	PLAUSIBLE_DOMAIN_NAME,
+} from '@/config/config.constants';
 import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exception.filter';
 
 export function bootstrap(app: NestExpressApplication): NestExpressApplication {
@@ -42,10 +45,15 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		configService.get('NODE_ENV', { infer: true }) === 'production',
 	);
 
-	nunjucks.configure(join(__dirname, '..', 'views'), {
-		express: app,
-		watch: configService.get('NODE_ENV', { infer: true }) === 'development',
-	});
+	nunjucks
+		.configure(join(__dirname, '..', 'views'), {
+			express: app,
+			watch: configService.get('NODE_ENV', { infer: true }) === 'development',
+		})
+		.addGlobal(
+			'plausibleDomainName',
+			configService.get(PLAUSIBLE_DOMAIN_NAME, { infer: true }),
+		);
 
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.useStaticAssets(join(__dirname, '..', 'public'));

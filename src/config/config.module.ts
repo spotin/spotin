@@ -12,6 +12,7 @@ import {
 	MAIL_USER,
 	MAIL_SENDER_NAME,
 	NODE_ENV,
+	PLAUSIBLE_DOMAIN_NAME,
 } from '@/config/config.constants';
 
 @Module({
@@ -30,6 +31,7 @@ import {
 				[NODE_ENV]: Joi.string()
 					.valid('development', 'test', 'production')
 					.default('production'),
+				[PLAUSIBLE_DOMAIN_NAME]: Joi.string().required(),
 			}),
 			validationOptions: {
 				allowUnknown: true,

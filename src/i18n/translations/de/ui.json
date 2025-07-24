@@ -94,14 +94,14 @@
 		"subtitle": "Das Internet der Orte",
 		"description": "Die Startseite von Spot in.",
 		"paragraphOne": "Spot in® ist die fehlende Verbindung zwischen dem physischen Raum und den verborgenen digitalen Informationen. Im Zentrum des Internet der Orte verwandelt diese Plattform jeden Ort – jeden „Spot“ – in eine Open-Air-Galerie. Erkunden, dokumentieren, entdecken, lernen und staunen! Wir liefern die Verbindung, Sie liefern den Inhalt.",
-		"viewLatestSpots": "Neueste Spots anzeigen"
+		"viewPublicSpots": "Alle öffentlichen Spots anzeigen"
 	},
 	"notFound": {
 		"title": "Nicht gefunden",
 		"description": "Die angeforderte Seite konnte nicht gefunden werden.",
 		"paragraphOne": "Dies kann folgende Ursachen haben: Der Spot oder das Profil wurde absichtlich gelöscht oder der QR-Code ist ungültig (beschädigt, falsch konfiguriert usw.).",
-		"latestSpotsDescription": "Sie können andere verfügbare Spots auf der",
-		"latestSpots": "Seite der neuesten Spots",
+		"publicSpotsDescription": "Sie können alle verfügbaren öffentlichen Spots auf der",
+		"publicSpots": "Seite mit öffentlichen Spots finden",
 		"registerPageDescription": "Um eigene Spots zu erstellen, legen Sie ein Konto auf der",
 		"registerPage": "Registrierungsseite",
 		"homePageDescription": "Um mehr über Spot in zu erfahren, besuchen Sie",
@@ -159,6 +159,14 @@
 			"noName": "Dieser Spot hat keinen Namen",
 			"button": "Neuer Spot"
 		},
+		"public": {
+			"title": "Öffentliche Spots",
+			"description": "Alle öffentlichen Spots anzeigen.",
+			"paragraphOne": "Entdecken Sie die öffentlichen Spots, die von Spot in-Nutzern geteilt wurden. Sie können die Details jedes Spots einsehen und mit ihnen interagieren.",
+			"tableHeaders": {
+				"title": "Titel"
+			}
+		},
 		"redirect": {
 			"title": "Weiterleitungsseite",
 			"description": "Die Weiterleitungsseite des Spots.",
@@ -179,15 +187,49 @@
 			"accessContent": {
 				"button": "Externen Inhalt aufrufen",
 				"modal": {
-					"title": "Sie verlassen gerade Spot in",
-					"details": "Sie sind dabei, Spot in zu verlassen und {websiteTarget} zu besuchen. Bitte seien Sie vorsichtig beim Umgang mit externem Inhalt. Um darauf zuzugreifen, klicken Sie auf den folgenden Button.",
-					"confirm": "Bestätigen",
-					"cancel": "Abbrechen"
+					"title": "Sie sind dabei, Spot in zu verlassen",
+					"description": "Sie sind dabei, Spot in zu verlassen und {websiteTarget} zu besuchen. Bitte seien Sie vorsichtig im Umgang mit diesem externen Inhalt. Um fortzufahren, klicken Sie auf den untenstehenden Button.",
+					"actions": {
+						"access": "Externen Inhalt aufrufen",
+						"cancel": "Abbrechen"
+					}
 				}
 			},
-			"report": "Melden",
-			"like": "Gefällt mir",
-			"share": "Teilen"
+			"report": {
+				"button": "Melden",
+				"modal": {
+					"title": "Unangemessenen Spot melden",
+					"description": "Wenn Sie denken, dass dieser Spot unangemessen und/oder beschädigt ist, melden Sie ihn bitte. Das Spot in-Team wird Ihre Meldung prüfen und geeignete Maßnahmen ergreifen.",
+					"actions": {
+						"report": "Spot melden",
+						"close": "Schließen"
+					}
+				}
+			},
+			"like": {
+				"button": "Gefällt mir",
+				"modal": {
+					"title": "Diesen Spot liken",
+					"description": "Wenn Ihnen dieser Spot gefällt, zeigen Sie etwas Liebe. Diese Aktion hilft dem Spot in-Team, die beliebtesten Spots zu identifizieren.",
+					"actions": {
+						"like": "Diesen Spot liken",
+						"close": "Schließen"
+					}
+				}
+			},
+			"share": {
+				"button": "Teilen",
+				"modal": {
+					"title": "Diesen Spot teilen",
+					"description": "Teilen Sie diesen Spot mit Ihren Freunden, damit sie ihn ebenfalls entdecken können!",
+					"actions": {
+						"share": "Diesen Spot teilen",
+						"shared": "Link erfolgreich geteilt!",
+						"copied": "Link in die Zwischenablage kopiert!",
+						"close": "Schließen"
+					}
+				}
+			}
 		},
 		"view": {
 			"title": "Spot-Details",
