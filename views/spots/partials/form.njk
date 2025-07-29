@@ -13,12 +13,13 @@
     <textarea id="description" type="text" name="description" rows="15" placeholder="{{ t('ui.spots.form.description.placeholder') }}">{{ spot.description|safe }}</textarea>
     <small>
       <i class="fab fa-markdown"></i>
-      This field supports
-      <a href="https://www.markdownguide.org" target="_blank" rel="noopener noreferrer">Markdown</a>
-      with the help of
-      <a href="https://www.npmjs.com/package/markdown-it" target="_blank" rel="noopener noreferrer">markdown-it</a>
-      and
-      <a href="https://www.npmjs.com/package/markdown-it-attrs" target="_blank" rel="noopener noreferrer">markdown-it-attrs</a>.
+      {{
+        t('ui.spots.form.description.note', {
+          markdown: '<a href="https://www.markdownguide.org" target="_blank" rel="noopener noreferrer">Markdown</a>',
+          markdownIt: '<a href="https://www.npmjs.com/package/markdown-it" target="_blank" rel="noopener noreferrer">markdown-it</a>',
+          markdownItAttrs: '<a href="https://www.npmjs.com/package/markdown-it-attrs" target="_blank" rel="noopener noreferrer">markdown-it-attrs</a>'
+        })|safe
+      }}
     </small>
 
     <!-- Prompt user for current location -->

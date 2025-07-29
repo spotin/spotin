@@ -1,13 +1,13 @@
 {
 	"about": {
 		"title": "Über",
-		"description": "Erfahren Sie mehr über Spot in.",
-		"paragraphOne": "Spot in ist eine Plattform, mit der Sie Ihre Lieblingsorte mit der Welt teilen können. Sie können einen Spot erstellen, indem Sie einen Namen, eine Beschreibung und eine Ziel-URL angeben. Sie können auch die geografischen Koordinaten des Spots angeben, um ihn auf einer Karte anzuzeigen."
+		"description": "Erfahren Sie mehr über Spot in®.",
+		"paragraphOne": "Spot in® ist eine Plattform, mit der Sie Ihre Lieblingsorte mit der Welt teilen können. Sie können einen Spot erstellen, indem Sie einen Namen, eine Beschreibung und eine Ziel-URL angeben. Sie können auch die geografischen Koordinaten des Spots angeben, um ihn auf einer Karte anzuzeigen."
 	},
 	"auth": {
 		"login": {
 			"title": "Anmelden",
-			"description": "Melden Sie sich bei Ihrem Spot in-Konto an.",
+			"description": "Melden Sie sich bei Ihrem Spot in®-Konto an.",
 			"email": {
 				"label": "E-Mail",
 				"placeholder": "Geben Sie Ihre E-Mail ein"
@@ -24,12 +24,12 @@
 		},
 		"logout": {
 			"title": "Abmelden",
-			"description": "Von Ihrem Spot in-Konto abmelden.",
+			"description": "Von Ihrem Spot in®-Konto abmelden.",
 			"paragraphOne": "Sie wurden erfolgreich abgemeldet."
 		},
 		"register": {
 			"title": "Registrieren",
-			"description": "Ein neues Spot in-Konto erstellen.",
+			"description": "Ein neues Spot in®-Konto erstellen.",
 			"username": {
 				"label": "Benutzername",
 				"placeholder": "Geben Sie Ihren Benutzernamen ein",
@@ -47,7 +47,7 @@
 		},
 		"resetPassword": {
 			"title": "Passwort zurücksetzen",
-			"description": "Setzen Sie Ihr Spot in-Passwort zurück.",
+			"description": "Setzen Sie Ihr Spot in®-Passwort zurück.",
 			"newPassword": {
 				"label": "Neues Passwort",
 				"placeholder": "Geben Sie Ihr neues Passwort ein"
@@ -60,7 +60,7 @@
 		},
 		"resetPasswordRequest": {
 			"title": "Passwort-Reset anfordern",
-			"description": "Fordern Sie die Rücksetzung Ihres Spot in-Passworts an.",
+			"description": "Fordern Sie die Rücksetzung Ihres Spot in®-Passworts an.",
 			"forgotPassword": {
 				"label": "Passwort vergessen?",
 				"reset": "Passwort zurücksetzen"
@@ -77,8 +77,9 @@
 		}
 	},
 	"footer": {
-		"offeredBy": "Ein Service von Spot in.",
-		"about": "Mehr über Spot in"
+		"copyright": "Spot in® 2021-2025",
+		"about": "Über",
+		"privacyPolicy": "Datenschutzrichtlinie"
 	},
 	"header": {
 		"users": "Benutzer",
@@ -92,7 +93,7 @@
 	"index": {
 		"title": "Startseite",
 		"subtitle": "Das Internet der Orte",
-		"description": "Die Startseite von Spot in.",
+		"description": "Die Startseite von Spot in®.",
 		"paragraphOne": "Spot in® ist die fehlende Verbindung zwischen dem physischen Raum und den verborgenen digitalen Informationen. Im Zentrum des Internet der Orte verwandelt diese Plattform jeden Ort – jeden „Spot“ – in eine Open-Air-Galerie. Erkunden, dokumentieren, entdecken, lernen und staunen! Wir liefern die Verbindung, Sie liefern den Inhalt.",
 		"viewPublicSpots": "Alle öffentlichen Spots anzeigen"
 	},
@@ -104,8 +105,16 @@
 		"publicSpots": "Seite mit öffentlichen Spots finden",
 		"registerPageDescription": "Um eigene Spots zu erstellen, legen Sie ein Konto auf der",
 		"registerPage": "Registrierungsseite",
-		"homePageDescription": "Um mehr über Spot in zu erfahren, besuchen Sie",
+		"homePageDescription": "Um mehr über Spot in® zu erfahren, besuchen Sie",
 		"homePage": "die Startseite"
+	},
+	"privacyPolicy": {
+		"title": "Datenschutzrichtlinie",
+		"description": "Erfahren Sie mehr darüber, wie wir mit Ihren Daten umgehen.",
+		"paragraphOne": "Bei Spot in® nehmen wir Ihre Privatsphäre ernst. Wir sammeln nur die Daten, die notwendig sind, um Ihnen die bestmögliche Erfahrung zu bieten. Wir teilen Ihre Daten nicht ohne Ihre Zustimmung mit Dritten.",
+		"paragraphTwo": "Wir verwenden Cookies nur zur Speicherung von Authentifizierungsinformationen.",
+		"paragraphThree": "Wir nutzen Plausible für Analytics (das keine Cookies verwendet), damit wir verstehen können, wie Sie unsere Website nutzen und wie wir sie verbessern können, ohne Ihre Privatsphäre zu gefährden.",
+		"paragraphFour": "Wir teilen keine persönlichen Daten mit Dritten."
 	},
 	"profile": {
 		"edit": {
@@ -162,7 +171,7 @@
 		"public": {
 			"title": "Öffentliche Spots",
 			"description": "Alle öffentlichen Spots anzeigen.",
-			"paragraphOne": "Entdecken Sie die öffentlichen Spots, die von Spot in-Nutzern geteilt wurden. Sie können die Details jedes Spots einsehen und mit ihnen interagieren.",
+			"paragraphOne": "Entdecken Sie die öffentlichen Spots, die von Spot in®-Nutzern geteilt wurden. Sie können die Details jedes Spots einsehen und mit ihnen interagieren.",
 			"tableHeaders": {
 				"title": "Titel"
 			}
@@ -187,8 +196,8 @@
 			"accessContent": {
 				"button": "Externen Inhalt aufrufen",
 				"modal": {
-					"title": "Sie sind dabei, Spot in zu verlassen",
-					"description": "Sie sind dabei, Spot in zu verlassen und {websiteTarget} zu besuchen. Bitte seien Sie vorsichtig im Umgang mit diesem externen Inhalt. Um fortzufahren, klicken Sie auf den untenstehenden Button.",
+					"title": "Sie sind dabei, Spot in® zu verlassen",
+					"description": "Sie sind dabei, Spot in® zu verlassen und {websiteTarget} zu besuchen. Bitte seien Sie vorsichtig im Umgang mit diesem externen Inhalt. Um fortzufahren, klicken Sie auf den untenstehenden Button.",
 					"actions": {
 						"access": "Externen Inhalt aufrufen",
 						"cancel": "Abbrechen"
@@ -199,7 +208,7 @@
 				"button": "Melden",
 				"modal": {
 					"title": "Unangemessenen Spot melden",
-					"description": "Wenn Sie denken, dass dieser Spot unangemessen und/oder beschädigt ist, melden Sie ihn bitte. Das Spot in-Team wird Ihre Meldung prüfen und geeignete Maßnahmen ergreifen.",
+					"description": "Wenn Sie denken, dass dieser Spot unangemessen und/oder beschädigt ist, melden Sie ihn bitte. Das Spot in®-Team wird Ihre Meldung prüfen und geeignete Maßnahmen ergreifen.",
 					"actions": {
 						"report": "Spot melden",
 						"close": "Schließen"
@@ -210,7 +219,7 @@
 				"button": "Gefällt mir",
 				"modal": {
 					"title": "Diesen Spot liken",
-					"description": "Wenn Ihnen dieser Spot gefällt, zeigen Sie etwas Liebe. Diese Aktion hilft dem Spot in-Team, die beliebtesten Spots zu identifizieren.",
+					"description": "Wenn Ihnen dieser Spot gefällt, zeigen Sie etwas Liebe. Diese Aktion hilft dem Spot in®-Team, die beliebtesten Spots zu identifizieren.",
 					"actions": {
 						"like": "Diesen Spot liken",
 						"close": "Schließen"
@@ -246,7 +255,8 @@
 			},
 			"description": {
 				"label": "Beschreibung des Spots",
-				"placeholder": "Gib die Beschreibung deines Spots ein"
+				"placeholder": "Gib die Beschreibung deines Spots ein",
+				"note": "Dieses Feld unterstützt {markdown}-Syntax mit Hilfe von {markdownIt} und {markdownItAttrs}. Du kannst es verwenden, um Links, Bilder und andere Formatierungen zu deiner Beschreibung hinzuzufügen."
 			},
 			"latitude": {
 				"label": "Spot-Breitengrad (zwischen -90.0 und 90.0)",

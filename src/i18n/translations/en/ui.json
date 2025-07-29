@@ -1,13 +1,13 @@
 {
 	"about": {
 		"title": "About",
-		"description": "Learn more about Spot in.",
-		"paragraphOne": "Spot in is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map."
+		"description": "Learn more about Spot in®.",
+		"paragraphOne": "Spot in® is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map."
 	},
 	"auth": {
 		"login": {
 			"title": "Login",
-			"description": "Login to your Spot in account.",
+			"description": "Login to your Spot in® account.",
 			"email": {
 				"label": "Email",
 				"placeholder": "Enter your email"
@@ -24,12 +24,12 @@
 		},
 		"logout": {
 			"title": "Logout",
-			"description": "Logout from your Spot in account.",
+			"description": "Logout from your Spot in® account.",
 			"paragraphOne": "You have been successfully logged out."
 		},
 		"register": {
 			"title": "Register",
-			"description": "Create a new Spot in account.",
+			"description": "Create a new Spot in® account.",
 			"username": {
 				"label": "Username",
 				"placeholder": "Enter your username",
@@ -47,7 +47,7 @@
 		},
 		"resetPassword": {
 			"title": "Reset password",
-			"description": "Reset your Spot in account password.",
+			"description": "Reset your Spot in® account password.",
 			"newPassword": {
 				"label": "New password",
 				"placeholder": "Enter your new password"
@@ -60,7 +60,7 @@
 		},
 		"resetPasswordRequest": {
 			"title": "Request password reset",
-			"description": "Request a password reset for your Spot in account.",
+			"description": "Request a password reset for your Spot in® account.",
 			"forgotPassword": {
 				"label": "Forgot password?",
 				"reset": "Reset password"
@@ -77,8 +77,9 @@
 		}
 	},
 	"footer": {
-		"offeredBy": "A service offered by Spot in.",
-		"about": "More about Spot in"
+		"copyright": "Spot in® 2021-2025",
+		"about": "About",
+		"privacyPolicy": "Privacy policy"
 	},
 	"header": {
 		"users": "Users",
@@ -92,7 +93,7 @@
 	"index": {
 		"title": "Homepage",
 		"subtitle": "The Internet of places",
-		"description": "The homepage of Spot in.",
+		"description": "The homepage of Spot in®.",
 		"paragraphOne": "Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed! We power the link, you the content.",
 		"viewPublicSpots": "View all public spots"
 	},
@@ -104,8 +105,16 @@
 		"publicSpots": "public spots page",
 		"registerPageDescription": "To create your own spots, create an account on the",
 		"registerPage": "register page",
-		"homePageDescription": "To find out more about Spot in, visit",
+		"homePageDescription": "To find out more about Spot in®, visit",
 		"homePage": "the home page"
+	},
+	"privacyPolicy": {
+		"title": "Privacy policy",
+		"description": "Learn more about how we handle your data.",
+		"paragraphOne": "At Spot in®, we take your privacy seriously. We only collect the data that is necessary to provide you with the best experience possible. We do not share your data with third parties without your consent.",
+		"paragraphTwo": "We use cookies only to store authentication information.",
+		"paragraphThree": "We use Plausible for analytics (which does not use cookies), allowing us to understand how you use our website and how to improve it without compromising your privacy.",
+		"paragraphFour": "We do not share any personal data with third parties."
 	},
 	"profile": {
 		"edit": {
@@ -162,7 +171,7 @@
 		"public": {
 			"title": "Public spots",
 			"description": "View all public spots.",
-			"paragraphOne": "Discover the public spots shared by users of Spot in. You can view the details of each spot and interact with them.",
+			"paragraphOne": "Discover the public spots shared by users of Spot in®. You can view the details of each spot and interact with them.",
 			"tableHeaders": {
 				"title": "Title"
 			}
@@ -187,8 +196,8 @@
 			"accessContent": {
 				"button": "Access external content",
 				"modal": {
-					"title": "You are about to leave Spot in",
-					"description": "You are about to leave Spot in and visit {websiteTarget}. Please use caution when interacting with this external content. To access this content, click on the button below.",
+					"title": "You are about to leave Spot in®",
+					"description": "You are about to leave Spot in® and visit {websiteTarget}. Please use caution when interacting with this external content. To access this content, click on the button below.",
 					"actions": {
 						"access": "Access external content",
 						"cancel": "Cancel"
@@ -199,7 +208,7 @@
 				"button": "Report",
 				"modal": {
 					"title": "Report an inappropriate spot",
-					"description": "If you think this spot is inappropriate and/or damaged, please report it. The Spot in team will review your report and take appropriate action.",
+					"description": "If you think this spot is inappropriate and/or damaged, please report it. The Spot in® team will review your report and take appropriate action.",
 					"actions": {
 						"report": "Report spot",
 						"close": "Close"
@@ -210,7 +219,7 @@
 				"button": "Like",
 				"modal": {
 					"title": "Like this spot",
-					"description": "If you like this spot, please give it some love. This action will help the Spot in team to identify the most popular spots.",
+					"description": "If you like this spot, please give it some love. This action will help the Spot in® team to identify the most popular spots.",
 					"actions": {
 						"like": "Like this spot",
 						"close": "Close"
@@ -246,7 +255,8 @@
 			},
 			"description": {
 				"label": "Spot description",
-				"placeholder": "Enter the description of your spot"
+				"placeholder": "Enter the description of your spot",
+				"note": "This field supports {markdown} syntax with the help of {markdownIt} and {markdownItAttrs}. You can use it to add links, images, and other formatting to your description."
 			},
 			"latitude": {
 				"label": "Spot latitude (between -90.0 and 90.0)",
