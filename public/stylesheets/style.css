@@ -126,6 +126,19 @@ nav ul:last-of-type {
 	display: none !important;
 }
 
+.banner {
+	background-color: #f8f9fa;
+	padding: 10px;
+	text-align: center;
+}
+
+.banner summary {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
 @media (max-width: 768px) {
 	.site-footer {
 		padding-bottom: 0;

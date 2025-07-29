@@ -1,0 +1,23 @@
+{% extends "layout.njk" %}
+{% block body %}
+  <div>
+    <h1>
+      <i class="fas fa-map-marker-alt"></i>
+      {{ t('ui.privacyPolicy.title') }}
+    </h1>
+    <p class="text-justify">
+      {{ t('ui.privacyPolicy.paragraphOne') }}
+    </p>
+    <ul>
+      <li>
+        {{ t('ui.privacyPolicy.paragraphTwo') }}
+      </li>
+      <li>
+        {{ t('ui.privacyPolicy.paragraphThree') }}
+      </li>
+      <li>
+        {{ t('ui.privacyPolicy.paragraphFour') }}
+      </li>
+    </ul>
+  </div>
+{% endblock %}

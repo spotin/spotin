@@ -1,24 +1,4 @@
 (function () {
-	// Cookie consent
-	window.cookieconsent.initialise({
-		palette: {
-			popup: {
-				background: '#24333e',
-				text: '#ffffff',
-			},
-			button: {
-				background: '#e53935',
-				text: '#ffffff',
-			},
-		},
-		showLink: false,
-		theme: 'classic',
-		content: {
-			message:
-				'This website uses cookies for user authentication, we do not use third-party trackers.',
-		},
-	});
-
 	// Convert UTC time to local time in time elements
 	document.querySelectorAll('time.datetime').forEach((elem) => {
 		let value = elem.textContent;
