@@ -1,13 +1,13 @@
 {
 	"about": {
 		"title": "À propos",
-		"description": "En savoir plus sur Spot in.",
-		"paragraphOne": "Spot in est une plateforme qui vous permet de partager vos lieux favoris avec le monde. Vous pouvez créer un spot en fournissant un nom, une description et une URL cible. Vous pouvez également renseigner la latitude et la longitude du spot pour l'afficher sur une carte."
+		"description": "En savoir plus sur Spot in®.",
+		"paragraphOne": "Spot in® est une plateforme qui vous permet de partager vos lieux favoris avec le monde. Vous pouvez créer un spot en fournissant un nom, une description et une URL cible. Vous pouvez également renseigner la latitude et la longitude du spot pour l'afficher sur une carte."
 	},
 	"auth": {
 		"login": {
 			"title": "Connexion",
-			"description": "Connectez-vous à votre compte Spot in.",
+			"description": "Connectez-vous à votre compte Spot in®.",
 			"email": {
 				"label": "Email",
 				"placeholder": "Entrez votre email"
@@ -24,12 +24,12 @@
 		},
 		"logout": {
 			"title": "Déconnexion",
-			"description": "Déconnexion de votre compte Spot in.",
+			"description": "Déconnexion de votre compte Spot in®.",
 			"paragraphOne": "Vous avez été déconnecté avec succès."
 		},
 		"register": {
 			"title": "Inscription",
-			"description": "Créez un nouveau compte Spot in.",
+			"description": "Créez un nouveau compte Spot in®.",
 			"username": {
 				"label": "Nom d'utilisateur",
 				"placeholder": "Entrez votre nom d'utilisateur",
@@ -47,7 +47,7 @@
 		},
 		"resetPassword": {
 			"title": "Réinitialiser le mot de passe",
-			"description": "Réinitialisez le mot de passe de votre compte Spot in.",
+			"description": "Réinitialisez le mot de passe de votre compte Spot in®.",
 			"newPassword": {
 				"label": "Nouveau mot de passe",
 				"placeholder": "Entrez votre nouveau mot de passe"
@@ -60,7 +60,7 @@
 		},
 		"resetPasswordRequest": {
 			"title": "Demander la réinitialisation du mot de passe",
-			"description": "Demandez une réinitialisation du mot de passe pour votre compte Spot in.",
+			"description": "Demandez une réinitialisation du mot de passe pour votre compte Spot in®.",
 			"forgotPassword": {
 				"label": "Mot de passe oublié ?",
 				"reset": "Réinitialiser le mot de passe"
@@ -77,8 +77,9 @@
 		}
 	},
 	"footer": {
-		"offeredBy": "Un service proposé par Spot in.",
-		"about": "En savoir plus sur Spot in"
+		"copyright": "Spot in® 2021-2025",
+		"about": "À propos",
+		"privacyPolicy": "Politique de confidentialité"
 	},
 	"header": {
 		"users": "Utilisateurs",
@@ -92,7 +93,7 @@
 	"index": {
 		"title": "Page d'accueil",
 		"subtitle": "L'internet des lieux",
-		"description": "La page d'accueil de Spot in.",
+		"description": "La page d'accueil de Spot in®.",
 		"paragraphOne": "Spot in® est le maillon manquant entre l'espace physique et les trésors d'information cachés du monde numérique. Au cœur de l'internet des lieux, cette plateforme transforme chaque endroit, chaque « spot », en galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous alimentons le lien, vous le contenu.",
 		"viewPublicSpots": "Voir tous les spots publics"
 	},
@@ -104,8 +105,16 @@
 		"publicSpots": "page des spots publics",
 		"registerPageDescription": "Pour créer vos propres spots, créez un compte sur la",
 		"registerPage": "page d'inscription",
-		"homePageDescription": "Pour en savoir plus sur Spot in, visitez",
+		"homePageDescription": "Pour en savoir plus sur Spot in®, visitez",
 		"homePage": "la page d'accueil"
+	},
+	"privacyPolicy": {
+		"title": "Politique de confidentialité",
+		"description": "En savoir plus sur la façon dont nous traitons vos données.",
+		"paragraphOne": "Chez Spot in®, nous prenons votre vie privée au sérieux. Nous ne collectons que les données nécessaires pour vous offrir la meilleure expérience possible. Nous ne partageons pas vos données avec des tiers sans votre consentement.",
+		"paragraphTwo": "Nous utilisons les cookies uniquement pour stocker les informations d'authentification.",
+		"paragraphThree": "Nous utilisons Plausible pour les analyses (qui n'utilise pas de cookies), ce qui nous permet de comprendre comment vous utilisez notre site web et comment l'améliorer sans compromettre votre vie privée.",
+		"paragraphFour": "Nous ne partageons aucune donnée personnelle avec des tiers."
 	},
 	"profile": {
 		"edit": {
@@ -162,7 +171,7 @@
 		"public": {
 			"title": "Spots publics",
 			"description": "Voir tous les spots publics.",
-			"paragraphOne": "Découvrez les spots publics partagés par les utilisateurs de Spot in. Vous pouvez consulter les détails de chaque spot et interagir avec eux.",
+			"paragraphOne": "Découvrez les spots publics partagés par les utilisateurs de Spot in®. Vous pouvez consulter les détails de chaque spot et interagir avec eux.",
 			"tableHeaders": {
 				"title": "Titre"
 			}
@@ -187,8 +196,8 @@
 			"accessContent": {
 				"button": "Accéder au contenu externe",
 				"modal": {
-					"title": "Vous êtes sur le point de quitter Spot in",
-					"description": "Vous êtes sur le point de quitter Spot in et de visiter {websiteTarget}. Veuillez faire preuve de prudence lors de l'interaction avec ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
+					"title": "Vous êtes sur le point de quitter Spot in®",
+					"description": "Vous êtes sur le point de quitter Spot in® et de visiter {websiteTarget}. Veuillez faire preuve de prudence lors de l'interaction avec ce contenu externe. Pour y accéder, cliquez sur le bouton ci-dessous.",
 					"actions": {
 						"access": "Accéder au contenu externe",
 						"cancel": "Annuler"
@@ -199,7 +208,7 @@
 				"button": "Signaler",
 				"modal": {
 					"title": "Signaler un spot inapproprié",
-					"description": "Si vous pensez que ce spot est inapproprié et/ou endommagé, veuillez le signaler. L'équipe de Spot in examinera votre signalement et prendra les mesures appropriées.",
+					"description": "Si vous pensez que ce spot est inapproprié et/ou endommagé, veuillez le signaler. L'équipe de Spot in® examinera votre signalement et prendra les mesures appropriées.",
 					"actions": {
 						"report": "Signaler le spot",
 						"close": "Fermer"
@@ -210,7 +219,7 @@
 				"button": "J'aime",
 				"modal": {
 					"title": "Aimer ce spot",
-					"description": "Si vous aimez ce spot, montrez-lui un peu d'amour. Cette action aidera l'équipe de Spot in à identifier les spots les plus populaires.",
+					"description": "Si vous aimez ce spot, montrez-lui un peu d'amour. Cette action aidera l'équipe de Spot in® à identifier les spots les plus populaires.",
 					"actions": {
 						"like": "Aimer ce spot",
 						"close": "Fermer"
@@ -246,7 +255,8 @@
 			},
 			"description": {
 				"label": "Description du spot",
-				"placeholder": "Entrez la description de votre spot"
+				"placeholder": "Entrez la description de votre spot",
+				"note": "Ce champ prend en charge la syntaxe {markdown} avec l'aide de {markdownIt} et {markdownItAttrs}. Vous pouvez l'utiliser pour ajouter des liens, des images et d'autres formatages à votre description."
 			},
 			"latitude": {
 				"label": "Latitude du spot (entre -90.0 et 90.0)",

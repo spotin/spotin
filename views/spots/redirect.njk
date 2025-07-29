@@ -1,5 +1,11 @@
 {% extends "public-layout.njk" %}
 {% block body %}
+  {% if spot.websiteTarget == null %}
+    {{ spot.description|safe }}
+
+    <hr>
+
+  {% endif %}
 
   <details>
     <summary>
@@ -12,8 +18,8 @@
       {{ t('ui.spots.redirect.createdBy') }}
       <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>.
     </p>
-    {% if spot.description != null %}
-      <p>{{ spot.description }}</p>
+    {% if spot.description != null and spot.websiteTarget != null %}
+      {{ spot.description|safe }}
     {% endif %}
   </details>
 
