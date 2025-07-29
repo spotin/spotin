@@ -1,0 +1,33 @@
+<small>
+  <details class="banner">
+    <summary>
+      <img src="/icons/icon.svg" alt="Spot in icon" width="30"/>
+      {{ t('ui.banner.title') }}
+    </summary>
+
+    <p>
+      <strong>
+        {{
+          t('ui.banner.keyElementOne.title', {
+            spotInWebsite: '<a href="#">https://spotin.ch</a>'
+          })|safe
+        }}
+      </strong>
+      <br>
+      {{ t('ui.banner.keyElementOne.note') }}
+    </p>
+
+    <p>
+      <strong>
+        {{ t('ui.banner.keyElementTwo.title')|safe }}
+      </strong>
+      <br>
+      {{
+        t('ui.banner.keyElementTwo.note', {
+          lockIcon: '<span class="fas fa-lock fa-sm"></span>',
+          httpsUrl: '<a href="#">https://</a>'
+        })|safe
+      }}
+    </p>
+  </details>
+</small>

@@ -71,6 +71,8 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		return i18n.t(key, { lang: detectedLanguage, args });
 	});
 
+	app.setLocal('lang', () => I18nContext.current()?.lang ?? 'en');
+
 	const config = new DocumentBuilder()
 		.setTitle('Spot in API')
 		.setDescription('The Spot in API description')

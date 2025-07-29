@@ -84,4 +84,27 @@ export class AppViewsController {
 			role: user?.role,
 		};
 	}
+
+	@Get('privacy-policy')
+	@JwtOrUnrestrictedAuth()
+	@ApiOperation({
+		summary: 'Render the privacy policy page',
+		description: 'Render the privacy policy page.',
+		operationId: 'privacyPolicy',
+	})
+	@ApiOkResponse({
+		description: 'Render successful.',
+	})
+	@Render('privacy-policy')
+	privacyPolicy(
+		@AuthUser() user: User | undefined,
+	): Record<string, string | undefined> {
+		return {
+			title: 'ui.privacyPolicy.title',
+			description: 'ui.privacyPolicy.description',
+			username: user?.username,
+			email: user?.email,
+			role: user?.role,
+		};
+	}
 }

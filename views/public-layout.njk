@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ lang() }}">
   {% include "partials/head.njk" %}
   <body>
     <div class="flex flex-col min-h-screen">
+      {% include "partials/banner.njk" %}
       <div class="container grow content-center justify-center">
         {% include "partials/flash.njk" %}
         <article class="m-8">

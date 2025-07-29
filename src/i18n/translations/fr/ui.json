@@ -76,6 +76,17 @@
 			}
 		}
 	},
+	"banner": {
+		"title": "Le site officiel de Spot in®. Voici comment vous le savez.",
+		"keyElementOne": {
+			"title": "Le site officiel de Spot in® est {spotInWebsite}.",
+			"note": "Aucun autre site n'est officiel."
+		},
+		"keyElementTwo": {
+			"title": "Le site officiel de Spot in® utilise HTTPS.",
+			"note": "Une icône de cadenas ({lockIcon}) ou {httpsUrl} dans la barre d'adresse indique une connexion sécurisée."
+		}
+	},
 	"footer": {
 		"copyright": "Spot in® 2021-2025",
 		"about": "À propos",
