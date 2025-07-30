@@ -31,9 +31,9 @@
         <span>
           <i class="fas fa-map"></i>
         </span>
-        {{ t('ui.spots.redirect.showMap') }}
+        {{ t('ui.spots.redirect.map.show') }}
       </summary>
-      <div id='map' style='width: 100%; height: 400px;'></div>
+      <div id='map' class="map" style='width: 100%; height: 400px;'></div>
     </details>
 
     <hr>
@@ -225,14 +225,18 @@
         center: [
           longitude, latitude
         ],
-        dragPan: false,
-        dragRotate: false,
-        touchPitch: false,
-        pitchWithRotate: false,
+        // boxZoom: false,
+        // doubleClickZoom: false,
+        // dragPan: false,
+        // dragRotate: false,
+        // keyboard: false,
+        // scrollZoom: false,
+        // touchPitch: false,
+        // pitchWithRotate: false,
         zoom: 18
       });
 
-      map.addControl(new maplibregl.NavigationControl({showCompass: false}), 'bottom-right');
+      map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
       map.addControl(new maplibregl.GeolocateControl({
         positionOptions: {
@@ -240,6 +244,37 @@
         },
         trackUserLocation: true
       }), 'bottom-right');
+
+      // Add custom control to center on spot location
+      class CenterOnSpotControl {
+        onAdd(map) {
+          this._map = map;
+          this._container = document.createElement('div');
+          this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+          this._container.innerHTML = '<button type="button" title="Center on spot location"><i class="fas fa-crosshairs"></i></button>';
+
+          this._container.onclick = () => {
+            map.flyTo({
+              center: [
+                longitude, latitude
+              ],
+              zoom: 18
+            });
+          };
+
+          return this._container;
+        }
+
+        onRemove() {
+          this
+            ._container
+            .parentNode
+            .removeChild(this._container);
+          this._map = undefined;
+        }
+      }
+
+      map.addControl(new CenterOnSpotControl(), 'bottom-right');
 
       const marker = new maplibregl
         .Marker({color: "#e53935"})

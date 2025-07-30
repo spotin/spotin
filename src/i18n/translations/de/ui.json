@@ -203,7 +203,12 @@
 			},
 			"showSpotInformation": "Spot-Details anzeigen",
 			"createdBy": "Spot erstellt von",
-			"showMap": "Auf der Karte anzeigen",
+			"map": {
+				"show": "Auf der Karte anzeigen",
+				"popup": {
+					"youAreHere": "Du bist hier."
+				}
+			},
 			"accessContent": {
 				"button": "Externen Inhalt aufrufen",
 				"modal": {

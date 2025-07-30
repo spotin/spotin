@@ -126,8 +126,14 @@ nav ul:last-of-type {
 	display: none !important;
 }
 
+.m-0 {
+	margin: 0 !important;
+}
+
 .banner {
-	background-color: #f8f9fa;
+	margin: 0;
+	color: var(--pico-background-color);
+	background-color: var(--pico-card-sectioning-background-color);
 	padding: 10px;
 	text-align: center;
 }
@@ -137,6 +143,22 @@ nav ul:last-of-type {
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+}
+
+.map [type='button'],
+.map [type='reset'],
+.map [type='submit'],
+.map [type='file']::file-selector-button,
+.map button {
+	border-radius: initial;
+	color: initial;
+	font-size: initial;
+	font-weight: initial;
+	margin-bottom: initial;
+}
+
+.map details summary::after {
+	background-image: none !important;
 }
 
 @media (max-width: 768px) {

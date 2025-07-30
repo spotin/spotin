@@ -203,7 +203,12 @@
 			},
 			"showSpotInformation": "Show spot details",
 			"createdBy": "Spot created by",
-			"showMap": "Show on map",
+			"map": {
+				"show": "Show on map",
+				"popup": {
+					"youAreHere": "You are here."
+				}
+			},
 			"accessContent": {
 				"button": "Access external content",
 				"modal": {
