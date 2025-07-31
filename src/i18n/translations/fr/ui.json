@@ -205,9 +205,13 @@
 			"createdBy": "Spot créé par",
 			"map": {
 				"show": "Afficher sur la carte",
-				"popup": {
-					"youAreHere": "Vous êtes ici."
-				}
+				"centerOnSpotLocation": "Centrer sur l'emplacement du spot",
+				"toggleAttribution": "Basculer l'attribution",
+				"resetBearing": "Remettre l'orientation vers le nord",
+				"zoomIn": "Zoomer",
+				"zoomOut": "Dézoomer",
+				"findMyLocation": "Trouver ma position",
+				"locationNotAvailable": "Position non disponible"
 			},
 			"accessContent": {
 				"button": "Accéder au contenu externe",

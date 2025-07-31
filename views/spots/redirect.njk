@@ -68,7 +68,7 @@
     <hr>
 
     <form id="form">
-      <button type="submit" data-target="modal-access-content" onclick="toggleModal(event)">
+      <button type="submit" class="m-0" data-target="modal-access-content" onclick="toggleModal(event)">
         <i class="fas fa-external-link-alt"></i>
         {{ t('ui.spots.redirect.accessContent.button') }}
       </button>
@@ -76,7 +76,7 @@
   {% endif %}
 
   <footer>
-    <div role="group">
+    <div role="group" class="m-0">
       <button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
         <small>
           <i class="fas fa-flag"></i>
@@ -166,7 +166,7 @@
     </article>
   </dialog>
 
-  <dialog id="modal-share-spot">
+  <dialog id="modal-share-spot" onclose="enableShareSpotButton()">
     <article>
       <header>
         <button aria-label="{{ t('ui.spots.redirect.share.modal.actions.close') }}" rel="prev" data-target="modal-share-spot" onclick="toggleModal(event)"></button>
@@ -179,7 +179,7 @@
       </p>
       <footer>
         <!-- On close, enable the share button again -->
-        <button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event); enableShareSpot(event)">
+        <button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event)">
           {{ t('ui.spots.redirect.share.modal.actions.close') }}
         </button>
         <button id="share-button" class="plausible-event-name=share-spot" autofocus="autofocus" onclick="shareSpot(event)">
@@ -219,39 +219,13 @@
         ]
       };
 
-      const map = new maplibregl.Map({
-        container: 'map',
-        style: mapGlStyle,
-        center: [
-          longitude, latitude
-        ],
-        // boxZoom: false,
-        // doubleClickZoom: false,
-        // dragPan: false,
-        // dragRotate: false,
-        // keyboard: false,
-        // scrollZoom: false,
-        // touchPitch: false,
-        // pitchWithRotate: false,
-        zoom: 18
-      });
-
-      map.addControl(new maplibregl.NavigationControl(), 'top-right');
-
-      map.addControl(new maplibregl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: false
-        },
-        trackUserLocation: true
-      }), 'bottom-right');
-
       // Add custom control to center on spot location
       class CenterOnSpotControl {
         onAdd(map) {
           this._map = map;
           this._container = document.createElement('div');
           this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
-          this._container.innerHTML = '<button type="button" title="Center on spot location"><i class="fas fa-crosshairs"></i></button>';
+          this._container.innerHTML = "<button type=\"button\" title=\"{{ t('ui.spots.redirect.map.centerOnSpotLocation') }}\"><i class=\"fas fa-crosshairs\"></i></button>";
 
           this._container.onclick = () => {
             map.flyTo({
@@ -274,7 +248,38 @@
         }
       }
 
-      map.addControl(new CenterOnSpotControl(), 'bottom-right');
+      const map = new maplibregl.Map({
+        container: 'map',
+        style: mapGlStyle,
+        center: [
+          longitude, latitude
+        ],
+        zoom: 18,
+        locale: {
+          'AttributionControl.ToggleAttribution': "{{ t('ui.spots.redirect.map.toggleAttribution')|safe }}",
+          'NavigationControl.ResetBearing': "{{ t('ui.spots.redirect.map.resetBearing')|safe }}",
+          'NavigationControl.ZoomIn': "{{ t('ui.spots.redirect.map.zoomIn')|safe }}",
+          'NavigationControl.ZoomOut': "{{ t('ui.spots.redirect.map.zoomOut')|safe }}",
+          'GeolocateControl.FindMyLocation': "{{ t('ui.spots.redirect.map.findMyLocation')|safe }}",
+          'GeolocateControl.LocationNotAvailable': "{{ t('ui.spots.redirect.map.locationNotAvailable')|safe }}"
+        },
+        attributionControl: false
+      });
+
+      const attributionControl = new maplibregl.AttributionControl({compact: true});
+      const navigationControl = new maplibregl.NavigationControl();
+      const geolocateControl = new maplibregl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: false
+        },
+        trackUserLocation: true
+      });
+      const centerOnSpotControl = new CenterOnSpotControl();
+
+      map.addControl(attributionControl, 'top-left');
+      map.addControl(navigationControl, 'top-right');
+      map.addControl(geolocateControl, 'bottom-right');
+      map.addControl(centerOnSpotControl, 'bottom-right');
 
       const marker = new maplibregl
         .Marker({color: "#e53935"})
@@ -311,9 +316,7 @@
       shareButton.disabled = true;
     };
 
-    const enableShareSpot = (event) => {
-      event.preventDefault();
-
+    const enableShareSpotButton = () => {
       const shareButton = document.getElementById("share-button");
 
       shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.share') }}";
@@ -322,10 +325,3 @@
     };
   </script>
 {% endblock %}
-
-{# block the view on the single spot
-    zoom more
-    add the other spots (with a gray color)
-    add meta tags for sharing and good practice
-    add bold URL for the redirection
-    where does the text of the modal go ? below ? #}
