@@ -58,7 +58,6 @@
 		"passport-local": "^1.0.0",
 		"prisma": "^6.10.1",
 		"qrcode": "^1.5.4",
-		"qrcode-with-logos": "^1.1.1",
 		"reflect-metadata": "^0.2.2",
 		"rxjs": "^7.8.1",
 		"tsx": "^4.20.3"
