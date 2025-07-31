@@ -336,7 +336,10 @@ export class SpotsViewsController {
 		const redirection = `${baseUrl}/spots/${spot.id}/redirect`;
 
 		try {
-			const qrcodeSvg = await qrcode.toString(redirection, { type: 'svg' });
+			const qrcodeSvg = await qrcode.toString(redirection, {
+				errorCorrectionLevel: 'high',
+				type: 'svg',
+			});
 
 			return {
 				title: 'ui.spots.view.title',

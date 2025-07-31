@@ -203,7 +203,16 @@
 			},
 			"showSpotInformation": "Spot-Details anzeigen",
 			"createdBy": "Spot erstellt von",
-			"showMap": "Auf der Karte anzeigen",
+			"map": {
+				"show": "Auf der Karte anzeigen",
+				"centerOnSpotLocation": "Auf Spot-Standort zentrieren",
+				"toggleAttribution": "Urheberrechtshinweis umschalten",
+				"resetBearing": "Ausrichtung nach Norden zurücksetzen",
+				"zoomIn": "Hineinzoomen",
+				"zoomOut": "Herauszoomen",
+				"findMyLocation": "Meinen Standort finden",
+				"locationNotAvailable": "Standort nicht verfügbar"
+			},
 			"accessContent": {
 				"button": "Externen Inhalt aufrufen",
 				"modal": {

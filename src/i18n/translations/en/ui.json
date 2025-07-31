@@ -203,7 +203,16 @@
 			},
 			"showSpotInformation": "Show spot details",
 			"createdBy": "Spot created by",
-			"showMap": "Show on map",
+			"map": {
+				"show": "Show on map",
+				"centerOnSpotLocation": "Center on spot location",
+				"toggleAttribution": "Toggle attribution",
+				"resetBearing": "Reset bearing to north",
+				"zoomIn": "Zoom in",
+				"zoomOut": "Zoom out",
+				"findMyLocation": "Find my location",
+				"locationNotAvailable": "Location not available"
+			},
 			"accessContent": {
 				"button": "Access external content",
 				"modal": {
