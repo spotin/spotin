@@ -15,6 +15,7 @@ import { TokenOrJwtAuth } from '@/auth/token-or-jwt/token-or-jwt-auth.decorators
 import { User } from '@/users/types/user';
 import { UnconfiguredSpotAuth } from '@/auth/unconfigured-spot/unconfigured-spot-auth.decorator';
 import { ConfigureSpotDto } from '@/spots/dtos/configure-spot-type.dto';
+import { ReadSpotsWithStatisticsDto } from '@/spots/dtos/read-spots-with-statistics.dto';
 
 @ApiTags('Spots')
 @Controller('api/spots')
@@ -26,20 +27,12 @@ export class SpotsController {
 		name: 'Spots',
 		summary: 'Get the public spots',
 		operationId: 'getPublicSpots',
-		responseType: [ReadSpotDto],
+		responseType: ReadSpotsWithStatisticsDto,
 	})
-	async getPublicSpots(): Promise<ReadSpotDto[]> {
-		const spots = await this.spotsService.getPublicSpots();
+	async getPublicSpots(): Promise<ReadSpotsWithStatisticsDto> {
+		const spotsWithStatistics = await this.spotsService.getPublicSpots();
 
-		const spotsDto = spots.map(
-			(spot) =>
-				new ReadSpotDto({
-					...spot,
-					payload: spot.payload ? JSON.stringify(spot.payload) : null,
-				}),
-		);
-
-		return spotsDto;
+		return new ReadSpotsWithStatisticsDto(spotsWithStatistics);
 	}
 	@CustomPatch({
 		path: ':id/configure',

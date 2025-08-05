@@ -1,10 +1,12 @@
 import { CreateSpot } from '@/spots/types/create-spot';
 import { Spot } from '@/spots/types/spot';
 import { SpotWithUser } from '@/spots/types/spot-with-user';
+import { SpotsWithStatistics } from '@/spots/types/spots-with-statistics';
 import { UpdateSpot } from '@/spots/types/update-spot';
 import { UserRole } from '@/users/enums/user-role';
 import { User } from '@/users/types/user';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -131,19 +133,48 @@ export class SpotsService {
 	}
 
 	/** List public spots */
-	async getPublicSpots(): Promise<Spot[]> {
+	async getPublicSpots(): Promise<SpotsWithStatistics> {
+		const where: Prisma.SpotWhereInput = {
+			public: true,
+			deletedAt: {
+				equals: null,
+			},
+			configured: true,
+		};
+
 		const publicSpots = await this.prisma.spot.findMany({
-			where: {
-				public: true,
-				deletedAt: {
-					equals: null,
-				},
+			where,
+		});
+
+		const spotsStatistics = await this.prisma.spot.aggregate({
+			where,
+			_count: true,
+			_min: {
+				latitude: true,
+				longitude: true,
+			},
+			_max: {
+				latitude: true,
+				longitude: true,
 			},
 		});
 
-		return publicSpots.map((publicSpot) => ({
-			...publicSpot,
-			payload: publicSpot.payload ? JSON.stringify(publicSpot.payload) : null,
-		}));
+		return {
+			spotsStatistics: {
+				count: spotsStatistics._count,
+				latitude: {
+					min: spotsStatistics._min.latitude ?? NaN,
+					max: spotsStatistics._max.latitude ?? NaN,
+				},
+				longitude: {
+					min: spotsStatistics._min.longitude ?? NaN,
+					max: spotsStatistics._max.longitude ?? NaN,
+				},
+			},
+			spots: publicSpots.map((publicSpot) => ({
+				...publicSpot,
+				payload: publicSpot.payload ? JSON.stringify(publicSpot.payload) : null,
+			})),
+		};
 	}
 }

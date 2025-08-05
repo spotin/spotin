@@ -105,8 +105,15 @@
 		"title": "Homepage",
 		"subtitle": "The Internet of places",
 		"description": "The homepage of Spot in®.",
-		"paragraphOne": "Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world. At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery. Explore, document, discover, learn and be amazed! We power the link, you the content.",
-		"viewPublicSpots": "View all public spots"
+		"paragraphOne": "Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world.",
+		"paragraphTwo": "At the heart of the Internet of places, this platform transforms every place, every 'spot', into an open-air gallery.",
+		"paragraphThree": "Explore, document, discover, learn and be amazed! We power the link, you the content.",
+		"stats": {
+			"registeredUsers": "{number} registered users",
+			"publicSpots": "{number} public spots",
+			"certifiedUsers": "{number} certified users"
+		},
+		"exploreTheSpots": "Explore the spots around the world"
 	},
 	"notFound": {
 		"title": "Not Found",
@@ -206,7 +213,10 @@
 			"map": {
 				"show": "Show on map",
 				"centerOnSpotLocation": "Center on spot location",
+				"centerOnSpotLocations": "Center on spot locations",
 				"toggleAttribution": "Toggle attribution",
+				"enterFullscreen": "Enter fullscreen",
+				"exitFullscreen": "Exit fullscreen",
 				"resetBearing": "Reset bearing to north",
 				"zoomIn": "Zoom in",
 				"zoomOut": "Zoom out",

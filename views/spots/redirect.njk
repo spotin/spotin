@@ -1,327 +1,326 @@
 {% extends "public-layout.njk" %}
 {% block body %}
-  {% if spot.websiteTarget == null %}
-    {{ spot.description|safe }}
+		{% if spot.websiteTarget == null %}
+				{{ spot.description|safe }}
 
-    <hr>
+				<hr>
 
-  {% endif %}
+		{% endif %}
 
-  <details>
-    <summary>
-      <span>
-        <i class="fas fa-info-circle" "></i>
-      </span>
-      {{ t('ui.spots.redirect.showSpotInformation') }}
-    </summary>
-    <p>
-      {{ t('ui.spots.redirect.createdBy') }}
-      <a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>.
-    </p>
-    {% if spot.description != null and spot.websiteTarget != null %}
-      {{ spot.description|safe }}
-    {% endif %}
-  </details>
+		<details>
+				<summary>
+						<span>
+								<i class="fas fa-info-circle" "></i>
+						</span>
+						{{ t('ui.spots.redirect.showSpotInformation') }}
+				</summary>
+				<p>
+						{{ t('ui.spots.redirect.createdBy') }}
+						<a href="/profile/{{ spot.user.username }}">{{ spot.user.username }}</a>.
+				</p>
+				{% if spot.description != null and spot.websiteTarget != null %}
+						{{ spot.description|safe }}
+				{% endif %}
+		</details>
 
-  <hr>
+		<hr>
 
-  {% if spot.latitude != null and spot.longitude != null %}
-    <details>
-      <summary>
-        <span>
-          <i class="fas fa-map"></i>
-        </span>
-        {{ t('ui.spots.redirect.map.show') }}
-      </summary>
-      <div id='map' class="map" style='width: 100%; height: 400px;'></div>
-    </details>
+		{% if spot.latitude != null and spot.longitude != null %}
+				<details>
+						<summary>
+								<span>
+										<i class="fas fa-map"></i>
+								</span>
+								{{ t('ui.spots.redirect.map.show') }}
+						</summary>
+						<div id='map' class="map" style='width: 100%; height: 400px;'></div>
+				</details>
 
-    <hr>
-  {% endif %}
+				<hr>
+		{% endif %}
 
-  <details>
-    <summary>
-      {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
-        <span>
-          <i class="fas fa-check-circle" style="color: LimeGreen;"></i>
-          {{ t('ui.spots.redirect.certified') }}
-        </span>
-      {% else %}
-        <span>
-          <i class="fas fa-exclamation-circle" style="color: Orange;"></i>
-          {{ t('ui.spots.redirect.unverified') }}
-        </span>
-      {% endif %}
+		<details>
+				<summary>
+						{% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
+								<span>
+										<i class="fas fa-check-circle" style="color: LimeGreen;"></i>
+										{{ t('ui.spots.redirect.certified') }}
+								</span>
+						{% else %}
+								<span>
+										<i class="fas fa-exclamation-circle" style="color: Orange;"></i>
+										{{ t('ui.spots.redirect.unverified') }}
+								</span>
+						{% endif %}
 
-      <i>({{ t('ui.spots.redirect.whatDoesThatMean.title') }})</i>
-    </summary>
-    <p class="text-justify">
-      {{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
-    </p>
-    <p class="text-justify">
-      {{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
-    </p>
-  </details>
+						<i>({{ t('ui.spots.redirect.whatDoesThatMean.title') }})</i>
+				</summary>
+				<p class="text-justify">
+						{{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span><i class="fas fa-check-circle" style="color: LimeGreen;"></i></span>' })|safe }}
+				</p>
+				<p class="text-justify">
+						{{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span><i class="fas fa-exclamation-circle" style="color: Orange;"></i></span>' })|safe }}
+				</p>
+		</details>
 
-  {% if spot.websiteTarget != null %}
+		{% if spot.websiteTarget != null %}
 
-    <hr>
+				<hr>
 
-    <form id="form">
-      <button type="submit" class="m-0" data-target="modal-access-content" onclick="toggleModal(event)">
-        <i class="fas fa-external-link-alt"></i>
-        {{ t('ui.spots.redirect.accessContent.button') }}
-      </button>
-    </form>
-  {% endif %}
+				<form id="form">
+						<button type="submit" class="m-0" data-target="modal-access-content" onclick="toggleModal(event)">
+								<i class="fas fa-external-link-alt"></i>
+								{{ t('ui.spots.redirect.accessContent.button') }}
+						</button>
+				</form>
+		{% endif %}
 
-  <footer>
-    <div role="group" class="m-0">
-      <button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
-        <small>
-          <i class="fas fa-flag"></i>
-          {{ t('ui.spots.redirect.report.button') }}
-        </small>
-      </button>
-      <button class="secondary" data-target="modal-like-spot" onclick="toggleModal(event)">
-        <small>
-          <span style="color: Red;">
-            <i class="fas fa-heart"></i>
-          </span>
-          {{ t('ui.spots.redirect.like.button') }}
-        </small>
-      </button>
-      <button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event)">
-        <small>
-          <i class="fas fa-share-alt"></i>
-          {{ t('ui.spots.redirect.share.button') }}
-        </small>
-      </button>
-    </div>
-  </footer>
+		<footer>
+				<div role="group" class="m-0">
+						<button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
+								<small>
+										<i class="fas fa-flag"></i>
+										{{ t('ui.spots.redirect.report.button') }}
+								</small>
+						</button>
+						<button class="secondary" data-target="modal-like-spot" onclick="toggleModal(event)">
+								<small>
+										<span style="color: Red;">
+												<i class="fas fa-heart"></i>
+										</span>
+										{{ t('ui.spots.redirect.like.button') }}
+								</small>
+						</button>
+						<button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event)">
+								<small>
+										<i class="fas fa-share-alt"></i>
+										{{ t('ui.spots.redirect.share.button') }}
+								</small>
+						</button>
+				</div>
+		</footer>
 
-  <dialog id="modal-access-content">
-    <article>
-      <header>
-        <button aria-label="{{ t('ui.spots.redirect.accessContent.modal.actions.cancel') }}" rel="prev" data-target="modal-access-content" onclick="toggleModal(event)"></button>
-        <h2>
-          {{ t('ui.spots.redirect.accessContent.modal.title') }}
-        </h2>
-      </header>
-      <p class="text-justify">
-        {{ t('ui.spots.redirect.accessContent.modal.description', { websiteTarget: spot.websiteTarget }) }}
-      </p>
-      <footer>
-        <button class="secondary" data-target="modal-access-content" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.accessContent.modal.actions.cancel') }}
-        </button>
-        <a role="button" href="{{ spot.websiteTarget }}" autofocus="autofocus" target="_self">
-          {{ t('ui.spots.redirect.accessContent.modal.actions.access') }}
-        </a>
-      </footer>
-    </article>
-  </dialog>
+		<dialog id="modal-access-content">
+				<article>
+						<header>
+								<button aria-label="{{ t('ui.spots.redirect.accessContent.modal.actions.cancel') }}" rel="prev" data-target="modal-access-content" onclick="toggleModal(event)"></button>
+								<h2>
+										{{ t('ui.spots.redirect.accessContent.modal.title') }}
+								</h2>
+						</header>
+						<p class="text-justify">
+								{{ t('ui.spots.redirect.accessContent.modal.description', { websiteTarget: spot.websiteTarget }) }}
+						</p>
+						<footer>
+								<button class="secondary" data-target="modal-access-content" onclick="toggleModal(event)">
+										{{ t('ui.spots.redirect.accessContent.modal.actions.cancel') }}
+								</button>
+								<a role="button" href="{{ spot.websiteTarget }}" autofocus="autofocus" target="_self">
+										{{ t('ui.spots.redirect.accessContent.modal.actions.access') }}
+								</a>
+						</footer>
+				</article>
+		</dialog>
 
-  <dialog id="modal-report-spot">
-    <article>
-      <header>
-        <button aria-label="{{ t('ui.spots.redirect.report.modal.actions.close') }}" rel="prev" data-target="modal-report-spot" onclick="toggleModal(event)"></button>
-        <h2>
-          {{ t('ui.spots.redirect.report.modal.title') }}
-        </h2>
-      </header>
-      <p class="text-justify">
-        {{ t('ui.spots.redirect.report.modal.description', { websiteTarget: spot.websiteTarget }) }}
-      </p>
-      <footer>
-        <button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.report.modal.actions.close') }}
-        </button>
-        <button class="plausible-event-name=report-spot" autofocus="autofocus" data-target="modal-report-spot" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.report.modal.actions.report') }}
-        </button>
-      </footer>
-    </article>
-  </dialog>
+		<dialog id="modal-report-spot">
+				<article>
+						<header>
+								<button aria-label="{{ t('ui.spots.redirect.report.modal.actions.close') }}" rel="prev" data-target="modal-report-spot" onclick="toggleModal(event)"></button>
+								<h2>
+										{{ t('ui.spots.redirect.report.modal.title') }}
+								</h2>
+						</header>
+						<p class="text-justify">
+								{{ t('ui.spots.redirect.report.modal.description', { websiteTarget: spot.websiteTarget }) }}
+						</p>
+						<footer>
+								<button class="secondary" data-target="modal-report-spot" onclick="toggleModal(event)">
+										{{ t('ui.spots.redirect.report.modal.actions.close') }}
+								</button>
+								<button class="plausible-event-name=report-spot" autofocus="autofocus" data-target="modal-report-spot" onclick="toggleModal(event)">
+										{{ t('ui.spots.redirect.report.modal.actions.report') }}
+								</button>
+						</footer>
+				</article>
+		</dialog>
 
-  <dialog id="modal-like-spot">
-    <article>
-      <header>
-        <button aria-label="{{ t('ui.spots.redirect.like.modal.actions.close') }}" rel="prev" data-target="modal-like-spot" onclick="toggleModal(event)"></button>
-        <h2>
-          {{ t('ui.spots.redirect.like.modal.title') }}
-        </h2>
-      </header>
-      <p class="text-justify">
-        {{ t('ui.spots.redirect.like.modal.description', { websiteTarget: spot.websiteTarget }) }}
-      </p>
-      <footer>
-        <button class="secondary" data-target="modal-like-spot" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.like.modal.actions.close') }}
-        </button>
-        <button class="plausible-event-name=like-spot" autofocus="autofocus" data-target="modal-like-spot" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.like.modal.actions.like') }}
-        </button>
-      </footer>
-    </article>
-  </dialog>
+		<dialog id="modal-like-spot">
+				<article>
+						<header>
+								<button aria-label="{{ t('ui.spots.redirect.like.modal.actions.close') }}" rel="prev" data-target="modal-like-spot" onclick="toggleModal(event)"></button>
+								<h2>
+										{{ t('ui.spots.redirect.like.modal.title') }}
+								</h2>
+						</header>
+						<p class="text-justify">
+								{{ t('ui.spots.redirect.like.modal.description', { websiteTarget: spot.websiteTarget }) }}
+						</p>
+						<footer>
+								<button class="secondary" data-target="modal-like-spot" onclick="toggleModal(event)">
+										{{ t('ui.spots.redirect.like.modal.actions.close') }}
+								</button>
+								<button class="plausible-event-name=like-spot" autofocus="autofocus" data-target="modal-like-spot" onclick="toggleModal(event)">
+										{{ t('ui.spots.redirect.like.modal.actions.like') }}
+								</button>
+						</footer>
+				</article>
+		</dialog>
 
-  <dialog id="modal-share-spot" onclose="enableShareSpotButton()">
-    <article>
-      <header>
-        <button aria-label="{{ t('ui.spots.redirect.share.modal.actions.close') }}" rel="prev" data-target="modal-share-spot" onclick="toggleModal(event)"></button>
-        <h2>
-          {{ t('ui.spots.redirect.share.modal.title') }}
-        </h2>
-      </header>
-      <p class="text-justify">
-        {{ t('ui.spots.redirect.share.modal.description', { websiteTarget: spot.websiteTarget }) }}
-      </p>
-      <footer>
-        <!-- On close, enable the share button again -->
-        <button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event)">
-          {{ t('ui.spots.redirect.share.modal.actions.close') }}
-        </button>
-        <button id="share-button" class="plausible-event-name=share-spot" autofocus="autofocus" onclick="shareSpot(event)">
-          {{ t('ui.spots.redirect.share.modal.actions.share') }}
-        </button>
-      </footer>
-    </article>
-  </dialog>
-
+		<dialog id="modal-share-spot" onclose="enableShareSpotButton()">
+				<article>
+						<header>
+								<button aria-label="{{ t('ui.spots.redirect.share.modal.actions.close') }}" rel="prev" data-target="modal-share-spot" onclick="toggleModal(event)"></button>
+								<h2>
+										{{ t('ui.spots.redirect.share.modal.title') }}
+								</h2>
+						</header>
+						<p class="text-justify">
+								{{ t('ui.spots.redirect.share.modal.description', { websiteTarget: spot.websiteTarget }) }}
+						</p>
+						<footer>
+								<!-- On close, enable the share button again -->
+								<button class="secondary" data-target="modal-share-spot" onclick="toggleModal(event)">
+										{{ t('ui.spots.redirect.share.modal.actions.close') }}
+								</button>
+								<button id="share-button" class="plausible-event-name=share-spot" autofocus="autofocus" onclick="shareSpot(event)">
+										{{ t('ui.spots.redirect.share.modal.actions.share') }}
+								</button>
+						</footer>
+				</article>
+		</dialog>
 {% endblock %}
 
 {% block javascript %}
-  <script>
-    {% if spot.latitude != null and spot.longitude != null %}
-      const latitude = '{{ spot.latitude }}';
-      const longitude = '{{ spot.longitude }}';
+		<script>
+				{% if spot.latitude != null and spot.longitude != null %}
+						const latitude = '{{ spot.latitude }}';
+						const longitude = '{{ spot.longitude }}';
 
-      // https://codepen.io/bothness/pen/ExgwzEG
-      const mapGlStyle = {
-        version: 8,
-        sources: {
-          osm: {
-            type: 'raster',
-            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '&copy; OpenStreetMap Contributors',
-            // https://wiki.openstreetmap.org/wiki/Zoom_levels#Mapbox_GL
-            maxzoom: 19
-          }
-        },
-        layers: [
-          {
-            id: 'osm',
-            type: 'raster',
-            source: 'osm'
-          }
-        ]
-      };
+						// https://codepen.io/bothness/pen/ExgwzEG
+						const mapGlStyle = {
+								version: 8,
+								sources: {
+										osm: {
+												type: 'raster',
+												tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+												tileSize: 256,
+												attribution: '&copy; OpenStreetMap Contributors',
+												// https://wiki.openstreetmap.org/wiki/Zoom_levels#Mapbox_GL
+												maxzoom: 19
+										}
+								},
+								layers: [
+										{
+												id: 'osm',
+												type: 'raster',
+												source: 'osm'
+										}
+								]
+						};
 
-      // Add custom control to center on spot location
-      class CenterOnSpotControl {
-        onAdd(map) {
-          this._map = map;
-          this._container = document.createElement('div');
-          this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
-          this._container.innerHTML = "<button type=\"button\" title=\"{{ t('ui.spots.redirect.map.centerOnSpotLocation') }}\"><i class=\"fas fa-crosshairs\"></i></button>";
+						// Add custom control to center on spot location
+						class CenterOnSpotControl {
+								onAdd(map) {
+										this._map = map;
+										this._container = document.createElement('div');
+										this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+										this._container.innerHTML = "<button type=\"button\" title=\"{{ t('ui.spots.redirect.map.centerOnSpotLocation') }}\"><i class=\"fas fa-crosshairs\"></i></button>";
 
-          this._container.onclick = () => {
-            map.flyTo({
-              center: [
-                longitude, latitude
-              ],
-              zoom: 18
-            });
-          };
+										this._container.onclick = () => {
+												map.flyTo({
+														center: [
+																longitude, latitude
+														],
+														zoom: 18
+												});
+										};
 
-          return this._container;
-        }
+										return this._container;
+								}
 
-        onRemove() {
-          this
-            ._container
-            .parentNode
-            .removeChild(this._container);
-          this._map = undefined;
-        }
-      }
+								onRemove() {
+										this
+												._container
+												.parentNode
+												.removeChild(this._container);
+										this._map = undefined;
+								}
+						}
 
-      const map = new maplibregl.Map({
-        container: 'map',
-        style: mapGlStyle,
-        center: [
-          longitude, latitude
-        ],
-        zoom: 18,
-        locale: {
-          'AttributionControl.ToggleAttribution': "{{ t('ui.spots.redirect.map.toggleAttribution')|safe }}",
-          'NavigationControl.ResetBearing': "{{ t('ui.spots.redirect.map.resetBearing')|safe }}",
-          'NavigationControl.ZoomIn': "{{ t('ui.spots.redirect.map.zoomIn')|safe }}",
-          'NavigationControl.ZoomOut': "{{ t('ui.spots.redirect.map.zoomOut')|safe }}",
-          'GeolocateControl.FindMyLocation': "{{ t('ui.spots.redirect.map.findMyLocation')|safe }}",
-          'GeolocateControl.LocationNotAvailable': "{{ t('ui.spots.redirect.map.locationNotAvailable')|safe }}"
-        },
-        attributionControl: false
-      });
+						const map = new maplibregl.Map({
+								container: 'map',
+								style: mapGlStyle,
+								center: [
+										longitude, latitude
+								],
+								zoom: 18,
+								locale: {
+										'AttributionControl.ToggleAttribution': "{{ t('ui.spots.redirect.map.toggleAttribution')|safe }}",
+										'NavigationControl.ResetBearing': "{{ t('ui.spots.redirect.map.resetBearing')|safe }}",
+										'NavigationControl.ZoomIn': "{{ t('ui.spots.redirect.map.zoomIn')|safe }}",
+										'NavigationControl.ZoomOut': "{{ t('ui.spots.redirect.map.zoomOut')|safe }}",
+										'GeolocateControl.FindMyLocation': "{{ t('ui.spots.redirect.map.findMyLocation')|safe }}",
+										'GeolocateControl.LocationNotAvailable': "{{ t('ui.spots.redirect.map.locationNotAvailable')|safe }}"
+								},
+								attributionControl: false
+						});
 
-      const attributionControl = new maplibregl.AttributionControl({compact: true});
-      const navigationControl = new maplibregl.NavigationControl();
-      const geolocateControl = new maplibregl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: false
-        },
-        trackUserLocation: true
-      });
-      const centerOnSpotControl = new CenterOnSpotControl();
+						const attributionControl = new maplibregl.AttributionControl({compact: true});
+						const navigationControl = new maplibregl.NavigationControl();
+						const geolocateControl = new maplibregl.GeolocateControl({
+								positionOptions: {
+										enableHighAccuracy: false
+								},
+								trackUserLocation: true
+						});
+						const centerOnSpotControl = new CenterOnSpotControl();
 
-      map.addControl(attributionControl, 'top-left');
-      map.addControl(navigationControl, 'top-right');
-      map.addControl(geolocateControl, 'bottom-right');
-      map.addControl(centerOnSpotControl, 'bottom-right');
+						map.addControl(attributionControl, 'top-left');
+						map.addControl(navigationControl, 'top-right');
+						map.addControl(geolocateControl, 'bottom-right');
+						map.addControl(centerOnSpotControl, 'bottom-right');
 
-      const marker = new maplibregl
-        .Marker({color: "#e53935"})
-        .setLngLat([longitude, latitude])
-        .addTo(map);
-    {% endif %}
+						const marker = new maplibregl
+								.Marker({color: "#e53935"})
+								.setLngLat([longitude, latitude])
+								.addTo(map);
+				{% endif %}
 
-    const shareSpot = (event) => {
-      event.preventDefault();
+				const shareSpot = (event) => {
+						event.preventDefault();
 
-      const shareButton = event.currentTarget;
+						const shareButton = event.currentTarget;
 
-      if (navigator.share) {
-        navigator
-          .share({title: document.title, url: window.location.href})
-          .then(() => {
-            shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.shared') }}";
-          })
-          .catch(() => {
-            // Do nothing
-          });
-      } else {
-        navigator
-          .clipboard
-          .writeText(window.location.href)
-          .then(() => {
-            shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.copied') }}";
-          })
-          .catch(() => {
-            // Do nothing
-          });
-      }
+						if (navigator.share) {
+								navigator
+										.share({title: document.title, url: window.location.href})
+										.then(() => {
+												shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.shared') }}";
+										})
+										.catch(() => {
+												enableShareSpotButton();
+										});
+						} else {
+								navigator
+										.clipboard
+										.writeText(window.location.href)
+										.then(() => {
+												shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.copied') }}";
+										})
+										.catch(() => {
+												enableShareSpotButton();
+										});
+						}
 
-      shareButton.disabled = true;
-    };
+						shareButton.disabled = true;
+				};
 
-    const enableShareSpotButton = () => {
-      const shareButton = document.getElementById("share-button");
+				const enableShareSpotButton = () => {
+						const shareButton = document.getElementById("share-button");
 
-      shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.share') }}";
+						shareButton.textContent = "{{ t('ui.spots.redirect.share.modal.actions.share') }}";
 
-      shareButton.disabled = false;
-    };
-  </script>
+						shareButton.disabled = false;
+				};
+		</script>
 {% endblock %}
