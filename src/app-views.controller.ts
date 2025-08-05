@@ -3,10 +3,14 @@ import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestr
 import { User } from '@/users/types/user';
 import { Get, Controller, Render } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { StatsService } from '@/stats/stats.service';
+import { Stats } from '@/stats/types/stats';
 
 @ApiTags('Views')
 @Controller()
 export class AppViewsController {
+	constructor(private readonly statsService: StatsService) {}
+
 	@Get()
 	@JwtOrUnrestrictedAuth()
 	@ApiOperation({
@@ -18,13 +22,18 @@ export class AppViewsController {
 		description: 'Render successful.',
 	})
 	@Render('index')
-	root(@AuthUser() user: User | undefined): Record<string, string | undefined> {
+	async root(
+		@AuthUser() user: User | undefined,
+	): Promise<Record<string, string | undefined | Stats>> {
+		const stats = await this.statsService.getStats();
+
 		return {
 			title: 'ui.index.title',
 			description: 'ui.index.description',
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
+			stats,
 		};
 	}
 

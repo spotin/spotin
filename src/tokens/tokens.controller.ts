@@ -1,7 +1,7 @@
 import { Controller, Body, Param } from '@nestjs/common';
 import { CustomPost } from '@/common/decorators/custom-post.decorator';
-import { TokensService } from './tokens.service';
-import { CreateTokenDto } from './dtos/create-token.dto';
+import { TokensService } from '@/tokens/tokens.service';
+import { CreateTokenDto } from '@/tokens/dtos/create-token.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetMany } from '@/common/decorators/get-many.decorator';
 import { CustomDelete } from '@/common/decorators/custom-delete.decorator';

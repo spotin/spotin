@@ -105,8 +105,15 @@
 		"title": "Startseite",
 		"subtitle": "Das Internet der Orte",
 		"description": "Die Startseite von Spot in®.",
-		"paragraphOne": "Spot in® ist die fehlende Verbindung zwischen dem physischen Raum und den verborgenen digitalen Informationen. Im Zentrum des Internet der Orte verwandelt diese Plattform jeden Ort – jeden „Spot“ – in eine Open-Air-Galerie. Erkunden, dokumentieren, entdecken, lernen und staunen! Wir liefern die Verbindung, Sie liefern den Inhalt.",
-		"viewPublicSpots": "Alle öffentlichen Spots anzeigen"
+		"paragraphOne": "Spot in® ist die fehlende Verbindung zwischen dem physischen Raum und den verborgenen digitalen Informationen.",
+		"paragraphTwo": "Im Zentrum des Internet der Orte verwandelt diese Plattform jeden Ort, jeden \"Spot\", in eine Open-Air-Galerie.",
+		"paragraphThree": "Erkunden, dokumentieren, entdecken, lernen und staunen! Wir liefern die Verbindung, Sie liefern den Inhalt.",
+		"stats": {
+			"registeredUsers": "{number} registrierte Benutzer",
+			"publicSpots": "{number} öffentliche Spots",
+			"certifiedUsers": "{number} zertifizierte Benutzer"
+		},
+		"exploreTheSpots": "Entdecken Sie die Spots auf der ganzen Welt"
 	},
 	"notFound": {
 		"title": "Nicht gefunden",
@@ -205,8 +212,11 @@
 			"createdBy": "Spot erstellt von",
 			"map": {
 				"show": "Auf der Karte anzeigen",
+				"centerOnSpotLocations": "Auf Spot-Standorte zentrieren",
 				"centerOnSpotLocation": "Auf Spot-Standort zentrieren",
 				"toggleAttribution": "Urheberrechtshinweis umschalten",
+				"enterFullscreen": "Vollbildmodus aktivieren",
+				"exitFullscreen": "Vollbildmodus verlassen",
 				"resetBearing": "Ausrichtung nach Norden zurücksetzen",
 				"zoomIn": "Hineinzoomen",
 				"zoomOut": "Herauszoomen",

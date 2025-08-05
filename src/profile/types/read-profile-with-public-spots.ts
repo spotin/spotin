@@ -1,8 +1,5 @@
 import { ReadProfile } from '@/profile/types/read-profile';
-import { ReadSpot } from '@/spots/types/read-spot';
-import { SpotsStatistics } from '@/spots/types/spots-statistics';
+import { ReadSpotsWithStatistics } from '@/spots/types/read-spots-with-statistics';
 
-export type ReadProfileWithPublicSpots = Omit<ReadProfile, 'email'> & {
-	spotsStatistics: SpotsStatistics;
-	spots: ReadSpot[];
-};
+export type ReadProfileWithPublicSpots = Omit<ReadProfile, 'email'> &
+	ReadSpotsWithStatistics;

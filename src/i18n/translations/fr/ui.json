@@ -105,8 +105,15 @@
 		"title": "Page d'accueil",
 		"subtitle": "L'internet des lieux",
 		"description": "La page d'accueil de Spot in®.",
-		"paragraphOne": "Spot in® est le maillon manquant entre l'espace physique et les trésors d'information cachés du monde numérique. Au cœur de l'internet des lieux, cette plateforme transforme chaque endroit, chaque « spot », en galerie à ciel ouvert. Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous alimentons le lien, vous le contenu.",
-		"viewPublicSpots": "Voir tous les spots publics"
+		"paragraphOne": "Spot in® est le maillon manquant entre l'espace physique et les trésors d'information cachés du monde numérique.",
+		"paragraphTwo": "Au cœur de l'internet des lieux, cette plateforme transforme chaque endroit, chaque « spot », en galerie à ciel ouvert.",
+		"paragraphThree": "Explorez, documentez, découvrez, apprenez et émerveillez-vous ! Nous alimentons le lien, vous le contenu.",
+		"stats": {
+			"registeredUsers": "{number} utilisateurs enregistrés",
+			"publicSpots": "{number} spots publics",
+			"certifiedUsers": "{number} utilisateurs certifiés"
+		},
+		"exploreTheSpots": "Explorez les spots dans le monde entier"
 	},
 	"notFound": {
 		"title": "Introuvable",
@@ -206,7 +213,10 @@
 			"map": {
 				"show": "Afficher sur la carte",
 				"centerOnSpotLocation": "Centrer sur l'emplacement du spot",
+				"centerOnSpotLocations": "Centrer sur les emplacements des spots",
 				"toggleAttribution": "Basculer l'attribution",
+				"enterFullscreen": "Activer le mode plein écran",
+				"exitFullscreen": "Quitter le mode plein écran",
 				"resetBearing": "Remettre l'orientation vers le nord",
 				"zoomIn": "Zoomer",
 				"zoomOut": "Dézoomer",

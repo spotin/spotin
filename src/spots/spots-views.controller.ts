@@ -1,5 +1,6 @@
 import * as qrcode from 'qrcode';
 import * as markdownit from 'markdown-it';
+import * as markdownItAttrs from 'markdown-it-attrs';
 import {
 	Get,
 	Controller,
@@ -28,7 +29,7 @@ import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
-import * as markdownItAttrs from 'markdown-it-attrs';
+import { SpotsWithStatistics } from '@/spots/types/spots-with-statistics';
 
 @ApiTags('Views')
 @Controller('spots')
@@ -115,10 +116,10 @@ export class SpotsViewsController {
 	@Render('spots/public')
 	async renderPublicSpots(
 		@AuthUser() user: User | undefined,
-	): Promise<Record<string, string | undefined | Spot[]>> {
-		const spots = await this.spotsService.getPublicSpots();
+	): Promise<Record<string, string | undefined | SpotsWithStatistics>> {
+		const spotsWithStatistics = await this.spotsService.getPublicSpots();
 
-		const mdSpots = spots.map((spot) => {
+		const mdSpots = spotsWithStatistics.spots.map((spot) => {
 			const mdDescription =
 				spot.description && this.md.render(spot.description);
 
@@ -134,7 +135,10 @@ export class SpotsViewsController {
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
-			spots: mdSpots,
+			spotsWithStatistics: {
+				...spotsWithStatistics,
+				spots: mdSpots,
+			},
 		};
 	}
 
