@@ -6,7 +6,7 @@ import { IsArray, ValidateNested } from 'class-validator';
 
 export class ReadSpotsWithStatisticsDto implements ReadSpotsWithStatistics {
 	/**
-	 * Statistics for user's spots
+	 * Statistics for spots
 	 */
 	spotsStatistics: SpotsStatisticsDto;
 

@@ -17,7 +17,7 @@ export class StatsService {
 					_count: true,
 					where: {
 						role: {
-							not: UserRole.STANDARD_USER,
+							equals: UserRole.CERTIFIED_USER,
 						},
 					},
 				}),
