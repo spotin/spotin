@@ -45,6 +45,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.2",
 		"cookie-parser": "^1.4.7",
+		"date-fns": "^4.1.0",
 		"joi": "^17.13.3",
 		"markdown-it": "^14.1.0",
 		"markdown-it-attrs": "^4.3.1",

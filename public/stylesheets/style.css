@@ -2,10 +2,18 @@ div[role='group'] button {
 	padding: var(--pico-form-element-spacing-vertical) 10px;
 }
 
+form button {
+	width: 100%;
+}
+
+.grid {
+	margin-top: calc(var(--pico-spacing) * 2);
+	margin-bottom: calc(var(--pico-spacing) * 2);
+}
+
 .grid > div {
 	padding: var(--pico-spacing);
 	text-align: center;
-	margin: calc(var(--pico-spacing) * 2);
 }
 
 .error {

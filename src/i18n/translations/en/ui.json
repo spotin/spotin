@@ -142,6 +142,11 @@
 				"label": "Username",
 				"placeholder": "Update your username"
 			},
+			"bio": {
+				"label": "Bio",
+				"placeholder": "Enter a short bio about yourself (optional)",
+				"note": "This field supports {markdown} syntax with the help of {markdownIt} and {markdownItAttrs}. You can use it to add links, images, and other formatting to your description."
+			},
 			"email": {
 				"label": "Email",
 				"note": "Email address cannot be changed."
@@ -152,16 +157,55 @@
 			},
 			"newPassword": {
 				"label": "New password",
-				"placeholder": "Enter your new password"
+				"placeholder": "Enter your new password (optional)"
 			},
-			"button": "Update profile"
+			"actions": {
+				"view": "View profile",
+				"update": "Update profile"
+			}
 		},
 		"view": {
 			"title": "View profile",
 			"description": "View a profile.",
 			"username": "Username",
 			"memberSince": "Member since: {date}",
-			"numberOfPublicSpots": "Number of public spots: {count}"
+			"numberOfPublicSpots": "Number of public spots: {count}",
+			"explorePublicSpots": "Explore {number} public spots from {username}",
+			"report": {
+				"button": "Report",
+				"modal": {
+					"title": "Report an inappropriate profile",
+					"description": "If you think this profile is inappropriate, please report it. The Spot in® team will review your report and take appropriate action.",
+					"actions": {
+						"report": "Report profile",
+						"close": "Close"
+					}
+				}
+			},
+			"like": {
+				"button": "Like",
+				"modal": {
+					"title": "Like this profile",
+					"description": "If you like this profile, please give it some love. This action will help the Spot in® team to identify the most popular profiles.",
+					"actions": {
+						"like": "Like this profile",
+						"close": "Close"
+					}
+				}
+			},
+			"share": {
+				"button": "Share",
+				"modal": {
+					"title": "Share this profile",
+					"description": "Share this profile with your friends so they can discover it too!",
+					"actions": {
+						"share": "Share this profile",
+						"shared": "Link shared successfully!",
+						"copied": "Link copied to clipboard!",
+						"close": "Close"
+					}
+				}
+			}
 		}
 	},
 	"spots": {
@@ -204,7 +248,7 @@
 			"whatDoesThatMean": {
 				"title": "What does that mean?",
 				"details": {
-					"part1": "Spots marked with a checkmark ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.",
+					"part1": "Spots marked with a certificate ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.",
 					"part2": "Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these spots."
 				}
 			},
@@ -334,7 +378,11 @@
 					"false": "No"
 				}
 			},
-			"button": "Save"
+			"actions": {
+				"view": "View spot",
+				"delete": "Delete spot",
+				"save": "Save spot"
+			}
 		}
 	},
 	"tokens": {
@@ -417,7 +465,11 @@
 				},
 				"note": "If the user is not enabled, they will not be able to log in."
 			},
-			"button": "Save"
+			"actions": {
+				"view": "View user",
+				"delete": "Delete user",
+				"save": "Save user"
+			}
 		}
 	}
 }

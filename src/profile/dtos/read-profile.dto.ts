@@ -8,6 +8,7 @@ export class ReadProfileDto extends ProfileDto implements ReadProfile {
 
 		this.username = entity.username;
 		this.email = entity.email;
+		this.bio = entity.bio;
 		this.createdAt = entity.createdAt;
 	}
 }

@@ -4,45 +4,45 @@
     {% if role == "ADMIN" %}
       <li>
         <a href="/users">
-          <i class="fas fa-users"></i>
+          <span class="fas fa-users"></span>
           {{ t('ui.header.users') }}
         </a>
       </li>
     {% endif %}
     <li>
       <a href="/spots">
-        <i class="fas fa-map-marker-alt"></i>
+        <span class="fas fa-map-marker-alt"></span>
         {{ t('ui.header.spots') }}
       </a>
     </li>
     <li>
       <a href="/tokens">
-        <i class="fas fa-key"></i>
+        <span class="fas fa-key"></span>
         {{ t('ui.header.tokens') }}
       </a>
     </li>
     <li>
       <a href="/profile">
-        <i class="fas fa-user"></i>
+        <span class="fas fa-user"></span>
         {{ t('ui.header.profile') }}
       </a>
     </li>
     <li>
       <a href="/auth/logout">
-        <i class="fas fa-sign-out-alt"></i>
+        <span class="fas fa-sign-out-alt"></span>
         {{ t('ui.header.logout') }}
       </a>
     </li>
   {% else %}
     <li>
       <a href="/auth/login">
-        <i class="fas fa-sign-in-alt"></i>
+        <span class="fas fa-sign-in-alt"></span>
         {{ t('ui.header.login') }}
       </a>
     </li>
     <li>
       <a href="/auth/register">
-        <i class="fas fa-edit"></i>
+        <span class="fas fa-edit"></span>
         {{ t('ui.header.register') }}
       </a>
     </li>

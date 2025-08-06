@@ -1,6 +1,7 @@
 import * as nunjucks from 'nunjucks';
-import { I18nContext, I18nService } from 'nestjs-i18n';
 import * as cookieParser from 'cookie-parser';
+import * as dateFns from 'date-fns';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -53,7 +54,14 @@ export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 		.addGlobal(
 			'plausibleDomainName',
 			configService.get(PLAUSIBLE_DOMAIN_NAME, { infer: true }),
-		);
+		)
+		.addFilter('date', (date: Date | string, format: string) => {
+			if (typeof date === 'string') {
+				date = new Date(date);
+			}
+
+			return dateFns.format(date, format);
+		});
 
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.useStaticAssets(join(__dirname, '..', 'public'));

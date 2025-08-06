@@ -41,9 +41,18 @@
   </fieldset>
   <div id="success"></div>
   <div id="errors"></div>
-  <button id="button" name="button" type="submit">
-    <i class="fas fa-save"></i>
-    {{ t('ui.users.form.button') }}
+  {% if user %}
+    <a href="/users/{{ user.id }}/delete">
+      <button type="button">
+        <span class="fas fa-trash"></span>
+        {{ t('ui.users.form.actions.delete') }}
+      </button>
+    </a>
+  {% endif %}
+
+  <button type="submit">
+    <span class="fas fa-save"></span>
+    {{ t('ui.users.form.actions.save') }}
   </button>
 </form>
 

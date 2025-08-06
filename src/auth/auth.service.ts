@@ -65,13 +65,11 @@ export class AuthService {
 	}
 
 	async validateSpot(spotId: string): Promise<User> {
-		const spot = await this.spotsService.getSpot(spotId);
+		const spotWithUser = await this.spotsService.getSpotWithUser(spotId);
 
-		if (spot.configured) {
+		if (spotWithUser.configured) {
 			throw new UnauthorizedException();
 		}
-
-		const spotWithUser = await this.spotsService.getSpotWithUser(spot.id);
 
 		return spotWithUser.user;
 	}

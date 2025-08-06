@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% block body %}
   <h1>
-    <i class="fas fa-users"></i>
+    <span class="fas fa-users"></span>
     {{ t('ui.users.index.title') }}
   </h1>
   <p class="text-justify">
@@ -16,6 +16,7 @@
         <th>
           {{ t('ui.users.index.email') }}
         </th>
+        <th></th>
         <th></th>
         <th></th>
       </tr>
@@ -35,12 +36,17 @@
           </td>
           <td>
             <a href="/users/{{ user.id }}">
-              <i class="fas fa-eye"></i>
+              <span class="fas fa-eye"></span>
+            </a>
+          </td>
+          <td>
+            <a href="/users/{{ user.id }}/edit">
+              <span class="fas fa-pen"></span>
             </a>
           </td>
           <td>
             <a href="/users/{{ user.id }}/delete">
-              <i class="fas fa-trash"></i>
+              <span class="fas fa-trash"></span>
             </a>
           </td>
         </tr>
@@ -48,7 +54,7 @@
     </tbody>
   </table>
   <a href="/users/create" role="button">
-    <i class="fas fa-plus-circle"></i>
+    <span class="fas fa-plus-circle"></span>
     {{ t('ui.users.index.button') }}
   </a>
 {% endblock %}

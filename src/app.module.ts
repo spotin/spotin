@@ -10,12 +10,14 @@ import { MailModule } from '@/mail/mail.module';
 import { ProfileModule } from '@/profile/profile.module';
 import { I18nModule } from '@/i18n/i18n.module';
 import { StatsModule } from '@/stats/stats.module';
+import { MarkdownModule } from '@/markdown/markdown.module';
 
 @Module({
 	imports: [
 		AuthModule,
 		ConfigModule,
 		MailModule,
+		MarkdownModule,
 		I18nModule,
 		ProfileModule,
 		ResetPasswordRequestsModule,

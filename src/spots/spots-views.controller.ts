@@ -1,6 +1,4 @@
 import * as qrcode from 'qrcode';
-import * as markdownit from 'markdown-it';
-import * as markdownItAttrs from 'markdown-it-attrs';
 import {
 	Get,
 	Controller,
@@ -29,58 +27,17 @@ import { User } from '@/users/types/user';
 import { Response } from 'express';
 import { ConfiguredSpotViewExceptionFilter } from '@/spots/filters/configured-spot-view-exception.filter';
 import { UserRole } from '@/users/enums/user-role';
-import { SpotsWithStatistics } from '@/spots/types/spots-with-statistics';
+import { MarkdownService } from '@/markdown/markdown.service';
 
 @ApiTags('Views')
 @Controller('spots')
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class SpotsViewsController {
-	private readonly md: markdownit;
-
 	constructor(
+		private readonly markdownService: MarkdownService,
 		private readonly spotsService: SpotsService,
 		private readonly configService: ConfigService<EnvironmentVariables, true>,
-	) {
-		this.md = markdownit({
-			typographer: false,
-			linkify: true,
-		});
-
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-		this.md.use(markdownItAttrs, {
-			allowedAttributes: ['class', 'style'],
-		});
-
-		// Customize heading rendering to shift all headings down by one level.
-		// This allows to keep the h1 for the spot title
-		this.md.renderer.rules.heading_open = (
-			tokens,
-			idx,
-			options,
-			env,
-			renderer,
-		): string => {
-			const token = tokens[idx];
-
-			// Extract number from h1, h2, etc.
-			const level = parseInt(token.tag.slice(1));
-
-			// Shift down by 1, max h6
-			const newLevel = Math.min(level + 1, 6);
-
-			return `<h${newLevel}${renderer.renderAttrs(token)}>`;
-		};
-
-		this.md.renderer.rules.heading_close = (tokens, idx): string => {
-			const token = tokens[idx];
-
-			const level = parseInt(token.tag.slice(1));
-
-			const newLevel = Math.min(level + 1, 6);
-
-			return `</h${newLevel}>`;
-		};
-	}
+	) {}
 
 	@Get('create')
 	@JwtAuth()
@@ -103,45 +60,6 @@ export class SpotsViewsController {
 		};
 	}
 
-	@Get('public')
-	@JwtOrUnrestrictedAuth()
-	@ApiOperation({
-		summary: 'Render the list of all public spots page',
-		description: 'Render the list of all public spots page.',
-		operationId: 'renderPublicSpots',
-	})
-	@ApiOkResponse({
-		description: 'Render successful.',
-	})
-	@Render('spots/public')
-	async renderPublicSpots(
-		@AuthUser() user: User | undefined,
-	): Promise<Record<string, string | undefined | SpotsWithStatistics>> {
-		const spotsWithStatistics = await this.spotsService.getPublicSpots();
-
-		const mdSpots = spotsWithStatistics.spots.map((spot) => {
-			const mdDescription =
-				spot.description && this.md.render(spot.description);
-
-			return {
-				...spot,
-				description: mdDescription,
-			};
-		});
-
-		return {
-			title: 'ui.spots.public.title',
-			description: 'ui.spots.public.description',
-			username: user?.username,
-			email: user?.email,
-			role: user?.role,
-			spotsWithStatistics: {
-				...spotsWithStatistics,
-				spots: mdSpots,
-			},
-		};
-	}
-
 	@Get()
 	@JwtAuth()
 	@ApiOperation({
@@ -160,7 +78,8 @@ export class SpotsViewsController {
 
 		const mdSpots = spots.map((spot) => {
 			const mdDescription =
-				spot.description && this.md.render(spot.description);
+				spot.description &&
+				this.markdownService.renderMarkdown(spot.description);
 
 			return {
 				...spot,
@@ -300,7 +219,8 @@ export class SpotsViewsController {
 			return res.redirect(spotWithUser.websiteTarget);
 		}
 
-		const mdDescription = description && this.md.render(description);
+		const mdDescription =
+			description && this.markdownService.renderMarkdown(description);
 
 		return res.render('spots/redirect', {
 			title: 'ui.spots.redirect.title',
@@ -331,34 +251,43 @@ export class SpotsViewsController {
 	async renderSpot(
 		@AuthUser() user: User | undefined,
 		@Param('id') id: string,
+		@Res() res: Response,
 	): Promise<Record<string, string | undefined | Spot> | void> {
-		const { description, ...spot } = await this.spotsService.getSpot(id);
-
-		const mdDescription = description && this.md.render(description);
-
-		const baseUrl = this.configService.get(BASE_URL, { infer: true });
-		const redirection = `${baseUrl}/spots/${spot.id}/redirect`;
-
 		try {
-			const qrcodeSvg = await qrcode.toString(redirection, {
-				errorCorrectionLevel: 'high',
-				type: 'svg',
-			});
+			const { description, ...spot } = await this.spotsService.getSpot(
+				id,
+				user,
+			);
 
-			return {
-				title: 'ui.spots.view.title',
-				description: 'ui.spots.view.description',
-				username: user?.username,
-				email: user?.email,
-				role: user?.role,
-				spot: {
-					...spot,
-					description: mdDescription,
-				},
-				qrcode: qrcodeSvg,
-			};
-		} catch (error) {
-			console.error(error);
+			const mdDescription =
+				description && this.markdownService.renderMarkdown(description);
+
+			const baseUrl = this.configService.get(BASE_URL, { infer: true });
+			const redirection = `${baseUrl}/spots/${spot.id}/redirect`;
+
+			try {
+				const qrcodeSvg = await qrcode.toString(redirection, {
+					errorCorrectionLevel: 'high',
+					type: 'svg',
+				});
+
+				return {
+					title: 'ui.spots.view.title',
+					description: 'ui.spots.view.description',
+					username: user?.username,
+					email: user?.email,
+					role: user?.role,
+					spot: {
+						...spot,
+						description: mdDescription,
+					},
+					qrcode: qrcodeSvg,
+				};
+			} catch (error) {
+				console.error(error);
+			}
+		} catch {
+			res.redirect(`/spots/${id}/redirect`);
 		}
 	}
 }
