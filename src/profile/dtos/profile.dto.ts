@@ -3,5 +3,5 @@ import { UserDto } from '@/users/dtos/user.dto';
 import { Profile } from '@/profile/types/profile';
 
 export class ProfileDto
-	extends PickType(UserDto, ['username', 'email', 'createdAt'] as const)
+	extends PickType(UserDto, ['username', 'email', 'bio', 'createdAt'] as const)
 	implements Profile {}

@@ -1,6 +1,8 @@
 <form id="form">
   <fieldset>
-    <input type="hidden" name="id" id="id" value="{{ spot.id }}">
+    {% if spot %}
+      <input type="hidden" name="id" id="id" value="{{ spot.id }}">
+    {% endif %}
 
     <label for="name">
       {{ t('ui.spots.form.name.label') }}
@@ -12,7 +14,7 @@
     </label>
     <textarea id="description" type="text" name="description" rows="15" placeholder="{{ t('ui.spots.form.description.placeholder') }}">{{ spot.description|safe }}</textarea>
     <small>
-      <i class="fab fa-markdown"></i>
+      <span class="fab fa-markdown"></span>
       {{
         t('ui.spots.form.description.note', {
           markdown: '<a href="https://www.markdownguide.org" target="_blank" rel="noopener noreferrer">Markdown</a>',
@@ -22,14 +24,12 @@
       }}
     </small>
 
-    <!-- Prompt user for current location -->
-
     <label for="latitude">
       {{ t('ui.spots.form.latitude.label') }}
     </label>
     <input id="latitude" type="number" step="0.000000000000001" name="latitude" lang="en" placeholder="{{ t('ui.spots.form.latitude.placeholder') }}" value="{{ spot.latitude }}" min="-90" max="90">
     <small id="get-latitude">
-      <i class="fas fa-map-marker-alt"></i>
+      <span class="fas fa-map-marker-alt"></span>
       {{ t('ui.spots.form.useCurrentLocation') }}
     </small>
 
@@ -38,7 +38,7 @@
     </label>
     <input id="longitude" type="number" step="0.000000000000001" name="longitude" lang="en" placeholder="{{ t('ui.spots.form.longitude.placeholder') }}" value="{{ spot.longitude }}" min="-180" max="180">
     <small id="get-longitude">
-      <i class="fas fa-map-marker-alt"></i>
+      <span class="fas fa-map-marker-alt"></span>
       {{ t('ui.spots.form.useCurrentLocation') }}
     </small>
 
@@ -115,9 +115,26 @@
   </fieldset>
   <div id="success"></div>
   <div id="errors"></div>
+
+  {% if spot %}
+    <a href="/spots/{{ spot.id }}">
+      <button type="button">
+        <span class="fas fa-eye"></span>
+        {{ t('ui.spots.form.actions.view') }}
+      </button>
+    </a>
+
+    <a href="/spots/{{ spot.id }}/delete">
+      <button type="button">
+        <span class="fas fa-trash"></span>
+        {{ t('ui.spots.form.actions.delete') }}
+      </button>
+    </a>
+  {% endif %}
+
   <button type="submit">
-    <i class="fas fa-save"></i>
-    {{ t('ui.spots.form.button') }}
+    <span class="fas fa-save"></span>
+    {{ t('ui.spots.form.actions.save') }}
   </button>
 </form>
 

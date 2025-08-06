@@ -5,12 +5,12 @@
     <header>
       {% if spot.name != null %}
         <h1>
-          <i class="fas fa-map-marker-alt"></i>
+          <span class="fas fa-map-marker-alt"></span>
           {{ spot.name }}
         </h1>
       {% else %}
         <h1 class="text-italic">
-          <i class="fas fa-map-marker-alt"></i>
+          <span class="fas fa-map-marker-alt"></span>
           {{ t('ui.spots.view.noName') }}
         </h1>
       {% endif %}
@@ -36,19 +36,19 @@
     <footer>
       <div role="group">
         <button id="download-qr-code" class="secondary">
-          <i class="fas fa-qrcode"></i>
+          <span class="fas fa-qrcode"></span>
           <small>
             {{ t('ui.spots.view.download') }}
           </small>
         </button>
         <button id="edit" class="secondary">
-          <i class="fas fa-pen"></i>
+          <span class="fas fa-pen"></span>
           <small>
             {{ t('ui.spots.view.edit') }}
           </small>
         </button>
         <button id="view-redirection-page" class="secondary">
-          <i class="fas fa-external-link-alt"></i>
+          <span class="fas fa-external-link-alt"></span>
           <small>
             {{ t('ui.spots.view.view') }}
           </small>

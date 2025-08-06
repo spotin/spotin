@@ -142,6 +142,11 @@
 				"label": "Nom d'utilisateur",
 				"placeholder": "Mettez à jour votre nom d'utilisateur"
 			},
+			"bio": {
+				"label": "Biographie",
+				"placeholder": "Entrez une courte biographie sur vous (facultatif)",
+				"note": "Ce champ prend en charge la syntaxe {markdown} avec l'aide de {markdownIt} et {markdownItAttrs}. Vous pouvez l'utiliser pour ajouter des liens, des images et d'autres formatages à votre description."
+			},
 			"email": {
 				"label": "Email",
 				"note": "L'adresse email ne peut pas être modifiée."
@@ -152,16 +157,55 @@
 			},
 			"newPassword": {
 				"label": "Nouveau mot de passe",
-				"placeholder": "Entrez votre nouveau mot de passe"
+				"placeholder": "Entrez votre nouveau mot de passe (optionnel)"
 			},
-			"button": "Mettre à jour le profil"
+			"actions": {
+				"view": "Voir le profil",
+				"update": "Mettre à jour le profil"
+			}
 		},
 		"view": {
 			"title": "Voir le profil",
 			"description": "Consultez un profil.",
 			"username": "Nom d'utilisateur",
 			"memberSince": "Membre depuis : {date}",
-			"numberOfPublicSpots": "Nombre de spots publics : {count}"
+			"numberOfPublicSpots": "Nombre de spots publics : {count}",
+			"explorePublicSpots": "Explorez {number} spots publics de {username}",
+			"report": {
+				"button": "Signaler",
+				"modal": {
+					"title": "Signaler un profil inapproprié",
+					"description": "Si vous pensez que ce profil est inapproprié, veuillez le signaler. L'équipe de Spot in® examinera votre signalement et prendra les mesures appropriées.",
+					"actions": {
+						"report": "Signaler le profil",
+						"close": "Fermer"
+					}
+				}
+			},
+			"like": {
+				"button": "J'aime",
+				"modal": {
+					"title": "Aimer ce profil",
+					"description": "Si vous aimez ce profil, montrez-lui un peu d'amour. Cette action aidera l'équipe de Spot in® à identifier les profils les plus populaires.",
+					"actions": {
+						"like": "Aimer ce profil",
+						"close": "Fermer"
+					}
+				}
+			},
+			"share": {
+				"button": "Partager",
+				"modal": {
+					"title": "Partager ce profil",
+					"description": "Partagez ce profil avec vos amis pour qu'ils puissent le découvrir eux aussi !",
+					"actions": {
+						"share": "Partager ce profil",
+						"shared": "Lien partagé avec succès !",
+						"copied": "Lien copié dans le presse-papiers !",
+						"close": "Fermer"
+					}
+				}
+			}
 		}
 	},
 	"spots": {
@@ -204,7 +248,7 @@
 			"whatDoesThatMean": {
 				"title": "Qu'est-ce que cela signifie ?",
 				"details": {
-					"part1": "Les spots marqués d'un check ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré fiable.",
+					"part1": "Les spots marqués d'un certificat ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré fiable.",
 					"part2": "Les spots marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Merci d'être prudent lorsque vous interagissez avec ces spots."
 				}
 			},
@@ -334,7 +378,11 @@
 					"false": "Non"
 				}
 			},
-			"button": "Enregistrer"
+			"actions": {
+				"view": "Voir le spot",
+				"delete": "Supprimer le spot",
+				"save": "Enregistrer le spot"
+			}
 		}
 	},
 	"tokens": {
@@ -417,7 +465,11 @@
 				},
 				"note": "Si l'utilisateur n'est pas activé, il ne pourra pas se connecter."
 			},
-			"button": "Enregistrer"
+			"actions": {
+				"view": "Voir l'utilisateur",
+				"delete": "Supprimer l'utilisateur",
+				"save": "Enregistrer l'utilisateur"
+			}
 		}
 	}
 }

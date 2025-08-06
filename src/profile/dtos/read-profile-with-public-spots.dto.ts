@@ -27,6 +27,7 @@ export class ReadProfileWithPublicSpotsDto
 
 		this.username = entity.username;
 		this.createdAt = entity.createdAt;
+		this.bio = entity.bio;
 		this.spotsStatistics = entity.spotsStatistics;
 		this.spots = entity.spots.map((spot) => new ReadSpotDto(spot));
 	}

@@ -1,9 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
 	IsBoolean,
 	IsDateString,
 	IsEmail,
 	IsEnum,
+	IsOptional,
 	IsString,
 	IsUUID,
 	MaxLength,
@@ -44,6 +45,15 @@ export class UserDto implements User {
 	@MinLength(8)
 	@MaxLength(255)
 	password: string;
+
+	/**
+	 * Bio of the user
+	 */
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@MinLength(1)
+	bio: string | null;
 
 	/**
 	 * Role of the user

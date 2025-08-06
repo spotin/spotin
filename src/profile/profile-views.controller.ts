@@ -2,6 +2,7 @@ import { AuthUser } from '@/auth/decorators/auth-user.decorator';
 import { JwtOrUnrestrictedAuth } from '@/auth/jwt-or-unrestricted/jwt-or-unrestricted-auth.decorator';
 import { JwtAuth } from '@/auth/jwt/jwt-auth.decorator';
 import { UnauthorizedViewExceptionFilter } from '@/common/filters/unauthorized-view-exception.filter';
+import { MarkdownService } from '@/markdown/markdown.service';
 import { ProfileWithPublicSpots } from '@/profile/types/profile-with-public-spots';
 import { User } from '@/users/types/user';
 import { UsersService } from '@/users/users.service';
@@ -12,7 +13,10 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 @Controller('profile')
 @UseFilters(UnauthorizedViewExceptionFilter)
 export class ProfileViewsController {
-	constructor(private readonly usersService: UsersService) {}
+	constructor(
+		private readonly markdownService: MarkdownService,
+		private readonly usersService: UsersService,
+	) {}
 
 	@Get()
 	@JwtAuth()
@@ -25,12 +29,13 @@ export class ProfileViewsController {
 		description: 'Render successful.',
 	})
 	@Render('profile/edit')
-	renderMyProfile(@AuthUser() user: User): Record<string, string> {
+	renderMyProfile(@AuthUser() user: User): Record<string, string | null> {
 		return {
 			title: 'ui.profile.edit.title',
 			description: 'ui.profile.edit.description',
 			username: user.username,
 			email: user.email,
+			bio: user.bio,
 			role: user.role,
 		};
 	}
@@ -54,13 +59,20 @@ export class ProfileViewsController {
 		const profileWithPublicSpots =
 			await this.usersService.getUserWithPublicSpotsByUsername(username);
 
+		const mdBio =
+			profileWithPublicSpots.bio &&
+			this.markdownService.renderMarkdown(profileWithPublicSpots.bio);
+
 		return {
 			title: 'ui.profile.view.title',
 			description: `ui.profile.view.description`,
 			username: user?.username,
 			email: user?.email,
 			role: user?.role,
-			profile: profileWithPublicSpots,
+			profile: {
+				...profileWithPublicSpots,
+				bio: mdBio,
+			},
 		};
 	}
 }

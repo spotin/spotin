@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% block body %}
   <h1>
-    <i class="fas fa-user"></i>
+    <span class="fas fa-user"></span>
     {{ t('ui.profile.edit.title') }}
   </h1>
   <form id="form">
@@ -19,6 +19,21 @@
         {{ t('ui.profile.edit.email.note') }}
       </small>
 
+      <label for="bio">
+        {{ t('ui.profile.edit.bio.label') }}
+      </label>
+      <textarea id="bio" type="text" name="bio" rows="15" placeholder="{{ t('ui.profile.edit.bio.placeholder') }}">{{ bio }}</textarea>
+      <small>
+        <span class="fab fa-markdown"></span>
+        {{
+        t('ui.profile.edit.bio.note', {
+          markdown: '<a href="https://www.markdownguide.org" target="_blank" rel="noopener noreferrer">Markdown</a>',
+          markdownIt: '<a href="https://www.npmjs.com/package/markdown-it" target="_blank" rel="noopener noreferrer">markdown-it</a>',
+          markdownItAttrs: '<a href="https://www.npmjs.com/package/markdown-it-attrs" target="_blank" rel="noopener noreferrer">markdown-it-attrs</a>'
+        })|safe
+      }}
+      </small>
+
       <label for="current-password">
         {{ t('ui.profile.edit.currentPassword.label') }}
       </label>
@@ -31,9 +46,16 @@
     </fieldset>
     <div id="success"></div>
     <div id="errors"></div>
+    <a href="/profile/{{ username }}">
+      <button type="button">
+        <span class="fas fa-eye"></span>
+        {{ t('ui.profile.edit.actions.view') }}
+      </button>
+    </a>
+
     <button type="submit">
-      <i class="fas fa-edit"></i>
-      {{ t('ui.profile.edit.button') }}
+      <span class="fas fa-edit"></span>
+      {{ t('ui.profile.edit.actions.update') }}
     </button>
   </form>
 {% endblock %}
@@ -59,11 +81,13 @@
 
       // Get the form data
       const username = document.getElementById("username");
+      const bio = document.getElementById("bio");
       const currentPassword = document.getElementById("current-password");
       const newPassword = document.getElementById("new-password");
 
       const body = JSON.stringify({
         username: username.value || undefined,
+        bio: bio.value || null,
         currentPassword: currentPassword.value || undefined,
         newPassword: newPassword.value || undefined
       });
