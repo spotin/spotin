@@ -1,10 +1,9 @@
 {% extends "public-layout.njk" %}
 {% block body %}
-  {% if spot.websiteTarget == null %}
+  {% if spot.websiteTarget == null and spot.description %}
     {{ spot.description|safe }}
 
     <hr>
-
   {% endif %}
 
   <details>
@@ -64,7 +63,6 @@
   </details>
 
   {% if spot.websiteTarget != null %}
-
     <hr>
 
     <form id="form">

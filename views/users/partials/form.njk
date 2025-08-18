@@ -43,7 +43,7 @@
   <div id="errors"></div>
   {% if user %}
     <a href="/users/{{ user.id }}/delete">
-      <button type="button">
+      <button type="button" class="secondary">
         <span class="fas fa-trash"></span>
         {{ t('ui.users.form.actions.delete') }}
       </button>

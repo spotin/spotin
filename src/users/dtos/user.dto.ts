@@ -7,6 +7,7 @@ import {
 	IsOptional,
 	IsString,
 	IsUUID,
+	Matches,
 	MaxLength,
 	MinLength,
 } from 'class-validator';
@@ -23,10 +24,14 @@ export class UserDto implements User {
 
 	/**
 	 * Username of the user
+	 *
+	 * @example 'john_doe'
 	 */
-	@IsString()
-	@MinLength(3)
-	@MaxLength(255)
+	@ApiProperty({ pattern: '^[a-zA-Z0-9_-]{3,255}$' })
+	@Matches(/^[a-zA-Z0-9_-]{3,255}$/, {
+		message:
+			'username must be between 3 and 255 characters long and can only contain letters, numbers, underscores, and hyphens.',
+	})
 	username: string;
 
 	/**

@@ -1,8 +1,6 @@
 <form id="form">
   <fieldset>
-    {% if spot %}
-      <input type="hidden" name="id" id="id" value="{{ spot.id }}">
-    {% endif %}
+    <input type="hidden" name="id" id="id" value="{{ spot.id }}">
 
     <label for="name">
       {{ t('ui.spots.form.name.label') }}
@@ -118,14 +116,14 @@
 
   {% if spot %}
     <a href="/spots/{{ spot.id }}">
-      <button type="button">
+      <button type="button" class="secondary">
         <span class="fas fa-eye"></span>
         {{ t('ui.spots.form.actions.view') }}
       </button>
     </a>
 
     <a href="/spots/{{ spot.id }}/delete">
-      <button type="button">
+      <button type="button" class="secondary">
         <span class="fas fa-trash"></span>
         {{ t('ui.spots.form.actions.delete') }}
       </button>
