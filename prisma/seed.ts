@@ -7,11 +7,11 @@ async function main() {
 	const admin = await prisma.user.upsert({
 		where: {
 			email: process.env.SPOT_IN_ADMIN_EMAIL as string,
-			username: 'Spot in',
+			username: 'spotin',
 		},
 		update: {},
 		create: {
-			username: 'Spot in',
+			username: 'spotin',
 			email: process.env.SPOT_IN_ADMIN_EMAIL as string,
 			password: await argon2id.hash(
 				process.env.SPOT_IN_ADMIN_PASSWORD as string,
