@@ -14,7 +14,7 @@ export class MarkdownService {
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		this.md.use(markdownItAttrs, {
-			allowedAttributes: ['class', 'style'],
+			allowedAttributes: ['class', 'style', 'id'],
 		});
 
 		// Customize heading rendering to shift all headings down by one level.
