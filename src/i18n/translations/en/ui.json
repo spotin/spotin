@@ -254,15 +254,6 @@
 			"description": "The redirection page of the spot.",
 			"spotScanned": "You just have scanned a spot!",
 			"spotExplanation": "{spotIn} adds digital information to our physical world with the help of 'spots'.<br>Share spots with your friends and discover new places and things!",
-			"certified": "Certified",
-			"unverified": "Unverified",
-			"whatDoesThatMean": {
-				"title": "What does that mean?",
-				"details": {
-					"part1": "Spots marked with a certificate ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.",
-					"part2": "Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these spots."
-				}
-			},
 			"showSpotInformation": "Show spot details",
 			"createdBy": "Spot created by",
 			"map": {
