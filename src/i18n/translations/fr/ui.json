@@ -78,13 +78,23 @@
 	},
 	"banner": {
 		"title": "Le site officiel de Spot in®. Voici comment vous le savez.",
+		"spot": {
+			"certified": {
+				"title": "Ce spot est certifié.",
+				"meaning": "Ce spot a été créé par un utilisateur qui a été vérifié par la plateforme. Ses spots sont considérés comme dignes de confiance."
+			},
+			"unverified": {
+				"title": "Ce spot n'est pas vérifié.",
+				"meaning": "Ce spot a été créé par un utilisateur qui n'a pas été vérifié par la plateforme. Ses spots peuvent ne pas être fiables. Veuillez faire preuve de prudence lors de l'interaction avec ces spots."
+			}
+		},
 		"keyElementOne": {
 			"title": "Le site officiel de Spot in® est {spotInWebsite}.",
 			"note": "Aucun autre site n'est officiel."
 		},
 		"keyElementTwo": {
 			"title": "Le site officiel de Spot in® utilise HTTPS.",
-			"note": "Une icône de cadenas ({lockIcon}) ou {httpsUrl} dans la barre d'adresse indique une connexion sécurisée."
+			"note": "Une icône de cadenas ({lockIcon}), une icône de bouclier ({shieldIcon}) ou {httpsUrl} dans la barre d'adresse indique une connexion sécurisée."
 		}
 	},
 	"footer": {
@@ -243,15 +253,6 @@
 			"description": "La page de redirection du spot.",
 			"spotScanned": "Vous venez de scanner un spot !",
 			"spotExplanation": "{spotIn} ajoute des informations numériques à notre monde physique grâce aux « spots ».<br>Partagez des spots avec vos amis et découvrez de nouveaux lieux et choses !",
-			"certified": "Certifié",
-			"unverified": "Non vérifié",
-			"whatDoesThatMean": {
-				"title": "Qu'est-ce que cela signifie ?",
-				"details": {
-					"part1": "Les spots marqués d'un certificat ({icon}) sont créés par des utilisateurs certifiés ou des administrateurs. Cela signifie que l'utilisateur a été vérifié par la plateforme et est considéré fiable.",
-					"part2": "Les spots marqués d'un point d'exclamation ({icon}) sont créés par des utilisateurs non vérifiés. Cela signifie que l'utilisateur n'a pas été vérifié par la plateforme et peut ne pas être fiable. Merci d'être prudent lorsque vous interagissez avec ces spots."
-				}
-			},
 			"showSpotInformation": "Afficher les détails du spot",
 			"createdBy": "Spot créé par",
 			"map": {

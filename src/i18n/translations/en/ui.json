@@ -77,14 +77,25 @@
 		}
 	},
 	"banner": {
-		"title": "The official Spot in® website. Here's how you know.",
+		"title": "The official Spot in® website.",
+		"subtitle": "Here's how you know.",
+		"spot": {
+			"certified": {
+				"title": "This spot is certified.",
+				"meaning": "This spot was created by a user that has been verified by the platform. Their spots are considered trustworthy."
+			},
+			"unverified": {
+				"title": "This spot is unverified.",
+				"meaning": "This spot was created by a user that has not been verified by the platform. Their spots may not be trustworthy. Please use caution when interacting with these spots."
+			}
+		},
 		"keyElementOne": {
 			"title": "The official Spot in® website is {spotInWebsite}.",
 			"note": "No other website is official."
 		},
 		"keyElementTwo": {
 			"title": "The official Spot in® website uses HTTPS.",
-			"note": "A lock icon ({lockIcon}) or {httpsUrl} in the address bar indicates a secure connection."
+			"note": "A lock icon ({lockIcon}), a shield icon ({shieldIcon}), or {httpsUrl} in the address bar indicates a secure connection."
 		}
 	},
 	"footer": {

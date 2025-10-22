@@ -167,7 +167,6 @@ export class UsersService {
 		if (password && typeof password === 'string') {
 			password = await argon2id.hash(password);
 		}
-
 		const updatedUser = await this.prisma.user.update({
 			where: {
 				id: userId,
