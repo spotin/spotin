@@ -15,6 +15,7 @@ export class NotFoundViewExceptionFilter implements ExceptionFilter {
 		const ctx = host.switchToHttp();
 		const request = ctx.getRequest<Request>();
 		const response = ctx.getResponse<Response>();
+
 		// TODO: This does not work at the moment. Interceptor might be a better solution.
 		// It is kept here for future investigation.
 		const user = request.user as User | undefined;

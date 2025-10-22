@@ -22,9 +22,9 @@
     {% endif %}
   </details>
 
-  <hr>
-
   {% if spot.latitude != null and spot.longitude != null %}
+    <hr>
+
     <details>
       <summary>
         <span>
@@ -34,33 +34,7 @@
       </summary>
       <div id='map' class="map" style='width: 100%; height: 70vh;'></div>
     </details>
-
-    <hr>
   {% endif %}
-
-  <details>
-    <summary>
-      {% if spot.user.role == "CERTIFIED_USER" or spot.user.role == "ADMIN" %}
-        <span>
-          <span class="fas fa-certificate" style="color: LimeGreen;"></span>
-          {{ t('ui.spots.redirect.certified') }}
-        </span>
-      {% else %}
-        <span>
-          <span class="fas fa-exclamation-circle" style="color: Orange;"></span>
-          {{ t('ui.spots.redirect.unverified') }}
-        </span>
-      {% endif %}
-
-      <i>({{ t('ui.spots.redirect.whatDoesThatMean.title') }})</i>
-    </summary>
-    <p class="text-justify">
-      {{ t('ui.spots.redirect.whatDoesThatMean.details.part1', { icon: '<span class="fas fa-certificate" style="color: LimeGreen;"></span>' })|safe }}
-    </p>
-    <p class="text-justify">
-      {{ t('ui.spots.redirect.whatDoesThatMean.details.part2', { icon: '<span class="fas fa-exclamation-circle" style="color: Orange;"></span>' })|safe }}
-    </p>
-  </details>
 
   {% if spot.websiteTarget != null %}
     <hr>
@@ -272,9 +246,11 @@
         trackUserLocation: true
       });
       const centerOnSpotControl = new CenterOnSpotControl();
+      const fullscreenControl = new maplibregl.FullscreenControl()
 
       map.addControl(attributionControl, 'top-left');
       map.addControl(navigationControl, 'top-right');
+      map.addControl(fullscreenControl, 'bottom-left');
       map.addControl(geolocateControl, 'bottom-right');
       map.addControl(centerOnSpotControl, 'bottom-right');
 

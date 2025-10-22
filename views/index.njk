@@ -155,7 +155,7 @@
       map.fitBounds(mapBounds, {padding: 100});
 
       for (const spot of spotsWithStatistics.spots) {
-        if (spot.latitude == null || spot.longitude == null) {
+        if (spot.latitude === null || spot.longitude === null) {
           continue;
         }
 

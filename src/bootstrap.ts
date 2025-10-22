@@ -3,7 +3,7 @@ import * as cookieParser from 'cookie-parser';
 import * as dateFns from 'date-fns';
 import { I18nContext, I18nService } from 'nestjs-i18n';
 import { HttpAdapterHost } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
@@ -23,8 +23,14 @@ import { NotFoundViewExceptionFilter } from '@/common/filters/not-found-view-exc
 export function bootstrap(app: NestExpressApplication): NestExpressApplication {
 	const { httpAdapter } = app.get(HttpAdapterHost);
 
-	app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 	app.useGlobalFilters(new NotFoundViewExceptionFilter());
+	app.useGlobalFilters(
+		new PrismaClientExceptionFilter(httpAdapter, {
+			P2000: HttpStatus.BAD_REQUEST,
+			P2002: HttpStatus.CONFLICT,
+			P2025: HttpStatus.NOT_FOUND,
+		}),
+	);
 
 	app.useGlobalPipes(
 		new ValidationPipe({
