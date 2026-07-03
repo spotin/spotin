@@ -1,9 +1,11 @@
 ### button
+
 Buttons allow the user to take actions
 
 [button docs](https://daisyui.com/components/button/)
 
 #### Class names
+
 - component: `btn`
 - color: `btn-neutral`, `btn-primary`, `btn-secondary`, `btn-accent`, `btn-info`, `btn-success`, `btn-warning`, `btn-error`
 - style: `btn-outline`, `btn-dash`, `btn-soft`, `btn-ghost`, `btn-link`
@@ -12,10 +14,13 @@ Buttons allow the user to take actions
 - modifier: `btn-wide`, `btn-block`, `btn-square`, `btn-circle`
 
 #### Syntax
+
 ```html
 <button class="btn {MODIFIER}">Button</button>
 ```
+
 #### Rules
+
 - {MODIFIER} is optional and can have one of each color/style/behavior/size/modifier class names
 - btn can be used on any html tags such as `<button>`, `<a>`, `<input>`
 - btn can have an icon before or after the text

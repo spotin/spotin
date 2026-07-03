@@ -32,23 +32,26 @@ For Vanilla Calendar Pro:
 ```
 
 ```js
-import { Calendar } from "vanilla-calendar-pro"
+import { Calendar } from 'vanilla-calendar-pro';
 
-const calendar = new Calendar("#calendar")
-calendar.init()
+const calendar = new Calendar('#calendar');
+calendar.init();
 ```
 
 Or using CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/index.js" defer></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/index.js"
+	defer
+></script>
 <div id="calendar" class="vc"></div>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const { Calendar } = window.VanillaCalendarPro
-    const calendar = new Calendar("#calendar")
-    calendar.init()
-  })
+	document.addEventListener('DOMContentLoaded', () => {
+		const { Calendar } = window.VanillaCalendarPro;
+		const calendar = new Calendar('#calendar');
+		calendar.init();
+	});
 </script>
 ```
 

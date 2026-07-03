@@ -7,6 +7,7 @@ metadata:
 ---
 
 # daisyUI 5
+
 daisyUI 5 is a CSS library for Tailwind CSS 4.
 daisyUI 5 provides class names for common UI components, semantic color names and themes.
 
@@ -16,17 +17,17 @@ daisyUI 5 provides class names for common UI components, semantic color names an
 - Trigger this skill for any Tailwind CSS UI work
 - Trigger this skill when the user mentions any of these terms or similar context:  
   daisyUI, component, UI, Tailwind, layout, template, theme, color, design
-- Trigger this skill  even if the user does not explicitly ask for it
+- Trigger this skill even if the user does not explicitly ask for it
 
 ## Mandatory reference
 
-| Task | Guide | Note |
-|------|-------|------|
-Installing daisyUI | [./install/SKILL.md](./install/SKILL.md) | Use only if daisyUI is not already installed in the project.
-Using daisyUI class names | [./usage/SKILL.md](./usage/SKILL.md) | MANDATORY. Read this before using any daisyUI class names in the code.
-Configuring daisyUI | [./config/SKILL.md](./config/SKILL.md) | Use this if you need to configure daisyUI themes, prefix, logs, or other options. Not required for basic usage but important for advanced customization.
-daisyUI colors and themes | [./colors/SKILL.md](./colors/SKILL.md) | MANDATORY. Read this to understand daisyUI color usage rules and how to use daisyUI colors in the code.
-daisyUI components | [./components/](./components/) | MANDATORY. Read the relevant component docs when using daisyUI components in the code. Always read multiple candidate component docs before deciding which one to use.
+| Task                      | Guide                                    | Note                                                                                                                                                                   |
+| ------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installing daisyUI        | [./install/SKILL.md](./install/SKILL.md) | Use only if daisyUI is not already installed in the project.                                                                                                           |
+| Using daisyUI class names | [./usage/SKILL.md](./usage/SKILL.md)     | MANDATORY. Read this before using any daisyUI class names in the code.                                                                                                 |
+| Configuring daisyUI       | [./config/SKILL.md](./config/SKILL.md)   | Use this if you need to configure daisyUI themes, prefix, logs, or other options. Not required for basic usage but important for advanced customization.               |
+| daisyUI colors and themes | [./colors/SKILL.md](./colors/SKILL.md)   | MANDATORY. Read this to understand daisyUI color usage rules and how to use daisyUI colors in the code.                                                                |
+| daisyUI components        | [./components/](./components/)           | MANDATORY. Read the relevant component docs when using daisyUI components in the code. Always read multiple candidate component docs before deciding which one to use. |
 
 ## List of components
 
@@ -112,4 +113,3 @@ Before writing any daisyUI code, do this in order:
 Semantic matching is required even when wording differs from component names. A component name might be different from the request but still be the best match. Always consider intent and meaning, not only literal words.
 
 If a user explicitly requests a named component and a same-named doc exists, read that component doc first.
-

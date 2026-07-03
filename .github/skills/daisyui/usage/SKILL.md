@@ -4,6 +4,7 @@ description: MANDATORY usage rules for daisyUI 5
 ---
 
 ## daisyUI 5 usage rules
+
 1. We can give styles to a HTML element by adding daisyUI class names to it. By adding a component class name, part class names (if there's any available for that component), and modifier class names (if there's any available for that component)
 2. Components can be customized using Tailwind CSS utility classes if the customization is not possible using the existing daisyUI classes. For example `btn px-10` sets a custom horizontal padding to a `btn`
 3. If customization of daisyUI styles using Tailwind CSS utility classes didn't work because of CSS specificity issues, you can use the `!` at the end of the Tailwind CSS utility class to override the existing styles. For example `btn bg-red-500!` sets a custom background color to a `btn` forcefully. This is a last resort solution and should be used sparingly
@@ -18,6 +19,7 @@ description: MANDATORY usage rules for daisyUI 5
 12. Always use the default variant of daisyUI components unless the user asked for a specific variant or color
 
 daisyUI 5 class names are one of the following categories. These type names are only for reference and are not used in the actual code
+
 - `component`: the required component class
 - `part`: a child part of a component
 - `style`: sets a specific style to component or part
