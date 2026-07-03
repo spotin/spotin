@@ -27,6 +27,12 @@ sudo apt install --yes sqlite3
 # Install missing PHP extensions (PHP is from the Docker official image)
 sudo apt install --yes default-libmysqlclient-dev
 sudo docker-php-ext-install bcmath pdo_mysql
+sudo docker-php-ext-install pcntl
+
+# docker-php-ext-enable is broken in this container; create the ini file manually
+if [ ! -f /usr/local/etc/php/conf.d/docker-php-ext-pcntl.ini ]; then
+    echo "extension=pcntl.so" | sudo tee /usr/local/etc/php/conf.d/docker-php-ext-pcntl.ini
+fi
 
 ## Install Laravel Installer
 composer global require laravel/installer
