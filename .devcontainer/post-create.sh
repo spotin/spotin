@@ -41,3 +41,5 @@ composer global require laravel/installer
 tee -a ~/.bashrc > /dev/null <<"EOF"
 export PATH="${HOME}/.composer/vendor/bin:${PATH}"
 EOF
+
+composer setup
