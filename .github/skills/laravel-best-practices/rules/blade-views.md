@@ -34,9 +34,21 @@ Hardcoding classes prevents consumers from adding their own. `merge()` combines 
 
 Use `@if`, `@foreach`, `@forelse`, `@unless`, and other Blade directives instead of raw PHP tags to keep templates clean and consistent.
 
-## Minimize Tailwind Classes — Stay Simple and Consistent
+## Minimize Tailwind Classes — Use DaisyUI Components
 
-Avoid cluttering templates with long chains of utility classes. Extract repeated patterns into components or use `@apply` in CSS when a combination is reused often.
+DaisyUI is the mandatory UI component library for this project. Prefer DaisyUI semantic class names (`btn`, `card`, `alert`, `input`, `modal`, etc.) over long chains of raw Tailwind utilities. This keeps templates readable, consistent, and easy to theme.
+
+```blade
+{{-- Bad --}}
+<button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">
+    Submit
+</button>
+
+{{-- Good --}}
+<button class="btn btn-primary">Submit</button>
+```
+
+Only reach for raw Tailwind utilities for layout and spacing concerns not covered by a DaisyUI component.
 
 ## Mobile-First Responsive Design
 
