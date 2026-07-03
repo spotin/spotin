@@ -29,7 +29,7 @@ terminal, run the following commands:
 composer setup
 
 # Start the application in watch mode (changes to the code will be automatically reloaded)
-composer dev
+php artisan serve
 ```
 
 The application should start and be accessible at <http://localhost:8000>. You
