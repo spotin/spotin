@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SpotController;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
@@ -28,4 +30,33 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/spots', [SpotController::class, 'store']);
     Route::patch('/spots/{spot}', [SpotController::class, 'update']);
     Route::delete('/spots/{spot}', [SpotController::class, 'destroy']);
+});
+
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => ['required', 'email']]);
+
+    Password::sendResetLink($request->only('email'));
+
+    // Always return 200 to avoid email enumeration attacks
+    return response()->json(['message' => 'If this email exists, a reset link has been sent.']);
+});
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token'    => ['required'],
+        'email'    => ['required', 'email'],
+        'password' => ['required', 'min:8', 'confirmed'],
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill(['password' => $password])->save();
+            event(new PasswordReset($user));
+        }
+    );
+
+    return $status === Password::PasswordReset
+        ? response()->json(['message' => 'Password reset successfully.'])
+        : response()->json(['message' => __($status)], 422);
 });
