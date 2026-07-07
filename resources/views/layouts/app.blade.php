@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<main class="container mx-auto px-4 py-8 grow max-w-4xl">
+<main class="container mx-auto px-4 py-10 grow max-w-4xl mt-6">
     @if (session('success'))
         <div role="alert" class="alert alert-success mb-4">{{ session('success') }}</div>
     @endif
@@ -44,8 +44,12 @@
     @yield('content')
 </main>
 
-<footer class="footer footer-center bg-neutral text-neutral-content p-4 text-sm">
-    <p>© {{ date('Y') }} Spot in® · <a href="/about" class="link">À propos</a> · <a href="/privacy-policy" class="link">Confidentialité</a></p>
+<footer class="bg-neutral text-neutral-content text-sm flex items-center justify-center gap-4 p-4">
+    <span>Spot in® 2021-{{ date('Y') }}</span>
+		<span>·</span>
+    <a href="/" class="link link-hover">À propos</a>
+		<span>·</span>
+    <a href="/privacy-policy" class="link link-hover">Confidentialité</a>
 </footer>
 
 </body>

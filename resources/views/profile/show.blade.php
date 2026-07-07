@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Mon profil')
 @section('content')
-<div class="flex items-center justify-between mb-6 ">
-    <h1 class="text-2xlfont-bold">Mon profil</h1>
+<div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold">Mon profil</h1>
     <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm">Modifier</a>
 </div>
 <div class="card bg-base-100 shadow p-6">
