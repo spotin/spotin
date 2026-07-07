@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'));
 Route::get('/prices', fn () => view('prices'));
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, ['fr', 'en', 'de'])) {
+        session(['locale' => $locale]);
+    }
+    return back();
+})->name('lang.switch');
 
 // Auth
 Route::get('/auth/login', [AuthWebController::class, 'loginForm'])->name('auth.login');

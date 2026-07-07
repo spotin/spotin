@@ -18,7 +18,7 @@
             <li><a href="#concept">Concept</a></li>
             <li><a href="#avantages">Avantages</a></li>
             <li><a href="/prices">Prix</a></li>
-            <li><a href="#suisse" class="flex items-center gap-1">🇨🇭 100% Suisse</a></li>
+            <li><a href="#suisse" class="flex items-center gap-1">100% Suisse</a></li>
         </ul>
     </div>
     <div class="navbar-end">

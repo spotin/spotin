@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="spotin">
+<html lang="{{ app()->getLocale() }}" data-theme="spotin">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,16 +14,16 @@
     </div>
     <div class="navbar-end gap-2">
         @auth
-            <a href="{{ route('spots.index') }}" class="btn btn-ghost btn-sm">Spots</a>
-            <a href="{{ route('tokens.index') }}" class="btn btn-ghost btn-sm">Tokens</a>
-            <a href="{{ route('profile.show') }}" class="btn btn-ghost btn-sm">Profil</a>
+            <a href="{{ route('spots.index') }}" class="btn btn-ghost btn-sm">{{ __('ui.header.spots') }}</a>
+            <a href="{{ route('tokens.index') }}" class="btn btn-ghost btn-sm">{{ __('ui.header.tokens') }}</a>
+            <a href="{{ route('profile.show') }}" class="btn btn-ghost btn-sm">{{ __('ui.header.profile') }}</a>
             <form method="POST" action="{{ route('auth.logout') }}">
                 @csrf
-                <button class="btn btn-ghost btn-sm">Déconnexion</button>
+                <button class="btn btn-ghost btn-sm">{{ __('ui.header.logout') }}</button>
             </form>
         @else
-            <a href="{{ route('auth.login') }}" class="btn btn-ghost btn-sm">Connexion</a>
-            <a href="{{ route('auth.register') }}" class="btn btn-primary btn-sm rounded-full">S'inscrire</a>
+            <a href="{{ route('auth.login') }}" class="btn btn-ghost btn-sm">{{ __('ui.header.login') }}</a>
+            <a href="{{ route('auth.register') }}" class="btn btn-primary btn-sm rounded-full">{{ __('ui.header.register') }}</a>
         @endauth
     </div>
 </div>
@@ -44,12 +44,19 @@
     @yield('content')
 </main>
 
-<footer class="bg-neutral text-neutral-content text-sm flex items-center justify-center gap-4 p-4">
-    <span>Spot in® 2021-{{ date('Y') }}</span>
-		<span>·</span>
-    <a href="/" class="link link-hover">À propos</a>
-		<span>·</span>
-    <a href="/privacy-policy" class="link link-hover">Confidentialité</a>
+<footer class="bg-neutral text-neutral-content text-sm flex items-center justify-center gap-4 p-4 flex-wrap">
+    <span>{{ __('ui.footer.copyright') }}</span>
+    <span class="opacity-30">·</span>
+    <a href="/about" class="link link-hover">{{ __('ui.footer.about') }}</a>
+    <span class="opacity-30">·</span>
+    <a href="/privacy-policy" class="link link-hover">{{ __('ui.footer.privacyPolicy') }}</a>
+    <span class="opacity-30">|</span>
+    @foreach (['fr' => 'FR', 'en' => 'EN', 'de' => 'DE'] as $locale => $label)
+        <a href="{{ route('lang.switch', $locale) }}"
+           class="link link-hover {{ app()->getLocale() === $locale ? 'font-bold text-primary' : 'opacity-60' }}">
+            {{ $label }}
+        </a>
+    @endforeach
 </footer>
 
 </body>
