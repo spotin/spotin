@@ -5,7 +5,7 @@
     <h1 class="text-2xl font-bold">{{ __('ui.tokens.index.title') }}</h1>
     <a href="{{ route('tokens.create') }}" class="btn btn-primary btn-sm">{{ __('ui.tokens.index.button') }}</a>
 </div>
-<p class="text-base-content/60 mb-6 text-sm">{{ __('ui.tokens.index.paragraphOne') }}</p>
+<p class="text-base-content/60 mb-6 text-sm">{{ __('ui.tokens.index.paragraphOne') }} <a href="/docs/api" class="link link-hover">{{ __('ui.tokens.index.apiDocumentation') }}</a></p>
 <div class="card bg-base-100 shadow overflow-x-auto">
     <table class="table">
         <thead>

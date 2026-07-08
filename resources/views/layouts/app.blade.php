@@ -10,7 +10,7 @@
 
 <div class="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-4">
     <div class="navbar-start">
-        <a href="/" class="text-xl font-bold">Spot <span class="text-primary">in</span></a>
+        <a href="/" class="text-xl font-bold">Spot in</a>
     </div>
     <div class="navbar-end gap-2">
         @auth

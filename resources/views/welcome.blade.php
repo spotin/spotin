@@ -11,7 +11,7 @@
 {{-- Navbar --}}
 <div class="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-4 lg:px-12">
     <div class="navbar-start">
-        <a href="#" class="text-xl font-bold">Spot <span class="text-primary">in</span></a>
+        <a href="#" class="text-xl font-bold">Spot in</a>
     </div>
     <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal gap-1 text-sm font-medium">
@@ -27,7 +27,7 @@
 </div>
 
 {{-- Hero --}}
-<section class="hero min-h-[80vh] bg-base-100 px-4 lg:px-12 py-16">
+<section class="hero  bg-base-100 px-4 lg:px-12 py-16">
     <div class="hero-content max-w-6xl w-full flex-col lg:flex-row justify-between gap-12 mx-auto">
         <div class="max-w-xl">
             <h1 class="text-4xl lg:text-5xl font-extrabold leading-tight mb-6">
