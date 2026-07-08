@@ -10,6 +10,7 @@
 	"license": "MIT",
 	"require": {
 		"php": "^8.3",
+		"blade-ui-kit/blade-heroicons": "^2.7",
 		"dedoc/scramble": "^0.13.30",
 		"laravel/framework": "^13.8",
 		"laravel/sanctum": "^4.0",

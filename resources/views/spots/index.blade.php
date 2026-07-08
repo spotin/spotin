@@ -39,12 +39,24 @@
                         @endif
                     </td>
                     <td class="flex gap-2 justify-end">
-                        <a href="{{ route('spots.show', $spot) }}" class="btn btn-ghost btn-xs">{{ __('ui.spots.form.actions.view') }}</a>
-                        <a href="{{ route('spots.edit', $spot) }}" class="btn btn-ghost btn-xs">{{ __('ui.spots.view.edit') }}</a>
-                        <form method="POST" action="{{ route('spots.destroy', $spot) }}" onsubmit="return confirm('{{ __('ui.spots.form.actions.delete') }} ?')">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-ghost btn-xs text-error">{{ __('ui.spots.form.actions.delete') }}</button>
-                        </form>
+                        <div class="tooltip" data-tip="{{ __('ui.spots.form.actions.view') }}">
+                            <a href="{{ route('spots.show', $spot) }}" class="btn btn-ghost btn-xs" aria-label="{{ __('ui.spots.form.actions.view') }}">
+                                <x-heroicon-o-eye class="w-4 h-4" />
+                            </a>
+                        </div>
+                        <div class="tooltip" data-tip="{{ __('ui.spots.view.edit') }}">
+                            <a href="{{ route('spots.edit', $spot) }}" class="btn btn-ghost btn-xs" aria-label="{{ __('ui.spots.view.edit') }}">
+                                <x-heroicon-o-pencil class="w-4 h-4" />
+                            </a>
+                        </div>
+                        <div class="tooltip tooltip-error" data-tip="{{ __('ui.spots.form.actions.delete') }}">
+                            <form method="POST" action="{{ route('spots.destroy', $spot) }}" onsubmit="return confirm('{{ __('ui.spots.form.actions.delete') }} ?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-ghost btn-xs text-error" aria-label="{{ __('ui.spots.form.actions.delete') }}">
+                                    <x-heroicon-o-trash class="w-4 h-4" />
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @empty
