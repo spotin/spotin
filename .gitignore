@@ -1,7 +1,7 @@
 ## dotenv environment variables files
 .env
 .env.*
-!.env.defaults
+!.env.example
 !.env.schema
 !.env.*.defaults
 !.env.*.schema
