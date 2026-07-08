@@ -1,10 +1,7 @@
-## Docker volumes
-postgres-data
-
 ## dotenv environment variables files
 .env
 .env.*
-!.env.defaults
+!.env.example
 !.env.schema
 !.env.*.defaults
 !.env.*.schema
@@ -39,6 +36,7 @@ coverage
 
 # Dependency directories
 node_modules
+vendor
 
 # NestJS build / generated output
 .nest
@@ -56,3 +54,23 @@ ehthumbs_vista.db
 
 # Windows shortcuts
 *.lnk
+
+# Laravel & PHP
+.phpactor.json
+.phpunit.result.cache
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+_ide_helper.php
+Homestead.json
+Homestead.yaml
+
+old

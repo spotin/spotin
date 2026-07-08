@@ -1,0 +1,477 @@
+<?php
+
+return [
+    'about' => [
+        'title' => 'About',
+        'description' => 'Learn more about Spot in®.',
+        'paragraphOne' => 'Spot in® is a platform that allows you to share your favorite spots with the world. You can create a spot by providing a name, a description, and a website target. You can also provide the latitude and longitude of the spot to display it on a map.',
+    ],
+    'auth' => [
+        'login' => [
+            'title' => 'Login',
+            'description' => 'Login to your Spot in® account.',
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Enter your email',
+            ],
+            'password' => [
+                'label' => 'Password',
+                'placeholder' => 'Enter your password',
+            ],
+            'button' => 'Login',
+            'haveAccount' => [
+                'label' => 'Already have an account?',
+                'login' => 'Login',
+            ],
+        ],
+        'logout' => [
+            'title' => 'Logout',
+            'description' => 'Logout from your Spot in® account.',
+            'paragraphOne' => 'You have been successfully logged out.',
+        ],
+        'register' => [
+            'title' => 'Register',
+            'description' => 'Create a new Spot in® account.',
+            'username' => [
+                'label' => 'Username',
+                'placeholder' => 'Enter your username',
+                'warning' => 'The username will be public for all users.',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Enter your email',
+            ],
+            'button' => 'Register',
+            'noAccount' => [
+                'label' => 'Don\'t have an account?',
+                'register' => 'Register',
+            ],
+        ],
+        'resetPassword' => [
+            'title' => 'Reset password',
+            'description' => 'Reset your Spot in® account password.',
+            'newPassword' => [
+                'label' => 'New password',
+                'placeholder' => 'Enter your new password',
+            ],
+            'confirmPassword' => [
+                'label' => 'Confirm password',
+                'placeholder' => 'Confirm your new password',
+            ],
+            'button' => 'Reset password',
+        ],
+        'resetPasswordRequest' => [
+            'title' => 'Request password reset',
+            'description' => 'Request a password reset for your Spot in® account.',
+            'forgotPassword' => [
+                'label' => 'Forgot password?',
+                'reset' => 'Reset password',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Enter your email',
+            ],
+            'button' => 'Request password reset',
+            'rememberedPassword' => [
+                'label' => 'Remembered your password?',
+                'login' => 'Login',
+            ],
+        ],
+    ],
+    'banner' => [
+        'title' => 'The official Spot in® website. Here\'s how you know.',
+        'keyElementOne' => [
+            'title' => 'The official Spot in® website is {spotInWebsite}.',
+            'note' => 'No other website is official.',
+        ],
+        'keyElementTwo' => [
+            'title' => 'The official Spot in® website uses HTTPS.',
+            'note' => 'A lock icon ({lockIcon}) or {httpsUrl} in the address bar indicates a secure connection.',
+        ],
+    ],
+    'footer' => [
+        'copyright' => 'Spot in® 2021-2025',
+        'about' => 'About',
+        'privacyPolicy' => 'Privacy policy',
+    ],
+    'header' => [
+        'users' => 'Users',
+        'spots' => 'Spots',
+        'profile' => 'Profile',
+        'tokens' => 'Tokens',
+        'logout' => 'Logout',
+        'login' => 'Login',
+        'register' => 'Register',
+    ],
+    'index' => [
+        'title' => 'Homepage',
+        'subtitle' => 'The Internet of places',
+        'description' => 'The homepage of Spot in®.',
+        'paragraphOne' => 'Spot in® is the missing link between the physical space and the hidden treasures of information in the digital world.',
+        'paragraphTwo' => 'At the heart of the Internet of places, this platform transforms every place, every \'spot\', into an open-air gallery.',
+        'paragraphThree' => 'Explore, document, discover, learn and be amazed! We power the link, you the content.',
+        'stats' => [
+            'registeredUsers' => '{number} registered users',
+            'publicSpots' => '{number} public spots',
+            'certifiedUsers' => '{number} certified users',
+        ],
+        'exploreTheSpots' => 'Explore the spots around the world',
+    ],
+    'notFound' => [
+        'title' => 'Not Found',
+        'description' => 'The requested page could not be found.',
+        'paragraphOne' => 'This may be due to the following reasons: the spot or profile has been deliberately deleted or the QR code is invalid (degradation, incorrect configuration, etc.).',
+        'publicSpotsDescription' => 'You can find all public spots available on the',
+        'publicSpots' => 'public spots page',
+        'registerPageDescription' => 'To create your own spots, create an account on the',
+        'registerPage' => 'register page',
+        'homePageDescription' => 'To find out more about Spot in®, visit',
+        'homePage' => 'the home page',
+    ],
+    'privacyPolicy' => [
+        'title' => 'Privacy policy',
+        'description' => 'Learn more about how we handle your data.',
+        'paragraphOne' => 'At Spot in®, we take your privacy seriously. We only collect the data that is necessary to provide you with the best experience possible. We do not share your data with third parties without your consent.',
+        'paragraphTwo' => 'We use cookies only to store authentication information.',
+        'paragraphThree' => 'We use Plausible for analytics (which does not use cookies), allowing us to understand how you use our website and how to improve it without compromising your privacy.',
+        'paragraphFour' => 'We do not share any personal data with third parties.',
+    ],
+    'profile' => [
+        'edit' => [
+            'title' => 'Edit profile',
+            'description' => 'Edit your profile.',
+            'username' => [
+                'label' => 'Username',
+                'placeholder' => 'Update your username',
+            ],
+            'bio' => [
+                'label' => 'Bio',
+                'placeholder' => 'Enter a short bio about yourself (optional)',
+                'note' => 'This field supports {markdown} syntax with the help of {markdownIt} and {markdownItAttrs}. You can use it to add links, images, and other formatting to your description.',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'note' => 'Email address cannot be changed.',
+            ],
+            'currentPassword' => [
+                'label' => 'Current password',
+                'placeholder' => 'Enter your current password',
+            ],
+            'newPassword' => [
+                'label' => 'New password',
+                'placeholder' => 'Enter your new password (optional)',
+            ],
+            'actions' => [
+                'view' => 'View profile',
+                'update' => 'Update profile',
+            ],
+        ],
+        'view' => [
+            'title' => 'View profile',
+            'description' => 'View a profile.',
+            'username' => 'Username',
+            'memberSince' => 'Member since: {date}',
+            'numberOfPublicSpots' => 'Number of public spots: {count}',
+            'explorePublicSpots' => 'Explore {number} public spots from {username}',
+            'report' => [
+                'button' => 'Report',
+                'modal' => [
+                    'title' => 'Report an inappropriate profile',
+                    'description' => 'If you think this profile is inappropriate, please report it. The Spot in® team will review your report and take appropriate action.',
+                    'actions' => [
+                        'report' => 'Report profile',
+                        'close' => 'Close',
+                    ],
+                ],
+            ],
+            'like' => [
+                'button' => 'Like',
+                'modal' => [
+                    'title' => 'Like this profile',
+                    'description' => 'If you like this profile, please give it some love. This action will help the Spot in® team to identify the most popular profiles.',
+                    'actions' => [
+                        'like' => 'Like this profile',
+                        'close' => 'Close',
+                    ],
+                ],
+            ],
+            'share' => [
+                'button' => 'Share',
+                'modal' => [
+                    'title' => 'Share this profile',
+                    'description' => 'Share this profile with your friends so they can discover it too!',
+                    'actions' => [
+                        'share' => 'Share this profile',
+                        'shared' => 'Link shared successfully!',
+                        'copied' => 'Link copied to clipboard!',
+                        'close' => 'Close',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'spots' => [
+        'create' => [
+            'title' => 'Create a new spot',
+            'description' => 'Create a new spot.',
+        ],
+        'configure' => [
+            'title' => 'Configure spot',
+            'description' => 'Configure a spot.',
+            'paragraphOne' => 'You can configure this spot once. After that, it will be locked and no one else can configure it.',
+        ],
+        'edit' => [
+            'title' => 'Edit spot',
+            'description' => 'Edit a spot.',
+        ],
+        'index' => [
+            'title' => 'Your spots',
+            'description' => 'Manage your spots.',
+            'paragraphOne' => 'Spots can take place in the virtual or in the physical world. They capture the context and the circumstances that form the setting for an event.',
+            'name' => 'Name',
+            'noName' => 'This spot has no name',
+            'button' => 'New spot',
+        ],
+        'public' => [
+            'title' => 'Public spots',
+            'description' => 'View all public spots.',
+            'paragraphOne' => 'Discover the public spots shared by users of Spot in®. You can view the details of each spot and interact with them.',
+            'tableHeaders' => [
+                'title' => 'Title',
+            ],
+        ],
+        'redirect' => [
+            'title' => 'Redirection page',
+            'description' => 'The redirection page of the spot.',
+            'spotScanned' => 'You just have scanned a spot!',
+            'spotExplanation' => '{spotIn} adds digital information to our physical world with the help of \'spots\'.<br>Share spots with your friends and discover new places and things!',
+            'certified' => 'Certified',
+            'unverified' => 'Unverified',
+            'whatDoesThatMean' => [
+                'title' => 'What does that mean?',
+                'details' => [
+                    'part1' => 'Spots marked with a certificate ({icon}) are created by certified users or administrators. This means that the user has been verified by the platform and is considered trustworthy.',
+                    'part2' => 'Spots marked with an exclamation mark ({icon}) are created by unverified users. This means that the user has not been verified by the platform and may not be trustworthy. Please use caution when interacting with these spots.',
+                ],
+            ],
+            'showSpotInformation' => 'Show spot details',
+            'createdBy' => 'Spot created by',
+            'map' => [
+                'show' => 'Show on map',
+                'centerOnSpotLocation' => 'Center on spot location',
+                'centerOnSpotLocations' => 'Center on spot locations',
+                'toggleAttribution' => 'Toggle attribution',
+                'enterFullscreen' => 'Enter fullscreen',
+                'exitFullscreen' => 'Exit fullscreen',
+                'resetBearing' => 'Reset bearing to north',
+                'zoomIn' => 'Zoom in',
+                'zoomOut' => 'Zoom out',
+                'findMyLocation' => 'Find my location',
+                'locationNotAvailable' => 'Location not available',
+            ],
+            'accessContent' => [
+                'button' => 'Access external content',
+                'modal' => [
+                    'title' => 'You are about to leave Spot in®',
+                    'description' => 'You are about to leave Spot in® and visit {websiteTarget}. Please use caution when interacting with this external content. To access this content, click on the button below.',
+                    'actions' => [
+                        'access' => 'Access external content',
+                        'cancel' => 'Cancel',
+                    ],
+                ],
+            ],
+            'report' => [
+                'button' => 'Report',
+                'modal' => [
+                    'title' => 'Report an inappropriate spot',
+                    'description' => 'If you think this spot is inappropriate and/or damaged, please report it. The Spot in® team will review your report and take appropriate action.',
+                    'actions' => [
+                        'report' => 'Report spot',
+                        'close' => 'Close',
+                    ],
+                ],
+            ],
+            'like' => [
+                'button' => 'Like',
+                'modal' => [
+                    'title' => 'Like this spot',
+                    'description' => 'If you like this spot, please give it some love. This action will help the Spot in® team to identify the most popular spots.',
+                    'actions' => [
+                        'like' => 'Like this spot',
+                        'close' => 'Close',
+                    ],
+                ],
+            ],
+            'share' => [
+                'button' => 'Share',
+                'modal' => [
+                    'title' => 'Share this spot',
+                    'description' => 'Share this spot with your friends so they can discover it too!',
+                    'actions' => [
+                        'share' => 'Share this spot',
+                        'shared' => 'Link shared successfully!',
+                        'copied' => 'Link copied to clipboard!',
+                        'close' => 'Close',
+                    ],
+                ],
+            ],
+        ],
+        'view' => [
+            'title' => 'Spot details',
+            'description' => 'View a spot.',
+            'noName' => 'This spot has no name',
+            'download' => 'Download',
+            'edit' => 'Edit',
+            'view' => 'View',
+        ],
+        'form' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Enter the name of your spot',
+            ],
+            'description' => [
+                'label' => 'Spot description',
+                'placeholder' => 'Enter the description of your spot',
+                'note' => 'This field supports {markdown} syntax with the help of {markdownIt} and {markdownItAttrs}. You can use it to add links, images, and other formatting to your description.',
+            ],
+            'latitude' => [
+                'label' => 'Spot latitude (between -90.0 and 90.0)',
+                'placeholder' => 'Enter the latitude of your spot (e.g. 46.818188)',
+            ],
+            'longitude' => [
+                'label' => 'Spot longitude (between -180.0 and 180.0)',
+                'placeholder' => 'Enter the longitude of your spot (e.g. 8.227511)',
+            ],
+            'websiteTarget' => [
+                'label' => 'Website target',
+                'placeholder' => 'Enter the target of your spot (e.g. https://www.example.com)',
+            ],
+            'useCurrentLocation' => 'Use current location',
+            'configured' => [
+                'label' => 'Configured',
+                'note' => 'If set to "No", another user can configure this spot once.',
+                'values' => [
+                    'true' => 'Yes',
+                    'false' => 'No',
+                ],
+            ],
+            'public' => [
+                'label' => 'Public',
+                'note' => 'If the spot is public, it will be visible to all users.',
+                'values' => [
+                    'true' => 'Yes',
+                    'false' => 'No',
+                ],
+            ],
+            'optionsForAdvancedUsers' => [
+                'label' => 'Options for advanced users',
+                'note' => 'These options are for advanced users.',
+                'payload' => [
+                    'label' => 'Payload',
+                    'placeholder' => 'Enter the payload of your spot in JSON format (e.g. {"hello": "world"})',
+                    'note' => 'The payload must be a valid JSON object. Refer to the API documentation for more details.',
+                ],
+            ],
+            'directAccessToWebsiteTarget' => [
+                'label' => 'Direct access to website target',
+                'note' => 'If set to "Yes", the user will be redirected to the website target when scanning the spot. If set to "No", the user will be redirected to the spot\'s redirection page.',
+                'values' => [
+                    'true' => 'Yes',
+                    'false' => 'No',
+                ],
+            ],
+            'actions' => [
+                'view' => 'View spot',
+                'delete' => 'Delete spot',
+                'save' => 'Save spot',
+            ],
+        ],
+    ],
+    'tokens' => [
+        'create' => [
+            'title' => 'Create a new token',
+            'description' => 'Create a new token.',
+        ],
+        'view' => [
+            'title' => 'Token details',
+            'description' => 'View a token.',
+        ],
+        'index' => [
+            'title' => 'Your tokens',
+            'description' => 'Manage your tokens.',
+            'paragraphOne' => 'The tokens enable you to publish/manage spots from other platform with a REST API. The API documentation is available at the following link:',
+            'apiDocumentation' => 'API documentation',
+            'name' => 'Name',
+            'button' => 'New token',
+        ],
+        'form' => [
+            'name' => [
+                'label' => 'Token name',
+                'placeholder' => 'Enter the name of your token',
+            ],
+            'value' => [
+                'label' => 'Token value',
+                'placeholder' => 'The value of your token will be generated automatically',
+                'note' => 'Once the token is created, you will not be able to see the value again. Save it in a secure place.',
+            ],
+            'button' => 'Create token',
+        ],
+    ],
+    'users' => [
+        'create' => [
+            'title' => 'Create a new user',
+            'description' => 'Create a new user.',
+        ],
+        'edit' => [
+            'title' => 'Edit user',
+            'description' => 'Edit a user.',
+        ],
+        'index' => [
+            'title' => 'Users',
+            'description' => 'Manage users.',
+            'paragraphOne' => 'Manage the users of the platform. You can create, update and delete users.',
+            'username' => 'Username',
+            'email' => 'Email',
+            'button' => 'New user',
+        ],
+        'view' => [
+            'title' => 'User details',
+            'description' => 'View a user.',
+        ],
+        'form' => [
+            'username' => [
+                'label' => 'Username',
+                'placeholder' => 'Enter the username of the user',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Enter the email of the user',
+            ],
+            'password' => [
+                'label' => 'Password',
+                'placeholder' => 'Enter the password of the user',
+            ],
+            'role' => [
+                'label' => 'Role',
+                'values' => [
+                    'standardUser' => 'Standard user',
+                    'certifiedUser' => 'Certified user',
+                    'admin' => 'Admin',
+                ],
+            ],
+            'enabled' => [
+                'label' => 'Enabled',
+                'values' => [
+                    'true' => 'Yes',
+                    'false' => 'No',
+                ],
+                'note' => 'If the user is not enabled, they will not be able to log in.',
+            ],
+            'actions' => [
+                'view' => 'View user',
+                'delete' => 'Delete user',
+                'save' => 'Save user',
+            ],
+        ],
+    ],
+];

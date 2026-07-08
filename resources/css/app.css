@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+	name: 'spotin';
+	default: true;
+	color-scheme: light;
+
+	--color-primary: oklch(62% 0.21 38);
+	--color-primary-content: oklch(98% 0.01 38);
+	--color-base-100: oklch(100% 0 0);
+	--color-base-200: oklch(97% 0.005 240);
+	--color-base-300: oklch(93% 0.01 240);
+	--color-base-content: oklch(20% 0.02 240);
+	--color-neutral: oklch(20% 0.03 250);
+	--color-neutral-content: oklch(95% 0.01 240);
+}

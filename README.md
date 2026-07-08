@@ -24,48 +24,14 @@ Open this folder in Visual Studio Code, and open it in a dev container. In a
 terminal, run the following commands:
 
 ```bash
-# Install dependencies
-# `--legacy-peer-deps` is used until `nunjucks` is updated.
-npm install --legacy-peer-deps
-
-# Copy the default environment variables file
-cp .env.defaults .env
-
-# Start the database and smtp server for local development
-npm run dev:up
-
-# Run the database migrations
-npm run prisma:migrate
-
-# Seed the database with some data
-npm run prisma:seed
+# Install dependencies, copy the environment variables file, generate the
+# application key, and run the database migrations
+composer setup
 
 # Start the application in watch mode (changes to the code will be automatically reloaded)
-npm run dev
+php artisan serve
 ```
 
-The application should start and be accessible at <http://localhost:3000>. The
-API documentation is accessible at <http://localhost:3000/api>. You can log in
-with the credentials defined in the `.env` file (`SPOT_IN_ADMIN_EMAIL` and
-`SPOT_IN_ADMIN_PASSWORD`). The mail server interface is accessible at <http://localhost:8025>.
-
-## Try out the application in development with Docker
-
-This is not recommended for development, but you can try out the application in
-development with Docker.
-
-Do not forget to set the environment variables as described in the previous
-section.
-
-```bash
-# Build the application with Docker
-docker compose build spotin
-
-# Edit the .env file to your needs
-
-# Start the application with Docker
-docker compose up spotin
-
-# Optional: seed the database with some data
-docker compose exec spotin npm run prisma:seed
-```
+The application should start and be accessible at <http://localhost:8000>. You
+can log in with the credentials defined in the `.env` file (`MAIL_FROM_ADDRESS`
+and the password set during setup).
