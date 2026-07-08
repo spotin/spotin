@@ -60,13 +60,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="flex items-start gap-3">
                     <div class="text-primary mt-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        <x-heroicon-o-device-phone-mobile class="w-6 h-6" />
                     </div>
                     <p class="text-sm text-base-content/70">Accès immédiat sans aucune application supplémentaire.</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="text-primary mt-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <x-heroicon-o-arrow-right-end-on-rectangle class="w-6 h-6" />
                     </div>
                     <p class="text-sm text-base-content/70">Une porte d'entrée intelligente vers des contenus et des données clairs.</p>
                 </div>
@@ -82,7 +82,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="bg-white/5 p-6 rounded-2xl">
                 <h3 class="font-bold text-primary mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <x-heroicon-o-user-group class="w-5 h-5" />
                     Problèmes pour le public
                 </h3>
                 <ul class="space-y-3 text-neutral-content/70 text-sm">
@@ -93,7 +93,7 @@
             </div>
             <div class="bg-white/5 p-6 rounded-2xl">
                 <h3 class="font-bold text-primary mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    <x-heroicon-o-wrench-screwdriver class="w-5 h-5" />
                     Problèmes pour les gestionnaires
                 </h3>
                 <ul class="space-y-3 text-neutral-content/70 text-sm">
@@ -149,21 +149,21 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <div class="card bg-base-100 p-6 rounded-2xl text-center">
                 <div class="text-primary mb-3 flex justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    <x-heroicon-o-pencil-square class="w-8 h-8" />
                 </div>
                 <h4 class="font-bold italic mb-2">Mise à jour instantanée</h4>
                 <p class="text-sm text-base-content/60">Modifiez vos contenus à tout moment, même après impression physique du QR code.</p>
             </div>
             <div class="card bg-base-100 p-6 rounded-2xl text-center">
                 <div class="text-primary mb-3 flex justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
+                    <x-heroicon-o-square-3-stack-3d class="w-8 h-8" />
                 </div>
                 <h4 class="font-bold italic mb-2">Hub d'information</h4>
                 <p class="text-sm text-base-content/60">Regroupez plusieurs liens et contenus dynamiques derrière une seule porte d'entrée.</p>
             </div>
             <div class="card bg-base-100 p-6 rounded-2xl text-center">
                 <div class="text-primary mb-3 flex justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" /></svg>
+                    <x-heroicon-o-cursor-arrow-rays class="w-8 h-8" />
                 </div>
                 <h4 class="font-bold italic mb-2">Zéro Technique</h4>
                 <p class="text-sm text-base-content/60">Aucune connaissance technique nécessaire. Simple, rapide et terriblement efficace.</p>
