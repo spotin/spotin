@@ -1,47 +1,17 @@
 {
-	"[hbs]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[jsonc]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[njk]": {
-		"editor.defaultFormatter": "douglaszaltron.nunjucks-vscode-extensionpack"
-	},
-	"[prisma]": {
-		"editor.defaultFormatter": "Prisma.prisma"
-	},
-	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
+	"cSpell.language": "fr,en",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.rulers": [80],
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
 	"editor.renderWhitespace": "all",
-	"emmet.includeLanguages": {
-		"njk": "html",
-		"nunjucks": "html"
-	},
-	"emmet.syntaxProfiles": {
-		"njk": "html"
-	},
-	"files.associations": {
-		"*.njk": "njk",
-		"*.nj": "njk"
-	},
+	"editor.rulers": [80],
+	"files.encoding": "utf8",
+	"files.eol": "\n",
 	"files.insertFinalNewline": true,
-	"javascript.preferences.importModuleSpecifier": "non-relative",
-	"javascript.updateImportsOnFileMove.enabled": "always",
-	"typescript.preferences.importModuleSpecifier": "non-relative",
-	"typescript.updateImportsOnFileMove.enabled": "always"
-	// "yaml.schemas": {
-	// 	"https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
-	// }
+	"markdown.extension.toc.levels": "2..3",
+	"prettier.endOfLine": "lf",
+	"prettier.printWidth": 80,
+	"prettier.proseWrap": "always",
+	"prettier.tabWidth": 2,
+	"prettier.useTabs": true
 }

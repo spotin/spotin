@@ -1,58 +1,14 @@
-## Docker volumes
-postgres-data
-
-## dotenv environment variables files
-.env
-.env.*
-!.env.defaults
-!.env.schema
-!.env.*.defaults
-!.env.*.schema
-
 ## Linux
+# Temporary files
 *~
 
 ## macOS
-
-# General
+# Files created by macOS Finder
 .DS_Store
 
-# Thumbnails
-._*
-
-## Material for MkDocs
-
-# Cache
-.cache
-
-# Output directory
-.mkdocs
-
-## Node
-
-# Logs
-logs
-*.log
-
-# Coverage directory
-coverage
-
-# Dependency directories
-node_modules
-
-# NestJS build / generated output
-.nest
-
 ## Windows
-
 # Windows thumbnail cache files
 Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
 
 # Folder config file
 [Dd]esktop.ini
-
-# Windows shortcuts
-*.lnk
