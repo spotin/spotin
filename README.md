@@ -29,10 +29,10 @@ docker compose up --detach mailpit
 
 # Install the dependencies for the application
 composer install
-npm install
+npm install && npm run build
 
 # Start the application for local development
-php artisan serve
+composer run dev
 ```
 
 The application is accessible at <http://localhost:8000>. The Vite development
