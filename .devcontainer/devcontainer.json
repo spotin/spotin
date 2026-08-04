@@ -1,12 +1,13 @@
 {
 	"name": "Spot in Development Container",
 	"image": "mcr.microsoft.com/devcontainers/base:trixie",
-	"workspaceFolder": "/workspace",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:4": {
 			"moby": false
 		},
-		"ghcr.io/devcontainers/features/node:2": {}
+		"ghcr.io/devcontainers/features/node:2": {
+			"version": "26"
+		}
 	},
 
 	"customizations": {
@@ -22,11 +23,6 @@
 			]
 		}
 	},
-
-	// Map the user's SSH directory to the container for SSH signing
-	"mounts": [
-		"type=bind,source=${localEnv:HOME}/.ssh,target=${localEnv:HOME}/.ssh,type=bind,consistency=cached"
-	],
 
 	// Execute the post-create.sh script once the container is created
 	"postCreateCommand": ".devcontainer/post-create.sh"
