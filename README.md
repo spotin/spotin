@@ -26,6 +26,15 @@ terminal, run the following commands:
 ```bash
 # Start the database and smtp server for local development
 docker compose up --detach mailpit
+
+# Install the dependencies for the application
+composer install
+npm install
+
+# Start the application for local development
+php artisan serve
 ```
 
-The mail server interface is accessible at <http://localhost:8025>.
+The application is accessible at <http://localhost:8000>. The Vite development
+server is accessible at <http://localhost:5173>. The mail server interface is
+accessible at <http://localhost:8025>.
