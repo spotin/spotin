@@ -6,6 +6,7 @@
 			"moby": false
 		},
 		"ghcr.io/devcontainers/features/node:2": {
+			// https://github.com/nodejs/release#release-schedule
 			"version": "26"
 		}
 	},
