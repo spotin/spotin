@@ -7,3 +7,13 @@ Identifier (URI) that can be used for referencing purposes. Spots can contain
 arbitrary metadata describing a context and circumstances. Additionally, spots
 can redirect the user to the original source of information. Once created, spots
 are searchable by places and by keywords.
+
+## Prerequisites
+
+The following prerequisites must be filled to run this service:
+
+- [Docker](https://docs.docker.com/get-docker/) must be installed.
+- [Visual Studio Code](https://code.visualstudio.com/download) must be
+  installed.
+- [Visual Studio Code Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+  extension must be installed.
