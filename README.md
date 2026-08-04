@@ -27,9 +27,11 @@ terminal, run the following commands:
 # Start the database and smtp server for local development
 docker compose up --detach mailpit
 
-# Install the dependencies for the application
-composer install
-npm install && npm run build
+# Install the dependencies for the application (first time only)
+composer setup
+
+# Install the dependencies for the application (on subsequent runs)
+composer install && npm install && npm run build
 
 # Start the application for local development
 composer run dev
