@@ -1,0 +1,15 @@
+name: Spot in
+
+networks:
+  spotin_network:
+    name: spotin_network
+
+services:
+  mailpit:
+    container_name: spotin-mailpit
+    image: axllent/mailpit:v1.30
+    networks:
+      - spotin_network
+    ports:
+      - 1025:1025
+      - 8025:8025

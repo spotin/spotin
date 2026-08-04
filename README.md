@@ -17,3 +17,15 @@ The following prerequisites must be filled to run this service:
   installed.
 - [Visual Studio Code Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
   extension must be installed.
+
+## Start the application for local development
+
+Open this folder in Visual Studio Code, and open it in a dev container. In a
+terminal, run the following commands:
+
+```bash
+# Start the database and smtp server for local development
+docker compose up --detach mailpit
+```
+
+The mail server interface is accessible at <http://localhost:8025>.
