@@ -1,7 +1,6 @@
 {
 	"name": "Spot in Development Container",
 	"image": "mcr.microsoft.com/devcontainers/base:trixie",
-	"workspaceFolder": "/workspace",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:4": {
 			"moby": false
