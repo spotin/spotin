@@ -1,6 +1,0 @@
-export enum UserRole {
-	STANDARD_USER = 'STANDARD_USER',
-	CERTIFIED_USER = 'CERTIFIED_USER',
-	ADMIN = 'ADMIN',
-	GUEST = 'GUEST',
-}

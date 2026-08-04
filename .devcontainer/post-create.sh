@@ -1,19 +1,21 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-# ## MkDocs dependencies
-# pip3 install \
-#     cairosvg \
-#     mkdocs-git-revision-date-localized-plugin \
-#     mkdocs-glightbox \
-#     mkdocs-material \
-#     mkdocs-minify-plugin \
-#     pillow
+## Configure Bash
+# Aliases for common commands
+tee -a ~/.bash_aliases > /dev/null <<"EOF"
+alias tree='tree --dirsfirst -A -F'
+EOF
 
-## Node.js
+## Install required packages
+# Update packages list
+sudo apt update
 
-# Global
-npm install --global @nestjs/cli
+# Install common packages
+sudo apt install --yes neovim
 
-# Project
-# `--legacy-peer-deps` is used until `nunjucks` is updated.
-npm install --legacy-peer-deps
+# Install network utilities (dig, nslookup, ping, ncat)
+sudo apt install --yes dnsutils iputils-ping ncat
+
+## Git configuration
+# Set pull to rebase by default
+git config pull.rebase true
