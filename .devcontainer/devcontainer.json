@@ -25,6 +25,14 @@
 		}
 	},
 
+	// Ports to expose on the container's network host
+	"forwardPorts": [8025],
+	"portsAttributes": {
+		"8025": {
+			"label": "Mailpit"
+		}
+	},
+
 	// Execute the post-create.sh script once the container is created
 	"postCreateCommand": ".devcontainer/post-create.sh"
 }
