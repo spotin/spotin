@@ -14,9 +14,11 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"cweijan.vscode-database-client2",
 				"DavidAnson.vscode-markdownlint",
 				"esbenp.prettier-vscode",
 				"GitHub.copilot",
+				"laravel.vscode-laravel",
 				"redhat.vscode-yaml",
 				"streetsidesoftware.code-spell-checker",
 				"streetsidesoftware.code-spell-checker-french",
