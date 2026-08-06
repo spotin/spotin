@@ -26,8 +26,14 @@
 	},
 
 	// Ports to expose on the container's network host
-	"forwardPorts": [8025],
+	"forwardPorts": [5173, 8000, 8025],
 	"portsAttributes": {
+		"5173": {
+			"label": "Vite Development Server"
+		},
+		"8000": {
+			"label": "Laravel Development Server"
+		},
 		"8025": {
 			"label": "Mailpit"
 		}

@@ -24,8 +24,38 @@ Open this folder in Visual Studio Code, and open it in a dev container. In a
 terminal, run the following commands:
 
 ```bash
-# Start the database and smtp server for local development
+# Start the database and SMTP server for local development
 docker compose up --detach mailpit
+
+# Install the dependencies with npm and Composer
+npm install && npm run build
+composer install
+
+# Copy the .env.example file to .env
+cp .env.example .env
+
+# Modify the environment variables if necessary (optional)
+
+# Generate the Laravel application key
+php artisan key:generate
+
+# Create the symbolic link for uploaded files
+php artisan storage:link
+
+# Create the database and run migrations
+php artisan migrate
+
+# If you need to reset the database, use:
+php artisan migrate:reset
+php artisan migrate
+
+# Optional: seed the database with fake data
+php artisan db:seed
+
+# Start the Laravel development server
+composer run dev
 ```
 
-The mail server interface is accessible at <http://localhost:8025>.
+The application is accessible at <http://localhost:8000>. The Vite development
+server is accessible at <http://localhost:5173>. The mail server interface is
+accessible at <http://localhost:8025>.
