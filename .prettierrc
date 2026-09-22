@@ -1,0 +1,8 @@
+# Prettier will read the EditorConfig file and use the settings defined there.
+printWidth: 80
+proseWrap: always
+
+plugins:
+  - prettier-plugin-laravel-blade
+overrides:
+  - files: "*.blade.php"

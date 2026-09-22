@@ -15,11 +15,12 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"bmewburn.vscode-intelephense-client",
 				"DavidAnson.vscode-markdownlint",
+				"EditorConfig.EditorConfig",
 				"esbenp.prettier-vscode",
 				"GitHub.copilot",
 				"jebbs.plantuml",
+				"laravel.vscode-laravel",
 				"qwtel.sqlite-viewer",
 				"redhat.vscode-yaml",
 				"streetsidesoftware.code-spell-checker",
