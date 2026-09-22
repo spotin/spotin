@@ -9,9 +9,7 @@
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
 	"markdown.extension.toc.levels": "2..3",
-	"prettier.endOfLine": "lf",
-	"prettier.printWidth": 80,
-	"prettier.proseWrap": "always",
-	"prettier.tabWidth": 2,
-	"prettier.useTabs": true
+	"plantuml.render": "PlantUMLServer",
+	"plantuml.server": "http://plantuml:8080",
+	"workbench.browser.openLocalhostLinks": false
 }
