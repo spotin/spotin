@@ -6,3 +6,4 @@
 @source "../../storage/framework/views/*.php";
 
 @plugin "daisyui";
+@plugin "@tailwindcss/typography";
