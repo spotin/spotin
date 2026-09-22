@@ -10,5 +10,6 @@
 	"files.insertFinalNewline": true,
 	"markdown.extension.toc.levels": "2..3",
 	"plantuml.render": "PlantUMLServer",
-	"plantuml.server": "http://plantuml:8080"
+	"plantuml.server": "http://plantuml:8080",
+	"workbench.browser.openLocalhostLinks": false
 }

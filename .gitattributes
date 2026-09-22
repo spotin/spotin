@@ -1,5 +1,3 @@
-## .gitattributes - https://rehansaeed.com/gitattributes-best-practices/
-
 # Set default behavior to automatically normalize line endings.
 * text=auto eol=lf
 
@@ -11,3 +9,10 @@
 # Force bash scripts to always use LF line endings so that if a repo is accessed
 # in Unix via a file share from Windows, the scripts will work.
 *.sh text eol=lf
+
+# Laravel specific settings
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
