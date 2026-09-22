@@ -60,3 +60,18 @@ composer run dev
 The application is accessible at <http://localhost:8000>. The Vite development
 server is accessible at <http://localhost:5173>. The mail server interface is
 accessible at <http://localhost:8025>.
+
+## Update the application
+
+To update the application, run the following commands:
+
+```bash
+# Update the dependencies with npm
+npx npm-check-updates
+
+# Update the dependencies with npm
+npx npm-check-updates -u
+
+# Update the dependencies with Composer
+composer update
+```

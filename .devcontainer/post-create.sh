@@ -35,3 +35,9 @@ EOF
 ## Git configuration
 # Set pull to rebase by default
 git config pull.rebase true
+
+# Enable rerere to automatically resolve conflicts that have been resolved before
+git config rerere.enabled true
+
+# Configure git to use force push when including changes
+git config push.useForceIfIncludes true
