@@ -12,29 +12,33 @@ class SetLocale
 
 	/**
 	 * Handle an incoming request.
-	 *
-	 * @param  Closure(Request): (Response)  $next
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		$locale = config("app.locale");
+		// Session locale detection
+		$sessionLocale = $request->session()->get("locale");
 
+		if ($this->isValidLocale($sessionLocale)) {
+			app()->setLocale($sessionLocale);
+			return $next($request);
+		}
+
+		// Browser locale detection
 		$browserLocale = $request->getPreferredLanguage($this->supportedLocales);
 
 		if ($this->isValidLocale($browserLocale)) {
-			$locale = $browserLocale;
+			app()->setLocale($browserLocale);
+			return $next($request);
 		}
 
-		app()->setLocale($locale);
-
+		// Default locale
+		$defaultLocale = config("app.locale");
+		app()->setLocale($defaultLocale);
 		return $next($request);
 	}
 
 	/**
 	 * Check if the given locale is valid.
-	 *
-	 * @param  string|null  $locale
-	 * @return bool
 	 */
 	protected function isValidLocale(?string $locale): bool
 	{
