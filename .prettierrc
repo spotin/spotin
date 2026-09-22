@@ -3,6 +3,7 @@ printWidth: 80
 proseWrap: always
 
 plugins:
-  - prettier-plugin-laravel-blade
+  - "@prettier/plugin-php"
+  - "prettier-plugin-laravel-blade"
 overrides:
   - files: "*.blade.php"

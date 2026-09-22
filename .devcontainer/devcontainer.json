@@ -15,6 +15,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"bmewburn.vscode-intelephense-client",
 				"DavidAnson.vscode-markdownlint",
 				"EditorConfig.EditorConfig",
 				"esbenp.prettier-vscode",
