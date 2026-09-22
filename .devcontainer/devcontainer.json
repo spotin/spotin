@@ -1,8 +1,10 @@
 {
 	"name": "Spot in Development Container",
 	"image": "mcr.microsoft.com/devcontainers/base:trixie",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+	"workspaceFolder": "/workspace",
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:4": {
+		"ghcr.io/devcontainers/features/docker-in-docker:4.1.1": {
 			"moby": false
 		},
 		"ghcr.io/devcontainers/features/node:2": {
@@ -10,13 +12,14 @@
 			"version": "26"
 		}
 	},
-
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"bmewburn.vscode-intelephense-client",
 				"DavidAnson.vscode-markdownlint",
 				"esbenp.prettier-vscode",
 				"GitHub.copilot",
+				"qwtel.sqlite-viewer",
 				"redhat.vscode-yaml",
 				"streetsidesoftware.code-spell-checker",
 				"streetsidesoftware.code-spell-checker-french",
@@ -24,10 +27,12 @@
 			]
 		}
 	},
-
 	// Ports to expose on the container's network host
-	"forwardPorts": [5173, 8000, 8025],
+	"forwardPorts": [3306, 5173, 8000, 8025, 9090, 8080],
 	"portsAttributes": {
+		"3306": {
+			"label": "MariaDB Database Server"
+		},
 		"5173": {
 			"label": "Vite Development Server"
 		},
@@ -35,10 +40,15 @@
 			"label": "Laravel Development Server"
 		},
 		"8025": {
-			"label": "Mailpit"
+			"label": "Mailpit SMTP Server"
+		},
+		"8080": {
+			"label": "PlantUML Server"
+		},
+		"9090": {
+			"label": "phpMyAdmin Web Interface"
 		}
 	},
-
 	// Execute the post-create.sh script once the container is created
 	"postCreateCommand": ".devcontainer/post-create.sh"
 }

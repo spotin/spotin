@@ -29,6 +29,7 @@ docker compose up --detach mailpit
 
 # Install the dependencies with npm and Composer
 npm install && npm run build
+
 composer install
 
 # Copy the .env.example file to .env
