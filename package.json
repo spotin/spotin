@@ -8,6 +8,7 @@
 		"dev": "vite"
 	},
 	"devDependencies": {
+		"@prettier/plugin-php": "^0.25.0",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.3.3",
 		"concurrently": "^10.0.5",
