@@ -7,19 +7,19 @@ use Illuminate\Http\Request;
 
 class LocaleController extends Controller
 {
-	/**
-	 * Update the user's preferred locale.
-	 */
-	public function update(Request $request): RedirectResponse
-	{
-		$validated = $request->validate([
-			"locale" => ["required", "in:en,fr"],
-		]);
+    /**
+     * Update the user's preferred locale.
+     */
+    public function update(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'locale' => ['required', 'in:en,fr'],
+        ]);
 
-		$locale = $validated["locale"];
+        $locale = $validated['locale'];
 
-		$request->session()->put("locale", $locale);
+        $request->session()->put('locale', $locale);
 
-		return back();
-	}
+        return back();
+    }
 }

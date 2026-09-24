@@ -1,25 +1,26 @@
 {
-	"$schema": "https://www.schemastore.org/package.json",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"format": "prettier --write .",
-		"build": "vite build",
-		"dev": "vite"
-	},
-	"devDependencies": {
-		"@prettier/plugin-php": "^0.25.0",
-		"@tailwindcss/typography": "^0.5.20",
-		"@tailwindcss/vite": "^4.3.3",
-		"concurrently": "^10.0.5",
-		"daisyui": "^5.7.43",
-		"laravel-vite-plugin": "^3.2",
-		"prettier": "^3.9.8",
-		"prettier-plugin-laravel-blade": "^1.6.0",
-		"tailwindcss": "^4.3.3",
-		"vite": "^8.3.0"
-	},
-	"optionalDependencies": {
-		"@laravel/multiplex": "^0.4.3"
-	}
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/typography": "^0.5.20",
+        "@tailwindcss/vite": "^4.3.3",
+        "concurrently": "^10.0.5",
+        "daisyui": "^5.7.43",
+        "laravel-vite-plugin": "^3.2",
+        "prettier": "^3.9.8",
+        "prettier-plugin-blade": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.8.1",
+        "tailwindcss": "^4.3.3",
+        "vite": "^8.3.0"
+    },
+    "optionalDependencies": {
+        "@laravel/multiplex": "^0.4.3"
+    }
 }

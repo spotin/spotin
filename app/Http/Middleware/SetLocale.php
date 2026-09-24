@@ -8,40 +8,43 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
-	protected array $supportedLocales = ["en", "fr"];
+    protected array $supportedLocales = ['en', 'fr'];
 
-	/**
-	 * Handle an incoming request.
-	 */
-	public function handle(Request $request, Closure $next): Response
-	{
-		// Session locale detection
-		$sessionLocale = $request->session()->get("locale");
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        // Session locale detection
+        $sessionLocale = $request->session()->get('locale');
 
-		if ($this->isValidLocale($sessionLocale)) {
-			app()->setLocale($sessionLocale);
-			return $next($request);
-		}
+        if ($this->isValidLocale($sessionLocale)) {
+            app()->setLocale($sessionLocale);
 
-		// Browser locale detection
-		$browserLocale = $request->getPreferredLanguage($this->supportedLocales);
+            return $next($request);
+        }
 
-		if ($this->isValidLocale($browserLocale)) {
-			app()->setLocale($browserLocale);
-			return $next($request);
-		}
+        // Browser locale detection
+        $browserLocale = $request->getPreferredLanguage($this->supportedLocales);
 
-		// Default locale
-		$defaultLocale = config("app.locale");
-		app()->setLocale($defaultLocale);
-		return $next($request);
-	}
+        if ($this->isValidLocale($browserLocale)) {
+            app()->setLocale($browserLocale);
 
-	/**
-	 * Check if the given locale is valid.
-	 */
-	protected function isValidLocale(?string $locale): bool
-	{
-		return $locale && in_array($locale, $this->supportedLocales);
-	}
+            return $next($request);
+        }
+
+        // Default locale
+        $defaultLocale = config('app.locale');
+        app()->setLocale($defaultLocale);
+
+        return $next($request);
+    }
+
+    /**
+     * Check if the given locale is valid.
+     */
+    protected function isValidLocale(?string $locale): bool
+    {
+        return $locale && in_array($locale, $this->supportedLocales);
+    }
 }
