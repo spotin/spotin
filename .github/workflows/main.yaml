@@ -119,28 +119,28 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-php-
 
-            - name: Setup Node
-              uses: actions/setup-node@v7
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
+            # - name: Setup Node
+            #   uses: actions/setup-node@v7
+            #   with:
+            #       node-version: ${{ env.NODE_VERSION }}
 
-            - name: Get npm cache directory
-              id: npm-cache
-              run: |
-                  echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+            # - name: Get npm cache directory
+            #   id: npm-cache
+            #   run: |
+            #       echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
-            - name: Cache npm dependencies
-              uses: actions/cache@v6
-              with:
-                  path: ${{ steps.npm-cache.outputs.dir }}
-                  key:
-                      ${{ runner.os }}-node-${{
-                      hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+            # - name: Cache npm dependencies
+            #   uses: actions/cache@v6
+            #   with:
+            #       path: ${{ steps.npm-cache.outputs.dir }}
+            #       key:
+            #           ${{ runner.os }}-node-${{
+            #           hashFiles('**/package-lock.json') }}
+            #       restore-keys: |
+            #           ${{ runner.os }}-node-
 
-            - name: Setup environment
-              run: composer setup
+            # - name: Setup environment
+            #   run: composer setup
 
             - name: Run test suite
               run: php artisan test
