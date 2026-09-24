@@ -153,14 +153,9 @@ jobs:
         if: github.event_name == 'pull_request'
         environment:
             name: development
-            url: ${{ vars.APP_URL }}
+            url: https://${{ vars.APP_URL }}
         steps:
-            # - name: Add Infomaniak host to known_hosts
-            #   run: |
-            #       mkdir -p ~/.ssh
-            #       ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-
-            - name: Run post-deploy commands
+            - name: Deploy to development environment
               uses: appleboy/ssh-action@v1
               with:
                   host: ${{ secrets.SSH_HOST }}
@@ -168,10 +163,17 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script: |
                       cd ~/sites
-                      touch $(date +%s).txt
-                      #   php artisan migrate --force
-                      #   php artisan config:cache
-                      #   php artisan route:cache
-                      #   php artisan view:cache
-                      #   php artisan storage:link || true
-                      #   php artisan queue:restart
+
+                      if [ ! -d dev.spotin.ch/.git ]; then
+                          git clone "${{ github.server_url }}/${{ github.repository }}.git" dev.spotin.ch
+                      fi
+
+                      cd dev.spotin.ch
+
+                      git fetch --depth=1 origin "${{ github.event.pull_request.head.sha }}"
+
+                      git checkout --detach FETCH_HEAD
+
+                      php artisan migrate --force
+
+                      php artisan storage:link
