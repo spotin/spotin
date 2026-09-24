@@ -1,15 +1,14 @@
 {
-	"cSpell.language": "fr,en",
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.formatOnPaste": true,
-	"editor.formatOnSave": true,
-	"editor.renderWhitespace": "all",
-	"editor.rulers": [80],
-	"files.encoding": "utf8",
-	"files.eol": "\n",
-	"files.insertFinalNewline": true,
-	"markdown.extension.toc.levels": "2..3",
-	"plantuml.render": "PlantUMLServer",
-	"plantuml.server": "http://plantuml:8080",
-	"workbench.browser.openLocalhostLinks": false
+    "[php]": {
+        "editor.defaultFormatter": "open-southeners.laravel-pint"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [80],
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "markdown.extension.toc.levels": "2..3",
+    "plantuml.render": "PlantUMLServer",
+    "plantuml.server": "http://plantuml:8080",
+    "workbench.browser.openLocalhostLinks": false
 }
