@@ -155,19 +155,19 @@ jobs:
             name: development
             url: ${{ vars.APP_URL }}
         steps:
-            - name: Add Infomaniak host to known_hosts
-              run: |
-                  mkdir -p ~/.ssh
-                  ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+            # - name: Add Infomaniak host to known_hosts
+            #   run: |
+            #       mkdir -p ~/.ssh
+            #       ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
             - name: Run post-deploy commands
               uses: appleboy/ssh-action@v1
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
-                  password: ${{ secrets.SSH_PASSWORD }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script: |
-                      cd "${{ secrets.DEPLOY_PATH }}"
+                      cd ~/sites
                       touch $(date +%s).txt
                       #   php artisan migrate --force
                       #   php artisan config:cache
