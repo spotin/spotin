@@ -90,9 +90,9 @@ jobs:
             - name: Check JavaScript code style
               run: npm run format-check
 
-    ## Local testing
+    ## Test
     test:
-        name: Local testing
+        name: Test
         runs-on: ubuntu-latest
         needs:
             - review-php
@@ -156,7 +156,8 @@ jobs:
             url: ${{ vars.APP_URL }}
         steps:
             - name: Add Infomaniak host to known_hosts
-              run:
+              run: |
+                  mkdir -p ~/.ssh
                   ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
             - name: Run post-deploy commands
