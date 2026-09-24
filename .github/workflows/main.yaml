@@ -149,7 +149,7 @@ jobs:
     deploy-development:
         name: Deploy to development environment
         runs-on: ubuntu-latest
-        # needs: test
+        needs: test
         if: github.event_name == 'pull_request'
         environment:
             name: development
