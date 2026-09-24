@@ -1,0 +1,179 @@
+name: Spot in GitHub Workflow
+
+# Allow one concurrent deployment per branch/tag, cancel superseded runs
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+    pull_request:
+    push:
+        branches:
+            - main
+        tags:
+            - "*"
+    # Allows to manually trigger the workflow from the Actions tab in GitHub
+    workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow creating GitHub Releases
+permissions:
+    contents: write
+
+env:
+    PHP_VERSION: "8.5"
+    PHP_CACHE_KEY: "php-cache-v1"
+    NODE_VERSION: "26"
+
+jobs:
+    ## Review
+    review-php:
+        name: Review PHP
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+
+            - name: Get Composer cache directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            - name: Cache PHP dependencies
+              uses: actions/cache@v6
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-
+
+            - name: Setup environment
+              run: composer setup
+
+            - name: Check PHP code style
+              run: composer format-check
+
+    review-javascript:
+        name: Review JavaScript
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Setup Node
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Get npm cache directory
+              id: npm-cache
+              run: |
+                  echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+            - name: Cache npm dependencies
+              uses: actions/cache@v6
+              with:
+                  path: ${{ steps.npm-cache.outputs.dir }}
+                  key:
+                      ${{ runner.os }}-node-${{
+                      hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+
+            - name: Install npm dependencies
+              run: npm ci --ignore-scripts
+
+            - name: Check JavaScript code style
+              run: npm run format-check
+
+    ## Test
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+        needs:
+            - review-php
+            - review-javascript
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+
+            - name: Get Composer cache directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            - name: Cache PHP dependencies
+              uses: actions/cache@v6
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-
+
+            - name: Setup Node
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Get npm cache directory
+              id: npm-cache
+              run: |
+                  echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+            - name: Cache npm dependencies
+              uses: actions/cache@v6
+              with:
+                  path: ${{ steps.npm-cache.outputs.dir }}
+                  key:
+                      ${{ runner.os }}-node-${{
+                      hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+
+            - name: Setup environment
+              run: composer setup
+
+            - name: Run test suite
+              run: php artisan test
+
+    ## Deploy to development environment
+    deploy-development:
+        name: Deploy to development environment
+        runs-on: ubuntu-latest
+        needs: test
+        if: github.event_name == 'pull_request'
+        environment:
+            name: development
+            url: https://${{ vars.APP_URL }}
+        steps:
+            - name: Deploy to development environment
+              uses: appleboy/ssh-action@v1
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  script: |
+                      cd ~/sites
+
+                      if [ ! -d dev.spotin.ch/.git ]; then
+                          git clone "${{ github.server_url }}/${{ github.repository }}.git" dev.spotin.ch
+                      fi
+
+                      cd dev.spotin.ch
+
+                      git fetch --depth=1 origin "${{ github.event.pull_request.head.sha }}"
+
+                      git checkout --detach FETCH_HEAD
+
+                      php artisan migrate --force
+
+                      php artisan storage:link --force

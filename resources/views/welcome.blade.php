@@ -6,6 +6,8 @@
 
         <p>{{ __('ui.welcome.second_paragraph') }}</p>
 
+        Test PR.
+
         <div>
             <button class="btn">{{ __('ui.welcome.button') }}</button>
         </div>
