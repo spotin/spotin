@@ -56,7 +56,6 @@ jobs:
 
             - name: Check PHP code style
               run: composer format-check
-              continue-on-error: true
 
     review-javascript:
         name: Review JavaScript
@@ -90,7 +89,6 @@ jobs:
 
             - name: Check JavaScript code style
               run: npm run format-check
-              continue-on-error: true
 
     ## Test
     test:
@@ -164,6 +162,8 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   password: ${{ secrets.SSH_PASSWORD }}
                   script: |
+                      set -euo pipefail
+
                       cd ~/sites/${{ vars.APP_DOMAIN }}
 
                       git fetch --depth=1 origin "${{ github.event.pull_request.head.sha }}"
@@ -196,6 +196,8 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   password: ${{ secrets.SSH_PASSWORD }}
                   script: |
+                      set -euo pipefail
+
                       cd ~/sites/${{ vars.APP_DOMAIN }}
 
                       git fetch --depth=1 origin "${{ github.sha }}"
