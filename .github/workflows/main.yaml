@@ -145,7 +145,7 @@ jobs:
             - name: Run test suite
               run: php artisan test
 
-    ## Deploy to development environment
+    ## Deploy
     deploy-development:
         name: Deploy to development environment
         runs-on: ubuntu-latest
@@ -153,27 +153,53 @@ jobs:
         if: github.event_name == 'pull_request'
         environment:
             name: development
-            url: https://${{ vars.APP_URL }}
+            url: https://${{ vars.APP_DOMAIN }}
         steps:
-            - name: Deploy to development environment
+            - name: Deploy through SSH
               uses: appleboy/ssh-action@v1
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
-                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  key: ${{ secrets.SSH_PASSWORD }}
                   script: |
-                      cd ~/sites
-
-                      if [ ! -d dev.spotin.ch/.git ]; then
-                          git clone "${{ github.server_url }}/${{ github.repository }}.git" dev.spotin.ch
-                      fi
-
-                      cd dev.spotin.ch
+                      cd ~/sites/${{ vars.APP_DOMAIN }}
 
                       git fetch --depth=1 origin "${{ github.event.pull_request.head.sha }}"
 
                       git checkout --detach FETCH_HEAD
 
-                      php artisan migrate --force
+                      composer setup-prod
+
+                      php artisan migrate:fresh --seed --seeder=DevelopmentSeeder
 
                       php artisan storage:link --force
+
+                      php artisan optimize
+
+    deploy-production:
+        name: Deploy to production environment
+        runs-on: ubuntu-latest
+        needs: test
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        environment:
+            name: production
+            url: https://${{ vars.APP_DOMAIN }}
+        steps:
+            - name: Deploy through SSH
+              uses: appleboy/ssh-action@v1
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_PASSWORD }}
+                  script: |
+                      cd ~/sites/${{ vars.APP_DOMAIN }}
+
+                      git fetch --depth=1 origin "${{ github.sha }}"
+
+                      git checkout --detach FETCH_HEAD
+
+                      composer setup-prod
+
+                      php artisan storage:link --force
+
+                      php artisan optimize
