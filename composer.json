@@ -58,6 +58,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
+            "docker compose up --detach mailpit",
             "@php artisan dev"
         ],
         "test": [

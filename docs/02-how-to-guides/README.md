@@ -11,6 +11,11 @@ specific tasks and achieving particular goals within the project.
 
 - [Table of contents](#table-of-contents)
 - [Set up a development environment on your local machine](#set-up-a-development-environment-on-your-local-machine)
+  - [Prerequisites](#prerequisites)
+  - [Clone the repository](#clone-the-repository)
+  - [Open the project in a Dev Container in Visual Studio Code](#open-the-project-in-a-dev-container-in-visual-studio-code)
+  - [Start the application for local development](#start-the-application-for-local-development)
+  - [Update the application](#update-the-application)
 - [Set up a production environment on the Infomaniak server](#set-up-a-production-environment-on-the-infomaniak-server)
   - [Order a new Infomaniak web hosting plan](#order-a-new-infomaniak-web-hosting-plan)
   - [Create a new site](#create-a-new-site)
@@ -21,7 +26,7 @@ specific tasks and achieving particular goals within the project.
   - [Delete the site default files](#delete-the-site-default-files)
   - [Checklist](#checklist)
 - [Deploy the application to the Infomaniak server](#deploy-the-application-to-the-infomaniak-server)
-  - [Clone the repository](#clone-the-repository)
+  - [Clone the repository](#clone-the-repository-1)
   - [Set up the application](#set-up-the-application)
   - [Access the application](#access-the-application)
   - [Checklist](#checklist-1)
@@ -31,7 +36,73 @@ specific tasks and achieving particular goals within the project.
 
 ## Set up a development environment on your local machine
 
-_Coming soon._
+### Prerequisites
+
+The following prerequisites must be filled to run this project:
+
+- [Git](https://git-scm.com/downloads) must be installed.
+- [Docker](https://docs.docker.com/get-docker/) must be installed.
+- [Visual Studio Code](https://code.visualstudio.com/download) must be
+  installed.
+- [Visual Studio Code Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+  extension must be installed.
+
+### Clone the repository
+
+1. Open a terminal on your local machine.
+2. Navigate to the directory where you want to clone the repository.
+3. Clone the repository using the following command:
+
+   ```bash
+   git clone <repository-url>
+   ```
+
+   Replace `<repository-url>` with the URL of your Git repository. This will
+   create a new directory with the repository name and clone the repository into
+   it.
+
+### Open the project in a Dev Container in Visual Studio Code
+
+1. Open Visual Studio Code.
+2. Click on "File" > "Open Folder..." and select the folder where you cloned the
+   repository.
+3. Click on the green "><" icon in the bottom-left corner of the Visual Studio
+   Code window and select "Remote-Containers: Reopen in Container". This will
+   open the project in a development container, which provides a consistent
+   development environment with all the necessary dependencies and tools.
+
+### Start the application for local development
+
+1. Open the project in a terminal within the Visual Studio Code Dev Container
+   (see the previous section for instructions).
+2. Run the following commands to set up and start the application:
+
+   ```bash
+   # Setup the development environment
+   composer setup
+
+   # Start the Laravel development server
+   composer dev
+   ```
+
+3. The application is accessible at <http://localhost:8000>. The Vite
+   development server is accessible at <http://localhost:5173>. The mail server
+   interface is accessible at <http://localhost:8025>.
+
+### Update the application
+
+To update the application, run the following commands:
+
+```bash
+# Update the dependencies with npm
+npx npm-check-updates
+
+# Update the dependencies with npm
+npx npm-check-updates -u
+
+# Update the dependencies with Composer
+composer update
+```
 
 ## Set up a production environment on the Infomaniak server
 

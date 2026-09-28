@@ -168,6 +168,8 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
+                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${{ github.event.pull_request.head.sha }}/" .env
+
                       composer setup-prod
 
                       php artisan migrate:fresh --seed --seeder=DevelopmentSeeder

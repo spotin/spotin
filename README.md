@@ -8,47 +8,6 @@ arbitrary metadata describing a context and circumstances. Additionally, spots
 can redirect the user to the original source of information. Once created, spots
 are searchable by places and by keywords.
 
-## Prerequisites
+## Getting started
 
-The following prerequisites must be filled to run this service:
-
-- [Docker](https://docs.docker.com/get-docker/) must be installed.
-- [Visual Studio Code](https://code.visualstudio.com/download) must be
-  installed.
-- [Visual Studio Code Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-  extension must be installed.
-
-## Start the application for local development
-
-Open this folder in Visual Studio Code, and open it in a dev container. In a
-terminal, run the following commands:
-
-```bash
-# Start the Mailpit SMTP server for local development
-docker compose up --detach mailpit
-
-# Setup the development environment
-composer setup
-
-# Start the Laravel development server
-composer dev
-```
-
-The application is accessible at <http://localhost:8000>. The Vite development
-server is accessible at <http://localhost:5173>. The mail server interface is
-accessible at <http://localhost:8025>.
-
-## Update the application
-
-To update the application, run the following commands:
-
-```bash
-# Update the dependencies with npm
-npx npm-check-updates
-
-# Update the dependencies with npm
-npx npm-check-updates -u
-
-# Update the dependencies with Composer
-composer update
-```
+Check out the [documentation](./docs/README.md) to get started with Spot in®.
