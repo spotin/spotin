@@ -308,6 +308,12 @@ ready to deploy the application.
    php artisan optimize
    ```
 
+7. Reload any running services to apply the changes:
+
+   ```bash
+   php artisan reload
+   ```
+
 ### Access the application
 
 1. Open a web browser and navigate to the domain or subdomain you linked to the
