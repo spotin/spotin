@@ -162,7 +162,7 @@ jobs:
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
-                  key: ${{ secrets.SSH_PASSWORD }}
+                  password: ${{ secrets.SSH_PASSWORD }}
                   script: |
                       cd ~/sites/${{ vars.APP_DOMAIN }}
 
@@ -194,7 +194,7 @@ jobs:
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
-                  key: ${{ secrets.SSH_PASSWORD }}
+                  password: ${{ secrets.SSH_PASSWORD }}
                   script: |
                       cd ~/sites/${{ vars.APP_DOMAIN }}
 
