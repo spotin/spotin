@@ -36,13 +36,16 @@
         "setup": [
             "composer install --prefer-dist",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php artisan key:generate",
-            "@php artisan migrate --force",
+            "@php artisan key:generate --silent",
+            "@php artisan migrate:fresh --seed --seeder=DevelopmentSeeder --force",
+            "@php artisan storage:link --force",
             "npm ci --ignore-scripts",
             "npm run build"
         ],
         "setup-prod": [
             "composer install --prefer-dist --no-dev --optimize-autoloader",
+            "@php artisan storage:link --force",
+            "@php artisan optimize",
             "npm ci --ignore-scripts",
             "npm run build"
         ],
@@ -51,10 +54,12 @@
             "npm run format"
         ],
         "format-check": [
-            "vendor/bin/pint --blade --test"
+            "pint --blade --test",
+            "npm run format-check"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
+            "docker compose up --detach mailpit",
             "@php artisan dev"
         ],
         "test": [

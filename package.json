@@ -1,10 +1,11 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
+    "name": "spotin/spotin",
     "private": true,
     "type": "module",
     "scripts": {
         "format": "prettier --write .",
-        "format:check": "prettier --check .",
+        "format-check": "prettier --check .",
         "build": "vite build",
         "dev": "vite"
     },
