@@ -174,10 +174,6 @@ jobs:
 
                       composer setup
 
-                      php artisan migrate:fresh --seed --seeder=DevelopmentSeeder
-
-                      php artisan storage:link --force
-
                       php artisan optimize
 
     deploy-production:
