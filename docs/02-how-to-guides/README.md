@@ -173,12 +173,12 @@ composer update
 
 1. Connect to the Infomaniak server via SSH (see the previous section for
    instructions).
-2. Create a `.profile` file in the home directory (if it doesn't already exist).
+2. Create a `.bashrc` file in the home directory (if it doesn't already exist).
    This will allow to add the Node.js binary to the PATH environment variable
    for the SSH user. You can create the file using the following command:
 
    ```bash
-   touch ~/.profile
+   touch ~/.bashrc
    ```
 
 3. Install Node.js using the instructions provided by the official Node.js
