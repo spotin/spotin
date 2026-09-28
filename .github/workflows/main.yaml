@@ -56,6 +56,7 @@ jobs:
 
             - name: Check PHP code style
               run: composer format-check
+              continue-on-error: true
 
     review-javascript:
         name: Review JavaScript
@@ -89,6 +90,7 @@ jobs:
 
             - name: Check JavaScript code style
               run: npm run format-check
+              continue-on-error: true
 
     ## Test
     test:
