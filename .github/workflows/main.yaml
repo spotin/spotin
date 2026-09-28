@@ -170,9 +170,10 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
-                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${{ github.event.pull_request.head.sha }}/" .env
-
                       composer setup
+
+                      sha="${{ github.event.pull_request.head.sha }}"
+                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${sha:0:7}/" .env
 
                       php artisan optimize
 
