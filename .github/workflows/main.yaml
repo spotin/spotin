@@ -177,6 +177,8 @@ jobs:
 
                       php artisan optimize
 
+                      php artisan reload
+
     deploy-production:
         name: Deploy to production environment
         runs-on: ubuntu-latest
@@ -203,6 +205,9 @@ jobs:
 
                       composer setup-prod
 
-                      php artisan storage:link --force
+                      sha="${{ github.event.pull_request.head.sha }}"
+                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${sha:0:7}/" .env
 
                       php artisan optimize
+
+                      php artisan reload
