@@ -6,6 +6,11 @@
     @isset($description)
         <meta name="description" content="{{ $description }}" />
     @endisset
+    <link rel="icon" href="{{ asset('icons/favicon.ico') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('icons/favicon-32x32.png') }}" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('icons/favicon.svg') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}" />
+    <link rel="manifest" href="{{ asset('manifest.json') }}" />
 
     @isset($title)
         <title>{{ $title }} - {{ config('app.name') }}</title>
@@ -19,7 +24,10 @@
     <header>
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
-                <a href="{{ url('/') }}" class="block transition hover:opacity-80"> {{ config('app.name') }} </a>
+                <a href="{{ url('/') }}" class="flex items-center gap-2 hover:opacity-60">
+                    <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name') }}" class="h-16 w-auto" />
+                    <span class="text-lg font-bold">{{ config('app.name') }}</span>
+                </a>
 
                 <div class="flex items-center gap-2">
                     <a href="{{ route('auth.sign_in') }}" class="btn btn-ghost"> {{ __('ui.auth.sign_in.title') }} </a>
