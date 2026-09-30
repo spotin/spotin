@@ -212,6 +212,8 @@ jobs:
                       sha="${{ env.GITHUB_SHA }}"
                       sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
 
+                      php artisan migrate
+
                       php artisan optimize
 
                       php artisan reload
