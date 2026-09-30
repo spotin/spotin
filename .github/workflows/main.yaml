@@ -24,7 +24,7 @@ env:
     PHP_CACHE_KEY: "php-cache-v1"
     NODE_VERSION: "26"
     BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-    GITHUB_SHA: ${{ github.pull_request.head.sha || github.sha }}
+    GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
     ## Review
