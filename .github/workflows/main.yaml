@@ -24,7 +24,7 @@ env:
     PHP_CACHE_KEY: "php-cache-v1"
     NODE_VERSION: "26"
     BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-    GITHUB_SHA: ${{ github.sha }}
+    GITHUB_SHA: ${{ github.pull_request.head.sha || github.sha }}
 
 jobs:
     ## Review
@@ -176,7 +176,7 @@ jobs:
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=${ref} (${sha:0:7})|" .env
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
 
                       php artisan optimize
 
@@ -210,7 +210,7 @@ jobs:
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=${ref} (${sha:0:7})|" .env
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
 
                       php artisan optimize
 
