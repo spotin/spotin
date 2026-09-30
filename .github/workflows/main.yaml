@@ -23,6 +23,8 @@ env:
     PHP_VERSION: "8.5"
     PHP_CACHE_KEY: "php-cache-v1"
     NODE_VERSION: "26"
+    BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+    GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
     ## Review
@@ -166,14 +168,15 @@ jobs:
 
                       cd ~/sites/${{ vars.APP_DOMAIN }}
 
-                      git fetch --depth=1 origin "${{ github.event.pull_request.head.sha }}"
+                      git fetch --depth=1 origin "${{ env.GITHUB_SHA }}"
 
                       git checkout --detach FETCH_HEAD
 
                       composer setup
 
-                      sha="${{ github.event.pull_request.head.sha }}"
-                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${sha:0:7}/" .env
+                      ref="${{ env.BRANCH_NAME }}"
+                      sha="${{ env.GITHUB_SHA }}"
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
 
                       php artisan optimize
 
@@ -199,14 +202,15 @@ jobs:
 
                       cd ~/sites/${{ vars.APP_DOMAIN }}
 
-                      git fetch --depth=1 origin "${{ github.sha }}"
+                      git fetch --depth=1 origin "${{ env.GITHUB_SHA }}"
 
                       git checkout --detach FETCH_HEAD
 
                       composer setup-prod
 
-                      sha="${{ github.event.pull_request.head.sha }}"
-                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${sha:0:7}/" .env
+                      ref="${{ env.BRANCH_NAME }}"
+                      sha="${{ env.GITHUB_SHA }}"
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
 
                       php artisan optimize
 

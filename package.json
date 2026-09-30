@@ -14,6 +14,7 @@
         "@tailwindcss/vite": "^4.3.3",
         "concurrently": "^10.0.5",
         "daisyui": "^5.7.43",
+        "fontaine": "^0.8.2",
         "laravel-vite-plugin": "^3.2",
         "prettier": "^3.9.8",
         "prettier-plugin-blade": "^3.3.3",
