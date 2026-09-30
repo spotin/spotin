@@ -172,8 +172,8 @@ jobs:
 
                       composer setup
 
-                      sha="${{ github.event.pull_request.head.sha }}"
-                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${sha:0:7}/" .env
+                      ref="${{ GITHUB_REF_NAME }}-${{ github.sha:0:7 }}"
+                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${ref}/" .env
 
                       php artisan optimize
 
@@ -205,8 +205,8 @@ jobs:
 
                       composer setup-prod
 
-                      sha="${{ github.event.pull_request.head.sha }}"
-                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${sha:0:7}/" .env
+                      ref="${{ GITHUB_REF_NAME }}-${{ github.sha:0:7 }}"
+                      sed -i "s/^APP_VERSION=.*/APP_VERSION=${ref}/" .env
 
                       php artisan optimize
 

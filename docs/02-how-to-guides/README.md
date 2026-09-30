@@ -288,13 +288,19 @@ ready to deploy the application.
    php artisan storage:link --force
    ```
 
-5. Set up the environment variables by creating a `.env` file in the project
-   root directory. You can copy the example `.env.example` file and modify it as
-   needed:
+5. Copy the example `.env.example` file to create a new `.env` file:
 
    ```bash
    cp .env.example .env
    ```
+
+6. Generate a new application key by running the following command:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+7. Set up the environment variables.
 
    **Note**: make sure to update the `.env` file with the correct values for
    your production environment, such as database credentials, mail server
@@ -302,17 +308,24 @@ ready to deploy the application.
    `APP_ENV` variable to `production` and the `APP_DEBUG` variable to `false` in
    the `.env` file.
 
-6. Run the following command to optimize the application for production:
+8. Run the following command to migrate the database and seed it with initial
+   data:
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+9. Run the following command to optimize the application for production:
 
    ```bash
    php artisan optimize
    ```
 
-7. Reload any running services to apply the changes:
+10. Reload any running services to apply the changes:
 
-   ```bash
-   php artisan reload
-   ```
+    ```bash
+    php artisan reload
+    ```
 
 ### Access the application
 
