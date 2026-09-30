@@ -176,7 +176,7 @@ jobs:
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=${ref}-${sha:0:7}|" .env
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=${ref} (${sha:0:7})|" .env
 
                       php artisan optimize
 
@@ -210,7 +210,7 @@ jobs:
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=${ref}-${sha:0:7}|" .env
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=${ref} (${sha:0:7})|" .env
 
                       php artisan optimize
 
