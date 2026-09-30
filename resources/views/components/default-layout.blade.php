@@ -16,28 +16,34 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex min-h-screen flex-col">
-    <header class="bg-red-600 text-white dark:bg-slate-800">
+    <header>
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <a href="{{ url('/') }}" class="block transition hover:opacity-80"> {{ config('app.name') }} </a>
-                </div>
+                <a href="{{ url('/') }}" class="block transition hover:opacity-80"> {{ config('app.name') }} </a>
 
-                <form method="POST" action="{{ route('locale.update') }}" class="text-black dark:text-white">
-                    @csrf
-                    @method('PATCH')
-                    <select id="locale" name="locale" onchange="this.form.submit()" class="select">
-                        <option value="en" @selected(app()->getLocale() === 'en')>English</option>
-                        <option value="fr" @selected(app()->getLocale() === 'fr')>Français</option>
-                    </select>
-                </form>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('auth.sign_in') }}" class="btn btn-ghost"> {{ __('ui.auth.sign_in.title') }} </a>
+                    <a href="{{ route('auth.sign_up') }}" class="btn btn-primary">
+                        {{ __('ui.auth.sign_up.title') }}
+                    </a>
+                    <form method="POST" action="{{ route('locale.update') }}">
+                        @csrf
+                        @method('PATCH')
+
+                        <select id="locale" name="locale" onchange="this.form.submit()" class="select">
+                            <option value="en" @selected(app()->getLocale() === 'en')>EN</option>
+                            <option value="fr" @selected(app()->getLocale() === 'fr')>FR</option>
+                        </select>
+                        </label>
+                    </form>
+                </div>
             </div>
         </nav>
     </header>
 
-    <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8 dark:text-white">{{ $slot }}</main>
+    <main class="prose container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">{{ $slot }}</main>
 
-    <footer class="bg-red-600 text-sm text-white dark:bg-slate-800">
+    <footer class="text-sm">
         <div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
             <div class="flex h-16 flex-col items-center justify-between gap-4 sm:flex-row">
                 <p class="text-center sm:text-left">Left</p>

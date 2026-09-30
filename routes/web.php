@@ -10,7 +10,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::controller(AuthController::class)->prefix('auth')->name('auth')->group(function () {
+Route::controller(AuthController::class)->prefix('auth')->name('auth.')->group(function () {
     // Forgot password
     Route::get('/forgot-password', 'showForgotPassword')->name('forgot-password');
     Route::post('/forgot-password', 'forgotPassword');
@@ -20,13 +20,13 @@ Route::controller(AuthController::class)->prefix('auth')->name('auth')->group(fu
     Route::post('/reset-password', 'resetPassword');
 
     // Sign in
-    Route::get('/sign-in', 'showSignIn')->name('sign-in');
+    Route::get('/sign-in', 'showSignIn')->name('sign_in');
     Route::post('/sign-in', 'signIn');
 
     // Sign out
-    Route::post('/sign-out', 'signOut')->name('sign-out');
+    Route::post('/sign-out', 'signOut')->name('sign_out');
 
     // Sign up
-    Route::get('/sign-up', 'showSignUp')->name('sign-up');
+    Route::get('/sign-up', 'showSignUp')->name('sign_up');
     Route::post('/sign-up', 'signUp');
 });
