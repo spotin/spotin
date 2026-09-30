@@ -68,6 +68,7 @@ return [
         ],
     ],
     'common' => [
+        'version' => 'Version :version',
         'required_fields' => 'Tous les champs marqués d’un astérisque (*) sont obligatoires.',
     ],
 ];

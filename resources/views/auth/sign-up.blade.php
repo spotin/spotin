@@ -7,7 +7,8 @@
         <fieldset class="fieldset mb-4">
             <legend class="fieldset-legend">{{ __('ui.common.required_fields') }}</legend>
 
-            <label class="label font-bold" for="username">{{ __('ui.auth.sign_up.form.fields.username.label') }}</label>
+            <label class="label font-bold" for="username"
+                >{{ __('ui.auth.sign_up.form.fields.username.label') }}*</label>
             <label class="input w-full">
                 <x-lucide-pencil-line class="h-[1em] opacity-50" />
                 <input
@@ -18,7 +19,7 @@
                 />
             </label>
 
-            <label class="label font-bold" for="name">{{ __('ui.auth.sign_up.form.fields.name.label') }}</label>
+            <label class="label font-bold" for="name">{{ __('ui.auth.sign_up.form.fields.name.label') }}*</label>
             <label class="input w-full">
                 <x-lucide-pencil-line class="h-[1em] opacity-50" />
                 <input
@@ -29,7 +30,7 @@
                 />
             </label>
 
-            <label class="label font-bold" for="email">{{ __('ui.auth.sign_up.form.fields.email.label') }}</label>
+            <label class="label font-bold" for="email">{{ __('ui.auth.sign_up.form.fields.email.label') }}*</label>
             <label class="input w-full">
                 <x-lucide-pencil-line class="h-[1em] opacity-50" />
                 <input
@@ -40,7 +41,8 @@
                 />
             </label>
 
-            <label class="label font-bold" for="password">{{ __('ui.auth.sign_up.form.fields.password.label') }}</label>
+            <label class="label font-bold" for="password"
+                >{{ __('ui.auth.sign_up.form.fields.password.label') }}*</label>
             <label class="input w-full">
                 <x-lucide-pencil-line class="h-[1em] opacity-50" />
                 <input
@@ -51,10 +53,8 @@
                 />
             </label>
 
-            <label
-                class="label font-bold"
-                for="password_confirmation"
-            >{{ __('ui.auth.sign_up.form.fields.confirm_password.label') }}</label>
+            <label class="label font-bold" for="password_confirmation"
+                >{{ __('ui.auth.sign_up.form.fields.confirm_password.label') }}*</label>
             <label class="input w-full">
                 <x-lucide-pencil-line class="h-[1em] opacity-50" />
                 <input

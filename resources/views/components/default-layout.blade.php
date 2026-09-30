@@ -55,7 +55,11 @@
         <div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
             <div class="flex h-16 flex-col items-center justify-between gap-4 sm:flex-row">
                 <p class="text-center sm:text-left">Left</p>
-                <p class="text-center sm:text-left">Version {{ config('app.version') }}</p>
+                <p class="text-center sm:text-left">
+                <div class="tooltip" data-tip="{{ __('ui.common.version', ['version' => config('app.version')]) }}">
+                    Spot in<sup>®</sup> 2021-{{ date('Y') }}
+                </div>
+                </p>
                 <a href="{{ url('/about') }}" class="block transition hover:opacity-80"> Right </a>
             </div>
         </div>
