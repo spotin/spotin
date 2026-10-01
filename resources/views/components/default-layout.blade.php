@@ -30,10 +30,22 @@
                 </a>
 
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('auth.sign_in') }}" class="btn btn-ghost"> {{ __('ui.auth.sign_in.title') }} </a>
-                    <a href="{{ route('auth.sign_up') }}" class="btn btn-primary">
-                        {{ __('ui.auth.sign_up.title') }}
-                    </a>
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="btn btn-ghost"
+                            >
+                                {{  __('ui.common.logout') }}
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-ghost"> {{ __('ui.auth.login.title') }} </a>
+                        <a href="{{ route('register') }}" class="btn btn-primary">
+                            {{ __('ui.auth.register.title') }}
+                        </a>
+                    @endauth
                     <form method="POST" action="{{ route('locale.update') }}">
                         @csrf
                         @method('PATCH')

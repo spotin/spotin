@@ -10,8 +10,8 @@ return [
         'button' => 'Click me',
     ],
     'auth' => [
-        'sign_up' => [
-            'title' => 'Sign up',
+        'register' => [
+            'title' => 'Register',
             'description' => 'Create a new account',
             'form' => [
                 'fields' => [
@@ -42,37 +42,40 @@ return [
                     ],
                 ],
                 'actions' => [
-                    'submit' => 'Sign up',
+                    'submit' => 'Register',
                 ],
             ],
             'already_have_an_account' => 'Already have an account?',
-            'sign_in' => 'Sign in',
+            'login' => 'Log in',
         ],
-        'sign_in' => [
-            'title' => 'Sign in',
+        'login' => [
+            'title' => 'Login',
             'description' => 'Access your account',
             'form' => [
                 'fields' => [
-                    'email' => [
-                        'label' => 'Email',
-                        'placeholder' => 'Enter your email',
+                    'username_or_email' => [
+                        'label' => 'Username or email',
+                        'placeholder' => 'Enter your username or email',
+                        'hint' => 'Enter your username or email address.',
                     ],
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
+                        'hint' => 'Enter your password.',
                     ],
                 ],
                 'actions' => [
-                    'submit' => 'Sign in',
+                    'submit' => 'Log in',
                 ],
             ],
             'remember_me' => 'Remember me',
             'forgot_your_password' => 'Forgot your password?',
             'dont_have_an_account' => "Don't have an account?",
-            'sign_up' => 'Sign up',
+            'register' => 'Register',
         ],
     ],
     'common' => [
+        'logout' => 'Logout',
         'version' => 'Version :version',
         'fill_the_form' => 'Please fill out the form below to continue.',
     ],
