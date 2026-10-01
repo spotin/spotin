@@ -21,7 +21,7 @@ return [
                         'hint' => 'Utilisez de 3 à 30 caractères : lettres, chiffres, traits d’union ou traits de soulignement uniquement.',
                     ],
                     'name' => [
-                        'label' => 'Nom',
+                        'label' => 'Nom complet',
                         'placeholder' => 'Saisissez votre nom complet',
                         'hint' => 'Utilisez de 2 à 50 caractères : lettres, espaces, apostrophes ou traits d’union uniquement.',
                     ],
