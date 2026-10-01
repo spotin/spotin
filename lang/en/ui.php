@@ -18,22 +18,27 @@ return [
                     'username' => [
                         'label' => 'Username',
                         'placeholder' => 'Enter your username',
+                        'hint' => 'Use 3 to 30 characters containing only letters, numbers or dash.',
                     ],
                     'name' => [
                         'label' => 'Name',
                         'placeholder' => 'Enter your full name',
+                        'hint' => 'Use 2 to 50 characters containing only letters, spaces, apostrophes or hyphens.',
                     ],
                     'email' => [
                         'label' => 'Email',
                         'placeholder' => 'Enter your email',
+                        'hint' => 'Enter a valid email address.',
                     ],
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
+                        'hint' => 'Use 8 to 72 characters.',
                     ],
                     'confirm_password' => [
                         'label' => 'Confirm password',
                         'placeholder' => 'Confirm your password',
+                        'hint' => 'Use 8 to 72 characters.',
                     ],
                 ],
                 'actions' => [
@@ -69,6 +74,6 @@ return [
     ],
     'common' => [
         'version' => 'Version :version',
-        'required_fields' => 'All fields marked with an asterisk (*) are required.',
+        'fill_the_form' => 'Please fill out the form below to continue.',
     ],
 ];

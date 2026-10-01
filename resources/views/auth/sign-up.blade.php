@@ -4,66 +4,94 @@
     <form method="POST" action="{{ url('/auth/register') }}">
         @csrf
 
-        <fieldset class="fieldset mb-4">
-            <legend class="fieldset-legend">{{ __('ui.common.required_fields') }}</legend>
+        <fieldset class="fieldset mb-4 gap-3">
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
-            <label class="label font-bold" for="username"
-                >{{ __('ui.auth.sign_up.form.fields.username.label') }}*</label>
-            <label class="input w-full">
-                <x-lucide-pencil-line class="h-[1em] opacity-50" />
+            <div>
+                <label class="floating-label input w-full validator">
+                <span>{{ __('ui.auth.sign_up.form.fields.username.placeholder') }}</span>
+                <x-lucide-user-round class="h-[1em] opacity-50" />
                 <input
-                    id="username"
                     type="text"
+                    required
+                    placeholder="{{ __('ui.auth.sign_up.form.fields.username.label') }}"
+                    pattern="[A-Za-z][A-Za-z0-9\-]*"
+                    minlength="3"
+                    maxlength="30"
+                    title="{{ __('ui.auth.sign_up.form.fields.username.hint') }}"
                     class="input w-full"
-                    placeholder="{{ __('ui.auth.sign_up.form.fields.username.placeholder') }}"
                 />
-            </label>
+                </label>
+                <span class="validator-hint hidden mt-0">{{ __('ui.auth.sign_up.form.fields.username.hint') }}</span>
+            </div>
 
-            <label class="label font-bold" for="name">{{ __('ui.auth.sign_up.form.fields.name.label') }}*</label>
-            <label class="input w-full">
-                <x-lucide-pencil-line class="h-[1em] opacity-50" />
+            <div>
+                <label class="floating-label input w-full validator">
+                <span>{{ __('ui.auth.sign_up.form.fields.name.placeholder') }}</span>
+                <x-lucide-id-card class="h-[1em] opacity-50" />
                 <input
-                    id="name"
                     type="text"
+                    required
+                    placeholder="{{ __('ui.auth.sign_up.form.fields.name.label') }}"
+                    pattern="[A-Za-z][A-Za-z' -]*"
+                    minlength="2"
+                    maxlength="50"
+                    title="{{ __('ui.auth.sign_up.form.fields.name.hint') }}"
                     class="input w-full"
-                    placeholder="{{ __('ui.auth.sign_up.form.fields.name.placeholder') }}"
                 />
-            </label>
+                </label>
+                <span class="validator-hint hidden mt-0">{{ __('ui.auth.sign_up.form.fields.name.hint') }}</span>
+            </div>
 
-            <label class="label font-bold" for="email">{{ __('ui.auth.sign_up.form.fields.email.label') }}*</label>
-            <label class="input w-full">
-                <x-lucide-pencil-line class="h-[1em] opacity-50" />
+            <div>
+                <label class="floating-label input w-full validator">
+                <span>{{ __('ui.auth.sign_up.form.fields.email.placeholder') }}</span>
+                <x-lucide-mail class="h-[1em] opacity-50" />
                 <input
-                    id="email"
                     type="email"
+                    required
+                    placeholder="{{ __('ui.auth.sign_up.form.fields.email.label') }}"
+                    maxlength="254"
+                    title="{{ __('ui.auth.sign_up.form.fields.email.hint') }}"
                     class="input w-full"
-                    placeholder="{{ __('ui.auth.sign_up.form.fields.email.placeholder') }}"
                 />
-            </label>
+                </label>
+                <span class="validator-hint hidden mt-0">{{ __('ui.auth.sign_up.form.fields.email.hint') }}</span>
+            </div>
 
-            <label class="label font-bold" for="password"
-                >{{ __('ui.auth.sign_up.form.fields.password.label') }}*</label>
-            <label class="input w-full">
-                <x-lucide-pencil-line class="h-[1em] opacity-50" />
+            <div>
+                <label class="floating-label input w-full validator">
+                <span>{{ __('ui.auth.sign_up.form.fields.password.placeholder') }}</span>
+                <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
                 <input
-                    id="password"
                     type="password"
+                    required
+                    placeholder="{{ __('ui.auth.sign_up.form.fields.password.label') }}"
+                    minlength="8"
+                    maxlength="72"
+                    title="{{ __('ui.auth.sign_up.form.fields.password.hint') }}"
                     class="input w-full"
-                    placeholder="{{ __('ui.auth.sign_up.form.fields.password.placeholder') }}"
                 />
-            </label>
+                </label>
+                <span class="validator-hint hidden mt-0">{{ __('ui.auth.sign_up.form.fields.password.hint') }}</span>
+            </div>
 
-            <label class="label font-bold" for="password_confirmation"
-                >{{ __('ui.auth.sign_up.form.fields.confirm_password.label') }}*</label>
-            <label class="input w-full">
-                <x-lucide-pencil-line class="h-[1em] opacity-50" />
+            <div>
+                <label class="floating-label input w-full validator">
+                <span>{{ __('ui.auth.sign_up.form.fields.confirm_password.placeholder') }}</span>
+                <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
                 <input
-                    id="password_confirmation"
                     type="password"
+                    required
+                    placeholder="{{ __('ui.auth.sign_up.form.fields.confirm_password.label') }}"
+                    minlength="8"
+                    maxlength="72"
+                    title="{{ __('ui.auth.sign_up.form.fields.confirm_password.hint') }}"
                     class="input w-full"
-                    placeholder="{{ __('ui.auth.sign_up.form.fields.confirm_password.placeholder') }}"
                 />
-            </label>
+                </label>
+                <span class="validator-hint hidden mt-0">{{ __('ui.auth.sign_up.form.fields.confirm_password.hint') }}</span>
+            </div>
         </fieldset>
 
         <footer>
