@@ -33,12 +33,7 @@
                     @auth
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
-                            <button
-                                type="submit"
-                                class="btn btn-ghost"
-                            >
-                                {{  __('ui.common.logout') }}
-                            </button>
+                            <button type="submit" class="btn btn-ghost">{{ __('ui.common.logout') }}</button>
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-ghost"> {{ __('ui.auth.login.title') }} </a>

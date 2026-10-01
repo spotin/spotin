@@ -7,9 +7,8 @@
         <fieldset class="fieldset mb-4 gap-3">
             <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
-            @if($errors->any())
-            Error
-
+            @if ($errors->any())
+                Error
             @endif
 
             <div>
@@ -67,9 +66,7 @@
         </fieldset>
 
         <footer>
-            <button type="submit" class="btn btn-block" disabled>
-                {{ __('ui.auth.login.form.actions.submit') }}
-            </button>
+            <button type="submit" class="btn btn-block" disabled>{{ __('ui.auth.login.form.actions.submit') }}</button>
 
             <p class="text-center text-sm">
                 {{ __('ui.auth.login.dont_have_an_account') }}
