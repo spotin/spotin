@@ -281,26 +281,19 @@ ready to deploy the application.
    composer setup-prod
    ```
 
-4. Run the following command to create a symbolic link for the storage
-   directory:
-
-   ```bash
-   php artisan storage:link --force
-   ```
-
-5. Copy the example `.env.example` file to create a new `.env` file:
+4. Copy the example `.env.example` file to create a new `.env` file:
 
    ```bash
    cp .env.example .env
    ```
 
-6. Generate a new application key by running the following command:
+5. Generate a new application key by running the following command:
 
    ```bash
    php artisan key:generate
    ```
 
-7. Set up the environment variables.
+6. Set up the environment variables.
 
    **Note**: make sure to update the `.env` file with the correct values for
    your production environment, such as database credentials, mail server
@@ -308,11 +301,17 @@ ready to deploy the application.
    `APP_ENV` variable to `production` and the `APP_DEBUG` variable to `false` in
    the `.env` file.
 
-8. Run the following command to migrate the database and seed it with initial
-   data:
+7. Run the following command to migrate the database:
 
    ```bash
-   php artisan migrate --seed
+   php artisan migrate
+   ```
+
+8. Optional: if you need to seed the database with initial data, run the
+   following command:
+
+   ```bash
+   php artisan db:seed
    ```
 
 9. Run the following command to optimize the application for production:

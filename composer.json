@@ -6,8 +6,10 @@
     "license": "AGPL-3.0",
     "require": {
         "php": "^8.3",
+        "laravel/fortify": "^1.40",
         "laravel/framework": "^13.17",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "mallardduck/blade-lucide-icons": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -45,7 +47,6 @@
         "setup-prod": [
             "composer install --prefer-dist --no-dev --optimize-autoloader",
             "@php artisan storage:link --force",
-            "@php artisan optimize",
             "npm ci --ignore-scripts",
             "npm run build"
         ],
