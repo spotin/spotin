@@ -18,10 +18,10 @@ return [
                     'username' => [
                         'label' => 'Username',
                         'placeholder' => 'Enter your username',
-                        'hint' => 'Use 3 to 30 characters containing only letters, numbers or dash.',
+                        'hint' => 'Use 3 to 30 characters containing only letters, numbers, hyphens or underscores.',
                     ],
                     'name' => [
-                        'label' => 'Name',
+                        'label' => 'Full name',
                         'placeholder' => 'Enter your full name',
                         'hint' => 'Use 2 to 50 characters containing only letters, spaces, apostrophes or hyphens.',
                     ],
@@ -33,12 +33,12 @@ return [
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
-                        'hint' => 'Use 8 to 72 characters.',
+                        'hint' => 'Use 8 to 128 characters.',
                     ],
                     'confirm_password' => [
                         'label' => 'Confirm password',
                         'placeholder' => 'Confirm your password',
-                        'hint' => 'Use 8 to 72 characters.',
+                        'hint' => 'Use 8 to 128 characters.',
                     ],
                 ],
                 'actions' => [
