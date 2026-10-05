@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Head\Facades\Head;
 
@@ -19,3 +20,12 @@ Route::get('/dashboard', function () {
 
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::singleton('profile', ProfileController::class)
+    ->destroyable()
+    ->middleware(['auth', 'verified'])
+    ->withHead(
+        title: __('ui.profile.title'),
+        description: __('ui.profile.description')
+    )
+    ->only(['show', 'destroy']);

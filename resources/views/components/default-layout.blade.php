@@ -16,12 +16,13 @@
                     <span class="text-lg font-bold">{{ config('app.name') }}</span>
                 </a>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-4">
                     @auth
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit" class="btn btn-ghost">{{ __('ui.common.logout') }}</button>
-                        </form>
+                        <a href="{{ route('profile.show') }}" class="avatar">
+                            <div class="rounded-full hover:opacity-80 bg-base-200">
+                                <x-lucide-user class="h-8 w-8" />
+                            </div>
+                        </a>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-ghost"> {{ __('ui.auth.login.title') }} </a>
                         <a href="{{ route('register') }}" class="btn btn-primary">

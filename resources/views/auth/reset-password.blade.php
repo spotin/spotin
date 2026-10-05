@@ -4,7 +4,7 @@
     <form method="POST" action="{{ route('password.update') }}" data-validate-submit>
         @csrf
 
-        <input type="hidden" name="token" value="{{ request()->route('token') }}">
+        <input type="hidden" name="token" value="{{ request()->route('token') }}" />
 
         <fieldset class="fieldset mb-4 gap-3">
             <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
@@ -92,7 +92,7 @@
         </fieldset>
 
         <footer>
-        <button type="submit" class="btn btn-block">{{ __('ui.auth.reset_password.form.actions.submit') }}</button>
+            <button type="submit" class="btn btn-block">{{ __('ui.auth.reset_password.form.actions.submit') }}</button>
 
             <p class="text-center text-sm">
                 {{ __('ui.auth.reset_password.already_have_an_account') }}
