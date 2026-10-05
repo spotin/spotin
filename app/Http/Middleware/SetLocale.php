@@ -16,7 +16,7 @@ class SetLocale
     public function handle(Request $request, Closure $next): Response
     {
         // Session locale detection
-        $sessionLocale = $request->session()->get('locale');
+        $sessionLocale = $request->session()->get('locale') ?? $request->cookie('locale');
 
         if ($this->isValidLocale($sessionLocale)) {
             app()->setLocale($sessionLocale);

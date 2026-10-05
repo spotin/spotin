@@ -20,6 +20,8 @@ class LocaleController extends Controller
 
         $request->session()->put('locale', $locale);
 
+        cookie()->queue(cookie()->forever('locale', $locale));
+
         return back();
     }
 }

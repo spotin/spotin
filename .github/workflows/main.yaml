@@ -176,7 +176,8 @@ jobs:
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
+                      date="$(date --rfc-3339=seconds --utc)"
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7}@${date})\"|" .env
 
                       php artisan optimize
 
@@ -210,9 +211,10 @@ jobs:
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
+                      date="$(date --rfc-3339=seconds --utc)"
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7}@${date})\"|" .env
 
-                      php artisan migrate
+                      php artisan migrate --force
 
                       php artisan optimize
 

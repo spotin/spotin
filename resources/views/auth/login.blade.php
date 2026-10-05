@@ -1,4 +1,4 @@
-<x-default-layout :title="__('ui.auth.login.title')" :description="__('ui.auth.login.description')">
+<x-default-layout>
     <h1>{{ __('ui.auth.login.title') }}</h1>
 
     <form method="POST" action="{{ route('login') }}" data-validate-submit>
@@ -71,6 +71,11 @@
             <p class="text-center text-sm">
                 {{ __('ui.auth.login.dont_have_an_account') }}
                 <a href="{{ route('register') }}"> {{ __('ui.auth.login.register') }} </a>
+            </p>
+
+            <p class="text-center text-sm">
+                {{ __('ui.auth.login.forgot_your_password') }}
+                <a href="{{ route('password.request') }}"> {{ __('ui.auth.login.reset_your_password') }} </a>
             </p>
         </footer>
     </form>

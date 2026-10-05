@@ -1,4 +1,4 @@
-<x-default-layout :title="__('ui.auth.register.title')" :description="__('ui.auth.register.description')">
+<x-default-layout>
     <h1>{{ __('ui.auth.register.title') }}</h1>
 
     <form method="POST" action="{{ route('register') }}" data-validate-submit>

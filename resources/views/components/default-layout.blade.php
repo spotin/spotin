@@ -2,21 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @isset($description)
-        <meta name="description" content="{{ $description }}" />
-    @endisset
-    <link rel="icon" href="{{ asset('icons/favicon.ico') }}" />
-    <link rel="icon" type="image/png" href="{{ asset('icons/favicon-32x32.png') }}" sizes="32x32" />
-    <link rel="icon" type="image/svg+xml" href="{{ asset('icons/favicon.svg') }}" />
-    <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}" />
-    <link rel="manifest" href="{{ asset('manifest.json') }}" />
-
-    @isset($title)
-        <title>{{ $title }} - {{ config('app.name') }}</title>
-    @else
-        <title>{{ config('app.name') }}</title>
-    @endisset
+    @head
+    @fonts
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -25,7 +12,7 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 hover:opacity-60">
-                    <img src="{{ asset('images/logo.svg') }}" alt="{{ config('app.name') }}" class="h-16 w-auto" />
+                    <x-icon-logo class="h-16 w-16" />
                     <span class="text-lg font-bold">{{ config('app.name') }}</span>
                 </a>
 

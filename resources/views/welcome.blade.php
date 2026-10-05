@@ -1,4 +1,4 @@
-<x-default-layout :title="__('ui.welcome.title')" :description="__('ui.welcome.description')">
+<x-default-layout>
     <article class="prose lg:prose-xl">
         <h1>{{ __('ui.welcome.title') }}</h1>
 
