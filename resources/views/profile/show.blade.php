@@ -1,7 +1,7 @@
 <x-default-layout>
     <h1>{{ __('ui.profile.title') }}</h1>
 
-    @if($errors->any())
+    @if ($errors->any())
         <div class="alert alert-error mb-4">
             <ul>
                 @foreach ($errors->all() as $error)

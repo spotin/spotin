@@ -19,7 +19,7 @@
                 <div class="flex items-center gap-4">
                     @auth
                         <a href="{{ route('profile.show') }}" class="avatar">
-                            <div class="rounded-full hover:opacity-80 bg-base-200">
+                            <div class="bg-base-200 rounded-full hover:opacity-80">
                                 <x-lucide-user class="h-8 w-8" />
                             </div>
                         </a>
