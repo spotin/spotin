@@ -6,6 +6,8 @@
 @source "../../storage/framework/views/*.php";
 
 @plugin "daisyui" {
-    themes: light --default, dark;
+    themes:
+        light --default,
+        dark;
 }
 @plugin "@tailwindcss/typography";

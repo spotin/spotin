@@ -22,23 +22,47 @@
                     tabindex="-1"
                     class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                 >
-                    <li><a>Item 1</a></li>
-                    <li>
-                        <a>Parent</a>
-                        <ul class="p-2">
-                            <li><a>Submenu 1</a></li>
-                            <li><a>Submenu 2</a></li>
-                        </ul>
-                    </li>
-                    <li><a>Item 3</a></li>
+                    @auth
+                        {{-- <li>
+                            <a href=""><x-lucide-map-pin class="h-4 w-4" />Mes spots</a>
+                        </li>
+                        <li>
+                            <a href=""><x-lucide-building class="h-4 w-4" />Mes organisations</a>
+                        </li>
+                        <li>
+                            <a href=""><x-lucide-shield class="h-4 w-4" />Administration</a>
+                        </li> --}}
+                        <li>
+                            <span><x-lucide-settings class="h-4 w-4" />{{ __('ui.settings.title') }}</span>
+                            <ul>
+                                <li>
+                                    <a href="{{ route('settings.profile') }}">{{ __('ui.settings.profile.title') }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('settings.security') }}">{{ __('ui.settings.security.title') }}</a>
+                                </li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}" class="grid-cols-1 p-0">
+                                        @csrf
+                                        <button type="submit" class="w-full cursor-pointer px-2 py-1 text-left">
+                                            {{ __('ui.common.logout') }}
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li><a href="{{ route('login') }}">{{ __('ui.auth.login.title') }}</a></li>
+                        <li><a href="{{ route('register') }}">{{ __('ui.auth.register.title') }}</a></li>
+                    @endauth
                 </ul>
             </div>
-            <a href="{{ route('index') }}"><x-icon-logo class="h-20 w-20" /></a>
+            <a href="{{ route('index') }}"><img src="{{ asset('logo.svg') }}" alt="Logo" class="h-20 w-20" /></a>
         </div>
         <div class="navbar-end group/nav gap-2">
             @auth
-                <ul class="menu menu-horizontal px-1">
-                    <li>
+                <ul class="menu menu-horizontal hidden px-1 lg:flex">
+                    {{-- <li>
                         <a href=""><x-lucide-map-pin class="h-4 w-4" />Mes spots</a>
                     </li>
                     <li>
@@ -46,7 +70,7 @@
                     </li>
                     <li>
                         <a href=""><x-lucide-shield class="h-4 w-4" />Administration</a>
-                    </li>
+                    </li> --}}
                     <li>
                         <button type="button" popovertarget="settings-popover" style="anchor-name: --settings-anchor">
                             <x-lucide-settings class="h-4 w-4" />
