@@ -37,42 +37,42 @@ class FortifyServiceProvider extends ServiceProvider
             Head::title(__('ui.auth.register.title'))
                 ->description(__('ui.auth.register.description'));
 
-            return view('auth.register');
+            return view('pages.auth.register');
         });
 
         Fortify::verifyEmailView(function () {
             Head::title(__('ui.auth.verify_email.title'))
                 ->description(__('ui.auth.verify_email.description'));
 
-            return view('auth.verify-email');
+            return view('pages.auth.verify-email');
         });
 
         Fortify::loginView(function () {
             Head::title(__('ui.auth.login.title'))
                 ->description(__('ui.auth.login.description'));
 
-            return view('auth.login');
+            return view('pages.auth.login');
         });
 
         Fortify::requestPasswordResetLinkView(function () {
             Head::title(__('ui.auth.forgot_password.title'))
                 ->description(__('ui.auth.forgot_password.description'));
 
-            return view('auth.forgot-password');
+            return view('pages.auth.forgot-password');
         });
 
         Fortify::resetPasswordView(function (Request $request) {
             Head::title(__('ui.auth.reset_password.title'))
                 ->description(__('ui.auth.reset_password.description'));
 
-            return view('auth.reset-password', ['request' => $request]);
+            return view('pages.auth.reset-password', ['request' => $request]);
         });
 
         Fortify::confirmPasswordView(function () {
             Head::title(__('ui.auth.confirm_password.title'))
                 ->description(__('ui.auth.confirm_password.description'));
 
-            return view('auth.confirm-password');
+            return view('pages.auth.confirm-password');
         });
 
         Fortify::authenticateUsing(function (Request $request) {

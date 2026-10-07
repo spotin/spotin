@@ -12,27 +12,22 @@ return [
                     'username' => [
                         'label' => 'Username',
                         'placeholder' => 'Enter your username',
-                        'hint' => 'Use 3 to 30 characters containing only letters, numbers, hyphens or underscores.',
                     ],
                     'name' => [
                         'label' => 'Full name',
                         'placeholder' => 'Enter your full name',
-                        'hint' => 'Use 2 to 50 characters containing only letters, spaces, apostrophes or hyphens.',
                     ],
                     'email' => [
                         'label' => 'Email address',
                         'placeholder' => 'Enter your email address',
-                        'hint' => 'Enter a valid email address.',
                     ],
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
-                        'hint' => 'Use 8 to 128 characters.',
                     ],
-                    'confirm_password' => [
-                        'label' => 'Confirm password',
+                    'password_confirmation' => [
+                        'label' => 'Password confirmation',
                         'placeholder' => 'Confirm your password',
-                        'hint' => 'Use 8 to 128 characters.',
                     ],
                 ],
                 'actions' => [
@@ -50,12 +45,10 @@ return [
                     'username_or_email' => [
                         'label' => 'Username or email',
                         'placeholder' => 'Enter your username or email',
-                        'hint' => 'Enter your username or email address.',
                     ],
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
-                        'hint' => 'Enter your password.',
                     ],
                 ],
                 'actions' => [
@@ -76,7 +69,6 @@ return [
                     'email' => [
                         'label' => 'Email address',
                         'placeholder' => 'Enter your email address',
-                        'hint' => 'Enter a valid email address.',
                     ],
                 ],
                 'actions' => [
@@ -92,17 +84,14 @@ return [
                     'email' => [
                         'label' => 'Email address',
                         'placeholder' => 'Enter your email address',
-                        'hint' => 'Enter a valid email address.',
                     ],
                     'password' => [
                         'label' => 'New password',
                         'placeholder' => 'Enter your new password',
-                        'hint' => 'Use 8 to 128 characters.',
                     ],
-                    'confirm_password' => [
-                        'label' => 'Confirm new password',
+                    'password_confirmation' => [
+                        'label' => 'Password confirmation',
                         'placeholder' => 'Confirm your new password',
-                        'hint' => 'Use 8 to 128 characters.',
                     ],
                 ],
                 'actions' => [
@@ -123,13 +112,82 @@ return [
                 ],
             ],
         ],
-        'confirm_password' => [
+        'password_confirmation' => [
             'title' => 'Confirm your password',
             'description' => 'Confirm your password to continue.',
+            'explanation' => 'For security reasons, please confirm your password before continuing.',
+            'form' => [
+                'fields' => [
+                    'password' => [
+                        'label' => 'Password',
+                        'placeholder' => 'Enter your password',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Confirm password',
+                ],
+            ],
+        ],
+    ],
+    'settings' => [
+        'title' => 'Settings',
+        'profile' => [
+            'title' => 'Profile settings',
+            'description' => 'Manage your profile information.',
+            'form' => [
+                'fields' => [
+                    'username' => [
+                        'label' => 'Username',
+                        'placeholder' => 'Enter your username',
+                    ],
+                    'name' => [
+                        'label' => 'Full name',
+                        'placeholder' => 'Enter your full name',
+                    ],
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Save profile',
+                ],
+            ],
+        ],
+        'security' => [
+            'title' => 'Security settings',
+            'description' => 'Update your password.',
+            'form' => [
+                'fields' => [
+                    'current_password' => [
+                        'label' => 'Current password',
+                        'placeholder' => 'Enter your current password',
+                    ],
+                    'new_password' => [
+                        'label' => 'New password',
+                        'placeholder' => 'Enter your new password',
+                    ],
+                    'confirm_password' => [
+                        'label' => 'Confirm new password',
+                        'placeholder' => 'Confirm your new password',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Change password',
+                ],
+            ],
         ],
     ],
     'common' => [
         'logout' => 'Logout',
+        'theme' => 'Toggle theme',
+        'locale' => [
+            'label' => 'Change language',
+            'options' => [
+                'en' => 'English',
+                'fr' => 'Français (French)',
+            ],
+        ],
         'version' => 'Version :version',
         'fill_the_form' => 'Please fill out the form below to continue.',
     ],

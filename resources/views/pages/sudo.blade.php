@@ -1,3 +1,10 @@
+<?php
+
+use function Laravel\Folio\middleware;
+
+middleware(['auth', 'verified', 'password.confirm']);
+
+?>
 <x-default-layout>
     <article class="prose lg:prose-xl">
         <h1>{{ __('ui.dashboard.title') }}</h1>

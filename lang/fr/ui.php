@@ -19,27 +19,22 @@ return [
                     'username' => [
                         'label' => "Nom d'utilisateur",
                         'placeholder' => "Saisissez votre nom d'utilisateur",
-                        'hint' => 'Utilisez de 3 à 30 caractères : lettres, chiffres, traits d’union ou traits de soulignement uniquement.',
                     ],
                     'name' => [
                         'label' => 'Nom complet',
                         'placeholder' => 'Saisissez votre nom complet',
-                        'hint' => 'Utilisez de 2 à 50 caractères : lettres, espaces, apostrophes ou traits d’union uniquement.',
                     ],
                     'email' => [
                         'label' => 'Adresse e-mail',
                         'placeholder' => 'Saisissez votre adresse e-mail',
-                        'hint' => 'Saisissez une adresse e-mail valide.',
                     ],
                     'password' => [
                         'label' => 'Mot de passe',
                         'placeholder' => 'Saisissez votre mot de passe',
-                        'hint' => 'Utilisez de 8 à 128 caractères.',
                     ],
-                    'confirm_password' => [
+                    'password_confirmation' => [
                         'label' => 'Confirmation du mot de passe',
                         'placeholder' => 'Confirmez votre mot de passe',
-                        'hint' => 'Utilisez de 8 à 128 caractères.',
                     ],
                 ],
                 'actions' => [
@@ -57,12 +52,10 @@ return [
                     'username_or_email' => [
                         'label' => "Nom d'utilisateur ou adresse e-mail",
                         'placeholder' => "Saisissez votre nom d'utilisateur ou votre adresse e-mail",
-                        'hint' => "Saisissez votre nom d'utilisateur ou votre adresse e-mail.",
                     ],
                     'password' => [
                         'label' => 'Mot de passe',
                         'placeholder' => 'Saisissez votre mot de passe',
-                        'hint' => 'Saisissez votre mot de passe.',
                     ],
                 ],
                 'actions' => [
@@ -83,7 +76,6 @@ return [
                     'email' => [
                         'label' => 'Adresse e-mail',
                         'placeholder' => 'Saisissez votre adresse e-mail',
-                        'hint' => 'Saisissez une adresse e-mail valide.',
                     ],
                 ],
                 'actions' => [
@@ -99,17 +91,14 @@ return [
                     'email' => [
                         'label' => 'Adresse e-mail',
                         'placeholder' => 'Saisissez votre adresse e-mail',
-                        'hint' => 'Saisissez une adresse e-mail valide.',
                     ],
                     'password' => [
                         'label' => 'Nouveau mot de passe',
                         'placeholder' => 'Saisissez votre nouveau mot de passe',
-                        'hint' => 'Utilisez de 8 à 128 caractères.',
                     ],
-                    'confirm_password' => [
+                    'password_confirmation' => [
                         'label' => 'Confirmation du nouveau mot de passe',
                         'placeholder' => 'Confirmez votre nouveau mot de passe',
-                        'hint' => 'Utilisez de 8 à 128 caractères.',
                     ],
                 ],
                 'actions' => [
@@ -130,13 +119,70 @@ return [
                 ],
             ],
         ],
-        'confirm_password' => [
+        'password_confirmation' => [
             'title' => 'Confirmez votre mot de passe',
             'description' => 'Confirmez votre mot de passe pour continuer.',
         ],
     ],
+    'settings' => [
+        'title' => 'Paramètres',
+        'profile' => [
+            'title' => 'Paramètres du profil',
+            'description' => 'Gérez les informations de votre profil.',
+            'form' => [
+                'fields' => [
+                    'username' => [
+                        'label' => 'Nom d’utilisateur',
+                        'placeholder' => 'Saisissez votre nom d’utilisateur',
+                    ],
+                    'name' => [
+                        'label' => 'Nom complet',
+                        'placeholder' => 'Saisissez votre nom complet',
+                    ],
+                    'email' => [
+                        'label' => 'Adresse e-mail',
+                        'placeholder' => 'Saisissez votre adresse e-mail',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Enregistrer le profil',
+                ],
+            ],
+        ],
+        'security' => [
+            'title' => 'Paramètres de sécurité',
+            'description' => 'Modifiez votre mot de passe.',
+            'form' => [
+                'fields' => [
+                    'current_password' => [
+                        'label' => 'Mot de passe actuel',
+                        'placeholder' => 'Saisissez votre mot de passe actuel',
+                    ],
+                    'new_password' => [
+                        'label' => 'Nouveau mot de passe',
+                        'placeholder' => 'Saisissez votre nouveau mot de passe',
+                    ],
+                    'confirm_password' => [
+                        'label' => 'Confirmer le nouveau mot de passe',
+                        'placeholder' => 'Confirmez votre nouveau mot de passe',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Modifier le mot de passe',
+                ],
+            ],
+        ],
+    ],
     'common' => [
         'logout' => 'Se déconnecter',
+        'theme' => 'Changer de thème',
+        'locale' => [
+            'label' => 'Changer de langue',
+            'options' => [
+                'en' => 'English (Anglais)',
+                'fr' => 'Français',
+            ],
+        ],
         'version' => 'Version :version',
         'fill_the_form' => 'Veuillez remplir le formulaire ci-dessous pour continuer.',
         'required_fields' => 'Tous les champs marqués d’un astérisque (*) sont obligatoires.',
