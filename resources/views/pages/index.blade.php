@@ -12,7 +12,6 @@ Head::title(__('ui.welcome.title'))
 
 <x-default-layout>
     <article class="prose lg:prose-xl">
-        <x-icon-logo class="h-32 w-32" />
         <h1>{{ __('ui.welcome.title') }}</h1>
 
         <p>{{ __('ui.welcome.first_paragraph') }}</p>

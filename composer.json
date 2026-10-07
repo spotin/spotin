@@ -6,6 +6,7 @@
     "license": "AGPL-3.0",
     "require": {
         "php": "^8.3",
+        "blade-ui-kit/blade-icons": "^1.10",
         "laravel/folio": "^1.2",
         "laravel/fortify": "^1.40",
         "laravel/framework": "^13.17",

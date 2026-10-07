@@ -57,7 +57,9 @@
                     @endauth
                 </ul>
             </div>
-            <a href="{{ route('index') }}"><img src="{{ asset('logo.svg') }}" alt="Logo" class="h-20 w-20" /></a>
+            <a href="{{ route('index') }}" aria-label="{{ config('app.name') }}"
+                ><x-icon-logo class="text-logo h-20 w-20" aria-hidden="true"
+            /></a>
         </div>
         <div class="navbar-end group/nav gap-2">
             @auth

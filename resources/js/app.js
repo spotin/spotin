@@ -1,5 +1,15 @@
-// Plain cookie (not encrypted) so the server can render the theme.
+const prefersDark = matchMedia("(prefers-color-scheme: dark)");
+
 document.querySelectorAll(".theme-controller").forEach((controller) => {
+    const syncWithOs = () => {
+        if (!document.documentElement.dataset.theme) {
+            controller.checked = prefersDark.matches;
+        }
+    };
+
+    syncWithOs();
+    prefersDark.addEventListener("change", syncWithOs);
+
     controller.addEventListener("change", () => {
         const theme = controller.checked ? controller.value : "light";
 

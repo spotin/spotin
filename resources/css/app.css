@@ -5,9 +5,9 @@
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../storage/framework/views/*.php";
 
-@plugin "daisyui" {
-    themes:
-        light --default,
-        dark;
-}
+@plugin "daisyui";
 @plugin "@tailwindcss/typography";
+
+@theme {
+    --color-logo: light-dark(#e53935, #ffffff);
+}
