@@ -29,10 +29,10 @@ class AppServiceProvider extends ServiceProvider
                 ->description(config('app.description'))
                 ->canonical()
                 ->viewport('width=device-width, initial-scale=1.0')
-                ->icon(asset('icons/favicon.ico'), ImageType::Ico)
-                ->icon(asset('icons/favicon.png'), ImageType::Png)
-                ->icon(asset('icons/favicon.svg'), ImageType::Svg)
-                ->appleTouchIcon(asset('icons/apple-touch-icon.png'))
+                ->icon(asset('favicon.ico'), ImageType::Ico)
+                ->icon(asset('favicon.png'), ImageType::Png)
+                ->icon(asset('favicon.svg'), ImageType::Svg)
+                ->appleTouchIcon(asset('apple-touch-icon.png'))
                 ->og(siteName: config('app.name'), type: OgType::Website)
                 ->manifest(asset('manifest.json'));
 
