@@ -172,10 +172,9 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
-                      composer setup
+                      php artisan optimize:clear
 
-                      # Always overwrite the .env file with the example to ensure a clean environment
-                      cp .env.example .env
+                      composer setup
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
@@ -209,6 +208,8 @@ jobs:
                       git fetch --depth=1 origin "${{ env.GITHUB_SHA }}"
 
                       git checkout --detach FETCH_HEAD
+
+                      php artisan optimize:clear
 
                       composer setup-prod
 
