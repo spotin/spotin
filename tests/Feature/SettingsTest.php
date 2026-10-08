@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
     $this->user = User::factory()->create([
-        'username' => 'jane-doe',
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
     ]);
@@ -18,7 +17,6 @@ test('the profile settings page shows the current profile', function () {
         ->get(route('settings.profile'))
         ->assertOk()
         ->assertSee('action="'.route('user-profile-information.update').'"', false)
-        ->assertSee('value="jane-doe"', false)
         ->assertSee('value="jane@example.com"', false);
 });
 
@@ -35,7 +33,6 @@ test('users can update their profile and see a confirmation', function () {
         ->followingRedirects()
         ->from(route('settings.profile'))
         ->put(route('user-profile-information.update'), [
-            'username' => 'jane-smith',
             'name' => 'Jane Smith',
             'email' => 'jane@example.com',
         ])
@@ -44,7 +41,6 @@ test('users can update their profile and see a confirmation', function () {
         ->assertDontSee('profile-information-updated');
 
     expect($this->user->fresh())
-        ->username->toBe('jane-smith')
         ->name->toBe('Jane Smith')
         ->hasVerifiedEmail()->toBeTrue();
 });
@@ -54,7 +50,6 @@ test('changing the email requires verifying the new address', function () {
 
     $this->actingAs($this->user)
         ->put(route('user-profile-information.update'), [
-            'username' => 'jane-doe',
             'name' => 'Jane Doe',
             'email' => 'Jane.Smith@Example.com',
         ])
@@ -68,19 +63,17 @@ test('changing the email requires verifying the new address', function () {
     Notification::assertSentTo($user, VerifyEmail::class);
 });
 
-test('users cannot take a username or email that is already used', function (array $overrides, string $field) {
-    User::factory()->create(['username' => 'john-doe', 'email' => 'john@example.com']);
+test('users cannot take an email that is already used', function (array $overrides, string $field) {
+    User::factory()->create(['email' => 'john@example.com']);
 
     $this->actingAs($this->user)
         ->put(route('user-profile-information.update'), [
-            'username' => 'jane-doe',
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
             ...$overrides,
         ])
         ->assertSessionHasErrorsIn('updateProfileInformation', $field);
 })->with([
-    'username' => [['username' => 'John-Doe'], 'username'],
     'email' => [['email' => 'John@Example.com'], 'email'],
 ]);
 

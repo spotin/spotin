@@ -31,19 +31,19 @@ Head::title(__('ui.auth.login.title'))
 
                 <div>
                     <label class="floating-label input validator w-full">
-                        <span>{{ __('ui.auth.login.form.fields.username_or_email.placeholder') }}</span>
-                        <x-lucide-user-round class="h-[1em] opacity-50" />
+                        <span>{{ __('ui.auth.login.form.fields.email.placeholder') }}</span>
+                        <x-lucide-mail class="h-[1em] opacity-50" />
                         <input
-                            name="username"
-                            type="text"
+                            name="email"
+                            type="email"
                             required
-                            placeholder="{{ __('ui.auth.login.form.fields.username_or_email.label') }}"
-                            value="{{ old('username') }}"
-                            @error('username') aria-invalid="true" @enderror
+                            placeholder="{{ __('ui.auth.login.form.fields.email.label') }}"
+                            value="{{ old('email') }}"
+                            @error('email') aria-invalid="true" @enderror
                             class="input w-full"
                         />
                     </label>
-                    @error('username')
+                    @error('email')
                         <span class="validator-hint">{{ $message }}</span>
                     @enderror
                 </div>

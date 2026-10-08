@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Notification;
 function registrationData(array $overrides = []): array
 {
     return [
-        'username' => 'jane-doe',
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
         'password' => 'a-long-enough-password',
@@ -26,14 +25,12 @@ test('users can register and receive a verification email', function () {
     Notification::fake();
 
     $this->post(route('register.store'), registrationData([
-        'username' => 'Jane-Doe',
         'email' => 'Jane@Example.com',
     ]))->assertRedirect(config('fortify.home'));
 
     $user = User::sole();
 
-    expect($user->username)->toBe('jane-doe')
-        ->and($user->email)->toBe('jane@example.com')
+    expect($user->email)->toBe('jane@example.com')
         ->and($user->hasVerifiedEmail())->toBeFalse();
 
     $this->assertAuthenticatedAs($user);
@@ -48,27 +45,22 @@ test('registration rejects invalid input', function (array $overrides, string $f
 
     $this->assertGuest();
 })->with([
-    'missing username' => [['username' => ''], 'username'],
-    'too short username' => [['username' => 'ab'], 'username'],
-    'username with spaces' => [['username' => 'jane doe'], 'username'],
     'too short name' => [['name' => 'J'], 'name'],
     'invalid email' => [['email' => 'not-an-email'], 'email'],
     'too short password' => [['password' => 'short', 'password_confirmation' => 'short'], 'password'],
     'mismatched confirmation' => [['password_confirmation' => 'something-else-entirely'], 'password'],
 ]);
 
-test('registration rejects a username or email that is already taken, in any case', function (array $overrides, string $field) {
-    User::factory()->create(['username' => 'jane-doe', 'email' => 'jane@example.com']);
+test('registration rejects an email that is already taken, in any case', function (array $overrides, string $field) {
+    User::factory()->create(['email' => 'jane@example.com']);
 
     $this->post(route('register.store'), registrationData([
-        'username' => 'someone-else',
         'email' => 'someone@example.com',
         ...$overrides,
     ]))->assertSessionHasErrors($field);
 
     expect(User::count())->toBe(1);
 })->with([
-    'username' => [['username' => 'JANE-DOE'], 'username'],
     'email' => [['email' => 'JANE@example.com'], 'email'],
 ]);
 

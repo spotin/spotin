@@ -9,10 +9,6 @@ return [
             'description' => 'Create a new account',
             'form' => [
                 'fields' => [
-                    'username' => [
-                        'label' => 'Username',
-                        'placeholder' => 'Enter your username',
-                    ],
                     'name' => [
                         'label' => 'Full name',
                         'placeholder' => 'Enter your full name',
@@ -42,9 +38,9 @@ return [
             'description' => 'Access your account',
             'form' => [
                 'fields' => [
-                    'username_or_email' => [
-                        'label' => 'Username or email',
-                        'placeholder' => 'Enter your username or email',
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
                     ],
                     'password' => [
                         'label' => 'Password',
@@ -138,10 +134,6 @@ return [
             'description' => 'Manage your profile information.',
             'form' => [
                 'fields' => [
-                    'username' => [
-                        'label' => 'Username',
-                        'placeholder' => 'Enter your username',
-                    ],
                     'name' => [
                         'label' => 'Full name',
                         'placeholder' => 'Enter your full name',

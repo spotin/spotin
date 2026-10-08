@@ -4,7 +4,6 @@ use App\Models\User;
 
 beforeEach(function () {
     $this->user = User::factory()->create([
-        'username' => 'jane-doe',
         'email' => 'jane@example.com',
     ]);
 });
@@ -12,32 +11,32 @@ beforeEach(function () {
 test('the login page renders', function () {
     $this->get(route('login'))
         ->assertOk()
-        ->assertSee('name="username"', false)
+        ->assertSee('name="email"', false)
         ->assertSee('name="password"', false);
 });
 
-test('users can log in with their username or email in any case', function (string $login) {
-    $this->post(route('login.store'), ['username' => $login, 'password' => 'password'])
+test('users can log in with their email in any case', function (string $login) {
+    $this->post(route('login.store'), ['email' => $login, 'password' => 'password'])
         ->assertRedirect(config('fortify.home'));
 
     $this->assertAuthenticatedAs($this->user);
-})->with(['jane-doe', 'Jane-Doe', 'jane@example.com', 'Jane@Example.com']);
+})->with(['jane@example.com', 'Jane@Example.com']);
 
 test('users cannot log in with a wrong password', function () {
     $this->from(route('login'))
-        ->post(route('login.store'), ['username' => 'jane-doe', 'password' => 'wrong-password'])
+        ->post(route('login.store'), ['email' => 'jane@example.com', 'password' => 'wrong-password'])
         ->assertRedirect(route('login'))
-        ->assertSessionHasErrors('username');
+        ->assertSessionHasErrors('email');
 
     $this->assertGuest();
 });
 
 test('login attempts are rate limited', function () {
     foreach (range(1, 5) as $attempt) {
-        $this->post(route('login.store'), ['username' => 'jane-doe', 'password' => 'wrong-password']);
+        $this->post(route('login.store'), ['email' => 'jane@example.com', 'password' => 'wrong-password']);
     }
 
-    $this->post(route('login.store'), ['username' => 'jane-doe', 'password' => 'password'])
+    $this->post(route('login.store'), ['email' => 'jane@example.com', 'password' => 'password'])
         ->assertTooManyRequests();
 
     $this->assertGuest();
@@ -64,7 +63,7 @@ test('authenticated users are redirected away from guest pages', function (strin
 
 test('users who ask to be remembered get a long-lived login cookie', function (?string $remember, bool $expectCookie) {
     $response = $this->post(route('login.store'), array_filter([
-        'username' => 'jane-doe',
+        'email' => 'jane@example.com',
         'password' => 'password',
         'remember' => $remember,
     ]));

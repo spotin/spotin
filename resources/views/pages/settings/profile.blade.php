@@ -32,25 +32,6 @@ Head::title(__('ui.settings.profile.title'))
 
                 <div>
                     <label class="floating-label input validator w-full">
-                        <span>{{ __('ui.settings.profile.form.fields.username.placeholder') }}</span>
-                        <x-lucide-user-round class="h-[1em] opacity-50" />
-                        <input
-                            name="username"
-                            type="text"
-                            required
-                            placeholder="{{ __('ui.settings.profile.form.fields.username.label') }}"
-                            value="{{ old('username', auth()->user()->username) }}"
-                            @error('username', 'updateProfileInformation') aria-invalid="true" @enderror
-                            class="input w-full"
-                        />
-                    </label>
-                    @error('username', 'updateProfileInformation')
-                        <span class="validator-hint">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div>
-                    <label class="floating-label input validator w-full">
                         <span>{{ __('ui.settings.profile.form.fields.name.placeholder') }}</span>
                         <x-lucide-id-card class="h-[1em] opacity-50" />
                         <input

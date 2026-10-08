@@ -24,25 +24,6 @@ Head::title(__('ui.auth.register.title'))
 
                 <div>
                     <label class="floating-label input validator w-full">
-                        <span>{{ __('ui.auth.register.form.fields.username.placeholder') }}</span>
-                        <x-lucide-user-round class="h-[1em] opacity-50" />
-                        <input
-                            name="username"
-                            type="text"
-                            required
-                            placeholder="{{ __('ui.auth.register.form.fields.username.label') }}"
-                            value="{{ old('username') }}"
-                            @error('username') aria-invalid="true" @enderror
-                            class="input w-full"
-                        />
-                    </label>
-                    @error('username')
-                        <span class="validator-hint">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div>
-                    <label class="floating-label input validator w-full">
                         <span>{{ __('ui.auth.register.form.fields.name.placeholder') }}</span>
                         <x-lucide-id-card class="h-[1em] opacity-50" />
                         <input

@@ -16,10 +16,6 @@ return [
             'description' => 'Créez un compte',
             'form' => [
                 'fields' => [
-                    'username' => [
-                        'label' => "Nom d'utilisateur",
-                        'placeholder' => "Saisissez votre nom d'utilisateur",
-                    ],
                     'name' => [
                         'label' => 'Nom complet',
                         'placeholder' => 'Saisissez votre nom complet',
@@ -49,9 +45,9 @@ return [
             'description' => 'Accédez à votre compte',
             'form' => [
                 'fields' => [
-                    'username_or_email' => [
-                        'label' => "Nom d'utilisateur ou adresse e-mail",
-                        'placeholder' => "Saisissez votre nom d'utilisateur ou votre adresse e-mail",
+                    'email' => [
+                        'label' => 'Adresse e-mail',
+                        'placeholder' => 'Saisissez votre adresse e-mail',
                     ],
                     'password' => [
                         'label' => 'Mot de passe',
@@ -145,10 +141,6 @@ return [
             'description' => 'Gérez les informations de votre profil.',
             'form' => [
                 'fields' => [
-                    'username' => [
-                        'label' => 'Nom d’utilisateur',
-                        'placeholder' => 'Saisissez votre nom d’utilisateur',
-                    ],
                     'name' => [
                         'label' => 'Nom complet',
                         'placeholder' => 'Saisissez votre nom complet',
