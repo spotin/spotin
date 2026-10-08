@@ -152,7 +152,7 @@ jobs:
         name: Deploy to development environment
         runs-on: ubuntu-latest
         needs: test
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         environment:
             name: development
             url: https://${{ vars.APP_DOMAIN }}
@@ -172,11 +172,14 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
+                      php artisan optimize:clear
+
                       composer setup
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
+                      date="$(date --rfc-3339=seconds --utc)"
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7}@${date})\"|" .env
 
                       php artisan optimize
 
@@ -206,13 +209,16 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
+                      php artisan optimize:clear
+
                       composer setup-prod
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
-                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7})\"|" .env
+                      date="$(date --rfc-3339=seconds --utc)"
+                      sed -i "s|^APP_VERSION=.*|APP_VERSION=\"${ref} (${sha:0:7}@${date})\"|" .env
 
-                      php artisan migrate
+                      php artisan migrate --force
 
                       php artisan optimize
 

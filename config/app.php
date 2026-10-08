@@ -16,6 +16,45 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Description
+    |--------------------------------------------------------------------------
+    |
+    | This value is the description of your application, which will be used when the
+    | framework needs to place the application's description in a notification or
+    | other UI elements where an application description needs to be displayed.
+    |
+    */
+
+    'description' => env('APP_DESCRIPTION', 'The skeleton application for the Laravel framework.'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Version
+    |--------------------------------------------------------------------------
+    |
+    | This value is the version of your application, which will be used when
+    | the framework needs to place the application's version in a notification
+    | or other UI elements where an application version needs to be displayed.
+    |
+    */
+
+    'version' => env('APP_VERSION', 'latest'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used by the console to properly generate URLs when using
+    | the Artisan command line tool. You should set this to the root of
+    | the application so that it's available within Artisan commands.
+    |
+    */
+
+    'url' => env('APP_URL', 'http://localhost:8000'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
@@ -39,32 +78,6 @@ return [
     */
 
     'debug' => (bool) env('APP_DEBUG', false),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Application URL
-    |--------------------------------------------------------------------------
-    |
-    | This URL is used by the console to properly generate URLs when using
-    | the Artisan command line tool. You should set this to the root of
-    | the application so that it's available within Artisan commands.
-    |
-    */
-
-    'url' => env('APP_URL', 'http://localhost'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Application Version
-    |--------------------------------------------------------------------------
-    |
-    | This value is the version of your application, which will be used when
-    | the framework needs to place the application's version in a notification
-    | or other UI elements where an application version needs to be displayed.
-    |
-    */
-
-    'version' => env('APP_VERSION', 'latest'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,6 +106,8 @@ return [
     'locale' => env('APP_LOCALE', 'en'),
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+
+    'supported_locales' => explode(',', (string) env('APP_SUPPORTED_LOCALES', 'en')),
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 

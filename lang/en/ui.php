@@ -3,42 +3,27 @@
 declare(strict_types=1);
 
 return [
-    'welcome' => [
-        'title' => 'Welcome',
-        'first_paragraph' => 'First paragraph text.',
-        'second_paragraph' => 'Second paragraph text.',
-        'button' => 'Click me',
-    ],
     'auth' => [
         'register' => [
             'title' => 'Register',
             'description' => 'Create a new account',
             'form' => [
                 'fields' => [
-                    'username' => [
-                        'label' => 'Username',
-                        'placeholder' => 'Enter your username',
-                        'hint' => 'Use 3 to 30 characters containing only letters, numbers, hyphens or underscores.',
-                    ],
                     'name' => [
                         'label' => 'Full name',
                         'placeholder' => 'Enter your full name',
-                        'hint' => 'Use 2 to 50 characters containing only letters, spaces, apostrophes or hyphens.',
                     ],
                     'email' => [
-                        'label' => 'Email',
-                        'placeholder' => 'Enter your email',
-                        'hint' => 'Enter a valid email address.',
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
                     ],
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
-                        'hint' => 'Use 8 to 128 characters.',
                     ],
-                    'confirm_password' => [
-                        'label' => 'Confirm password',
+                    'password_confirmation' => [
+                        'label' => 'Password confirmation',
                         'placeholder' => 'Confirm your password',
-                        'hint' => 'Use 8 to 128 characters.',
                     ],
                 ],
                 'actions' => [
@@ -53,30 +38,169 @@ return [
             'description' => 'Access your account',
             'form' => [
                 'fields' => [
-                    'username_or_email' => [
-                        'label' => 'Username or email',
-                        'placeholder' => 'Enter your username or email',
-                        'hint' => 'Enter your username or email address.',
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
                     ],
                     'password' => [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
-                        'hint' => 'Enter your password.',
+                    ],
+                    'remember' => [
+                        'label' => 'Remember me',
                     ],
                 ],
                 'actions' => [
                     'submit' => 'Log in',
                 ],
             ],
-            'remember_me' => 'Remember me',
             'forgot_your_password' => 'Forgot your password?',
+            'reset_your_password' => 'Reset your password',
             'dont_have_an_account' => "Don't have an account?",
             'register' => 'Register',
+        ],
+        'forgot_password' => [
+            'title' => 'Forgot your password?',
+            'description' => 'Request a password reset link for your account.',
+            'form' => [
+                'fields' => [
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Send reset link',
+                ],
+            ],
+        ],
+        'reset_password' => [
+            'title' => 'Reset your password',
+            'description' => 'Choose a new password for your account.',
+            'form' => [
+                'fields' => [
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
+                    ],
+                    'password' => [
+                        'label' => 'New password',
+                        'placeholder' => 'Enter your new password',
+                    ],
+                    'password_confirmation' => [
+                        'label' => 'Password confirmation',
+                        'placeholder' => 'Confirm your new password',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Reset password',
+                ],
+            ],
+        ],
+        'verify_email' => [
+            'title' => 'Verify your email address',
+            'description' => 'Confirm your email address to complete account setup.',
+            'explanation' => 'A verification link has been sent to your email address. Please check your inbox and click the link to verify your email. You will then be able to use your account. If you did not receive the email, you can request another verification link below.',
+            'form' => [
+                'actions' => [
+                    'resend' => 'Resend verification email',
+                ],
+                'feedback' => [
+                    'success' => 'A new verification link has been sent to your email address.',
+                ],
+            ],
+        ],
+        'password_confirmation' => [
+            'title' => 'Confirm your password',
+            'description' => 'Confirm your password to continue.',
+            'explanation' => 'For security reasons, please confirm your password before continuing.',
+            'form' => [
+                'fields' => [
+                    'password' => [
+                        'label' => 'Password',
+                        'placeholder' => 'Enter your password',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Confirm password',
+                ],
+            ],
+        ],
+    ],
+    'settings' => [
+        'title' => 'Settings',
+        'profile' => [
+            'title' => 'Profile settings',
+            'description' => 'Manage your profile information.',
+            'form' => [
+                'fields' => [
+                    'name' => [
+                        'label' => 'Full name',
+                        'placeholder' => 'Enter your full name',
+                    ],
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter your email address',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Save profile',
+                ],
+                'feedback' => [
+                    'success' => 'Your profile has been updated.',
+                ],
+            ],
+        ],
+        'security' => [
+            'title' => 'Security settings',
+            'description' => 'Update your password.',
+            'form' => [
+                'fields' => [
+                    'current_password' => [
+                        'label' => 'Current password',
+                        'placeholder' => 'Enter your current password',
+                    ],
+                    'new_password' => [
+                        'label' => 'New password',
+                        'placeholder' => 'Enter your new password',
+                    ],
+                    'confirm_password' => [
+                        'label' => 'Confirm new password',
+                        'placeholder' => 'Confirm your new password',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Change password',
+                ],
+                'feedback' => [
+                    'success' => 'Your password has been updated.',
+                ],
+            ],
         ],
     ],
     'common' => [
         'logout' => 'Logout',
+        'theme' => 'Toggle theme',
+        'locale' => [
+            'label' => 'Change language',
+            'options' => [
+                'en' => 'English',
+                'fr' => 'Français (French)',
+            ],
+        ],
         'version' => 'Version :version',
         'fill_the_form' => 'Please fill out the form below to continue.',
+    ],
+    'dashboard' => [
+        'title' => 'Dashboard',
+        'first_paragraph' => 'This is the first paragraph of the dashboard.',
+        'second_paragraph' => 'This is the second paragraph of the dashboard.',
+    ],
+    'welcome' => [
+        'title' => 'Welcome',
+        'description' => 'Welcome to our application',
+        'first_paragraph' => 'First paragraph text.',
+        'second_paragraph' => 'Second paragraph text.',
+        'button' => 'Click me',
     ],
 ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class LocaleController extends Controller
 {
@@ -13,12 +14,10 @@ class LocaleController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'locale' => ['required', 'in:en,fr'],
+            'locale' => ['required', Rule::in(config('app.supported_locales'))],
         ]);
 
-        $locale = $validated['locale'];
-
-        $request->session()->put('locale', $locale);
+        cookie()->queue(cookie()->forever('locale', $validated['locale']));
 
         return back();
     }

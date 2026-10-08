@@ -7,10 +7,7 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -32,44 +29,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::registerView(function () {
-            return view('auth.register');
-        });
-
-        Fortify::verifyEmailView(function () {
-            return view('auth.verify-email');
-        });
-
-        Fortify::loginView(function () {
-            return view('auth.login');
-        });
-
-        Fortify::requestPasswordResetLinkView(function () {
-            return view('auth.forgot-password');
-        });
-
-        Fortify::resetPasswordView(function (Request $request) {
-            return view('auth.reset-password', ['request' => $request]);
-        });
-
-        Fortify::confirmPasswordView(function () {
-            return view('auth.confirm-password');
-        });
-
-        Fortify::authenticateUsing(function (Request $request) {
-            Log::info('test');
-            Log::info($request->username);
-
-            $user = User::where('username', $request->username)->orWhere('email', $request->username)->first();
-
-            Log::info('User attempting to authenticate: '.($user ? $user->username : 'No user found'));
-
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
-                return $user;
-            }
-        });
-
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);

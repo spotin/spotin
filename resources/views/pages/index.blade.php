@@ -1,4 +1,16 @@
-<x-default-layout :title="__('ui.welcome.title')" :description="__('ui.welcome.description')">
+<?php
+
+use Laravel\Head\Facades\Head;
+
+use function Laravel\Folio\name;
+
+name('index');
+
+Head::title(__('ui.welcome.title'))
+    ->description(__('ui.welcome.description'));
+?>
+
+<x-default-layout>
     <article class="prose lg:prose-xl">
         <h1>{{ __('ui.welcome.title') }}</h1>
 

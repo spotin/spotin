@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -22,8 +23,12 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        // Fortify lowercases the email on login and password reset, so store it the same way.
+        if (is_string($input['email'] ?? null)) {
+            $input['email'] = Str::lower($input['email']);
+        }
+
         Validator::make($input, [
-            'username' => ['required', 'string', 'alpha_dash:ascii', 'min:3', 'max:30', Rule::unique(User::class)],
             'name' => ['required', 'string', 'min:2', 'max:50'],
             'email' => [
                 'required',
@@ -36,7 +41,6 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return User::create([
-            'username' => $input['username'],
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),

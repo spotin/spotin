@@ -7,3 +7,7 @@
 
 @plugin "daisyui";
 @plugin "@tailwindcss/typography";
+
+@theme {
+    --color-logo: light-dark(#e53935, #ffffff);
+}

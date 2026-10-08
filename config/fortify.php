@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'username' => 'username',
+    'username' => 'email',
 
     'email' => 'email',
 
@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/',
+    'home' => '/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -131,7 +131,22 @@ return [
     |
     */
 
-    'views' => true,
+    'views' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Redirects
+    |--------------------------------------------------------------------------
+    |
+    | The pages are served by Folio from resources/views/pages/auth, so these
+    | paths keep Fortify's routes in line with the page file names. Without
+    | views, a password reset would redirect home instead of to the login.
+    |
+    */
+
+    'redirects' => [
+        'password-reset' => '/auth/login',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -167,14 +182,14 @@ return [
         Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
-        Features::twoFactorAuthentication([
-            'confirm' => true,
-            'confirmPassword' => true,
-            // 'window' => 0,
-        ]),
-        Features::passkeys([
-            'confirmPassword' => true,
-        ]),
+        // Features::twoFactorAuthentication([
+        //     'confirm' => true,
+        //     'confirmPassword' => true,
+        //     // 'window' => 0,
+        // ]),
+        // Features::passkeys([
+        //     'confirmPassword' => true,
+        // ]),
     ],
 
 ];
