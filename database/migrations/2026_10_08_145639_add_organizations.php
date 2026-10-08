@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('organization_user', function (Blueprint $table) {
+        Schema::create('memberships', function (Blueprint $table) {
             $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('role', ['responsible', 'member'])->default('member');
@@ -50,7 +50,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('organization_invitations');
-        Schema::dropIfExists('organization_user');
+        Schema::dropIfExists('memberships');
         Schema::dropIfExists('organizations');
 
         Schema::table('users', function (Blueprint $table) {
