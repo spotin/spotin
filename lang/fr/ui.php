@@ -57,12 +57,14 @@ return [
                         'label' => 'Mot de passe',
                         'placeholder' => 'Saisissez votre mot de passe',
                     ],
+                    'remember' => [
+                        'label' => 'Se souvenir de moi',
+                    ],
                 ],
                 'actions' => [
                     'submit' => 'Se connecter',
                 ],
             ],
-            'remember_me' => 'Se souvenir de moi',
             'forgot_your_password' => 'Mot de passe oublié ?',
             'reset_your_password' => 'Réinitialisez votre mot de passe',
             'dont_have_an_account' => "Vous n'avez pas de compte ?",
@@ -105,23 +107,35 @@ return [
                     'submit' => 'Réinitialiser le mot de passe',
                 ],
             ],
-            'already_have_an_account' => 'Vous avez déjà un compte ?',
-            'login' => 'Se connecter',
         ],
         'verify_email' => [
             'title' => 'Vérifiez votre adresse e-mail',
             'description' => 'Confirmez votre adresse e-mail pour terminer la création du compte.',
             'explanation' => 'Un lien de vérification a été envoyé à votre adresse e-mail. Veuillez consulter votre boîte de réception et cliquer sur le lien pour vérifier votre adresse. Vous pourrez ensuite utiliser votre compte. Si vous n’avez pas reçu l’e-mail, vous pouvez demander un nouveau lien de vérification ci-dessous.',
-            'success' => 'Un nouveau lien de vérification a été envoyé à votre adresse e-mail.',
             'form' => [
                 'actions' => [
                     'resend' => 'Renvoyer l’e-mail de vérification',
+                ],
+                'feedback' => [
+                    'success' => 'Un nouveau lien de vérification a été envoyé à votre adresse e-mail.',
                 ],
             ],
         ],
         'password_confirmation' => [
             'title' => 'Confirmez votre mot de passe',
             'description' => 'Confirmez votre mot de passe pour continuer.',
+            'explanation' => 'Pour des raisons de sécurité, veuillez confirmer votre mot de passe avant de continuer.',
+            'form' => [
+                'fields' => [
+                    'password' => [
+                        'label' => 'Mot de passe',
+                        'placeholder' => 'Saisissez votre mot de passe',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Confirmer le mot de passe',
+                ],
+            ],
         ],
     ],
     'settings' => [
@@ -147,6 +161,9 @@ return [
                 'actions' => [
                     'submit' => 'Enregistrer le profil',
                 ],
+                'feedback' => [
+                    'success' => 'Votre profil a été mis à jour.',
+                ],
             ],
         ],
         'security' => [
@@ -170,6 +187,9 @@ return [
                 'actions' => [
                     'submit' => 'Modifier le mot de passe',
                 ],
+                'feedback' => [
+                    'success' => 'Votre mot de passe a été modifié.',
+                ],
             ],
         ],
     ],
@@ -185,11 +205,9 @@ return [
         ],
         'version' => 'Version :version',
         'fill_the_form' => 'Veuillez remplir le formulaire ci-dessous pour continuer.',
-        'required_fields' => 'Tous les champs marqués d’un astérisque (*) sont obligatoires.',
     ],
     'dashboard' => [
         'title' => 'Tableau de bord',
-        'description' => 'Bienvenue sur votre tableau de bord',
         'first_paragraph' => 'Ceci est le premier paragraphe du tableau de bord.',
         'second_paragraph' => 'Ceci est le deuxième paragraphe du tableau de bord.',
     ],

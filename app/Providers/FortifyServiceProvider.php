@@ -6,17 +6,15 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
-use Laravel\Head\Facades\Head;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -33,58 +31,10 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::registerView(function () {
-            Head::title(__('ui.auth.register.title'))
-                ->description(__('ui.auth.register.description'));
-
-            return view('pages.auth.register');
-        });
-
-        Fortify::verifyEmailView(function () {
-            Head::title(__('ui.auth.verify_email.title'))
-                ->description(__('ui.auth.verify_email.description'));
-
-            return view('pages.auth.verify-email');
-        });
-
-        Fortify::loginView(function () {
-            Head::title(__('ui.auth.login.title'))
-                ->description(__('ui.auth.login.description'));
-
-            return view('pages.auth.login');
-        });
-
-        Fortify::requestPasswordResetLinkView(function () {
-            Head::title(__('ui.auth.forgot_password.title'))
-                ->description(__('ui.auth.forgot_password.description'));
-
-            return view('pages.auth.forgot-password');
-        });
-
-        Fortify::resetPasswordView(function (Request $request) {
-            Head::title(__('ui.auth.reset_password.title'))
-                ->description(__('ui.auth.reset_password.description'));
-
-            return view('pages.auth.reset-password', ['request' => $request]);
-        });
-
-        Fortify::confirmPasswordView(function () {
-            Head::title(__('ui.auth.confirm_password.title'))
-                ->description(__('ui.auth.confirm_password.description'));
-
-            return view('pages.auth.confirm-password');
-        });
-
         Fortify::authenticateUsing(function (Request $request) {
-            Log::info('test');
-            Log::info($request->username);
-
             $user = User::where('username', $request->username)->orWhere('email', $request->username)->first();
 
-            Log::info('User attempting to authenticate: '.($user ? $user->username : 'No user found'));
-
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
+            if ($user && Hash::check($request->password, $user->password)) {
                 return $user;
             }
         });

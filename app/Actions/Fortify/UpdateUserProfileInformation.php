@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -20,10 +21,14 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
+        // Fortify lowercases the email on login and password reset, so store it the same way.
+        if (is_string($input['email'] ?? null)) {
+            $input['email'] = Str::lower($input['email']);
+        }
+
         Validator::make($input, [
             'username' => ['required', 'string', 'alpha_dash:ascii', 'min:3', 'max:30', Rule::unique('users')->ignore($user->id)],
-            'name' => ['required', 'string', 'max:255'],
-
+            'name' => ['required', 'string', 'min:2', 'max:50'],
             'email' => [
                 'required',
                 'string',

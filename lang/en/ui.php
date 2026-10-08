@@ -50,12 +50,14 @@ return [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
                     ],
+                    'remember' => [
+                        'label' => 'Remember me',
+                    ],
                 ],
                 'actions' => [
                     'submit' => 'Log in',
                 ],
             ],
-            'remember_me' => 'Remember me',
             'forgot_your_password' => 'Forgot your password?',
             'reset_your_password' => 'Reset your password',
             'dont_have_an_account' => "Don't have an account?",
@@ -98,17 +100,17 @@ return [
                     'submit' => 'Reset password',
                 ],
             ],
-            'already_have_an_account' => 'Already have an account?',
-            'login' => 'Log in',
         ],
         'verify_email' => [
             'title' => 'Verify your email address',
             'description' => 'Confirm your email address to complete account setup.',
             'explanation' => 'A verification link has been sent to your email address. Please check your inbox and click the link to verify your email. You will then be able to use your account. If you did not receive the email, you can request another verification link below.',
-            'success' => 'A new verification link has been sent to your email address.',
             'form' => [
                 'actions' => [
                     'resend' => 'Resend verification email',
+                ],
+                'feedback' => [
+                    'success' => 'A new verification link has been sent to your email address.',
                 ],
             ],
         ],
@@ -152,6 +154,9 @@ return [
                 'actions' => [
                     'submit' => 'Save profile',
                 ],
+                'feedback' => [
+                    'success' => 'Your profile has been updated.',
+                ],
             ],
         ],
         'security' => [
@@ -175,6 +180,9 @@ return [
                 'actions' => [
                     'submit' => 'Change password',
                 ],
+                'feedback' => [
+                    'success' => 'Your password has been updated.',
+                ],
             ],
         ],
     ],
@@ -193,7 +201,6 @@ return [
     ],
     'dashboard' => [
         'title' => 'Dashboard',
-        'description' => 'Welcome to your dashboard',
         'first_paragraph' => 'This is the first paragraph of the dashboard.',
         'second_paragraph' => 'This is the second paragraph of the dashboard.',
     ],

@@ -131,7 +131,22 @@ return [
     |
     */
 
-    'views' => true,
+    'views' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Redirects
+    |--------------------------------------------------------------------------
+    |
+    | The pages are served by Folio from resources/views/pages/auth, so these
+    | paths keep Fortify's routes in line with the page file names. Without
+    | views, a password reset would redirect home instead of to the login.
+    |
+    */
+
+    'redirects' => [
+        'password-reset' => '/auth/login',
+    ],
 
     /*
     |--------------------------------------------------------------------------

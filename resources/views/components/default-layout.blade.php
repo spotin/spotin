@@ -99,8 +99,12 @@
                     </li>
                 </ul>
             @else
-                <a href="{{ route('login') }}" class="btn btn-ghost"> {{ __('ui.auth.login.title') }} </a>
-                <a href="{{ route('register') }}" class="btn btn-primary"> {{ __('ui.auth.register.title') }} </a>
+                <a href="{{ route('login') }}" class="btn btn-ghost hidden lg:inline-flex">
+                    {{ __('ui.auth.login.title') }}
+                </a>
+                <a href="{{ route('register') }}" class="btn btn-primary hidden lg:inline-flex">
+                    {{ __('ui.auth.register.title') }}
+                </a>
             @endauth
 
             <label class="swap swap-rotate btn btn-ghost btn-circle">
@@ -118,7 +122,9 @@
             <ul class="menu menu-horizontal px-1">
                 <li>
                     <button type="button" popovertarget="locale-popover" style="anchor-name: --locale-anchor">
-                        <x-lucide-globe class="h-4 w-4" /> {{ strtoupper(app()->getLocale()) }}
+                        <x-lucide-globe class="h-4 w-4" aria-hidden="true" />
+                        <span class="sr-only">{{ __('ui.common.locale.label') }}</span>
+                        {{ strtoupper(app()->getLocale()) }}
                         <x-lucide-chevron-down class="h-3 w-3 transition-transform group-has-[#locale-popover:popover-open]/nav:rotate-180" />
                     </button>
                 </li>
@@ -129,7 +135,7 @@
                 style="position-anchor: --locale-anchor"
                 class="dropdown dropdown-end menu bg-base-100 rounded-box w-52 rounded-t-none p-2 shadow-sm"
             >
-                @foreach (['en', 'fr'] as $locale)
+                @foreach (config('app.supported_locales') as $locale)
                     <li>
                         <form method="POST" action="{{ route('locale.update') }}" class="grid-cols-1 p-0">
                             @csrf
@@ -150,7 +156,7 @@
         </div>
     </header>
 
-    <main class="prose container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">{{ $slot }}</main>
+    <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">{{ $slot }}</main>
 
     <footer class="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
         <nav class="grid grid-flow-col gap-4">
@@ -171,7 +177,7 @@
             </div>
         </nav>
         <aside>
-            <p>Spot in<sup>®</sup> 2021-{{ date('Y') }}</p>
+            <p>{{ config('app.name') }}<sup>®</sup> 2021-{{ date('Y') }}</p>
         </aside>
     </footer>
 </body>

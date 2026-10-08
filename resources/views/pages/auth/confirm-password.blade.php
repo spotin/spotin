@@ -1,35 +1,51 @@
+<?php
+
+use Laravel\Head\Facades\Head;
+
+use function Laravel\Folio\middleware;
+use function Laravel\Folio\name;
+
+middleware(['auth']);
+name('password.confirm');
+
+Head::title(__('ui.auth.password_confirmation.title'))
+    ->description(__('ui.auth.password_confirmation.description'));
+?>
+
 <x-default-layout>
-    <h1>{{ __('ui.auth.password_confirmation.title') }}</h1>
-    <p>{{ __('ui.auth.password_confirmation.explanation') }}</p>
+    <div class="prose max-w-none">
+        <h1>{{ __('ui.auth.password_confirmation.title') }}</h1>
+        <p>{{ __('ui.auth.password_confirmation.explanation') }}</p>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
+        <form method="POST" action="{{ route('password.confirm.store') }}">
+            @csrf
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+            <fieldset class="fieldset mb-4 gap-3">
+                <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.password_confirmation.form.fields.password.placeholder') }}</span>
-                    <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
-                    <input
-                        name="password"
-                        type="password"
-                        required
-                        autocomplete="current-password"
-                        placeholder="{{ __('ui.auth.password_confirmation.form.fields.password.label') }}"
-                        @error('password') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('password')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-        </fieldset>
+                <div>
+                    <label class="floating-label input validator w-full">
+                        <span>{{ __('ui.auth.password_confirmation.form.fields.password.placeholder') }}</span>
+                        <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
+                        <input
+                            name="password"
+                            type="password"
+                            required
+                            autocomplete="current-password"
+                            placeholder="{{ __('ui.auth.password_confirmation.form.fields.password.label') }}"
+                            @error('password') aria-invalid="true" @enderror
+                            class="input w-full"
+                        />
+                    </label>
+                    @error('password')
+                        <span class="validator-hint">{{ $message }}</span>
+                    @enderror
+                </div>
+            </fieldset>
 
-        <button type="submit" class="btn btn-block">
-            {{ __('ui.auth.password_confirmation.form.actions.submit') }}
-        </button>
-    </form>
+            <button type="submit" class="btn btn-block">
+                {{ __('ui.auth.password_confirmation.form.actions.submit') }}
+            </button>
+        </form>
+    </div>
 </x-default-layout>
