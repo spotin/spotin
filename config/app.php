@@ -107,7 +107,7 @@ return [
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
-    'supported_locales' => explode(',', env('APP_SUPPORTED_LOCALES', ['en', 'fr'])),
+    'supported_locales' => explode(',', (string) env('APP_SUPPORTED_LOCALES', 'en')),
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
