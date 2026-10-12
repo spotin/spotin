@@ -61,6 +61,16 @@ class Organization extends Model
     }
 
     /**
+     * Determine whether the user is the only responsible user of the organization.
+     */
+    public function isLastResponsible(User $user): bool
+    {
+        $responsibles = $this->responsibles()->pluck('users.id');
+
+        return $responsibles->count() === 1 && $responsibles->first() === $user->id;
+    }
+
+    /**
      * The pending invitations to join the organization.
      *
      * @return HasMany<OrganizationInvitation, $this>

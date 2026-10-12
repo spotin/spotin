@@ -49,6 +49,14 @@ class OrganizationInvitation extends Model
     }
 
     /**
+     * Find the active invitation matching a plain token, if any.
+     */
+    public static function findActiveByToken(string $token): ?static
+    {
+        return static::active()->where('token', static::hashToken($token))->first();
+    }
+
+    /**
      * Scope the query to the invitations that have not expired.
      *
      * @param  Builder<static>  $query
@@ -64,6 +72,14 @@ class OrganizationInvitation extends Model
     public function isExpired(): bool
     {
         return $this->expires_at->isPast();
+    }
+
+    /**
+     * Determine whether the invitation was sent to the user's verified email address.
+     */
+    public function isFor(User $user): bool
+    {
+        return $user->hasVerifiedEmail() && Str::lower($user->email) === Str::lower($this->email);
     }
 
     /**

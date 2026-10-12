@@ -2,6 +2,7 @@
     "[php]": {
         "editor.defaultFormatter": "open-southeners.laravel-pint"
     },
+    "cSpell.language": "en,fr",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.rulers": [80],
     "files.encoding": "utf8",
