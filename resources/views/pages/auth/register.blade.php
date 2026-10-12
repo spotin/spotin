@@ -25,17 +25,17 @@ render(function (View $view) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.register.form.fields.name.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.name.placeholder') }}</span>
                     <x-lucide-id-card class="h-[1em] opacity-50" />
                     <input
                         name="name"
                         type="text"
                         required
-                        placeholder="{{ __('ui.auth.register.form.fields.name.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.name.label') }}"
                         value="{{ old('name') }}"
                         @error('name') aria-invalid="true" @enderror
                         class="input w-full"
@@ -48,13 +48,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.register.form.fields.email.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
                     <x-lucide-mail class="h-[1em] opacity-50" />
                     <input
                         name="email"
                         type="email"
                         required
-                        placeholder="{{ __('ui.auth.register.form.fields.email.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
                         value="{{ old('email') }}"
                         @error('email') aria-invalid="true" @enderror
                         class="input w-full"
@@ -67,13 +67,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.register.form.fields.password.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.password.placeholder') }}</span>
                     <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
                     <input
                         name="password"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.register.form.fields.password.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.password.label') }}"
                         @error('password') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -85,13 +85,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.register.form.fields.password_confirmation.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.password-confirmation.placeholder') }}</span>
                     <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
                     <input
                         name="password_confirmation"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.register.form.fields.password_confirmation.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.password-confirmation.label') }}"
                         @error('password') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -106,7 +106,7 @@ render(function (View $view) {
     </form>
 
     <p class="text-center text-sm">
-        {{ __('ui.auth.register.already_have_an_account') }}
+        {{ __('ui.auth.register.already-have-an-account') }}
         <a href="{{ route('login') }}"> {{ __('ui.auth.register.login') }} </a>
     </p>
 </x-default-layout>

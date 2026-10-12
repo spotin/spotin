@@ -20,9 +20,9 @@ render(function (View $view) {
     <article class="prose lg:prose-xl">
         <h1>{{ __('ui.welcome.title') }}</h1>
 
-        <p>{{ __('ui.welcome.first_paragraph') }}</p>
+        <p>{{ __('ui.welcome.first-paragraph') }}</p>
 
-        <p>{{ __('ui.welcome.second_paragraph') }}</p>
+        <p>{{ __('ui.welcome.second-paragraph') }}</p>
 
         Test PR.
 

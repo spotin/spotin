@@ -31,7 +31,7 @@ class AcceptInvitation
             // The same message for an unknown, expired or foreign invitation, so the
             // page never reveals who an invitation was sent to.
             if (! $invitation || ! $invitation->isFor($user)) {
-                throw ValidationException::withMessages(['invitation' => __('ui.organizations.invitations.show.feedback.invalid')]);
+                throw ValidationException::withMessages(['invitation' => __('ui.organizations.invitations.feedback.invalid-invitation')]);
             }
 
             $organization = $invitation->organization;

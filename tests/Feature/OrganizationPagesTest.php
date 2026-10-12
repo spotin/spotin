@@ -251,7 +251,7 @@ test('the last responsible user has a disabled Leave button and is told why', fu
         ->assertDontSee('popovertarget="leave-popover"', false)
         ->assertDontSee(route('organizations.leave', ['organization' => $this->organization->uuid]), false)
         ->assertSee('aria-describedby="last-responsible-hint"', false)
-        ->assertSee(__('ui.organizations.members.leave.last_responsible'));
+        ->assertSee(__('ui.organizations.members.leave.last-responsible'));
 });
 
 test('admins who are not members have no Leave button', function () {
@@ -272,22 +272,22 @@ test('actions show their feedback and errors on the right page', function () {
 
     $this->followingRedirects()->from(($this->url)('organizations.members.index'))
         ->put(route('organizations.members.update', ['organization' => $this->organization->uuid, 'user' => $this->member->id]), ['role' => 'responsible'])
-        ->assertSee(__('ui.organizations.members.index.table.feedback.member-role-updated'));
+        ->assertSee(__('ui.organizations.members.feedback.member-role-updated'));
 
     $this->followingRedirects()->from(($this->url)('organizations.members.index'))
         ->delete(route('organizations.members.destroy', ['organization' => $this->organization->uuid, 'user' => $this->member->id]))
-        ->assertSee(__('ui.organizations.members.index.table.feedback.member-removed'));
+        ->assertSee(__('ui.organizations.members.feedback.member-removed'));
 
     $this->followingRedirects()->from(($this->url)('organizations.invitations.create'))
         ->post(route('organizations.invitations.store', ['organization' => $this->organization->uuid]), ['email' => 'new@example.com', 'role' => 'member'])
-        ->assertSee(__('ui.organizations.invitations.create.feedback.invitation-sent'))
+        ->assertSee(__('ui.organizations.invitations.feedback.invitation-sent'))
         ->assertSee(emailHtml('new@example.com'), false);
 
     $invitation = OrganizationInvitation::sole();
 
     $this->followingRedirects()->from(($this->url)('organizations.invitations.index'))
         ->delete(route('organizations.invitations.destroy', ['organization' => $this->organization->uuid, 'invitation' => $invitation->id]))
-        ->assertSee(__('ui.organizations.invitations.revoke.feedback.success'));
+        ->assertSee(__('ui.organizations.invitations.feedback.invitation-revoked'));
 });
 
 test('inviting someone who already belongs shows the error on the invitation form', function () {
@@ -295,7 +295,7 @@ test('inviting someone who already belongs shows the error on the invitation for
         ->followingRedirects()
         ->from(($this->url)('organizations.invitations.create'))
         ->post(route('organizations.invitations.store', ['organization' => $this->organization->uuid]), ['email' => 'mike@example.com', 'role' => 'member'])
-        ->assertSee(__('ui.organizations.invitations.show.feedback.already_member'));
+        ->assertSee(__('ui.organizations.invitations.feedback.already-member'));
 });
 
 test('sending an invitation brings back to the list of invitations', function () {
@@ -309,7 +309,7 @@ test('leaving shows a confirmation on the list of organizations', function () {
         ->followingRedirects()
         ->delete(route('organizations.leave', ['organization' => $this->organization->uuid]))
         ->assertOk()
-        ->assertSee(__('ui.organizations.members.leave.feedback.success'));
+        ->assertSee(__('ui.organizations.members.feedback.organization-left'));
 });
 
 test('the navigation links to the organizations of the user, and the admin list to each organization', function () {

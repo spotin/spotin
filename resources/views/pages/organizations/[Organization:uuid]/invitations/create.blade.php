@@ -36,7 +36,7 @@ render(function (View $view, Organization $organization) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">

@@ -11,7 +11,7 @@ test('the password confirmation page renders', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('password.confirm'))
         ->assertOk()
-        ->assertSee('<title>'.e(__('ui.auth.password_confirmation.title')), false)
+        ->assertSee('<title>'.e(__('ui.auth.password-confirmation.title')), false)
         ->assertSee('name="password"', false)
         ->assertSee('autocomplete="current-password"', false);
 });

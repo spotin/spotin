@@ -206,7 +206,7 @@ test('the invitation page does not reveal anything to another user', function ()
     $this->actingAs(User::factory()->create())->get(route('organizations.invitations.show', ['token' => $token]))
         ->assertOk()
         ->assertDontSee('Acme')
-        ->assertSee(__('ui.organizations.invitations.show.feedback.invalid'))
+        ->assertSee(__('ui.organizations.invitations.feedback.invalid-invitation'))
         ->assertDontSee(route('organizations.invitations.accept', $token), false);
 });
 
@@ -218,7 +218,7 @@ test('users accept an invitation through the form and see a confirmation', funct
         ->followingRedirects()
         ->post(route('organizations.invitations.accept', $token))
         ->assertOk()
-        ->assertSee(__('ui.organizations.invitations.show.feedback.success'));
+        ->assertSee(__('ui.organizations.invitations.feedback.invitation-accepted'));
 
     expect($jane->belongsToOrganization($this->organization))->toBeTrue();
 });

@@ -44,7 +44,7 @@ render(function (View $view, Organization $organization) {
     @if (in_array(session('status'), ['member-role-updated', 'member-removed'], true))
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.members.index.table.feedback.' . session('status')) }}</span>
+            <span>{{ __('ui.organizations.members.feedback.' . session('status')) }}</span>
         </p>
     @endif
 
@@ -105,7 +105,10 @@ render(function (View $view, Organization $organization) {
                                         @disabled($member->id === $lastResponsibleId)
                                     >
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->value }}" @selected($member->pivot->role === $role)>
+                                            <option
+                                                value="{{ $role->value }}"
+                                                @selected($member->pivot->role === $role)
+                                            >
                                                 {{ __('ui.organizations.common.forms.fields.role.options.' . $role->value) }}
                                             </option>
                                         @endforeach
@@ -152,7 +155,11 @@ render(function (View $view, Organization $organization) {
                                             </button>
                                         @endif
                                     @elseif ($canManage)
-                                        <x-remove-member-modal :organization="$organization" :member="$member" class="w-full sm:w-auto">
+                                        <x-remove-member-modal
+                                            :organization="$organization"
+                                            :member="$member"
+                                            class="w-full sm:w-auto"
+                                        >
                                             {{ __('ui.organizations.members.index.table.actions.remove') }}
                                         </x-remove-member-modal>
                                     @endif
@@ -168,7 +175,7 @@ render(function (View $view, Organization $organization) {
     {{ $members->links() }}
 
     @if ($isLastResponsible)
-        <p id="last-responsible-hint">{{ __('ui.organizations.members.leave.last_responsible') }}</p>
+        <p id="last-responsible-hint">{{ __('ui.organizations.members.leave.last-responsible') }}</p>
     @elseif ($canLeave)
         <div
             popover
@@ -188,9 +195,7 @@ render(function (View $view, Organization $organization) {
                 <button type="button" popovertarget="leave-popover" popovertargetaction="hide" class="btn">
                     {{ __('ui.common.actions.cancel') }}
                 </button>
-                <button type="submit" class="btn btn-error">
-                    {{ __('ui.organizations.members.leave.confirm') }}
-                </button>
+                <button type="submit" class="btn btn-error">{{ __('ui.organizations.members.leave.confirm') }}</button>
             </form>
         </div>
     @endif

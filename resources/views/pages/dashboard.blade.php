@@ -11,8 +11,8 @@ name('dashboard');
     <article class="prose lg:prose-xl">
         <h1>{{ __('ui.dashboard.title') }}</h1>
 
-        <p>{{ __('ui.dashboard.first_paragraph') }}</p>
+        <p>{{ __('ui.dashboard.first-paragraph') }}</p>
 
-        <p>{{ __('ui.dashboard.second_paragraph') }}</p>
+        <p>{{ __('ui.dashboard.second-paragraph') }}</p>
     </article>
 </x-default-layout>

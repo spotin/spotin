@@ -31,7 +31,7 @@ render(function (View $view, Organization $organization) {
     @if (session('status') === 'organization-updated')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.admin.organizations.edit.form.feedback.success') }}</span>
+            <span>{{ __('ui.admin.organizations.feedback.organization-updated') }}</span>
         </p>
     @endif
 
@@ -40,7 +40,7 @@ render(function (View $view, Organization $organization) {
         @method('PUT')
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">

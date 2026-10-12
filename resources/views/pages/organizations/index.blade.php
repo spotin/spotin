@@ -24,7 +24,7 @@ render(function (View $view) {
     @if (session('status') === 'organization-left')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.members.leave.feedback.success') }}</span>
+            <span>{{ __('ui.organizations.members.feedback.organization-left') }}</span>
         </p>
     @endif
 

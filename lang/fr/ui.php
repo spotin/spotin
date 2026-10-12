@@ -13,10 +13,9 @@ return [
             ],
         ],
         'version' => 'Version :version',
-        'fill_the_form' => 'Veuillez remplir le formulaire ci-dessous pour continuer.',
+        'fill-the-form' => 'Veuillez remplir le formulaire ci-dessous pour continuer.',
         'breadcrumbs' => "Fil d'Ariane",
         'actions' => [
-            'submit' => 'Valider',
             'cancel' => 'Annuler',
             'close' => 'Fermer',
         ],
@@ -28,6 +27,11 @@ return [
         'title' => 'Administration',
         'description' => 'Gérez la plateforme.',
         'organizations' => [
+            'feedback' => [
+                'organization-created' => "L'organisation a été créée.",
+                'organization-updated' => "L'organisation a été mise à jour.",
+                'organization-deleted' => "L'organisation a été supprimée.",
+            ],
             'index' => [
                 'title' => 'Organisations',
                 'description' => 'Gérez toutes les organisations.',
@@ -53,9 +57,6 @@ return [
                     'actions' => [
                         'submit' => "Créer l'organisation",
                     ],
-                    'feedback' => [
-                        'success' => "L'organisation a été créée.",
-                    ],
                 ],
             ],
             'edit' => [
@@ -65,9 +66,6 @@ return [
                     'actions' => [
                         'submit' => 'Enregistrer',
                     ],
-                    'feedback' => [
-                        'success' => "L'organisation a été mise à jour.",
-                    ],
                 ],
             ],
             'delete' => [
@@ -76,17 +74,12 @@ return [
                 'actions' => [
                     'submit' => "Supprimer l'organisation",
                 ],
-                'feedback' => [
-                    'success' => "L'organisation a été supprimée.",
-                ],
             ],
         ],
     ],
     'auth' => [
-        'register' => [
-            'title' => 'Inscription',
-            'description' => 'Créez un compte',
-            'form' => [
+        'common' => [
+            'forms' => [
                 'fields' => [
                     'name' => [
                         'label' => 'Nom complet',
@@ -100,83 +93,74 @@ return [
                         'label' => 'Mot de passe',
                         'placeholder' => 'Saisissez votre mot de passe',
                     ],
-                    'password_confirmation' => [
+                    'password-confirmation' => [
                         'label' => 'Confirmation du mot de passe',
                         'placeholder' => 'Confirmez votre mot de passe',
                     ],
+                    'remember' => [
+                        'label' => 'Se souvenir de moi',
+                    ],
+                    'current-password' => [
+                        'label' => 'Mot de passe actuel',
+                        'placeholder' => 'Saisissez votre mot de passe actuel',
+                    ],
+                    'new-password' => [
+                        'label' => 'Nouveau mot de passe',
+                        'placeholder' => 'Saisissez votre nouveau mot de passe',
+                    ],
+                    'new-password-confirmation' => [
+                        'label' => 'Confirmer le nouveau mot de passe',
+                        'placeholder' => 'Confirmez votre nouveau mot de passe',
+                    ],
                 ],
+            ],
+        ],
+        'feedback' => [
+            'verification-link-sent' => 'Un nouveau lien de vérification a été envoyé à votre adresse e-mail.',
+        ],
+        'register' => [
+            'title' => 'Inscription',
+            'description' => 'Créez un compte',
+            'form' => [
                 'actions' => [
                     'submit' => "S'inscrire",
                 ],
             ],
-            'already_have_an_account' => 'Vous avez déjà un compte ?',
+            'already-have-an-account' => 'Vous avez déjà un compte ?',
             'login' => 'Se connecter',
         ],
         'login' => [
             'title' => 'Connexion',
             'description' => 'Accédez à votre compte',
             'form' => [
-                'fields' => [
-                    'email' => [
-                        'label' => 'Adresse e-mail',
-                        'placeholder' => 'Saisissez votre adresse e-mail',
-                    ],
-                    'password' => [
-                        'label' => 'Mot de passe',
-                        'placeholder' => 'Saisissez votre mot de passe',
-                    ],
-                    'remember' => [
-                        'label' => 'Se souvenir de moi',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Se connecter',
                 ],
             ],
-            'forgot_your_password' => 'Mot de passe oublié ?',
-            'reset_your_password' => 'Réinitialisez votre mot de passe',
-            'dont_have_an_account' => "Vous n'avez pas de compte ?",
+            'forgot-your-password' => 'Mot de passe oublié ?',
+            'reset-your-password' => 'Réinitialisez votre mot de passe',
+            'dont-have-an-account' => "Vous n'avez pas de compte ?",
             'register' => "S'inscrire",
         ],
-        'forgot_password' => [
+        'forgot-password' => [
             'title' => 'Mot de passe oublié ?',
             'description' => 'Demandez un lien de réinitialisation du mot de passe.',
             'form' => [
-                'fields' => [
-                    'email' => [
-                        'label' => 'Adresse e-mail',
-                        'placeholder' => 'Saisissez votre adresse e-mail',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Envoyer le lien de réinitialisation',
                 ],
             ],
         ],
-        'reset_password' => [
+        'reset-password' => [
             'title' => 'Réinitialiser votre mot de passe',
             'description' => 'Choisissez un nouveau mot de passe pour votre compte.',
             'form' => [
-                'fields' => [
-                    'email' => [
-                        'label' => 'Adresse e-mail',
-                        'placeholder' => 'Saisissez votre adresse e-mail',
-                    ],
-                    'password' => [
-                        'label' => 'Nouveau mot de passe',
-                        'placeholder' => 'Saisissez votre nouveau mot de passe',
-                    ],
-                    'password_confirmation' => [
-                        'label' => 'Confirmation du nouveau mot de passe',
-                        'placeholder' => 'Confirmez votre nouveau mot de passe',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Réinitialiser le mot de passe',
                 ],
             ],
         ],
-        'verify_email' => [
+        'verify-email' => [
             'title' => 'Vérifiez votre adresse e-mail',
             'description' => 'Confirmez votre adresse e-mail pour terminer la création du compte.',
             'explanation' => "Un lien de vérification a été envoyé à votre adresse e-mail. Veuillez consulter votre boîte de réception et cliquer sur le lien pour vérifier votre adresse. Vous pourrez ensuite utiliser votre compte. Si vous n'avez pas reçu l'e-mail, vous pouvez demander un nouveau lien de vérification ci-dessous.",
@@ -184,22 +168,13 @@ return [
                 'actions' => [
                     'resend' => "Renvoyer l'e-mail de vérification",
                 ],
-                'feedback' => [
-                    'success' => 'Un nouveau lien de vérification a été envoyé à votre adresse e-mail.',
-                ],
             ],
         ],
-        'password_confirmation' => [
+        'password-confirmation' => [
             'title' => 'Confirmez votre mot de passe',
             'description' => 'Confirmez votre mot de passe pour continuer.',
             'explanation' => 'Pour des raisons de sécurité, veuillez confirmer votre mot de passe avant de continuer.',
             'form' => [
-                'fields' => [
-                    'password' => [
-                        'label' => 'Mot de passe',
-                        'placeholder' => 'Saisissez votre mot de passe',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Confirmer le mot de passe',
                 ],
@@ -248,6 +223,13 @@ return [
             ],
         ],
         'invitations' => [
+            'feedback' => [
+                'invitation-sent' => "L'invitation a été envoyée.",
+                'invitation-revoked' => "L'invitation a été révoquée.",
+                'invitation-accepted' => "Vous avez rejoint l'organisation.",
+                'invalid-invitation' => 'Cette invitation est invalide, a expiré ou a été envoyée à une autre adresse e-mail.',
+                'already-member' => "Cette personne fait déjà partie de l'organisation.",
+            ],
             'index' => [
                 'title' => 'Invitations',
                 'description' => "Les invitations en attente pour rejoindre l'organisation.",
@@ -286,18 +268,12 @@ return [
                     'expires' => 'Cette invitation expire le :date.',
                     'ignore' => "Si vous n'attendiez pas cette invitation, vous pouvez ignorer cet e-mail.",
                 ],
-                'feedback' => [
-                    'invitation-sent' => "L'invitation a été envoyée.",
-                ],
             ],
             'revoke' => [
                 'title' => "Révoquer l'invitation",
                 'warning' => "Cette action révoque définitivement l'invitation. La personne ne pourra plus l'accepter.",
                 'actions' => [
                     'submit' => "Révoquer l'invitation",
-                ],
-                'feedback' => [
-                    'success' => "L'invitation a été révoquée.",
                 ],
             ],
             'show' => [
@@ -307,14 +283,16 @@ return [
                 'actions' => [
                     'accept' => "Accepter l'invitation",
                 ],
-                'feedback' => [
-                    'success' => "Vous avez rejoint l'organisation.",
-                    'invalid' => 'Cette invitation est invalide, a expiré ou a été envoyée à une autre adresse e-mail.',
-                    'already_member' => "Cette personne fait déjà partie de l'organisation.",
-                ],
             ],
         ],
         'members' => [
+            'feedback' => [
+                'member-role-updated' => 'Le rôle a été mis à jour.',
+                'member-removed' => 'Le membre a été retiré.',
+                'not-a-member' => "Cette personne ne fait pas partie de l'organisation.",
+                'last-responsible' => 'Une organisation doit conserver au moins un responsable.',
+                'organization-left' => "Vous avez quitté l'organisation.",
+            ],
             'index' => [
                 'title' => 'Membres',
                 'description' => "Les membres de l'organisation et leurs rôles.",
@@ -332,12 +310,6 @@ return [
                         'leave' => 'Quitter',
                         'remove' => 'Retirer',
                     ],
-                    'feedback' => [
-                        'member-role-updated' => 'Le rôle a été mis à jour.',
-                        'member-removed' => 'Le membre a été retiré.',
-                        'not_a_member' => "Cette personne ne fait pas partie de l'organisation.",
-                        'last_responsible' => 'Une organisation doit conserver au moins un responsable.',
-                    ],
                 ],
             ],
             'remove' => [
@@ -351,35 +323,23 @@ return [
                 'title' => "Quitter l'organisation",
                 'warning' => "Vous perdrez l'accès à cette organisation. Un responsable devra vous inviter à nouveau si vous souhaitez revenir.",
                 'confirm' => "Quitter l'organisation",
-                'last_responsible' => 'Vous êtes le seul responsable de cette organisation. Nommez un autre membre responsable avant de pouvoir la quitter.',
-                'feedback' => [
-                    'success' => "Vous avez quitté l'organisation.",
-                ],
+                'last-responsible' => 'Vous êtes le seul responsable de cette organisation. Nommez un autre membre responsable avant de pouvoir la quitter.',
             ],
         ],
     ],
     'settings' => [
         'title' => 'Paramètres',
         'description' => 'Gérez votre compte.',
+        'feedback' => [
+            'profile-information-updated' => 'Votre profil a été mis à jour.',
+            'password-updated' => 'Votre mot de passe a été modifié.',
+        ],
         'profile' => [
             'title' => 'Paramètres du profil',
             'description' => 'Gérez les informations de votre profil.',
             'form' => [
-                'fields' => [
-                    'name' => [
-                        'label' => 'Nom complet',
-                        'placeholder' => 'Saisissez votre nom complet',
-                    ],
-                    'email' => [
-                        'label' => 'Adresse e-mail',
-                        'placeholder' => 'Saisissez votre adresse e-mail',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Enregistrer le profil',
-                ],
-                'feedback' => [
-                    'success' => 'Votre profil a été mis à jour.',
                 ],
             ],
         ],
@@ -387,39 +347,22 @@ return [
             'title' => 'Paramètres de sécurité',
             'description' => 'Modifiez votre mot de passe.',
             'form' => [
-                'fields' => [
-                    'current_password' => [
-                        'label' => 'Mot de passe actuel',
-                        'placeholder' => 'Saisissez votre mot de passe actuel',
-                    ],
-                    'new_password' => [
-                        'label' => 'Nouveau mot de passe',
-                        'placeholder' => 'Saisissez votre nouveau mot de passe',
-                    ],
-                    'confirm_password' => [
-                        'label' => 'Confirmer le nouveau mot de passe',
-                        'placeholder' => 'Confirmez votre nouveau mot de passe',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Modifier le mot de passe',
-                ],
-                'feedback' => [
-                    'success' => 'Votre mot de passe a été modifié.',
                 ],
             ],
         ],
     ],
     'dashboard' => [
         'title' => 'Tableau de bord',
-        'first_paragraph' => 'Ceci est le premier paragraphe du tableau de bord.',
-        'second_paragraph' => 'Ceci est le deuxième paragraphe du tableau de bord.',
+        'first-paragraph' => 'Ceci est le premier paragraphe du tableau de bord.',
+        'second-paragraph' => 'Ceci est le deuxième paragraphe du tableau de bord.',
     ],
     'welcome' => [
         'title' => 'Bienvenue',
         'description' => 'Bienvenue sur notre application',
-        'first_paragraph' => 'Texte du premier paragraphe.',
-        'second_paragraph' => 'Texte du deuxième paragraphe.',
+        'first-paragraph' => 'Texte du premier paragraphe.',
+        'second-paragraph' => 'Texte du deuxième paragraphe.',
         'button' => 'Cliquez ici',
     ],
 ];

@@ -25,7 +25,7 @@ class InviteToOrganization
         $alreadyMember = $organization->users()->where('users.email', $email)->exists();
 
         if ($alreadyMember) {
-            throw ValidationException::withMessages(['email' => __('ui.organizations.invitations.show.feedback.already_member')]);
+            throw ValidationException::withMessages(['email' => __('ui.organizations.invitations.feedback.already-member')]);
         }
 
         $token = OrganizationInvitation::generateToken();

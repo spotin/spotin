@@ -31,12 +31,12 @@ render(function (View $view, Organization $organization) {
     @if (session('status') === 'invitation-sent')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.create.feedback.invitation-sent') }}</span>
+            <span>{{ __('ui.organizations.invitations.feedback.invitation-sent') }}</span>
         </p>
     @elseif (session('status') === 'invitation-revoked')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.revoke.feedback.success') }}</span>
+            <span>{{ __('ui.organizations.invitations.feedback.invitation-revoked') }}</span>
         </p>
     @endif
 
@@ -70,8 +70,7 @@ render(function (View $view, Organization $organization) {
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                                     <span class="opacity-60">
-                                        {{ __('ui.organizations.invitations.index.table.columns.expires') }}
-                                        {{ $invitation->expires_at->isoFormat('LLL') }}
+                                        {{ __('ui.organizations.invitations.index.table.columns.expires') }} {{ $invitation->expires_at->isoFormat('LLL') }}
                                     </span>
                                     @if ($invitation->isExpired())
                                         <span class="badge badge-warning badge-sm">
@@ -80,7 +79,9 @@ render(function (View $view, Organization $organization) {
                                     @endif
                                 </div>
                             </td>
-                            <td>{{ __('ui.organizations.common.forms.fields.role.options.' . $invitation->role->value) }}</td>
+                            <td>
+                                {{ __('ui.organizations.common.forms.fields.role.options.' . $invitation->role->value) }}
+                            </td>
                             <td>
                                 <div class="flex flex-col gap-2 sm:flex-row">
                                     <form
@@ -92,7 +93,11 @@ render(function (View $view, Organization $organization) {
                                             {{ __('ui.organizations.invitations.index.table.actions.resend') }}
                                         </button>
                                     </form>
-                                    <x-revoke-invitation-modal :organization="$organization" :invitation="$invitation" class="w-full sm:w-auto">
+                                    <x-revoke-invitation-modal
+                                        :organization="$organization"
+                                        :invitation="$invitation"
+                                        class="w-full sm:w-auto"
+                                    >
                                         {{ __('ui.organizations.invitations.index.table.actions.revoke') }}
                                     </x-revoke-invitation-modal>
                                 </div>

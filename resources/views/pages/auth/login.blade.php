@@ -32,17 +32,17 @@ render(function (View $view) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.login.form.fields.email.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
                     <x-lucide-mail class="h-[1em] opacity-50" />
                     <input
                         name="email"
                         type="email"
                         required
-                        placeholder="{{ __('ui.auth.login.form.fields.email.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
                         value="{{ old('email') }}"
                         @error('email') aria-invalid="true" @enderror
                         class="input w-full"
@@ -55,13 +55,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.login.form.fields.password.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.password.placeholder') }}</span>
                     <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
                     <input
                         name="password"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.login.form.fields.password.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.password.label') }}"
                         @error('password') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -73,7 +73,7 @@ render(function (View $view) {
 
             <label class="label">
                 <input type="checkbox" name="remember" class="checkbox" @checked(old('remember')) />
-                {{ __('ui.auth.login.form.fields.remember.label') }}
+                {{ __('ui.auth.common.forms.fields.remember.label') }}
             </label>
         </fieldset>
 
@@ -81,12 +81,12 @@ render(function (View $view) {
     </form>
 
     <p class="text-center text-sm">
-        {{ __('ui.auth.login.dont_have_an_account') }}
+        {{ __('ui.auth.login.dont-have-an-account') }}
         <a href="{{ route('register') }}"> {{ __('ui.auth.login.register') }} </a>
     </p>
 
     <p class="text-center text-sm">
-        {{ __('ui.auth.login.forgot_your_password') }}
-        <a href="{{ route('password.request') }}"> {{ __('ui.auth.login.reset_your_password') }} </a>
+        {{ __('ui.auth.login.forgot-your-password') }}
+        <a href="{{ route('password.request') }}"> {{ __('ui.auth.login.reset-your-password') }} </a>
     </p>
 </x-default-layout>

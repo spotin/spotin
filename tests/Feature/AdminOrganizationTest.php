@@ -79,7 +79,7 @@ test('admins can create an organization and land on its page', function () {
     $response->assertRedirect(route('organizations.show', ['organization' => $organization->uuid]))
         ->assertSessionHas('status', 'organization-created');
 
-    $this->get(route('organizations.show', ['organization' => $organization->uuid]))->assertOk()->assertSee(__('ui.admin.organizations.create.form.feedback.success'));
+    $this->get(route('organizations.show', ['organization' => $organization->uuid]))->assertOk()->assertSee(__('ui.admin.organizations.feedback.organization-created'));
 
     expect($organization->users)->toBeEmpty()
         ->and($organization->invitations)->toBeEmpty();

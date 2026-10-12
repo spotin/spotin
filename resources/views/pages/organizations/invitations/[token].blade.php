@@ -48,7 +48,7 @@ render(function (View $view, string $token) {
     @else
         <p role="alert" class="alert alert-error">
             <x-lucide-circle-alert class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.show.feedback.invalid') }}</span>
+            <span>{{ __('ui.organizations.invitations.feedback.invalid-invitation') }}</span>
         </p>
     @endif
 </x-default-layout>

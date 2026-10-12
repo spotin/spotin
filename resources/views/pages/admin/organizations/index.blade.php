@@ -30,7 +30,7 @@ render(function (View $view) {
     @if (session('status') === 'organization-deleted')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.admin.organizations.delete.feedback.success') }}</span>
+            <span>{{ __('ui.admin.organizations.feedback.organization-deleted') }}</span>
         </p>
     @endif
 

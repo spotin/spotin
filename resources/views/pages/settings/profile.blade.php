@@ -26,7 +26,7 @@ render(function (View $view) {
     @if (session('status') === 'profile-information-updated')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.settings.profile.form.feedback.success') }}</span>
+            <span>{{ __('ui.settings.feedback.profile-information-updated') }}</span>
         </p>
     @endif
 
@@ -35,17 +35,17 @@ render(function (View $view) {
         @method('PUT')
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.settings.profile.form.fields.name.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.name.placeholder') }}</span>
                     <x-lucide-id-card class="h-[1em] opacity-50" />
                     <input
                         name="name"
                         type="text"
                         required
-                        placeholder="{{ __('ui.settings.profile.form.fields.name.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.name.label') }}"
                         value="{{ old('name', auth()->user()->name) }}"
                         @error('name', 'updateProfileInformation') aria-invalid="true" @enderror
                         class="input w-full"
@@ -58,13 +58,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.settings.profile.form.fields.email.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
                     <x-lucide-mail class="h-[1em] opacity-50" />
                     <input
                         name="email"
                         type="email"
                         required
-                        placeholder="{{ __('ui.settings.profile.form.fields.email.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
                         value="{{ old('email', auth()->user()->email) }}"
                         @error('email', 'updateProfileInformation') aria-invalid="true" @enderror
                         class="input w-full"

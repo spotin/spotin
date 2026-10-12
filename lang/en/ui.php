@@ -13,10 +13,9 @@ return [
             ],
         ],
         'version' => 'Version :version',
-        'fill_the_form' => 'Please fill out the form below to continue.',
+        'fill-the-form' => 'Please fill out the form below to continue.',
         'breadcrumbs' => 'Breadcrumb',
         'actions' => [
-            'submit' => 'Submit',
             'cancel' => 'Cancel',
             'close' => 'Close',
         ],
@@ -28,6 +27,11 @@ return [
         'title' => 'Administration',
         'description' => 'Manage the platform.',
         'organizations' => [
+            'feedback' => [
+                'organization-created' => 'The organization has been created.',
+                'organization-updated' => 'The organization has been updated.',
+                'organization-deleted' => 'The organization has been deleted.',
+            ],
             'index' => [
                 'title' => 'Organizations',
                 'description' => 'Manage all the organizations.',
@@ -53,9 +57,6 @@ return [
                     'actions' => [
                         'submit' => 'Create the organization',
                     ],
-                    'feedback' => [
-                        'success' => 'The organization has been created.',
-                    ],
                 ],
             ],
             'edit' => [
@@ -65,9 +66,6 @@ return [
                     'actions' => [
                         'submit' => 'Save',
                     ],
-                    'feedback' => [
-                        'success' => 'The organization has been updated.',
-                    ],
                 ],
             ],
             'delete' => [
@@ -76,17 +74,12 @@ return [
                 'actions' => [
                     'submit' => 'Delete the organization',
                 ],
-                'feedback' => [
-                    'success' => 'The organization has been deleted.',
-                ],
             ],
         ],
     ],
     'auth' => [
-        'register' => [
-            'title' => 'Register',
-            'description' => 'Create a new account',
-            'form' => [
+        'common' => [
+            'forms' => [
                 'fields' => [
                     'name' => [
                         'label' => 'Full name',
@@ -100,83 +93,74 @@ return [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
                     ],
-                    'password_confirmation' => [
+                    'password-confirmation' => [
                         'label' => 'Password confirmation',
                         'placeholder' => 'Confirm your password',
                     ],
+                    'remember' => [
+                        'label' => 'Remember me',
+                    ],
+                    'current-password' => [
+                        'label' => 'Current password',
+                        'placeholder' => 'Enter your current password',
+                    ],
+                    'new-password' => [
+                        'label' => 'New password',
+                        'placeholder' => 'Enter your new password',
+                    ],
+                    'new-password-confirmation' => [
+                        'label' => 'Confirm new password',
+                        'placeholder' => 'Confirm your new password',
+                    ],
                 ],
+            ],
+        ],
+        'feedback' => [
+            'verification-link-sent' => 'A new verification link has been sent to your email address.',
+        ],
+        'register' => [
+            'title' => 'Register',
+            'description' => 'Create a new account',
+            'form' => [
                 'actions' => [
                     'submit' => 'Register',
                 ],
             ],
-            'already_have_an_account' => 'Already have an account?',
+            'already-have-an-account' => 'Already have an account?',
             'login' => 'Log in',
         ],
         'login' => [
             'title' => 'Login',
             'description' => 'Access your account',
             'form' => [
-                'fields' => [
-                    'email' => [
-                        'label' => 'Email address',
-                        'placeholder' => 'Enter your email address',
-                    ],
-                    'password' => [
-                        'label' => 'Password',
-                        'placeholder' => 'Enter your password',
-                    ],
-                    'remember' => [
-                        'label' => 'Remember me',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Log in',
                 ],
             ],
-            'forgot_your_password' => 'Forgot your password?',
-            'reset_your_password' => 'Reset your password',
-            'dont_have_an_account' => "Don't have an account?",
+            'forgot-your-password' => 'Forgot your password?',
+            'reset-your-password' => 'Reset your password',
+            'dont-have-an-account' => "Don't have an account?",
             'register' => 'Register',
         ],
-        'forgot_password' => [
+        'forgot-password' => [
             'title' => 'Forgot your password?',
             'description' => 'Request a password reset link for your account.',
             'form' => [
-                'fields' => [
-                    'email' => [
-                        'label' => 'Email address',
-                        'placeholder' => 'Enter your email address',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Send reset link',
                 ],
             ],
         ],
-        'reset_password' => [
+        'reset-password' => [
             'title' => 'Reset your password',
             'description' => 'Choose a new password for your account.',
             'form' => [
-                'fields' => [
-                    'email' => [
-                        'label' => 'Email address',
-                        'placeholder' => 'Enter your email address',
-                    ],
-                    'password' => [
-                        'label' => 'New password',
-                        'placeholder' => 'Enter your new password',
-                    ],
-                    'password_confirmation' => [
-                        'label' => 'Password confirmation',
-                        'placeholder' => 'Confirm your new password',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Reset password',
                 ],
             ],
         ],
-        'verify_email' => [
+        'verify-email' => [
             'title' => 'Verify your email address',
             'description' => 'Confirm your email address to complete account setup.',
             'explanation' => 'A verification link has been sent to your email address. Please check your inbox and click the link to verify your email. You will then be able to use your account. If you did not receive the email, you can request another verification link below.',
@@ -184,22 +168,13 @@ return [
                 'actions' => [
                     'resend' => 'Resend verification email',
                 ],
-                'feedback' => [
-                    'success' => 'A new verification link has been sent to your email address.',
-                ],
             ],
         ],
-        'password_confirmation' => [
+        'password-confirmation' => [
             'title' => 'Confirm your password',
             'description' => 'Confirm your password to continue.',
             'explanation' => 'For security reasons, please confirm your password before continuing.',
             'form' => [
-                'fields' => [
-                    'password' => [
-                        'label' => 'Password',
-                        'placeholder' => 'Enter your password',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Confirm password',
                 ],
@@ -248,6 +223,13 @@ return [
             ],
         ],
         'invitations' => [
+            'feedback' => [
+                'invitation-sent' => 'The invitation has been sent.',
+                'invitation-revoked' => 'The invitation has been revoked.',
+                'invitation-accepted' => 'You have joined the organization.',
+                'invalid-invitation' => 'This invitation is invalid, has expired, or was sent to another email address.',
+                'already-member' => 'This person already belongs to the organization.',
+            ],
             'index' => [
                 'title' => 'Invitations',
                 'description' => 'The pending invitations to join the organization.',
@@ -286,18 +268,12 @@ return [
                     'expires' => 'This invitation expires on :date.',
                     'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
                 ],
-                'feedback' => [
-                    'invitation-sent' => 'The invitation has been sent.',
-                ],
             ],
             'revoke' => [
                 'title' => 'Revoke the invitation',
                 'warning' => 'This permanently revokes the invitation. The person will not be able to accept it anymore.',
                 'actions' => [
                     'submit' => 'Revoke the invitation',
-                ],
-                'feedback' => [
-                    'success' => 'The invitation has been revoked.',
                 ],
             ],
             'show' => [
@@ -307,14 +283,16 @@ return [
                 'actions' => [
                     'accept' => 'Accept the invitation',
                 ],
-                'feedback' => [
-                    'success' => 'You have joined the organization.',
-                    'invalid' => 'This invitation is invalid, has expired, or was sent to another email address.',
-                    'already_member' => 'This person already belongs to the organization.',
-                ],
             ],
         ],
         'members' => [
+            'feedback' => [
+                'member-role-updated' => 'The role has been updated.',
+                'member-removed' => 'The member has been removed.',
+                'not-a-member' => 'This person does not belong to the organization.',
+                'last-responsible' => 'An organization must keep at least one responsible user.',
+                'organization-left' => 'You have left the organization.',
+            ],
             'index' => [
                 'title' => 'Members',
                 'description' => 'The members of the organization and their roles.',
@@ -332,12 +310,6 @@ return [
                         'leave' => 'Leave',
                         'remove' => 'Remove',
                     ],
-                    'feedback' => [
-                        'member-role-updated' => 'The role has been updated.',
-                        'member-removed' => 'The member has been removed.',
-                        'not_a_member' => 'This person does not belong to the organization.',
-                        'last_responsible' => 'An organization must keep at least one responsible user.',
-                    ],
                 ],
             ],
             'remove' => [
@@ -351,35 +323,23 @@ return [
                 'title' => 'Leave the organization',
                 'warning' => 'You will lose access to this organization. A responsible user will have to invite you again if you want to come back.',
                 'confirm' => 'Leave the organization',
-                'last_responsible' => 'You are the only responsible user of this organization. Promote another member to responsible before you can leave.',
-                'feedback' => [
-                    'success' => 'You have left the organization.',
-                ],
+                'last-responsible' => 'You are the only responsible user of this organization. Promote another member to responsible before you can leave.',
             ],
         ],
     ],
     'settings' => [
         'title' => 'Settings',
         'description' => 'Manage your account.',
+        'feedback' => [
+            'profile-information-updated' => 'Your profile has been updated.',
+            'password-updated' => 'Your password has been updated.',
+        ],
         'profile' => [
             'title' => 'Profile settings',
             'description' => 'Manage your profile information.',
             'form' => [
-                'fields' => [
-                    'name' => [
-                        'label' => 'Full name',
-                        'placeholder' => 'Enter your full name',
-                    ],
-                    'email' => [
-                        'label' => 'Email address',
-                        'placeholder' => 'Enter your email address',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Save profile',
-                ],
-                'feedback' => [
-                    'success' => 'Your profile has been updated.',
                 ],
             ],
         ],
@@ -387,39 +347,22 @@ return [
             'title' => 'Security settings',
             'description' => 'Update your password.',
             'form' => [
-                'fields' => [
-                    'current_password' => [
-                        'label' => 'Current password',
-                        'placeholder' => 'Enter your current password',
-                    ],
-                    'new_password' => [
-                        'label' => 'New password',
-                        'placeholder' => 'Enter your new password',
-                    ],
-                    'confirm_password' => [
-                        'label' => 'Confirm new password',
-                        'placeholder' => 'Confirm your new password',
-                    ],
-                ],
                 'actions' => [
                     'submit' => 'Change password',
-                ],
-                'feedback' => [
-                    'success' => 'Your password has been updated.',
                 ],
             ],
         ],
     ],
     'dashboard' => [
         'title' => 'Dashboard',
-        'first_paragraph' => 'This is the first paragraph of the dashboard.',
-        'second_paragraph' => 'This is the second paragraph of the dashboard.',
+        'first-paragraph' => 'This is the first paragraph of the dashboard.',
+        'second-paragraph' => 'This is the second paragraph of the dashboard.',
     ],
     'welcome' => [
         'title' => 'Welcome',
         'description' => 'Welcome to our application',
-        'first_paragraph' => 'First paragraph text.',
-        'second_paragraph' => 'Second paragraph text.',
+        'first-paragraph' => 'First paragraph text.',
+        'second-paragraph' => 'Second paragraph text.',
         'button' => 'Click me',
     ],
 ];

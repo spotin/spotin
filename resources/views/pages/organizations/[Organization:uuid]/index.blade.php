@@ -55,12 +55,12 @@ render(function (View $view, Organization $organization) {
     @if (session('status') === 'organization-created')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.admin.organizations.create.form.feedback.success') }}</span>
+            <span>{{ __('ui.admin.organizations.feedback.organization-created') }}</span>
         </p>
     @elseif (session('status') === 'invitation-accepted')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.show.feedback.success') }}</span>
+            <span>{{ __('ui.organizations.invitations.feedback.invitation-accepted') }}</span>
         </p>
     @endif
 
