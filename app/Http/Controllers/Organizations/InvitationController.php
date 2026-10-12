@@ -52,6 +52,8 @@ class InvitationController extends Controller
     {
         $organization = $acceptInvitation->accept($token, $request->user());
 
+        $request->session()->forget(OrganizationInvitation::SESSION_KEY);
+
         return redirect()->route('organizations.show', ['organization' => $organization->uuid])
             ->with('status', 'invitation-accepted');
     }

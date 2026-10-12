@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\OrganizationInvitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -40,10 +41,19 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
+        $user = new User([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
+
+        // The invitation email reached this address, so there is nothing left to verify.
+        if (OrganizationInvitation::findInSession()?->email === $input['email']) {
+            $user->email_verified_at = now();
+        }
+
+        $user->save();
+
+        return $user;
     }
 }

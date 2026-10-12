@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrganizationInvitation;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -14,12 +15,19 @@ render(function (View $view) {
     Head::title(__('ui.auth.register.title'))
         ->description(__('ui.auth.register.description'));
 
-    return $view;
+    return $view->with('invitation', OrganizationInvitation::findInSession()?->load('organization'));
 });
 ?>
 
 <x-default-layout>
     <h1>{{ __('ui.auth.register.title') }}</h1>
+
+    @if ($invitation)
+        <p role="alert" class="alert alert-info">
+            <x-lucide-mail class="h-6 w-6" />
+            <span>{{ __('ui.auth.register.invitation', ['organization' => $invitation->organization->name]) }}</span>
+        </p>
+    @endif
 
     <form method="POST" action="{{ route('register.store') }}">
         @csrf
@@ -55,7 +63,8 @@ render(function (View $view) {
                         type="email"
                         required
                         placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
-                        value="{{ old('email') }}"
+                        value="{{ old('email', $invitation?->email) }}"
+                        @readonly($invitation)
                         @error('email') aria-invalid="true" @enderror
                         class="input w-full"
                     />

@@ -121,6 +121,7 @@ return [
         'register' => [
             'title' => 'Inscription',
             'description' => 'Créez un compte',
+            'invitation' => 'Vous créez un compte pour rejoindre :organization. Votre invitation a été envoyée à cette adresse e-mail, elle ne peut donc pas être modifiée.',
             'form' => [
                 'actions' => [
                     'submit' => "S'inscrire",
@@ -282,6 +283,8 @@ return [
                 'explanation' => 'Vous avez reçu une invitation à rejoindre :organization en tant que :role.',
                 'actions' => [
                     'accept' => "Accepter l'invitation",
+                    'register' => 'Créer un compte',
+                    'login' => "J'ai déjà un compte",
                 ],
             ],
         ],

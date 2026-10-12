@@ -121,6 +121,7 @@ return [
         'register' => [
             'title' => 'Register',
             'description' => 'Create a new account',
+            'invitation' => 'You are creating an account to join :organization. Your invitation was sent to this email address, so it cannot be changed.',
             'form' => [
                 'actions' => [
                     'submit' => 'Register',
@@ -282,6 +283,8 @@ return [
                 'explanation' => 'You have been invited to join :organization as :role.',
                 'actions' => [
                     'accept' => 'Accept the invitation',
+                    'register' => 'Create an account',
+                    'login' => 'I already have an account',
                 ],
             ],
         ],

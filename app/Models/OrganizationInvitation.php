@@ -17,6 +17,11 @@ use Illuminate\Support\Str;
 #[Hidden(['token'])]
 class OrganizationInvitation extends Model
 {
+    /**
+     * The session key holding the token of the invitation a visitor is following.
+     */
+    public const SESSION_KEY = 'invitation-token';
+
     /** @use HasFactory<OrganizationInvitationFactory> */
     use HasFactory;
 
@@ -65,6 +70,16 @@ class OrganizationInvitation extends Model
     public static function findActiveByToken(string $token): ?static
     {
         return static::active()->where('token', static::hashToken($token))->first();
+    }
+
+    /**
+     * Find the active invitation a visitor started following, if any.
+     */
+    public static function findInSession(): ?static
+    {
+        $token = session(self::SESSION_KEY);
+
+        return is_string($token) ? static::findActiveByToken($token) : null;
     }
 
     /**
