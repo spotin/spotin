@@ -15,22 +15,21 @@ render(function (View $view, string $token) {
 
     $user = auth()->user();
 
-    if ($user && ! $user->hasVerifiedEmail()) {
-        return redirect()->route('verification.notice');
+    // People with an account accept their invitations from the list of pending invitations.
+    if ($user) {
+        return $user->hasVerifiedEmail()
+            ? redirect()->route('organizations.invitations.pending')
+            : redirect()->route('verification.notice');
     }
 
     $invitation = OrganizationInvitation::findActiveByToken($token);
 
-    if (! $user) {
-        // A visitor can create an account or log in, then come back here.
-        if ($invitation) {
-            session([OrganizationInvitation::SESSION_KEY => $token, 'url.intended' => url()->current()]);
-        }
-
-        return $view->with(['invitation' => $invitation, 'guest' => true]);
+    // A visitor can create an account or log in, then come back here.
+    if ($invitation) {
+        session([OrganizationInvitation::SESSION_KEY => $token, 'url.intended' => url()->current()]);
     }
 
-    return $view->with(['invitation' => $invitation?->isFor($user) ? $invitation : null, 'guest' => false]);
+    return $view->with('invitation', $invitation);
 });
 ?>
 
@@ -42,31 +41,14 @@ render(function (View $view, string $token) {
             {{ __('ui.organizations.invitations.show.explanation', ['organization' => $invitation->organization->name, 'role' => __('ui.organizations.common.forms.fields.role.options.' . $invitation->role->value)]) }}
         </p>
 
-        @if ($guest)
-            <div class="flex flex-col gap-2 sm:flex-row">
-                <a href="{{ route('register') }}" class="btn btn-primary">
-                    {{ __('ui.organizations.invitations.show.actions.register') }}
-                </a>
-                <a href="{{ route('login') }}" class="btn">
-                    {{ __('ui.organizations.invitations.show.actions.login') }}
-                </a>
-            </div>
-        @else
-            <form method="POST" action="{{ route('organizations.invitations.accept', $token) }}">
-                @csrf
-
-                @error('invitation')
-                    <p role="alert" class="alert alert-error mb-4">
-                        <x-lucide-circle-alert class="h-6 w-6" />
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-
-                <button type="submit" class="btn btn-block">
-                    {{ __('ui.organizations.invitations.show.actions.accept') }}
-                </button>
-            </form>
-        @endif
+        <div class="flex flex-col gap-2 sm:flex-row">
+            <a href="{{ route('register') }}" class="btn btn-primary">
+                {{ __('ui.organizations.invitations.show.actions.register') }}
+            </a>
+            <a href="{{ route('login') }}" class="btn">
+                {{ __('ui.organizations.invitations.show.actions.login') }}
+            </a>
+        </div>
     @else
         <p role="alert" class="alert alert-error">
             <x-lucide-circle-alert class="h-6 w-6" />

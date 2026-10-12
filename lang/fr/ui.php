@@ -309,7 +309,6 @@ return [
                 'description' => 'Acceptez votre invitation à rejoindre une organisation.',
                 'explanation' => 'Vous avez reçu une invitation à rejoindre :organization en tant que :role.',
                 'actions' => [
-                    'accept' => "Accepter l'invitation",
                     'register' => 'Créer un compte',
                     'login' => "J'ai déjà un compte",
                 ],

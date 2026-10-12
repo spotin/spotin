@@ -119,10 +119,10 @@ test('inviting someone who already belongs to the organization is rejected', fun
 });
 
 test('a user with the invited verified address can accept and join with the invited role', function () {
-    $token = invite('jane@example.com', OrganizationRole::Responsible);
+    invite('jane@example.com', OrganizationRole::Responsible);
     $jane = User::factory()->create(['email' => 'jane@example.com']);
 
-    $organization = app(AcceptInvitation::class)->accept($token, $jane);
+    $organization = app(AcceptInvitation::class)->acceptInvitation(OrganizationInvitation::sole(), $jane);
 
     expect($organization->is($this->organization))->toBeTrue()
         ->and($jane->isResponsibleOf($this->organization))->toBeTrue()
@@ -130,54 +130,48 @@ test('a user with the invited verified address can accept and join with the invi
 });
 
 test('an invitation cannot be accepted twice', function () {
-    $token = invite();
+    invite();
+    $invitation = OrganizationInvitation::sole();
     $jane = User::factory()->create(['email' => 'jane@example.com']);
 
-    app(AcceptInvitation::class)->accept($token, $jane);
+    app(AcceptInvitation::class)->acceptInvitation($invitation, $jane);
 
-    expect(fn () => app(AcceptInvitation::class)->accept($token, $jane))->toThrow(ValidationException::class);
+    expect(fn () => app(AcceptInvitation::class)->acceptInvitation($invitation, $jane))->toThrow(ValidationException::class);
 });
 
-test('an invitation is refused to other users, unverified addresses and unknown or expired tokens', function (string $case) {
-    $token = invite();
+test('an invitation is refused to other users, unverified addresses and expired invitations', function (string $case) {
+    invite();
     $user = match ($case) {
         'another user' => User::factory()->create(),
         'unverified address' => User::factory()->unverified()->create(['email' => 'jane@example.com']),
-        'unknown token' => User::factory()->create(['email' => 'jane@example.com']),
         'expired' => User::factory()->create(['email' => 'jane@example.com']),
     };
-
-    if ($case === 'unknown token') {
-        $token = 'not-the-token';
-    }
 
     if ($case === 'expired') {
         OrganizationInvitation::sole()->update(['expires_at' => now()->subMinute()]);
     }
 
-    expect(fn () => app(AcceptInvitation::class)->accept($token, $user))->toThrow(ValidationException::class)
+    expect(fn () => app(AcceptInvitation::class)->acceptInvitation(OrganizationInvitation::sole(), $user))->toThrow(ValidationException::class)
         ->and($user->belongsToOrganization($this->organization))->toBeFalse();
-})->with(['another user', 'unverified address', 'unknown token', 'expired']);
+})->with(['another user', 'unverified address', 'expired']);
 
 test('a leftover invitation can promote an existing member but never demote a responsible user', function () {
     $member = User::factory()->create(['email' => 'jane@example.com']);
     $this->organization->users()->attach($member);
 
-    OrganizationInvitation::factory()->for($this->organization)->create([
+    $promotion = OrganizationInvitation::factory()->for($this->organization)->create([
         'email' => 'jane@example.com',
         'role' => OrganizationRole::Responsible,
-        'token' => OrganizationInvitation::hashToken('promote'),
     ]);
-    app(AcceptInvitation::class)->accept('promote', $member);
+    app(AcceptInvitation::class)->acceptInvitation($promotion, $member);
 
     expect($member->isResponsibleOf($this->organization))->toBeTrue();
 
-    OrganizationInvitation::factory()->for($this->organization)->create([
+    $demotion = OrganizationInvitation::factory()->for($this->organization)->create([
         'email' => 'jane@example.com',
         'role' => OrganizationRole::Member,
-        'token' => OrganizationInvitation::hashToken('demote'),
     ]);
-    app(AcceptInvitation::class)->accept('demote', $member);
+    app(AcceptInvitation::class)->acceptInvitation($demotion, $member);
 
     expect($member->isResponsibleOf($this->organization))->toBeTrue();
 });
@@ -189,8 +183,7 @@ test('guests following the invitation link see the organization and can create a
         ->assertOk()
         ->assertSee('Acme')
         ->assertSee(route('register'), false)
-        ->assertSee(route('login'), false)
-        ->assertDontSee(route('organizations.invitations.accept', $token), false);
+        ->assertSee(route('login'), false);
 
     expect(session('url.intended'))->toBe(route('organizations.invitations.show', ['token' => $token]))
         ->and(session(OrganizationInvitation::SESSION_KEY))->toBe($token);
@@ -229,51 +222,25 @@ test('the registration page keeps the invited address when an invitation is bein
     $this->get(route('register'))->assertOk()->assertDontSee('readonly', false);
 });
 
-test('the invitation page shows the organization to the invited user', function () {
+test('people with an account are taken to their pending invitations, whoever the invitation is for', function (bool $invited) {
     $token = invite();
-    $jane = User::factory()->create(['email' => 'jane@example.com']);
+    $user = User::factory()->create($invited ? ['email' => 'jane@example.com'] : []);
 
-    $this->actingAs($jane)->get(route('organizations.invitations.show', ['token' => $token]))
-        ->assertOk()
-        ->assertSee('Acme')
-        ->assertSee(route('organizations.invitations.accept', $token), false)
-        ->assertDontSee('ui.');
-});
+    $this->actingAs($user)->get(route('organizations.invitations.show', ['token' => $token]))
+        ->assertRedirect(route('organizations.invitations.pending'));
+})->with([true, false]);
 
-test('the invitation page does not reveal anything to another user', function () {
-    $token = invite();
-
-    $this->actingAs(User::factory()->create())->get(route('organizations.invitations.show', ['token' => $token]))
-        ->assertOk()
-        ->assertDontSee('Acme')
-        ->assertSee(__('ui.organizations.invitations.feedback.invalid-invitation'))
-        ->assertDontSee(route('organizations.invitations.accept', $token), false);
-});
-
-test('users accept an invitation through the form and see a confirmation', function () {
-    $token = invite();
+test('people see a confirmation once they have accepted an invitation', function () {
+    invite();
     $jane = User::factory()->create(['email' => 'jane@example.com']);
 
     $this->actingAs($jane)
         ->followingRedirects()
-        ->post(route('organizations.invitations.accept', $token))
+        ->post(route('organizations.invitations.pending.accept', ['invitation' => OrganizationInvitation::sole()->id]))
         ->assertOk()
         ->assertSee(__('ui.organizations.invitations.feedback.invitation-accepted'));
 
     expect($jane->belongsToOrganization($this->organization))->toBeTrue();
-});
-
-test('accepting with the wrong account is refused with an error', function () {
-    $token = invite();
-    $other = User::factory()->create();
-
-    $this->actingAs($other)
-        ->from(route('organizations.invitations.show', ['token' => $token]))
-        ->post(route('organizations.invitations.accept', $token))
-        ->assertRedirect(route('organizations.invitations.show', ['token' => $token]))
-        ->assertSessionHasErrors('invitation');
-
-    expect($other->belongsToOrganization($this->organization))->toBeFalse();
 });
 
 test('an invited person registers with the invited address, skips the verification email and accepts', function () {
@@ -292,7 +259,10 @@ test('an invited person registers with the invited address, skips the verificati
     expect($user->hasVerifiedEmail())->toBeTrue();
     Notification::assertNotSentTo($user, VerifyEmail::class);
 
-    $this->post(route('organizations.invitations.accept', $token))
+    $this->get(route('organizations.invitations.show', ['token' => $token]))
+        ->assertRedirect(route('organizations.invitations.pending'));
+
+    $this->post(route('organizations.invitations.pending.accept', ['invitation' => OrganizationInvitation::sole()->id]))
         ->assertRedirect(route('organizations.show', ['organization' => $this->organization->uuid]));
 
     expect($user->belongsToOrganization($this->organization))->toBeTrue()
@@ -315,6 +285,7 @@ test('registering with another address still requires verification, even while f
     expect($user->hasVerifiedEmail())->toBeFalse();
     Notification::assertSentTo($user, VerifyEmail::class);
 
-    $this->post(route('organizations.invitations.accept', $token))->assertRedirect(route('verification.notice'));
+    $this->post(route('organizations.invitations.pending.accept', ['invitation' => OrganizationInvitation::sole()->id]))
+        ->assertRedirect(route('verification.notice'));
     expect($user->belongsToOrganization($this->organization))->toBeFalse();
 });

@@ -46,19 +46,6 @@ class InvitationController extends Controller
     }
 
     /**
-     * Accept the invitation matching the token, for the authenticated user.
-     */
-    public function accept(Request $request, AcceptInvitation $acceptInvitation, string $token): RedirectResponse
-    {
-        $organization = $acceptInvitation->accept($token, $request->user());
-
-        $request->session()->forget(OrganizationInvitation::SESSION_KEY);
-
-        return redirect()->route('organizations.show', ['organization' => $organization->uuid])
-            ->with('status', 'invitation-accepted');
-    }
-
-    /**
      * Accept one of the pending invitations of the authenticated user.
      */
     public function acceptPending(Request $request, AcceptInvitation $acceptInvitation, int $invitation): RedirectResponse
@@ -67,6 +54,8 @@ class InvitationController extends Controller
             OrganizationInvitation::pendingFor($request->user())->findOrFail($invitation),
             $request->user(),
         );
+
+        $request->session()->forget(OrganizationInvitation::SESSION_KEY);
 
         return redirect()->route('organizations.show', ['organization' => $organization->uuid])
             ->with('status', 'invitation-accepted');

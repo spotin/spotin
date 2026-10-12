@@ -12,27 +12,10 @@ use Illuminate\Validation\ValidationException;
 class AcceptInvitation
 {
     /**
-     * Add the user to the organization the plain token invites to.
+     * Add the user to the organization of the invitation, which must be active and sent
+     * to the user's verified email address.
      *
-     * The invitation must be active and sent to the user's verified email address.
-     * It is deleted once accepted, in the same transaction as the membership.
-     *
-     * @throws ValidationException
-     */
-    public function accept(string $token, User $user): Organization
-    {
-        return DB::transaction(fn (): Organization => $this->join(
-            OrganizationInvitation::active()
-                ->where('token', OrganizationInvitation::hashToken($token))
-                ->lockForUpdate()
-                ->with('organization')
-                ->first(),
-            $user,
-        ));
-    }
-
-    /**
-     * Accept an invitation the user picked from their pending invitations.
+     * The invitation is deleted once accepted, in the same transaction as the membership.
      *
      * @throws ValidationException
      */
