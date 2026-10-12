@@ -45,9 +45,7 @@ render(function (View $view, string $token) {
             <a href="{{ route('register') }}" class="btn btn-primary">
                 {{ __('ui.organizations.invitations.show.actions.register') }}
             </a>
-            <a href="{{ route('login') }}" class="btn">
-                {{ __('ui.organizations.invitations.show.actions.login') }}
-            </a>
+            <a href="{{ route('login') }}" class="btn"> {{ __('ui.organizations.invitations.show.actions.login') }} </a>
         </div>
     @else
         <p role="alert" class="alert alert-error">

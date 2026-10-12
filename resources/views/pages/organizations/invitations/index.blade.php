@@ -67,11 +67,12 @@ render(function (View $view) {
                                         <br />
                                     @endif
 
-                                    {{ __('ui.organizations.invitations.index.table.columns.expires') }}
-                                    {{ $invitation->expires_at->isoFormat('LLL') }}
+                                    {{ __('ui.organizations.invitations.index.table.columns.expires') }} {{ $invitation->expires_at->isoFormat('LLL') }}
                                 </div>
                             </td>
-                            <td>{{ __('ui.organizations.common.forms.fields.role.options.' . $invitation->role->value) }}</td>
+                            <td>
+                                {{ __('ui.organizations.common.forms.fields.role.options.' . $invitation->role->value) }}
+                            </td>
                             <td>
                                 <div class="flex flex-col gap-2 sm:flex-row">
                                     <form
