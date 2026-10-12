@@ -93,6 +93,22 @@ class OrganizationInvitation extends Model
     }
 
     /**
+     * Scope the query to the active invitations sent to the user's verified email address.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopePendingFor(Builder $query, User $user): void
+    {
+        $query->active();
+
+        if ($user->hasVerifiedEmail()) {
+            $query->where('email', Str::lower($user->email));
+        } else {
+            $query->whereRaw('1 = 0');
+        }
+    }
+
+    /**
      * Determine whether the invitation has expired.
      */
     public function isExpired(): bool

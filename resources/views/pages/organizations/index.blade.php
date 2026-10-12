@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrganizationInvitation;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -14,7 +15,10 @@ render(function (View $view) {
     Head::title(__('ui.organizations.index.title'))
         ->description(__('ui.organizations.index.description'));
 
-    return $view->with('organizations', auth()->user()->organizations()->orderBy('name')->paginate(25));
+    return $view->with([
+        'organizations' => auth()->user()->organizations()->orderBy('name')->paginate(25),
+        'pendingInvitations' => OrganizationInvitation::pendingFor(auth()->user())->count(),
+    ]);
 });
 ?>
 
@@ -25,6 +29,16 @@ render(function (View $view) {
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
             <span>{{ __('ui.organizations.members.feedback.organization-left') }}</span>
+        </p>
+    @endif
+
+    @if ($pendingInvitations > 0)
+        <p role="alert" class="alert alert-info alert-vertical sm:alert-horizontal">
+            <x-lucide-mail class="h-6 w-6" />
+            <span>{{ trans_choice('ui.organizations.index.pending-invitations', $pendingInvitations) }}</span>
+            <a href="{{ route('organizations.invitations.pending') }}" class="btn btn-sm">
+                {{ __('ui.organizations.index.view-pending-invitations') }}
+            </a>
         </p>
     @endif
 

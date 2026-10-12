@@ -205,6 +205,8 @@ return [
             'title' => 'My organizations',
             'description' => 'The organizations you belong to.',
             'empty' => 'You do not belong to any organization yet. Ask a responsible user of an organization to invite you.',
+            'pending-invitations' => 'You have :count pending invitation.|You have :count pending invitations.',
+            'view-pending-invitations' => 'View invitations',
         ],
         'show' => [
             'description' => 'The members and invitations of the organization.',
@@ -228,6 +230,7 @@ return [
                 'invitation-sent' => 'The invitation has been sent.',
                 'invitation-revoked' => 'The invitation has been revoked.',
                 'invitation-accepted' => 'You have joined the organization.',
+                'invitation-declined' => 'The invitation has been declined.',
                 'invalid-invitation' => 'This invitation is invalid, has expired, or was sent to another email address.',
                 'already-member' => 'This person already belongs to the organization.',
             ],
@@ -268,6 +271,30 @@ return [
                     'action' => 'View the invitation',
                     'expires' => 'This invitation expires on :date.',
                     'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
+                ],
+            ],
+            'pending' => [
+                'title' => 'Pending invitations',
+                'description' => 'The invitations you have received to join an organization.',
+                'table' => [
+                    'empty' => 'You have no pending invitation.',
+                    'invited-by' => 'Invited by :name',
+                    'columns' => [
+                        'organization' => 'Organization',
+                        'role' => 'Role',
+                        'actions' => 'Actions',
+                    ],
+                    'actions' => [
+                        'accept' => 'Accept',
+                        'decline' => 'Decline',
+                    ],
+                ],
+            ],
+            'decline' => [
+                'title' => 'Decline the invitation',
+                'warning' => 'You will not join this organization. A responsible user will have to invite you again if you change your mind.',
+                'actions' => [
+                    'submit' => 'Decline the invitation',
                 ],
             ],
             'revoke' => [

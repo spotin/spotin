@@ -32,6 +32,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('organizations/invitations/{token}', [InvitationController::class, 'accept'])
         ->name('organizations.invitations.accept');
+    Route::post('organizations/invitations/{invitation}/accept', [InvitationController::class, 'acceptPending'])
+        ->name('organizations.invitations.pending.accept');
+    Route::delete('organizations/invitations/{invitation}', [InvitationController::class, 'decline'])
+        ->name('organizations.invitations.pending.decline');
 
     Route::prefix('admin/organizations')->name('admin.organizations.')->group(function () {
         Route::post('/', [AdminOrganizationController::class, 'store'])

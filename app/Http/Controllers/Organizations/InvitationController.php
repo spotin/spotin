@@ -57,4 +57,28 @@ class InvitationController extends Controller
         return redirect()->route('organizations.show', ['organization' => $organization->uuid])
             ->with('status', 'invitation-accepted');
     }
+
+    /**
+     * Accept one of the pending invitations of the authenticated user.
+     */
+    public function acceptPending(Request $request, AcceptInvitation $acceptInvitation, int $invitation): RedirectResponse
+    {
+        $organization = $acceptInvitation->acceptInvitation(
+            OrganizationInvitation::pendingFor($request->user())->findOrFail($invitation),
+            $request->user(),
+        );
+
+        return redirect()->route('organizations.show', ['organization' => $organization->uuid])
+            ->with('status', 'invitation-accepted');
+    }
+
+    /**
+     * Decline one of the pending invitations of the authenticated user.
+     */
+    public function decline(Request $request, int $invitation): RedirectResponse
+    {
+        OrganizationInvitation::pendingFor($request->user())->findOrFail($invitation)->delete();
+
+        return back()->with('status', 'invitation-declined');
+    }
 }

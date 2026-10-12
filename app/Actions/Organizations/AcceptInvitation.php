@@ -21,32 +21,58 @@ class AcceptInvitation
      */
     public function accept(string $token, User $user): Organization
     {
-        return DB::transaction(function () use ($token, $user): Organization {
-            $invitation = OrganizationInvitation::active()
+        return DB::transaction(fn (): Organization => $this->join(
+            OrganizationInvitation::active()
                 ->where('token', OrganizationInvitation::hashToken($token))
                 ->lockForUpdate()
                 ->with('organization')
-                ->first();
+                ->first(),
+            $user,
+        ));
+    }
 
-            // The same message for an unknown, expired or foreign invitation, so the
-            // page never reveals who an invitation was sent to.
-            if (! $invitation || ! $invitation->isFor($user)) {
-                throw ValidationException::withMessages(['invitation' => __('ui.organizations.invitations.feedback.invalid-invitation')]);
-            }
+    /**
+     * Accept an invitation the user picked from their pending invitations.
+     *
+     * @throws ValidationException
+     */
+    public function acceptInvitation(OrganizationInvitation $invitation, User $user): Organization
+    {
+        return DB::transaction(fn (): Organization => $this->join(
+            OrganizationInvitation::active()
+                ->whereKey($invitation->getKey())
+                ->lockForUpdate()
+                ->with('organization')
+                ->first(),
+            $user,
+        ));
+    }
 
-            $organization = $invitation->organization;
-            $membership = $organization->users()->whereKey($user->id)->first()?->pivot;
+    /**
+     * Add the user to the organization of the invitation, then delete the invitation.
+     *
+     * @throws ValidationException
+     */
+    private function join(?OrganizationInvitation $invitation, User $user): Organization
+    {
+        // The same message for an unknown, expired or foreign invitation, so the
+        // page never reveals who an invitation was sent to.
+        if (! $invitation || ! $invitation->isFor($user)) {
+            throw ValidationException::withMessages(['invitation' => __('ui.organizations.invitations.feedback.invalid-invitation')]);
+        }
 
-            if (! $membership) {
-                $organization->users()->attach($user, ['role' => $invitation->role]);
-            } elseif ($invitation->role === OrganizationRole::Responsible && $membership->role !== OrganizationRole::Responsible) {
-                // An invitation can promote an existing member, never demote one.
-                $organization->users()->updateExistingPivot($user->id, ['role' => $invitation->role]);
-            }
+        $organization = $invitation->organization;
+        $membership = $organization->users()->whereKey($user->id)->first()?->pivot;
 
-            $invitation->delete();
+        if (! $membership) {
+            $organization->users()->attach($user, ['role' => $invitation->role]);
+        } elseif ($invitation->role === OrganizationRole::Responsible && $membership->role !== OrganizationRole::Responsible) {
+            // An invitation can promote an existing member, never demote one.
+            $organization->users()->updateExistingPivot($user->id, ['role' => $invitation->role]);
+        }
 
-            return $organization;
-        });
+        $invitation->delete();
+
+        return $organization;
     }
 }
