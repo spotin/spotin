@@ -37,7 +37,7 @@ test('users can update their profile and see a confirmation', function () {
             'email' => 'jane@example.com',
         ])
         ->assertOk()
-        ->assertSee(__('ui.settings.profile.form.feedback.success'))
+        ->assertSee(__('ui.settings.feedback.profile-information-updated'))
         ->assertDontSee('profile-information-updated');
 
     expect($this->user->fresh())
@@ -87,7 +87,7 @@ test('users can change their password and see a confirmation', function () {
             'password_confirmation' => 'a-brand-new-password',
         ])
         ->assertOk()
-        ->assertSee(__('ui.settings.security.form.feedback.success'))
+        ->assertSee(__('ui.settings.feedback.password-updated'))
         ->assertDontSee('password-updated');
 
     expect(Hash::check('a-brand-new-password', $this->user->fresh()->password))->toBeTrue();
