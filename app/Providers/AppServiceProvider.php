@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Head\Enums\ImageType;
 use Laravel\Head\Enums\OgType;
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::defaultView('vendor.pagination.daisyui');
+
         Head::defaults(function (HeadBuilder $head) {
             $head
                 ->title(config('app.name'), suffix: ' - '.config('app.name'))

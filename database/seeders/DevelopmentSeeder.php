@@ -133,6 +133,9 @@ class DevelopmentSeeder extends Seeder
      */
     private function assignNamedUsersToOrganizations(Collection $organizations, User $responsible, User $member): void
     {
+        // Leave the empty organizations empty, otherwise they would end up without a responsible user.
+        $organizations = $organizations->filter(fn (Organization $organization) => $organization->users()->exists());
+
         // Add responsible in one organization out of five, a plain member in the others.
         foreach ($this->pick($organizations, self::NAMED_USER_ORGANIZATIONS) as $index => $organization) {
             $organization->users()->syncWithoutDetaching([

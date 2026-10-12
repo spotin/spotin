@@ -191,3 +191,40 @@ test('people who do not belong to an organization cannot leave it', function () 
 test('guests are sent to log in', function () {
     $this->delete(route('organizations.leave', $this->organization))->assertRedirect(route('login'));
 });
+
+test('only people who can manage members get an invite button on the members page', function () {
+    $invitePage = route('organizations.invitations.create', ['organization' => $this->organization->uuid]);
+
+    $this->actingAs($this->responsible)->get("/organizations/{$this->organization->uuid}/members")
+        ->assertOk()
+        ->assertSee($invitePage, false);
+
+    $this->actingAs($this->member)->get("/organizations/{$this->organization->uuid}/members")
+        ->assertOk()
+        ->assertDontSee($invitePage, false);
+});
+
+test('the members page says so when the organization has no members', function () {
+    $empty = Organization::factory()->create();
+
+    $this->actingAs($this->admin)->get("/organizations/{$empty->uuid}/members")
+        ->assertOk()
+        ->assertSee(__('ui.organizations.members.index.table.empty'));
+
+    $this->get("/organizations/{$this->organization->uuid}/members")
+        ->assertOk()
+        ->assertDontSee(__('ui.organizations.members.index.table.empty'));
+});
+
+test('removing a member and revoking an invitation are confirmed in a modal', function () {
+    $invitation = OrganizationInvitation::factory()->for($this->organization)->create();
+
+    $this->actingAs($this->responsible)->get("/organizations/{$this->organization->uuid}/members")
+        ->assertOk()
+        ->assertSee('id="remove-member-'.$this->member->id.'-modal"', false)
+        ->assertDontSee('id="remove-member-'.$this->responsible->id.'-modal"', false);
+
+    $this->get("/organizations/{$this->organization->uuid}/invitations")
+        ->assertOk()
+        ->assertSee('id="revoke-invitation-'.$invitation->id.'-modal"', false);
+});

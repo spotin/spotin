@@ -7,6 +7,7 @@ use Database\Factories\OrganizationInvitationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,16 @@ class OrganizationInvitation extends Model
             'role' => OrganizationRole::class,
             'expires_at' => 'datetime',
         ];
+    }
+
+    /**
+     * The invited email address, always stored in lowercase.
+     *
+     * @return Attribute<string, string>
+     */
+    protected function email(): Attribute
+    {
+        return Attribute::set(fn (string $value) => Str::lower($value));
     }
 
     /**

@@ -1,0 +1,115 @@
+<?php
+
+use App\Enums\OrganizationRole;
+use App\Models\Organization;
+use App\Models\User;
+
+beforeEach(function () {
+    $this->organization = Organization::factory()->create(['name' => 'Acme']);
+    $this->admin = User::factory()->admin()->create();
+    $this->responsible = User::factory()->create();
+    $this->organization->users()->attach($this->responsible, ['role' => OrganizationRole::Responsible]);
+
+    $this->orgUrl = '/organizations/'.$this->organization->uuid;
+});
+
+/**
+ * The text of every crumb of the trail, in order.
+ *
+ * @return list<string>
+ */
+function crumbs(string $html): array
+{
+    preg_match('/<nav aria-label="[^"]*" class="breadcrumbs[^"]*">(.*?)<\/nav>/s', $html, $nav);
+    preg_match_all('/<li>\s*(.*?)\s*<\/li>/s', $nav[1] ?? '', $items);
+
+    return array_map(fn (string $item) => trim(strip_tags($item)), $items[1]);
+}
+
+test('organization pages show a trail starting at My organizations', function (string $path, array $expected) {
+    $html = $this->actingAs($this->responsible)->get($this->orgUrl.$path)->assertOk()->getContent();
+
+    expect(crumbs($html))->toBe($expected);
+})->with([
+    'overview' => ['', ['My organizations', 'Acme']],
+    'members' => ['/members', ['My organizations', 'Acme', 'Members']],
+    'invitations' => ['/invitations', ['My organizations', 'Acme', 'Invitations']],
+    'invite someone' => ['/invitations/create', ['My organizations', 'Acme', 'Invitations', 'Invite someone']],
+]);
+
+test('the crumbs link to their page and the last one is the current page', function () {
+    $html = $this->actingAs($this->responsible)->get($this->orgUrl.'/invitations/create')->getContent();
+
+    preg_match('/<nav aria-label="[^"]*" class="breadcrumbs[^"]*">(.*?)<\/nav>/s', $html, $nav);
+
+    expect($nav[1])
+        ->toContain('<a href="'.url('/organizations').'">My organizations</a>')
+        ->toContain('<a href="'.url($this->orgUrl).'">Acme</a>')
+        ->toContain('<a href="'.url($this->orgUrl.'/invitations').'">Invitations</a>')
+        ->toMatch('/<span\s+aria-current="page"[^>]*>Invite someone<\/span>/')
+        ->not->toContain('<a href="'.url($this->orgUrl.'/invitations/create').'">');
+});
+
+test('an administrator who is not a member reaches an organization through the administration', function () {
+    $html = $this->actingAs($this->admin)->get($this->orgUrl.'/members')->assertOk()->getContent();
+
+    expect(crumbs($html))->toBe(['Administration', 'Organizations', 'Acme', 'Members']);
+});
+
+test('administration pages show their trail', function (string $path, array $expected) {
+    $html = $this->actingAs($this->admin)->get('/admin/organizations'.$path)->assertOk()->getContent();
+
+    expect(crumbs($html))->toBe($expected);
+})->with([
+    'list' => ['', ['Administration', 'Organizations']],
+    'new' => ['/create', ['Administration', 'Organizations', 'New organization']],
+]);
+
+test('the edit page of an organization shows its trail, linking back to the organization', function () {
+    $html = $this->actingAs($this->admin)->get('/admin/organizations/'.$this->organization->uuid.'/edit')->assertOk()->getContent();
+
+    expect($html)->toContain('href="'.route('organizations.show', ['organization' => $this->organization->uuid]).'"');
+
+    expect(crumbs($html))->toBe(['Administration', 'Organizations', 'Acme', 'Edit the organization']);
+});
+
+test('the trail is translated', function () {
+    $html = $this->withUnencryptedCookie('locale', 'fr')->actingAs($this->responsible)->get($this->orgUrl.'/members')->getContent();
+
+    expect(crumbs($html))->toBe(['Mes organisations', 'Acme', 'Membres']);
+    $this->assertStringContainsString('aria-label="'.e(__('ui.common.breadcrumbs', [], 'fr')).'"', $html);
+});
+
+test('pages without hierarchy have no trail', function (string $url, bool $authenticated) {
+    if ($authenticated) {
+        $this->actingAs($this->responsible);
+    }
+
+    $this->get($url)->assertOk()->assertDontSee('class="breadcrumbs', false);
+})->with([
+    'home' => ['/', false],
+    'login' => ['/auth/login', false],
+    'register' => ['/auth/register', false],
+    'dashboard' => ['/dashboard', true],
+    'my organizations' => ['/organizations', true],
+]);
+
+test('the sub-pages no longer have a back link', function () {
+    $this->actingAs($this->responsible)->get($this->orgUrl.'/members')->assertDontSee('btn-ghost btn-sm', false);
+});
+
+test('settings pages show a trail starting at Settings', function (string $path, array $expected) {
+    $html = $this->actingAs($this->responsible)->get($path)->assertOk()->getContent();
+
+    expect(crumbs($html))->toBe($expected);
+})->with([
+    'overview' => ['/settings', ['Settings']],
+    'profile' => ['/settings/profile', ['Settings', 'Profile settings']],
+    'security' => ['/settings/security', ['Settings', 'Security settings']],
+]);
+
+test('the administration page shows a trail with a single crumb', function () {
+    $html = $this->actingAs($this->admin)->get('/admin')->assertOk()->getContent();
+
+    expect(crumbs($html))->toBe(['Administration']);
+});

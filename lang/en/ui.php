@@ -3,6 +3,85 @@
 declare(strict_types=1);
 
 return [
+    'common' => [
+        'theme' => 'Toggle theme',
+        'locale' => [
+            'label' => 'Change language',
+            'options' => [
+                'en' => 'English',
+                'fr' => 'Français (French)',
+            ],
+        ],
+        'version' => 'Version :version',
+        'fill_the_form' => 'Please fill out the form below to continue.',
+        'breadcrumbs' => 'Breadcrumb',
+        'actions' => [
+            'submit' => 'Submit',
+            'cancel' => 'Cancel',
+            'close' => 'Close',
+        ],
+        'pagination' => [
+            'page' => 'Page :current of :last',
+        ],
+    ],
+    'admin' => [
+        'title' => 'Administration',
+        'description' => 'Manage the platform.',
+        'organizations' => [
+            'index' => [
+                'title' => 'Organizations',
+                'description' => 'Manage all the organizations.',
+                'create' => 'New organization',
+                'table' => [
+                    'empty' => 'There is no organization yet.',
+                    'columns' => [
+                        'name' => 'Name',
+                        'members' => 'Members',
+                        'actions' => 'Actions',
+                    ],
+                    'actions' => [
+                        'show' => 'Show',
+                        'edit' => 'Edit',
+                        'delete' => 'Delete',
+                    ],
+                ],
+            ],
+            'create' => [
+                'title' => 'New organization',
+                'description' => 'Create a new organization.',
+                'form' => [
+                    'actions' => [
+                        'submit' => 'Create the organization',
+                    ],
+                    'feedback' => [
+                        'success' => 'The organization has been created.',
+                    ],
+                ],
+            ],
+            'edit' => [
+                'title' => 'Edit the organization',
+                'description' => 'Edit or delete an organization.',
+                'form' => [
+                    'actions' => [
+                        'submit' => 'Save',
+                    ],
+                    'feedback' => [
+                        'success' => 'The organization has been updated.',
+                    ],
+                ],
+            ],
+            'delete' => [
+                'title' => 'Delete the organization',
+                'warning' => 'This permanently deletes the organization, its memberships and its pending invitations. This cannot be undone.',
+                'actions' => [
+                    'submit' => 'Delete the organization',
+                ],
+                'feedback' => [
+                    'success' => 'The organization has been deleted.',
+                ],
+            ],
+        ],
+    ],
     'auth' => [
         'register' => [
             'title' => 'Register',
@@ -126,9 +205,162 @@ return [
                 ],
             ],
         ],
+        'logout' => 'Logout',
+    ],
+    'organizations' => [
+        'common' => [
+            'forms' => [
+                'fields' => [
+                    'name' => [
+                        'label' => 'Organization name',
+                        'placeholder' => 'Enter the organization name',
+                    ],
+                    'role' => [
+                        'label' => 'Role',
+                        'options' => [
+                            'responsible' => 'Responsible',
+                            'member' => 'Member',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'index' => [
+            'title' => 'My organizations',
+            'description' => 'The organizations you belong to.',
+            'empty' => 'You do not belong to any organization yet. Ask a responsible user of an organization to invite you.',
+        ],
+        'show' => [
+            'description' => 'The members and invitations of the organization.',
+            'actions' => [
+                'edit' => 'Edit',
+                'delete' => 'Delete',
+            ],
+            'sections' => [
+                'members' => [
+                    'title' => 'Members',
+                    'summary' => ':count member|:count members',
+                ],
+                'invitations' => [
+                    'title' => 'Invitations',
+                    'summary' => ':count pending invitation|:count pending invitations',
+                ],
+            ],
+        ],
+        'invitations' => [
+            'index' => [
+                'title' => 'Invitations',
+                'description' => 'The pending invitations to join the organization.',
+                'invite' => 'Invite someone',
+                'table' => [
+                    'empty' => 'There is no pending invitation.',
+                    'expired' => 'Expired',
+                    'columns' => [
+                        'email' => 'Email address',
+                        'role' => 'Role',
+                        'expires' => 'Expires on',
+                        'actions' => 'Actions',
+                    ],
+                    'actions' => [
+                        'resend' => 'Resend',
+                        'revoke' => 'Revoke',
+                    ],
+                ],
+            ],
+            'create' => [
+                'title' => 'Invite someone',
+                'description' => 'Invite someone to join the organization.',
+                'fields' => [
+                    'email' => [
+                        'label' => 'Email address',
+                        'placeholder' => 'Enter the email address of the person to invite',
+                    ],
+                ],
+                'actions' => [
+                    'submit' => 'Send the invitation',
+                ],
+                'mail' => [
+                    'subject' => 'You have been invited to join :organization',
+                    'line' => 'You have been invited to join :organization as :role.',
+                    'action' => 'View the invitation',
+                    'expires' => 'This invitation expires on :date.',
+                    'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
+                ],
+                'feedback' => [
+                    'invitation-sent' => 'The invitation has been sent.',
+                ],
+            ],
+            'revoke' => [
+                'title' => 'Revoke the invitation',
+                'warning' => 'This permanently revokes the invitation. The person will not be able to accept it anymore.',
+                'actions' => [
+                    'submit' => 'Revoke the invitation',
+                ],
+                'feedback' => [
+                    'success' => 'The invitation has been revoked.',
+                ],
+            ],
+            'show' => [
+                'title' => 'Join an organization',
+                'description' => 'Accept your invitation to join an organization.',
+                'explanation' => 'You have been invited to join :organization as :role.',
+                'actions' => [
+                    'accept' => 'Accept the invitation',
+                ],
+                'feedback' => [
+                    'success' => 'You have joined the organization.',
+                    'invalid' => 'This invitation is invalid, has expired, or was sent to another email address.',
+                    'already_member' => 'This person already belongs to the organization.',
+                ],
+            ],
+        ],
+        'members' => [
+            'index' => [
+                'title' => 'Members',
+                'description' => 'The members of the organization and their roles.',
+                'table' => [
+                    'empty' => 'There is no member yet.',
+                    'you' => 'You',
+                    'columns' => [
+                        'name' => 'Name',
+                        'role' => 'Role',
+                        'actions' => 'Actions',
+                    ],
+                    'actions' => [
+                        'invite' => 'Invite someone',
+                        'save' => 'Save',
+                        'leave' => 'Leave',
+                        'remove' => 'Remove',
+                    ],
+                    'feedback' => [
+                        'member-role-updated' => 'The role has been updated.',
+                        'member-removed' => 'The member has been removed.',
+                        'not_a_member' => 'This person does not belong to the organization.',
+                        'last_responsible' => 'An organization must keep at least one responsible user.',
+                    ],
+                ],
+            ],
+            'remove' => [
+                'title' => 'Remove the member',
+                'warning' => 'This person will lose access to the organization. A responsible user will have to invite them again if they want to come back.',
+                'actions' => [
+                    'submit' => 'Remove the member',
+                ],
+            ],
+            'leave' => [
+                'title' => 'Leave the organization',
+                'warning' => 'You will lose access to this organization. A responsible user will have to invite you again if you want to come back.',
+                'confirm' => 'Leave the organization',
+                'last_responsible' => 'You are the only responsible user of this organization. Promote another member to responsible before you can leave.',
+                'feedback' => [
+                    'success' => 'You have left the organization.',
+                ],
+            ],
+        ],
     ],
     'settings' => [
         'title' => 'Settings',
+        'description' => 'Manage your account.',
         'profile' => [
             'title' => 'Profile settings',
             'description' => 'Manage your profile information.',
@@ -177,19 +409,6 @@ return [
                 ],
             ],
         ],
-    ],
-    'common' => [
-        'logout' => 'Logout',
-        'theme' => 'Toggle theme',
-        'locale' => [
-            'label' => 'Change language',
-            'options' => [
-                'en' => 'English',
-                'fr' => 'Français (French)',
-            ],
-        ],
-        'version' => 'Version :version',
-        'fill_the_form' => 'Please fill out the form below to continue.',
     ],
     'dashboard' => [
         'title' => 'Dashboard',
