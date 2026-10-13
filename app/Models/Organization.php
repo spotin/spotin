@@ -79,4 +79,14 @@ class Organization extends Model
     {
         return $this->hasMany(OrganizationInvitation::class);
     }
+
+    /**
+     * The spots of the organization.
+     *
+     * @return HasMany<Spot, $this>
+     */
+    public function spots(): HasMany
+    {
+        return $this->hasMany(Spot::class);
+    }
 }

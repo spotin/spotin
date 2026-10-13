@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
 use App\Models\OrganizationInvitation;
+use App\Models\Spot;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Collection;
@@ -78,6 +79,31 @@ class DevelopmentSeeder extends Seeder
 
         // Seed invitations for some of the organizations
         $this->seedInvitations($organizations);
+
+        // Seed spots, created by members of their organization
+        $this->seedSpots($organizations);
+    }
+
+    /**
+     * A few spots in each organization that has members, created by one of them.
+     *
+     * @param  Collection<int, Organization>  $organizations
+     */
+    private function seedSpots(Collection $organizations): void
+    {
+        foreach ($organizations as $organization) {
+            $members = $organization->users()->get();
+
+            if ($members->isEmpty()) {
+                continue;
+            }
+
+            foreach (range(1, fake()->numberBetween(0, 5)) as $ignored) {
+                Spot::factory()->for($organization)->create([
+                    'created_by' => $this->pick($members, 1)->first()->id,
+                ]);
+            }
+        }
     }
 
     /**
