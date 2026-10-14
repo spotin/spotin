@@ -20,7 +20,7 @@ render(function (View $view, Organization $organization) {
     Head::title(__('ui.organizations.invitations.create.title').' - '.$organization->name)
         ->description(__('ui.organizations.invitations.create.description'));
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization, auth()->user()), ['label' => __('ui.organizations.invitations.index.title'), 'url' => route('organizations.invitations.index', ['organization' => $organization->uuid])], ['label' => __('ui.organizations.invitations.create.title')]];
+    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.invitations.index.title'), 'url' => route('organizations.invitations.index', ['organization' => $organization->uuid])], ['label' => __('ui.organizations.invitations.create.title')]];
 
     return $view->with(['breadcrumbs' => $breadcrumbs, 'roles' => OrganizationRole::cases()]);
 });

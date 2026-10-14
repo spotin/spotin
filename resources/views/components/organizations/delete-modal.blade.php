@@ -1,13 +1,13 @@
-@props(['invitation'])
+@props(['organization'])
 
-@php($modalId = 'decline-invitation-'.$invitation->id.'-modal')
+@php($modalId = 'delete-organization-'.$organization->uuid.'-modal')
 
 <button
     type="button"
     onclick="document.getElementById('{{ $modalId }}').showModal()"
     {{ $attributes->merge(['class' => 'btn btn-sm btn-error btn-outline']) }}
 >
-    {{ $slot->isEmpty() ? __('ui.organizations.invitations.decline.actions.submit') : $slot }}
+    {{ $slot->isEmpty() ? __('ui.organizations.delete.actions.submit') : $slot }}
 </button>
 
 <dialog id="{{ $modalId }}" class="modal">
@@ -21,26 +21,19 @@
             </button>
         </form>
 
-        <h2 class="text-lg font-bold">{{ __('ui.organizations.invitations.decline.title') }}</h2>
-        <p class="py-4">{{ __('ui.organizations.invitations.decline.warning') }}</p>
+        <h2 class="text-lg font-bold">{{ __('ui.organizations.delete.title') }}</h2>
+        <p class="py-4">{{ __('ui.organizations.delete.warning') }}</p>
 
-        <form
-            method="POST"
-            action="{{ route('organizations.invitations.pending.decline', ['invitation' => $invitation->id]) }}"
-            class="modal-action"
-        >
+        <form method="POST" action="{{ route('organizations.destroy', $organization) }}" class="modal-action">
             @csrf
             @method('DELETE')
             <button type="button" onclick="this.closest('dialog').close()" class="btn" autofocus>
                 {{ __('ui.common.actions.cancel') }}
             </button>
-            <button type="submit" class="btn btn-error">
-                {{ __('ui.organizations.invitations.decline.actions.submit') }}
-            </button>
+            <button type="submit" class="btn btn-error">{{ __('ui.organizations.delete.actions.submit') }}</button>
         </form>
     </div>
 
-    {{-- Clicking outside the box closes the dialog --}}
     <form method="dialog" class="modal-backdrop">
         <button aria-label="{{ __('ui.common.actions.close') }}">{{ __('ui.common.actions.close') }}</button>
     </form>

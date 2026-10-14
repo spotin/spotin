@@ -6,11 +6,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
-use function Laravel\Folio\middleware;
 use function Laravel\Folio\name;
 use function Laravel\Folio\render;
 
-middleware(['auth', 'verified']);
 name('organizations.show');
 
 render(function (View $view, Organization $organization) {
@@ -18,12 +16,13 @@ render(function (View $view, Organization $organization) {
 
     Head::title($organization->name)->description(__('ui.organizations.show.description'));
 
-    $breadcrumbs = OrganizationBreadcrumbs::for($organization, auth()->user());
+    $breadcrumbs = OrganizationBreadcrumbs::for($organization);
 
     return $view->with([
         'breadcrumbs' => $breadcrumbs,
-        'membersCount' => $organization->users()->count(),
-        'invitationsCount' => $organization->invitations()->count(),
+        'membersCount' => Gate::allows('viewMembers', $organization) ? $organization->users()->count() : null,
+        'invitationsCount' => Gate::allows('manageMembers', $organization) ? $organization->invitations()->count() : null,
+        'spotsCount' => $organization->spots()->count(),
     ]);
 });
 ?>
@@ -36,7 +35,7 @@ render(function (View $view, Organization $organization) {
             <div class="not-prose flex shrink-0 gap-2">
                 @can('update', $organization)
                     <a
-                        href="{{ route('admin.organizations.edit', ['organization' => $organization->uuid]) }}"
+                        href="{{ route('organizations.edit', ['organization' => $organization->uuid]) }}"
                         class="btn btn-sm"
                     >
                         {{ __('ui.organizations.show.actions.edit') }}
@@ -44,9 +43,9 @@ render(function (View $view, Organization $organization) {
                 @endcan
 
                 @can('delete', $organization)
-                    <x-delete-organization-modal :organization="$organization">
+                    <x-organizations.delete-modal :organization="$organization">
                         {{ __('ui.organizations.show.actions.delete') }}
-                    </x-delete-organization-modal>
+                    </x-organizations.delete-modal>
                 @endcan
             </div>
         @endcanany
@@ -55,7 +54,7 @@ render(function (View $view, Organization $organization) {
     @if (session('status') === 'organization-created')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.admin.organizations.feedback.organization-created') }}</span>
+            <span>{{ __('ui.organizations.feedback.organization-created') }}</span>
         </p>
     @elseif (session('status') === 'invitation-accepted')
         <p role="alert" class="alert alert-success">
@@ -66,19 +65,36 @@ render(function (View $view, Organization $organization) {
 
     <div class="not-prose grid gap-4 sm:grid-cols-2">
         <a
-            href="{{ route('organizations.members.index', ['organization' => $organization->uuid]) }}"
+            href="{{ route('spots.index', ['organization' => $organization->uuid]) }}"
             class="card border-base-content/5 bg-base-100 hover:bg-base-200 focus-visible:outline-primary border transition-colors focus-visible:outline-2"
         >
             <div class="card-body flex-row items-center gap-4">
-                <x-lucide-users class="h-8 w-8 shrink-0 opacity-70" aria-hidden="true" />
+                <x-lucide-map-pin class="h-8 w-8 shrink-0 opacity-70" aria-hidden="true" />
                 <div class="min-w-0">
-                    <h2 class="card-title">{{ __('ui.organizations.show.sections.members.title') }}</h2>
+                    <h2 class="card-title">{{ __('ui.organizations.show.sections.spots.title') }}</h2>
                     <p class="text-sm opacity-70">
-                        {{ trans_choice('ui.organizations.show.sections.members.summary', $membersCount) }}
+                        {{ trans_choice('ui.organizations.show.sections.spots.summary', $spotsCount) }}
                     </p>
                 </div>
             </div>
         </a>
+
+        @can('viewMembers', $organization)
+            <a
+                href="{{ route('organizations.members.index', ['organization' => $organization->uuid]) }}"
+                class="card border-base-content/5 bg-base-100 hover:bg-base-200 focus-visible:outline-primary border transition-colors focus-visible:outline-2"
+            >
+                <div class="card-body flex-row items-center gap-4">
+                    <x-lucide-users class="h-8 w-8 shrink-0 opacity-70" aria-hidden="true" />
+                    <div class="min-w-0">
+                        <h2 class="card-title">{{ __('ui.organizations.show.sections.members.title') }}</h2>
+                        <p class="text-sm opacity-70">
+                            {{ trans_choice('ui.organizations.show.sections.members.summary', $membersCount) }}
+                        </p>
+                    </div>
+                </div>
+            </a>
+        @endcan
 
         @can('manageMembers', $organization)
             <a

@@ -41,6 +41,6 @@ class MemberController extends Controller
     {
         $removeMember->remove($organization, $request->user());
 
-        return redirect()->route('organizations.index')->with('status', 'organization-left');
+        return redirect()->route('organizations.index', ['mine' => 1])->with('status', 'organization-left');
     }
 }

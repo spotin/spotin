@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
 use App\Models\OrganizationInvitation;
+use App\Models\Spot;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Collection;
@@ -78,6 +79,51 @@ class DevelopmentSeeder extends Seeder
 
         // Seed invitations for some of the organizations
         $this->seedInvitations($organizations);
+
+        // Seed spots, created by members of their organization
+        $this->seedSpots($organizations);
+
+        // Seed named spots, linked to the named users and organization
+        $this->seedNamedSpots($organization, $responsible, $member);
+    }
+
+    /**
+     * Spots with a known name for testing: created by each kind of user, by an administrator who
+     * does not belong to the organization, by nobody anymore, and in another organization.
+     */
+    private function seedNamedSpots(Organization $organization, User $responsible, User $member): void
+    {
+        $admin = User::where('is_admin', true)->first();
+        $other = $member->organizations()->whereKeyNot($organization->getKey())->orderBy('organizations.id')->first();
+
+        $spots = [
+            ['Responsible Spot', $organization, $responsible],
+            ['Member Spot', $organization, $member],
+            ['Admin Spot', $organization, $admin],
+            ['Orphan Spot', $organization, null],
+            ['Other Organization Spot', $other, $member],
+        ];
+
+        foreach ($spots as [$name, $spotOrganization, $creator]) {
+            if ($spotOrganization === null) {
+                continue;
+            }
+
+            Spot::factory()->for($spotOrganization)->create(['name' => $name, 'created_by' => $creator?->id]);
+        }
+    }
+
+    /**
+     * Pick random items with Faker, so the choice follows its seed (unlike Collection::random()).
+     *
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
+     * @param  Collection<int, TModel>  $items
+     * @return Collection<int, TModel>
+     */
+    private function pick(Collection $items, int $count): Collection
+    {
+        return new Collection(fake()->randomElements($items->all(), min($count, $items->count())));
     }
 
     /**
@@ -152,19 +198,6 @@ class DevelopmentSeeder extends Seeder
     }
 
     /**
-     * Pick random items with Faker, so the choice follows its seed (unlike Collection::random()).
-     *
-     * @template TModel of \Illuminate\Database\Eloquent\Model
-     *
-     * @param  Collection<int, TModel>  $items
-     * @return Collection<int, TModel>
-     */
-    private function pick(Collection $items, int $count): Collection
-    {
-        return new Collection(fake()->randomElements($items->all(), min($count, $items->count())));
-    }
-
-    /**
      * Add users to an organization, the first ones as responsible users.
      *
      * @param  Collection<int, User>  $users
@@ -195,6 +228,28 @@ class DevelopmentSeeder extends Seeder
             OrganizationInvitation::factory()->for($organization)->expired()->count($expired)
                 ->sequence($roles)
                 ->create(['invited_by' => $inviter?->id]);
+        }
+    }
+
+    /**
+     * A few spots in each organization that has members, created by one of them.
+     *
+     * @param  Collection<int, Organization>  $organizations
+     */
+    private function seedSpots(Collection $organizations): void
+    {
+        foreach ($organizations as $organization) {
+            $members = $organization->users()->get();
+
+            if ($members->isEmpty()) {
+                continue;
+            }
+
+            foreach (range(1, fake()->numberBetween(0, 5)) as $ignored) {
+                Spot::factory()->for($organization)->create([
+                    'created_by' => $this->pick($members, 1)->first()->id,
+                ]);
+            }
         }
     }
 }

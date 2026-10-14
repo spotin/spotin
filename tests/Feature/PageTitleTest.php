@@ -18,8 +18,8 @@ test('pages that link to other pages show their own title', function (bool $admi
         ->assertOk()
         ->assertSee("<title>$title - Spot in</title>", false);
 })->with([
-    'my organizations' => [false, '/organizations', 'My organizations'],
-    'organizations administration' => [true, '/admin/organizations', 'Organizations'],
-    'new organization' => [true, '/admin/organizations/create', 'New organization'],
+    'organizations' => [false, '/organizations', 'Organizations'],
+    'spots' => [false, '/spots', 'Spots'],
+    'new organization' => [true, '/organizations/create', 'New organization'],
     'profile settings' => [false, '/settings/profile', 'Profile settings'],
 ]);

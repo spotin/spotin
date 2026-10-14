@@ -1,13 +1,13 @@
-@props(['organization'])
+@props(['spot'])
 
-@php($modalId = 'delete-organization-'.$organization->uuid.'-modal')
+@php($modalId = 'delete-spot-'.$spot->uuid.'-modal')
 
 <button
     type="button"
     onclick="document.getElementById('{{ $modalId }}').showModal()"
     {{ $attributes->merge(['class' => 'btn btn-sm btn-error btn-outline']) }}
 >
-    {{ $slot->isEmpty() ? __('ui.admin.organizations.delete.actions.submit') : $slot }}
+    {{ $slot->isEmpty() ? __('ui.spots.delete.actions.submit') : $slot }}
 </button>
 
 <dialog id="{{ $modalId }}" class="modal">
@@ -21,18 +21,16 @@
             </button>
         </form>
 
-        <h2 class="text-lg font-bold">{{ __('ui.admin.organizations.delete.title') }}</h2>
-        <p class="py-4">{{ __('ui.admin.organizations.delete.warning') }}</p>
+        <h2 class="text-lg font-bold">{{ __('ui.spots.delete.title') }}</h2>
+        <p class="py-4">{{ __('ui.spots.delete.warning') }}</p>
 
-        <form method="POST" action="{{ route('admin.organizations.destroy', $organization) }}" class="modal-action">
+        <form method="POST" action="{{ route('spots.destroy', $spot) }}" class="modal-action">
             @csrf
             @method('DELETE')
             <button type="button" onclick="this.closest('dialog').close()" class="btn" autofocus>
                 {{ __('ui.common.actions.cancel') }}
             </button>
-            <button type="submit" class="btn btn-error">
-                {{ __('ui.admin.organizations.delete.actions.submit') }}
-            </button>
+            <button type="submit" class="btn btn-error">{{ __('ui.spots.delete.actions.submit') }}</button>
         </form>
     </div>
 

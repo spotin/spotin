@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\OrganizationController as AdminOrganizationController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Organizations\InvitationController;
 use App\Http\Controllers\Organizations\MemberController;
+use App\Http\Controllers\Organizations\OrganizationController;
+use App\Http\Controllers\Spots\SpotController;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Route;
 
@@ -35,15 +36,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('organizations/invitations/{invitation}', [InvitationController::class, 'decline'])
         ->name('organizations.invitations.pending.decline');
 
-    Route::prefix('admin/organizations')->name('admin.organizations.')->group(function () {
-        Route::post('/', [AdminOrganizationController::class, 'store'])
-            ->middleware('can:create,'.Organization::class)
-            ->name('store');
-        Route::put('{organization:uuid}', [AdminOrganizationController::class, 'update'])
-            ->middleware('can:update,organization')
-            ->name('update');
-        Route::delete('{organization:uuid}', [AdminOrganizationController::class, 'destroy'])
-            ->middleware('can:delete,organization')
-            ->name('destroy');
+    Route::post('spots', [SpotController::class, 'store'])->name('spots.store');
+
+    Route::prefix('spots/{spot:uuid}')->name('spots.')->group(function () {
+        Route::put('/', [SpotController::class, 'update'])->middleware('can:update,spot')->name('update');
+        Route::delete('/', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('destroy');
     });
+
+    Route::post('organizations', [OrganizationController::class, 'store'])
+        ->middleware('can:create,'.Organization::class)
+        ->name('organizations.store');
+    Route::put('organizations/{organization:uuid}', [OrganizationController::class, 'update'])
+        ->middleware('can:update,organization')
+        ->name('organizations.update');
+    Route::delete('organizations/{organization:uuid}', [OrganizationController::class, 'destroy'])
+        ->middleware('can:delete,organization')
+        ->name('organizations.destroy');
 });

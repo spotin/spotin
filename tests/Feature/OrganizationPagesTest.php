@@ -3,6 +3,7 @@
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
 use App\Models\OrganizationInvitation;
+use App\Models\Spot;
 use App\Models\User;
 
 beforeEach(function () {
@@ -25,7 +26,7 @@ test('the pages render in every language without untranslated keys', function (s
     OrganizationInvitation::factory()->for($this->organization)->create(['email' => 'pending@example.com']);
     $this->withUnencryptedCookie('locale', $locale);
 
-    $this->actingAs($this->responsible)->get(route('organizations.index'))->assertOk()->assertDontSee('ui.');
+    $this->actingAs($this->responsible)->get(route('organizations.index', ['mine' => 1]))->assertOk()->assertDontSee('ui.');
 
     foreach (['organizations.show', 'organizations.members.index', 'organizations.invitations.index', 'organizations.invitations.create'] as $route) {
         $this->get(($this->url)($route))->assertOk()->assertDontSee('ui.');
@@ -40,7 +41,7 @@ test('the pages render in every language without untranslated keys', function (s
 test('users see only the organizations they belong to, as cards with their role', function () {
     $this->other->users()->attach($this->responsible);
 
-    $content = $this->actingAs($this->responsible)->get(route('organizations.index'))
+    $content = $this->actingAs($this->responsible)->get(route('organizations.index', ['mine' => 1]))
         ->assertOk()
         ->assertSee('Acme')
         ->assertSee('Globex')
@@ -54,7 +55,7 @@ test('users see only the organizations they belong to, as cards with their role'
         ->and($content)->toContain('class="card ')
         ->not->toContain('<table');
 
-    $this->actingAs($this->member)->get(route('organizations.index'))
+    $this->actingAs($this->member)->get(route('organizations.index', ['mine' => 1]))
         ->assertSee('Acme')
         ->assertDontSee('Globex');
 });
@@ -63,7 +64,7 @@ test('long organization names cannot make the cards overflow', function () {
     $name = 'Association-Internationale-des-Amis-du-Patrimoine-Culturel-et-Naturel-de-la-Region-Nord-Ouest';
     $this->member->organizations()->attach(Organization::factory()->create(['name' => $name]));
 
-    $content = $this->actingAs($this->member)->get(route('organizations.index'))->assertOk()->getContent();
+    $content = $this->actingAs($this->member)->get(route('organizations.index', ['mine' => 1]))->assertOk()->getContent();
 
     // The single column of the grid must be able to shrink below its content on phones,
     // and the title wraps on at most two lines instead of staying on one unbreakable line.
@@ -73,10 +74,32 @@ test('long organization names cannot make the cards overflow', function () {
         ->and($content)->not->toContain('truncate');
 });
 
-test('a user without organization is told how to join one', function () {
-    $this->actingAs(User::factory()->create())->get(route('organizations.index'))
+test('the organizations can be explored by anyone and filtered to the ones of the user', function () {
+    $this->get('/organizations')->assertOk()->assertSee('Acme')->assertSee('Globex')
+        ->assertDontSee('name="mine"', false)
+        ->assertSee('name="query"', false);
+
+    $this->get('/organizations?mine=1')->assertOk()->assertSee('Globex');
+
+    $this->actingAs($this->member)->get('/organizations')->assertOk()->assertSee('Acme')->assertSee('Globex')
+        ->assertSee('>'.__('ui.organizations.index.title').'</h1>', false)
+        ->assertSee('name="mine"', false)
+        ->assertSee(__('ui.organizations.common.forms.fields.role.options.member'));
+
+    expect(mineIsChecked($this->get('/organizations')->getContent()))->toBeFalse()
+        ->and(mineIsChecked($this->get('/organizations?mine=1')->getContent()))->toBeTrue();
+
+    $this->get('/organizations?mine=1')->assertOk()
+        ->assertSee('>'.__('ui.organizations.index.title').'</h1>', false)
+        ->assertSee('<title>'.__('ui.organizations.index.title').' - Spot in</title>', false)
+        ->assertSee(__('ui.organizations.index.filter.mine'))
+        ->assertDontSee('Globex');
+});
+
+test('a user without organization sees an empty filtered list', function () {
+    $this->actingAs(User::factory()->create())->get(route('organizations.index', ['mine' => 1]))
         ->assertOk()
-        ->assertSee(__('ui.organizations.index.empty'));
+        ->assertSee(__('ui.organizations.index.no-result'));
 });
 
 test('the organization page shows cards linking to the members, without the role', function () {
@@ -183,12 +206,39 @@ test('only responsible users and admins can reach the invitation pages', functio
     }
 });
 
-test('outsiders and guests cannot see an organization or its members', function (string $route) {
+test('outsiders and guests cannot see the members or the invitations of an organization', function (string $route) {
     $this->actingAs($this->outsider)->get(($this->url)($route))->assertForbidden();
 
     auth()->logout();
     $this->get(($this->url)($route))->assertRedirect(route('login'));
-})->with(['organizations.show', 'organizations.members.index', 'organizations.invitations.index', 'organizations.invitations.create']);
+})->with(['organizations.members.index', 'organizations.invitations.index', 'organizations.invitations.create']);
+
+test('everyone, guests included, can discover the organizations and see an organization with its spots', function (string $locale) {
+    Spot::factory()->for($this->organization)->create(['name' => 'Harbour']);
+    $this->withUnencryptedCookie('locale', $locale);
+
+    $this->get('/organizations')->assertOk()->assertDontSee('ui.')->assertSee('Acme')->assertSee('Globex');
+
+    $this->get(($this->url)('organizations.show'))
+        ->assertOk()
+        ->assertSee('<title>Acme - Spot in</title>', false)
+        ->assertSee('</footer>', false)
+        ->assertDontSee('ui.')
+        ->assertSee(route('spots.index', ['organization' => $this->organization->uuid]), false)
+        ->assertDontSee(($this->url)('organizations.members.index'), false)
+        ->assertDontSee(($this->url)('organizations.invitations.index'), false);
+
+    $this->get(route('spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Harbour');
+
+    $this->actingAs($this->outsider)->get(($this->url)('organizations.show'))->assertOk()
+        ->assertDontSee(($this->url)('organizations.members.index'), false);
+})->with(['en', 'fr']);
+
+test('the members see the members card of their organization', function () {
+    $this->actingAs($this->member)->get(($this->url)('organizations.show'))
+        ->assertOk()
+        ->assertSee(($this->url)('organizations.members.index'), false);
+});
 
 test('an unknown organization is not found', function () {
     $this->actingAs($this->admin);
@@ -232,7 +282,7 @@ test('every member gets a Leave button on their own row and a Remove button on t
     // A plain member can only leave.
     $this->actingAs($this->member)->get(($this->url)('organizations.members.index'))
         ->assertOk()
-        ->assertSee('popovertarget="leave-popover"', false)
+        ->assertSee('id="leave-organization-'.$this->organization->uuid.'-modal"', false)
         ->assertSee($leave, false)
         ->assertDontSee($remove($this->responsible), false);
 
@@ -240,7 +290,7 @@ test('every member gets a Leave button on their own row and a Remove button on t
     $this->organization->users()->updateExistingPivot($this->member->id, ['role' => OrganizationRole::Responsible]);
 
     $this->actingAs($this->responsible)->get(($this->url)('organizations.members.index'))
-        ->assertSee('popovertarget="leave-popover"', false)
+        ->assertSee('id="leave-organization-'.$this->organization->uuid.'-modal"', false)
         ->assertSee($leave, false)
         ->assertSee($remove($this->member), false);
 });
@@ -248,7 +298,7 @@ test('every member gets a Leave button on their own row and a Remove button on t
 test('the last responsible user has a disabled Leave button and is told why', function () {
     $this->actingAs($this->responsible)->get(($this->url)('organizations.members.index'))
         ->assertOk()
-        ->assertDontSee('popovertarget="leave-popover"', false)
+        ->assertDontSee('leave-organization-', false)
         ->assertDontSee(route('organizations.leave', ['organization' => $this->organization->uuid]), false)
         ->assertSee('aria-describedby="last-responsible-hint"', false)
         ->assertSee(__('ui.organizations.members.leave.last-responsible'));
@@ -257,7 +307,7 @@ test('the last responsible user has a disabled Leave button and is told why', fu
 test('admins who are not members have no Leave button', function () {
     $this->actingAs($this->admin)->get(($this->url)('organizations.members.index'))
         ->assertOk()
-        ->assertDontSee('leave-popover', false)
+        ->assertDontSee('leave-organization-', false)
         ->assertDontSee(route('organizations.leave', ['organization' => $this->organization->uuid]), false);
 });
 
@@ -312,13 +362,15 @@ test('leaving shows a confirmation on the list of organizations', function () {
         ->assertSee(__('ui.organizations.members.feedback.organization-left'));
 });
 
-test('the navigation links to the organizations of the user, and the admin list to each organization', function () {
+test('the navigation links to the public lists, and the list to each organization', function () {
     // Once in the mobile menu and once in the desktop menu.
-    $content = $this->actingAs($this->member)->get(route('dashboard'))->getContent();
+    $content = $this->actingAs($this->member)->get(route('settings.profile'))->getContent();
 
-    expect(substr_count($content, 'href="'.route('organizations.index').'"'))->toBe(2);
+    expect(substr_count($content, 'href="'.route('organizations.index').'"'))->toBe(2)
+        ->and(substr_count($content, 'href="'.route('spots.index').'"'))->toBe(2)
+        ->and($content)->not->toContain('mine=1');
 
-    $this->actingAs($this->admin)->get(route('admin.organizations.index'))->assertSee(($this->url)('organizations.show'), false);
+    $this->actingAs($this->admin)->get(route('organizations.index'))->assertSee(($this->url)('organizations.show'), false);
 });
 
 test('the lists are paginated with page numbers and equal-width Previous and Next buttons', function (string $route, Closure $seed) {
@@ -354,6 +406,21 @@ test('the lists of organizations are paginated', function () {
     $user->organizations()->attach(Organization::factory()->count(30)->create());
     Organization::factory()->count(30)->create();
 
-    $this->actingAs($user)->get(route('organizations.index'))->assertOk()->assertSee('page=2', false);
-    $this->actingAs($this->admin)->get(route('admin.organizations.index'))->assertOk()->assertSee('page=2', false);
+    $this->actingAs($user)->get(route('organizations.index', ['mine' => 1]))->assertOk()->assertSee('page=2', false);
+    $this->actingAs($this->admin)->get(route('organizations.index'))->assertOk()->assertSee('page=2', false);
+});
+
+test('the organizations can be searched by name, with a count and a way to reset', function () {
+    $this->get('/organizations')->assertOk()
+        ->assertSee(trans_choice('ui.organizations.index.count', 2, ['count' => 2]))
+        ->assertDontSee(__('ui.common.filters.reset'));
+
+    $this->get('/organizations?query=acm')->assertOk()
+        ->assertSee('Acme')->assertDontSee('Globex')
+        ->assertSee('value="acm"', false)
+        ->assertSee(__('ui.common.filters.reset'));
+
+    $this->get('/organizations?query=nothing-like-this')->assertOk()->assertSee(__('ui.organizations.index.no-result'));
+
+    $this->actingAs($this->member)->get('/organizations?query=globex&mine=1')->assertOk()->assertSee(__('ui.organizations.index.no-result'));
 });

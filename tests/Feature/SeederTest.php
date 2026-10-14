@@ -3,6 +3,7 @@
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
 use App\Models\OrganizationInvitation;
+use App\Models\Spot;
 use App\Models\User;
 use Database\Seeders\DevelopmentSeeder;
 use Database\Seeders\ProductionSeeder;
@@ -63,7 +64,7 @@ test('the development seeder creates enough data for every list to have several 
     $perPage = 25;
     $largest = fn (string $table, string $column) => DB::table($table)->select($column, DB::raw('count(*) as total'))->groupBy($column)->orderByDesc('total')->first()->total;
 
-    // The administration list of organizations.
+    // The list of organizations.
     expect(Organization::count())->toBeGreaterThan($perPage)
         // The list of organizations of the named users.
         ->and(User::where('email', 'responsible@example.com')->sole()->organizations()->count())->toBeGreaterThan($perPage)
@@ -86,4 +87,24 @@ test('the development seeder creates a mix of roles, expired invitations and unv
         ->and(OrganizationInvitation::where('role', OrganizationRole::Responsible)->exists())->toBeTrue()
         ->and(OrganizationInvitation::where('role', OrganizationRole::Member)->exists())->toBeTrue()
         ->and(User::whereNull('email_verified_at')->exists())->toBeTrue();
+});
+
+test('the development seeder creates named spots linked to the named users and organizations', function () {
+    $this->seed(DevelopmentSeeder::class);
+
+    $organization = Organization::firstWhere('name', 'Organization');
+    $responsible = User::firstWhere('email', 'responsible@example.com');
+    $member = User::firstWhere('email', 'member@example.com');
+    $admin = User::firstWhere('is_admin', true);
+    $spot = fn (string $name) => Spot::firstWhere('name', $name);
+
+    expect($spot('Responsible Spot')->creator->is($responsible))->toBeTrue()
+        ->and($spot('Responsible Spot')->organization->is($organization))->toBeTrue()
+        ->and($spot('Member Spot')->creator->is($member))->toBeTrue()
+        ->and($spot('Admin Spot')->creator->is($admin))->toBeTrue()
+        ->and($admin->belongsToOrganization($organization))->toBeFalse()
+        ->and($spot('Orphan Spot')->created_by)->toBeNull()
+        ->and($spot('Other Organization Spot')->organization->is($organization))->toBeFalse()
+        ->and($member->belongsToOrganization($spot('Other Organization Spot')->organization))->toBeTrue()
+        ->and(Spot::count())->toBeGreaterThan(25);
 });

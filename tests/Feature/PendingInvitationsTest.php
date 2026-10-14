@@ -53,14 +53,14 @@ test('an unverified address never has pending invitations', function () {
 });
 
 test('the list of organizations points to the pending invitations only when there are some', function () {
-    $this->actingAs($this->jane)->get(route('organizations.index'))
+    $this->actingAs($this->jane)->get(route('organizations.index', ['mine' => 1]))
         ->assertOk()
         ->assertDontSee(route('organizations.invitations.pending'), false);
 
     ($this->invite)($this->acme);
     ($this->invite)($this->globex);
 
-    $this->get(route('organizations.index'))
+    $this->get(route('organizations.index', ['mine' => 1]))
         ->assertOk()
         ->assertSee(route('organizations.invitations.pending'), false)
         ->assertSee(trans_choice('ui.organizations.index.pending-invitations', 2, ['count' => 2]));

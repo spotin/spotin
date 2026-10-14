@@ -1,29 +1,53 @@
 <?php
 
+use App\Models\Organization;
 use App\Models\OrganizationInvitation;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
-use function Laravel\Folio\middleware;
 use function Laravel\Folio\name;
 use function Laravel\Folio\render;
 
-middleware(['auth', 'verified']);
 name('organizations.index');
 
 render(function (View $view) {
-    Head::title(__('ui.organizations.index.title'))
-        ->description(__('ui.organizations.index.description'));
+    $user = auth()->user();
+    $mine = $user !== null && request()->boolean('mine');
+
+    $searchQuery = request()->query('query');
+    $searchQuery = is_string($searchQuery) ? mb_substr(trim($searchQuery), 0, 100) : '';
+
+    $title = __('ui.organizations.index.title');
+
+    Head::title($title)->description(__('ui.organizations.index.description'));
 
     return $view->with([
-        'organizations' => auth()->user()->organizations()->orderBy('name')->paginate(25),
-        'pendingInvitations' => OrganizationInvitation::pendingFor(auth()->user())->count(),
+        'mine' => $mine,
+        'searchQuery' => $searchQuery,
+        'active' => $mine || $searchQuery !== '',
+        'title' => $title,
+        'organizations' => Organization::withCount('spots')
+            ->search($searchQuery)
+            ->when($mine, fn ($query) => $query->mine($user))
+            ->orderBy('organizations.name')
+            ->paginate(25)
+            ->withQueryString(),
+        'roles' => $user?->organizations()->pluck('memberships.role', 'organizations.id') ?? collect(),
+        'pendingInvitations' => $user ? OrganizationInvitation::pendingFor($user)->count() : 0,
     ]);
 });
 ?>
 
 <x-default-layout>
-    <h1>{{ __('ui.organizations.index.title') }}</h1>
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <h1 class="m-0! min-w-0 break-words">{{ $title }}</h1>
+
+        @can('create', App\Models\Organization::class)
+            <a href="{{ route('organizations.create') }}" class="btn btn-primary btn-sm shrink-0">
+                {{ __('ui.organizations.index.create') }}
+            </a>
+        @endcan
+    </div>
 
     @if (session('status') === 'organization-left')
         <p role="alert" class="alert alert-success">
@@ -32,39 +56,37 @@ render(function (View $view) {
         </p>
     @endif
 
-    @if ($pendingInvitations > 0)
-        <p role="alert" class="alert alert-info alert-vertical sm:alert-horizontal">
-            <x-lucide-mail class="h-6 w-6" />
-            <span>{{ trans_choice('ui.organizations.index.pending-invitations', $pendingInvitations) }}</span>
-            <a href="{{ route('organizations.invitations.pending') }}" class="btn btn-sm">
-                {{ __('ui.organizations.index.view-pending-invitations') }}
-            </a>
+    @if (session('status') === 'organization-deleted')
+        <p role="alert" class="alert alert-success">
+            <x-lucide-check-circle class="h-6 w-6" />
+            <span>{{ __('ui.organizations.feedback.organization-deleted') }}</span>
         </p>
     @endif
 
+    <x-organizations.pending-invitations-alert :count="$pendingInvitations" />
+
+    <x-filters
+        :action="route('organizations.index')"
+        :label="__('ui.organizations.index.filter.label')"
+        :active="$active"
+    >
+        <x-slot:search>
+            <x-filters.search :placeholder="__('ui.organizations.index.filter.search')" :value="$searchQuery" />
+        </x-slot:search>
+
+        @auth
+            <x-filters.checkbox name="mine" :label="__('ui.organizations.index.filter.mine')" :checked="$mine" />
+        @endauth
+    </x-filters>
+
     @if ($organizations->isEmpty())
-        <p>{{ __('ui.organizations.index.empty') }}</p>
+        <p>{{ $active ? __('ui.organizations.index.no-result') : __('ui.organizations.index.empty') }}</p>
     @else
+        <p class="text-sm opacity-70">{{ trans_choice('ui.organizations.index.count', $organizations->total()) }}</p>
+
         <div class="not-prose grid grid-cols-1 gap-4 sm:grid-cols-2">
             @foreach ($organizations as $organization)
-                <a
-                    href="{{ route('organizations.show', ['organization' => $organization->uuid]) }}"
-                    class="card border-base-content/5 bg-base-100 hover:bg-base-200 focus-visible:outline-primary border transition-colors focus-visible:outline-2"
-                >
-                    <div class="card-body flex-row items-center gap-4">
-                        <x-lucide-user-group class="h-8 w-8 shrink-0 opacity-70" aria-hidden="true" />
-                        <div class="min-w-0">
-                            <h2 class="card-title">
-                                <span class="line-clamp-2 break-words" title="{{ $organization->name }}">
-                                    {{ $organization->name }}
-                                </span>
-                            </h2>
-                            <p class="text-sm opacity-70">
-                                {{ __('ui.organizations.common.forms.fields.role.options.' . $organization->pivot->role->value) }}
-                            </p>
-                        </div>
-                    </div>
-                </a>
+                <x-organizations.card :organization="$organization" :role="$roles[$organization->id] ?? null" />
             @endforeach
         </div>
 
