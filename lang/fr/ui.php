@@ -14,67 +14,19 @@ return [
         ],
         'version' => 'Version :version',
         'fill-the-form' => 'Veuillez remplir le formulaire ci-dessous pour continuer.',
+        'account' => 'Menu du compte',
+        'filters' => [
+            'search' => 'Rechercher',
+            'reset' => 'Réinitialiser les filtres',
+        ],
         'breadcrumbs' => "Fil d'Ariane",
         'actions' => [
             'cancel' => 'Annuler',
             'close' => 'Fermer',
+            'see-all' => 'Tout voir',
         ],
         'pagination' => [
             'page' => 'Page :current sur :last',
-        ],
-    ],
-    'admin' => [
-        'title' => 'Administration',
-        'description' => 'Gérez la plateforme.',
-        'organizations' => [
-            'feedback' => [
-                'organization-created' => "L'organisation a été créée.",
-                'organization-updated' => "L'organisation a été mise à jour.",
-                'organization-deleted' => "L'organisation a été supprimée.",
-            ],
-            'index' => [
-                'title' => 'Organisations',
-                'description' => 'Gérez toutes les organisations.',
-                'create' => 'Nouvelle organisation',
-                'table' => [
-                    'empty' => "Il n'y a pas encore d'organisation.",
-                    'columns' => [
-                        'name' => 'Nom',
-                        'members' => 'Membres',
-                        'actions' => 'Actions',
-                    ],
-                    'actions' => [
-                        'show' => 'Voir',
-                        'edit' => 'Modifier',
-                        'delete' => 'Supprimer',
-                    ],
-                ],
-            ],
-            'create' => [
-                'title' => 'Nouvelle organisation',
-                'description' => 'Créez une nouvelle organisation.',
-                'form' => [
-                    'actions' => [
-                        'submit' => "Créer l'organisation",
-                    ],
-                ],
-            ],
-            'edit' => [
-                'title' => "Modifier l'organisation",
-                'description' => 'Modifiez ou supprimez une organisation.',
-                'form' => [
-                    'actions' => [
-                        'submit' => 'Enregistrer',
-                    ],
-                ],
-            ],
-            'delete' => [
-                'title' => "Supprimer l'organisation",
-                'warning' => "Cette action supprime définitivement l'organisation, ses appartenances et ses invitations en attente. Elle est irréversible.",
-                'actions' => [
-                    'submit' => "Supprimer l'organisation",
-                ],
-            ],
         ],
     ],
     'auth' => [
@@ -183,6 +135,29 @@ return [
         ],
         'logout' => 'Se déconnecter',
     ],
+    'dashboard' => [
+        'title' => 'Tableau de bord',
+        'description' => 'Vos organisations, vos spots et vos invitations.',
+        'greeting' => 'Bonjour, :name !',
+        'organizations' => [
+            'title' => 'Mes organisations',
+            'empty' => "Vous ne faites encore partie d'aucune organisation. Demandez à un responsable d'une organisation de vous inviter.",
+        ],
+        'spots' => [
+            'title' => 'Mes spots',
+            'empty' => "Vous n'avez pas encore créé de spot.",
+        ],
+    ],
+    'homepage' => [
+        'title' => 'Bienvenue sur Spot in',
+        'description' => "Découvrez les lieux et les points d'intérêt près de chez vous.",
+        'intro' => "Les spots représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
+        'explore-spots' => 'Explorer les spots',
+        'explore-organizations' => 'Parcourir les organisations',
+        'dashboard' => 'Aller à mon tableau de bord',
+        'latest-spots' => 'Derniers spots',
+        'latest-spots-empty' => "Aucun spot n'a encore été créé.",
+    ],
     'organizations' => [
         'common' => [
             'forms' => [
@@ -201,15 +176,53 @@ return [
                 ],
             ],
         ],
+        'feedback' => [
+            'organization-created' => "L'organisation a été créée.",
+            'organization-updated' => "L'organisation a été mise à jour.",
+            'organization-deleted' => "L'organisation a été supprimée.",
+        ],
+        'create' => [
+            'title' => 'Nouvelle organisation',
+            'description' => 'Créez une nouvelle organisation.',
+            'form' => [
+                'actions' => [
+                    'submit' => "Créer l'organisation",
+                ],
+            ],
+        ],
+        'edit' => [
+            'title' => "Modifier l'organisation",
+            'description' => 'Modifiez ou supprimez une organisation.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Enregistrer',
+                ],
+            ],
+        ],
+        'delete' => [
+            'title' => "Supprimer l'organisation",
+            'warning' => "Cette action supprime définitivement l'organisation, ses appartenances et ses invitations en attente. Elle est irréversible.",
+            'actions' => [
+                'submit' => "Supprimer l'organisation",
+            ],
+        ],
         'index' => [
-            'title' => 'Mes organisations',
-            'description' => 'Les organisations dont vous faites partie.',
-            'empty' => "Vous ne faites encore partie d'aucune organisation. Demandez à un responsable d'une organisation de vous inviter.",
+            'create' => 'Nouvelle organisation',
+            'title' => 'Organisations',
+            'description' => 'Découvrez les organisations de la plateforme.',
+            'empty' => 'Aucune organisation à afficher.',
+            'count' => ':count organisation|:count organisations',
+            'no-result' => 'Aucune organisation ne correspond à vos filtres.',
+            'filter' => [
+                'search' => 'Rechercher une organisation',
+                'label' => 'Filtrer les organisations',
+                'mine' => 'Uniquement les organisations dont je fais partie',
+            ],
             'pending-invitations' => 'Vous avez :count invitation en attente.|Vous avez :count invitations en attente.',
             'view-pending-invitations' => 'Voir les invitations',
         ],
         'show' => [
-            'description' => "Les membres et les invitations de l'organisation.",
+            'description' => "Les spots, les membres et les invitations de l'organisation.",
             'actions' => [
                 'edit' => 'Modifier',
                 'delete' => 'Supprimer',
@@ -218,6 +231,10 @@ return [
                 'members' => [
                     'title' => 'Membres',
                     'summary' => ':count membre|:count membres',
+                ],
+                'spots' => [
+                    'title' => 'Spots',
+                    'summary' => ':count spot|:count spots',
                 ],
                 'invitations' => [
                     'title' => 'Invitations',
@@ -382,16 +399,77 @@ return [
             ],
         ],
     ],
-    'dashboard' => [
-        'title' => 'Tableau de bord',
-        'first-paragraph' => 'Ceci est le premier paragraphe du tableau de bord.',
-        'second-paragraph' => 'Ceci est le deuxième paragraphe du tableau de bord.',
-    ],
-    'welcome' => [
-        'title' => 'Bienvenue',
-        'description' => 'Bienvenue sur notre application',
-        'first-paragraph' => 'Texte du premier paragraphe.',
-        'second-paragraph' => 'Texte du deuxième paragraphe.',
-        'button' => 'Cliquez ici',
+    'spots' => [
+        'index' => [
+            'create' => 'Nouveau spot',
+            'title' => 'Spots',
+            'description' => 'Découvrez les spots de la plateforme.',
+            'empty' => 'Aucun spot à afficher.',
+            'count' => ':count spot|:count spots',
+            'no-result' => 'Aucun spot ne correspond à vos filtres.',
+            'filter' => [
+                'search' => 'Rechercher un spot',
+                'label' => 'Filtrer les spots',
+                'mine' => "Uniquement les spots que j'ai créés",
+            ],
+        ],
+        'common' => [
+            'unknown-creator' => 'Inconnu',
+            'forms' => [
+                'fields' => [
+                    'name' => [
+                        'label' => 'Nom du spot',
+                        'placeholder' => 'Saisissez le nom du spot',
+                    ],
+                    'organization' => [
+                        'label' => 'Organisation',
+                        'placeholder' => 'Sélectionnez une organisation',
+                    ],
+                ],
+            ],
+        ],
+        'feedback' => [
+            'spot-created' => 'Le spot a été créé.',
+            'spot-updated' => 'Le spot a été mis à jour.',
+            'spot-deleted' => 'Le spot a été supprimé.',
+        ],
+        'create' => [
+            'title' => 'Nouveau spot',
+            'description' => 'Créez un nouveau spot.',
+            'no-organization' => "Vous devez faire partie d'une organisation pour créer un spot.",
+            'form' => [
+                'actions' => [
+                    'submit' => 'Créer le spot',
+                ],
+            ],
+        ],
+        'show' => [
+            'description' => 'Les détails du spot.',
+            'actions' => [
+                'edit' => 'Modifier',
+                'delete' => 'Supprimer',
+            ],
+            'fields' => [
+                'organization' => 'Organisation',
+                'creator' => 'Créé par',
+                'created' => 'Créé le',
+            ],
+        ],
+        'edit' => [
+            'title' => 'Modifier le spot',
+            'description' => 'Modifiez ou supprimez un spot.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Enregistrer',
+                ],
+            ],
+        ],
+        'delete' => [
+            'title' => 'Supprimer le spot',
+            'warning' => 'Cela supprime définitivement le spot. Cette action est irréversible.',
+            'actions' => [
+                'submit' => 'Supprimer le spot',
+            ],
+        ],
     ],
 ];

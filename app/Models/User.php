@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -111,5 +112,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function createdSpots(): HasMany
     {
         return $this->hasMany(Spot::class, 'created_by');
+    }
+
+    /**
+     * The organizations the user can create spots in: all of them for an administrator,
+     * the ones they belong to otherwise.
+     *
+     * @return Builder<Organization>|BelongsToMany<Organization, $this, Membership>
+     */
+    public function spotOrganizations(): Builder|BelongsToMany
+    {
+        return $this->isAdmin() ? Organization::query() : $this->organizations();
+    }
+
+    /**
+     * The initials of the user, shown in their avatar.
+     */
+    public function initials(): string
+    {
+        return Str::of($this->name)->words(2, '')->initials(capitalize: true)->toString();
     }
 }

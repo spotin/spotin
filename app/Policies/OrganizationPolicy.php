@@ -21,19 +21,17 @@ class OrganizationPolicy
     }
 
     /**
-     * Determine whether the user can list all the organizations.
-     *
-     * Other users only see the organizations they belong to, through their relation.
+     * Determine whether anyone, guests included, can view the organization and its spots.
      */
-    public function viewAny(User $user): bool
+    public function view(?User $user, Organization $organization): bool
     {
-        return false;
+        return true;
     }
 
     /**
-     * Determine whether the user can view the organization.
+     * Determine whether the user can see the members of the organization.
      */
-    public function view(User $user, Organization $organization): bool
+    public function viewMembers(User $user, Organization $organization): bool
     {
         return $user->belongsToOrganization($organization);
     }

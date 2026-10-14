@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\OrganizationRole;
 use Database\Factories\OrganizationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -88,5 +89,27 @@ class Organization extends Model
     public function spots(): HasMany
     {
         return $this->hasMany(Spot::class);
+    }
+
+    /**
+     * Scope the query to the organizations whose name contains the search query.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeSearch(Builder $query, string $searchQuery): void
+    {
+        if ($searchQuery !== '') {
+            $query->whereLike('name', "%{$searchQuery}%");
+        }
+    }
+
+    /**
+     * Scope the query to the organizations the user belongs to.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeMine(Builder $query, User $user): void
+    {
+        $query->whereIn('organizations.id', $user->organizations()->select('organizations.id'));
     }
 }

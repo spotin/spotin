@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Organization;
+use App\Support\OrganizationBreadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -10,25 +11,33 @@ use function Laravel\Folio\name;
 use function Laravel\Folio\render;
 
 middleware(['auth', 'verified']);
-name('admin.organizations.create');
+name('organizations.edit');
 
-render(function (View $view) {
-    Head::title(__('ui.admin.organizations.create.title'))
-        ->description(__('ui.admin.organizations.create.description'));
+render(function (View $view, Organization $organization) {
+    Head::title(__('ui.organizations.edit.title'))
+        ->description(__('ui.organizations.edit.description'));
 
-    Gate::authorize('create', Organization::class);
+    Gate::authorize('update', $organization);
 
-    $breadcrumbs = [['label' => __('ui.admin.title'), 'url' => route('admin.index')], ['label' => __('ui.admin.organizations.index.title'), 'url' => route('admin.organizations.index')], ['label' => __('ui.admin.organizations.create.title')]];
+    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.edit.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <h1>{{ __('ui.admin.organizations.create.title') }}</h1>
+    <h1>{{ __('ui.organizations.edit.title') }}</h1>
 
-    <form method="POST" action="{{ route('admin.organizations.store') }}">
+    @if (session('status') === 'organization-updated')
+        <p role="alert" class="alert alert-success">
+            <x-lucide-check-circle class="h-6 w-6" />
+            <span>{{ __('ui.organizations.feedback.organization-updated') }}</span>
+        </p>
+    @endif
+
+    <form method="POST" action="{{ route('organizations.update', $organization) }}">
         @csrf
+        @method('PUT')
 
         <fieldset class="fieldset mb-4 gap-3">
             <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
@@ -42,7 +51,7 @@ render(function (View $view) {
                         type="text"
                         required
                         placeholder="{{ __('ui.organizations.common.forms.fields.name.label') }}"
-                        value="{{ old('name') }}"
+                        value="{{ old('name', $organization->name) }}"
                         @error('name') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -54,9 +63,7 @@ render(function (View $view) {
         </fieldset>
 
         <footer>
-            <button type="submit" class="btn btn-block">
-                {{ __('ui.admin.organizations.create.form.actions.submit') }}
-            </button>
+            <button type="submit" class="btn btn-block">{{ __('ui.organizations.edit.form.actions.submit') }}</button>
         </footer>
     </form>
 </x-default-layout>

@@ -15,7 +15,7 @@ middleware(['auth', 'verified']);
 name('organizations.members.index');
 
 render(function (View $view, Organization $organization) {
-    Gate::authorize('view', $organization);
+    Gate::authorize('viewMembers', $organization);
 
     Head::title(__('ui.organizations.members.index.title').' - '.$organization->name)
         ->description(__('ui.organizations.members.index.description'));
@@ -23,7 +23,7 @@ render(function (View $view, Organization $organization) {
     $responsibleIds = $organization->responsibles()->pluck('users.id');
     $lastResponsibleId = $responsibleIds->count() === 1 ? $responsibleIds->first() : null;
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization, auth()->user()), ['label' => __('ui.organizations.members.index.title')]];
+    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.members.index.title')]];
 
     return $view->with([
         'breadcrumbs' => $breadcrumbs,
@@ -31,7 +31,6 @@ render(function (View $view, Organization $organization) {
         'lastResponsibleId' => $lastResponsibleId,
         'roles' => OrganizationRole::cases(),
         'canManage' => auth()->user()->can('manageMembers', $organization),
-        'canLeave' => auth()->user()->can('leave', $organization),
         'isLastResponsible' => $lastResponsibleId === auth()->id(),
     ]);
 });
@@ -146,22 +145,19 @@ render(function (View $view, Organization $organization) {
                                                 {{ __('ui.organizations.members.index.table.actions.leave') }}
                                             </button>
                                         @else
-                                            <button
-                                                type="button"
-                                                popovertarget="leave-popover"
-                                                class="btn btn-sm btn-error btn-outline w-full sm:w-auto"
-                                            >
-                                                {{ __('ui.organizations.members.index.table.actions.leave') }}
-                                            </button>
+                                            <x-organizations.leave-modal
+                                                :organization="$organization"
+                                                class="w-full sm:w-auto"
+                                            />
                                         @endif
                                     @elseif ($canManage)
-                                        <x-remove-member-modal
+                                        <x-organizations.remove-member-modal
                                             :organization="$organization"
                                             :member="$member"
                                             class="w-full sm:w-auto"
                                         >
                                             {{ __('ui.organizations.members.index.table.actions.remove') }}
-                                        </x-remove-member-modal>
+                                        </x-organizations.remove-member-modal>
                                     @endif
                                 </div>
                             </td>
@@ -176,27 +172,5 @@ render(function (View $view, Organization $organization) {
 
     @if ($isLastResponsible)
         <p id="last-responsible-hint">{{ __('ui.organizations.members.leave.last-responsible') }}</p>
-    @elseif ($canLeave)
-        <div
-            popover
-            id="leave-popover"
-            class="rounded-box bg-base-100 not-prose m-auto w-full max-w-md p-6 shadow-xl backdrop:bg-black/40"
-        >
-            <h2 class="text-lg font-bold">{{ __('ui.organizations.members.leave.title') }}</h2>
-            <p class="py-4">{{ __('ui.organizations.members.leave.warning') }}</p>
-
-            <form
-                method="POST"
-                action="{{ route('organizations.leave', ['organization' => $organization->uuid]) }}"
-                class="flex justify-end gap-2"
-            >
-                @csrf
-                @method('DELETE')
-                <button type="button" popovertarget="leave-popover" popovertargetaction="hide" class="btn">
-                    {{ __('ui.common.actions.cancel') }}
-                </button>
-                <button type="submit" class="btn btn-error">{{ __('ui.organizations.members.leave.confirm') }}</button>
-            </form>
-        </div>
     @endif
 </x-default-layout>

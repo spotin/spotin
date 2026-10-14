@@ -14,67 +14,19 @@ return [
         ],
         'version' => 'Version :version',
         'fill-the-form' => 'Please fill out the form below to continue.',
+        'account' => 'Account menu',
+        'filters' => [
+            'search' => 'Search',
+            'reset' => 'Reset the filters',
+        ],
         'breadcrumbs' => 'Breadcrumb',
         'actions' => [
             'cancel' => 'Cancel',
             'close' => 'Close',
+            'see-all' => 'See all',
         ],
         'pagination' => [
             'page' => 'Page :current of :last',
-        ],
-    ],
-    'admin' => [
-        'title' => 'Administration',
-        'description' => 'Manage the platform.',
-        'organizations' => [
-            'feedback' => [
-                'organization-created' => 'The organization has been created.',
-                'organization-updated' => 'The organization has been updated.',
-                'organization-deleted' => 'The organization has been deleted.',
-            ],
-            'index' => [
-                'title' => 'Organizations',
-                'description' => 'Manage all the organizations.',
-                'create' => 'New organization',
-                'table' => [
-                    'empty' => 'There is no organization yet.',
-                    'columns' => [
-                        'name' => 'Name',
-                        'members' => 'Members',
-                        'actions' => 'Actions',
-                    ],
-                    'actions' => [
-                        'show' => 'Show',
-                        'edit' => 'Edit',
-                        'delete' => 'Delete',
-                    ],
-                ],
-            ],
-            'create' => [
-                'title' => 'New organization',
-                'description' => 'Create a new organization.',
-                'form' => [
-                    'actions' => [
-                        'submit' => 'Create the organization',
-                    ],
-                ],
-            ],
-            'edit' => [
-                'title' => 'Edit the organization',
-                'description' => 'Edit or delete an organization.',
-                'form' => [
-                    'actions' => [
-                        'submit' => 'Save',
-                    ],
-                ],
-            ],
-            'delete' => [
-                'title' => 'Delete the organization',
-                'warning' => 'This permanently deletes the organization, its memberships and its pending invitations. This cannot be undone.',
-                'actions' => [
-                    'submit' => 'Delete the organization',
-                ],
-            ],
         ],
     ],
     'auth' => [
@@ -183,6 +135,29 @@ return [
         ],
         'logout' => 'Logout',
     ],
+    'dashboard' => [
+        'title' => 'Dashboard',
+        'description' => 'Your organizations, spots and invitations.',
+        'greeting' => 'Hello, :name!',
+        'organizations' => [
+            'title' => 'My organizations',
+            'empty' => 'You do not belong to any organization yet. Ask a responsible user of an organization to invite you.',
+        ],
+        'spots' => [
+            'title' => 'My spots',
+            'empty' => 'You have not created any spot yet.',
+        ],
+    ],
+    'homepage' => [
+        'title' => 'Welcome to Spot in',
+        'description' => 'Discover locations and places of interest in your area.',
+        'intro' => 'Spots represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
+        'explore-spots' => 'Explore the spots',
+        'explore-organizations' => 'Browse the organizations',
+        'dashboard' => 'Go to my dashboard',
+        'latest-spots' => 'Latest spots',
+        'latest-spots-empty' => 'No spot has been created yet.',
+    ],
     'organizations' => [
         'common' => [
             'forms' => [
@@ -201,15 +176,53 @@ return [
                 ],
             ],
         ],
+        'feedback' => [
+            'organization-created' => 'The organization has been created.',
+            'organization-updated' => 'The organization has been updated.',
+            'organization-deleted' => 'The organization has been deleted.',
+        ],
+        'create' => [
+            'title' => 'New organization',
+            'description' => 'Create a new organization.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Create the organization',
+                ],
+            ],
+        ],
+        'edit' => [
+            'title' => 'Edit the organization',
+            'description' => 'Edit or delete an organization.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Save',
+                ],
+            ],
+        ],
+        'delete' => [
+            'title' => 'Delete the organization',
+            'warning' => 'This permanently deletes the organization, its memberships and its pending invitations. This cannot be undone.',
+            'actions' => [
+                'submit' => 'Delete the organization',
+            ],
+        ],
         'index' => [
-            'title' => 'My organizations',
-            'description' => 'The organizations you belong to.',
-            'empty' => 'You do not belong to any organization yet. Ask a responsible user of an organization to invite you.',
+            'create' => 'New organization',
+            'title' => 'Organizations',
+            'description' => 'Discover the organizations of the platform.',
+            'empty' => 'No organization to show.',
+            'count' => ':count organization|:count organizations',
+            'no-result' => 'No organization matches your filters.',
+            'filter' => [
+                'search' => 'Search an organization',
+                'label' => 'Filter the organizations',
+                'mine' => 'Only the organizations I belong to',
+            ],
             'pending-invitations' => 'You have :count pending invitation.|You have :count pending invitations.',
             'view-pending-invitations' => 'View invitations',
         ],
         'show' => [
-            'description' => 'The members and invitations of the organization.',
+            'description' => 'The spots, members and invitations of the organization.',
             'actions' => [
                 'edit' => 'Edit',
                 'delete' => 'Delete',
@@ -218,6 +231,10 @@ return [
                 'members' => [
                     'title' => 'Members',
                     'summary' => ':count member|:count members',
+                ],
+                'spots' => [
+                    'title' => 'Spots',
+                    'summary' => ':count spot|:count spots',
                 ],
                 'invitations' => [
                     'title' => 'Invitations',
@@ -382,16 +399,77 @@ return [
             ],
         ],
     ],
-    'dashboard' => [
-        'title' => 'Dashboard',
-        'first-paragraph' => 'This is the first paragraph of the dashboard.',
-        'second-paragraph' => 'This is the second paragraph of the dashboard.',
-    ],
-    'welcome' => [
-        'title' => 'Welcome',
-        'description' => 'Welcome to our application',
-        'first-paragraph' => 'First paragraph text.',
-        'second-paragraph' => 'Second paragraph text.',
-        'button' => 'Click me',
+    'spots' => [
+        'index' => [
+            'create' => 'New spot',
+            'title' => 'Spots',
+            'description' => 'Discover the spots of the platform.',
+            'empty' => 'No spot to show.',
+            'count' => ':count spot|:count spots',
+            'no-result' => 'No spot matches your filters.',
+            'filter' => [
+                'search' => 'Search a spot',
+                'label' => 'Filter the spots',
+                'mine' => 'Only the spots I created',
+            ],
+        ],
+        'common' => [
+            'unknown-creator' => 'Unknown',
+            'forms' => [
+                'fields' => [
+                    'name' => [
+                        'label' => 'Spot name',
+                        'placeholder' => 'Enter the spot name',
+                    ],
+                    'organization' => [
+                        'label' => 'Organization',
+                        'placeholder' => 'Select an organization',
+                    ],
+                ],
+            ],
+        ],
+        'feedback' => [
+            'spot-created' => 'The spot has been created.',
+            'spot-updated' => 'The spot has been updated.',
+            'spot-deleted' => 'The spot has been deleted.',
+        ],
+        'create' => [
+            'title' => 'New spot',
+            'description' => 'Create a new spot.',
+            'no-organization' => 'You need to belong to an organization to create a spot.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Create the spot',
+                ],
+            ],
+        ],
+        'show' => [
+            'description' => 'The details of the spot.',
+            'actions' => [
+                'edit' => 'Edit',
+                'delete' => 'Delete',
+            ],
+            'fields' => [
+                'organization' => 'Organization',
+                'creator' => 'Created by',
+                'created' => 'Created on',
+            ],
+        ],
+        'edit' => [
+            'title' => 'Edit the spot',
+            'description' => 'Edit or delete a spot.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Save',
+                ],
+            ],
+        ],
+        'delete' => [
+            'title' => 'Delete the spot',
+            'warning' => 'This permanently deletes the spot. This cannot be undone.',
+            'actions' => [
+                'submit' => 'Delete the spot',
+            ],
+        ],
     ],
 ];

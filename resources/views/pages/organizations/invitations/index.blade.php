@@ -84,9 +84,12 @@ render(function (View $view) {
                                             {{ __('ui.organizations.invitations.pending.table.actions.accept') }}
                                         </button>
                                     </form>
-                                    <x-decline-invitation-modal :invitation="$invitation" class="w-full sm:w-auto">
+                                    <x-organizations.decline-invitation-modal
+                                        :invitation="$invitation"
+                                        class="w-full sm:w-auto"
+                                    >
                                         {{ __('ui.organizations.invitations.pending.table.actions.decline') }}
-                                    </x-decline-invitation-modal>
+                                    </x-organizations.decline-invitation-modal>
                                 </div>
                             </td>
                         </tr>

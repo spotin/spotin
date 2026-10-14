@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\SpotFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,5 +54,27 @@ class Spot extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Scope the query to the spots whose name contains the search query.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeSearch(Builder $query, string $searchQuery): void
+    {
+        if ($searchQuery !== '') {
+            $query->whereLike('name', "%{$searchQuery}%");
+        }
+    }
+
+    /**
+     * Scope the query to the spots the user created.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeMine(Builder $query, User $user): void
+    {
+        $query->where('created_by', $user->id);
     }
 }

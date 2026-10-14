@@ -17,17 +17,25 @@ class SpotPolicy
     }
 
     /**
-     * Determine whether the user can list the spots of the organization.
+     * Determine whether anyone, guests included, can list the spots of the organization.
      */
-    public function viewAny(User $user, Organization $organization): bool
+    public function viewAny(?User $user, Organization $organization): bool
     {
-        return $user->belongsToOrganization($organization);
+        return true;
     }
 
     /**
-     * Determine whether the user can view the spot.
+     * Determine whether anyone, guests included, can view the spot.
      */
-    public function view(User $user, Spot $spot): bool
+    public function view(?User $user, Spot $spot): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can see who created the spot.
+     */
+    public function viewCreator(User $user, Spot $spot): bool
     {
         return $user->belongsToOrganization($spot->organization);
     }

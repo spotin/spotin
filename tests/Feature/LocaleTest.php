@@ -10,7 +10,7 @@ test('a stored locale cookie is applied', function () {
     $this->withUnencryptedCookie('locale', 'fr')
         ->get('/')
         ->assertSee('<html lang="fr"', false)
-        ->assertSee(__('ui.welcome.title', locale: 'fr'));
+        ->assertSee(__('ui.homepage.title', locale: 'fr'));
 });
 
 test('the browser language is used when no locale is stored', function () {

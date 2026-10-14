@@ -19,7 +19,7 @@ render(function (View $view, Organization $organization) {
     Head::title(__('ui.organizations.invitations.index.title').' - '.$organization->name)
         ->description(__('ui.organizations.invitations.index.description'));
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization, auth()->user()), ['label' => __('ui.organizations.invitations.index.title')]];
+    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.invitations.index.title')]];
 
     return $view->with(['breadcrumbs' => $breadcrumbs, 'invitations' => $organization->invitations()->orderBy('email')->paginate(25)]);
 });
@@ -93,13 +93,13 @@ render(function (View $view, Organization $organization) {
                                             {{ __('ui.organizations.invitations.index.table.actions.resend') }}
                                         </button>
                                     </form>
-                                    <x-revoke-invitation-modal
+                                    <x-organizations.revoke-invitation-modal
                                         :organization="$organization"
                                         :invitation="$invitation"
                                         class="w-full sm:w-auto"
                                     >
                                         {{ __('ui.organizations.invitations.index.table.actions.revoke') }}
-                                    </x-revoke-invitation-modal>
+                                    </x-organizations.revoke-invitation-modal>
                                 </div>
                             </td>
                         </tr>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Organizations;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreOrganizationRequest;
-use App\Http\Requests\Admin\UpdateOrganizationRequest;
+use App\Http\Requests\Organizations\StoreOrganizationRequest;
+use App\Http\Requests\Organizations\UpdateOrganizationRequest;
 use App\Models\Organization;
 use Illuminate\Http\RedirectResponse;
 
@@ -37,6 +37,6 @@ class OrganizationController extends Controller
     {
         $organization->delete();
 
-        return redirect()->route('admin.organizations.index')->with('status', 'organization-deleted');
+        return redirect()->route('organizations.index')->with('status', 'organization-deleted');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Organization;
-use App\Support\OrganizationBreadcrumbs;
+use App\Models\Spot;
+use App\Support\SpotBreadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -11,31 +11,30 @@ use function Laravel\Folio\name;
 use function Laravel\Folio\render;
 
 middleware(['auth', 'verified']);
-name('admin.organizations.edit');
+name('spots.edit');
 
-render(function (View $view, Organization $organization) {
-    Head::title(__('ui.admin.organizations.edit.title'))
-        ->description(__('ui.admin.organizations.edit.description'));
+render(function (View $view, Spot $spot) {
+    Gate::authorize('update', $spot);
 
-    Gate::authorize('update', $organization);
+    Head::title(__('ui.spots.edit.title'))->description(__('ui.spots.edit.description'));
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization, auth()->user()), ['label' => __('ui.admin.organizations.edit.title')]];
+    $breadcrumbs = [...SpotBreadcrumbs::for($spot), ['label' => __('ui.spots.edit.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <h1>{{ __('ui.admin.organizations.edit.title') }}</h1>
+    <h1>{{ __('ui.spots.edit.title') }}</h1>
 
-    @if (session('status') === 'organization-updated')
+    @if (session('status') === 'spot-updated')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.admin.organizations.feedback.organization-updated') }}</span>
+            <span>{{ __('ui.spots.feedback.spot-updated') }}</span>
         </p>
     @endif
 
-    <form method="POST" action="{{ route('admin.organizations.update', $organization) }}">
+    <form method="POST" action="{{ route('spots.update', $spot) }}">
         @csrf
         @method('PUT')
 
@@ -44,14 +43,14 @@ render(function (View $view, Organization $organization) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.organizations.common.forms.fields.name.placeholder') }}</span>
-                    <x-lucide-building-complex class="h-[1em] opacity-50" />
+                    <span>{{ __('ui.spots.common.forms.fields.name.placeholder') }}</span>
+                    <x-lucide-map-pin class="h-[1em] opacity-50" />
                     <input
                         name="name"
                         type="text"
                         required
-                        placeholder="{{ __('ui.organizations.common.forms.fields.name.label') }}"
-                        value="{{ old('name', $organization->name) }}"
+                        placeholder="{{ __('ui.spots.common.forms.fields.name.label') }}"
+                        value="{{ old('name', $spot->name) }}"
                         @error('name') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -63,9 +62,7 @@ render(function (View $view, Organization $organization) {
         </fieldset>
 
         <footer>
-            <button type="submit" class="btn btn-block">
-                {{ __('ui.admin.organizations.edit.form.actions.submit') }}
-            </button>
+            <button type="submit" class="btn btn-block">{{ __('ui.spots.edit.form.actions.submit') }}</button>
         </footer>
     </form>
 </x-default-layout>
