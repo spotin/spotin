@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\OrganizationInvitation;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -48,7 +48,7 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // The invitation email reached this address, so there is nothing left to verify.
-        if (OrganizationInvitation::findInSession()?->email === $input['email']) {
+        if (Invitation::findInSession()?->email === $input['email']) {
             $user->email_verified_at = now();
         }
 

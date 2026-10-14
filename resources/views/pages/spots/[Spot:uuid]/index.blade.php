@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\Spot;
-use App\Support\SpotBreadcrumbs;
-use Illuminate\Support\Facades\Gate;
+use App\Support\Breadcrumbs;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -12,11 +11,9 @@ use function Laravel\Folio\render;
 name('spots.show');
 
 render(function (View $view, Spot $spot) {
-    Gate::authorize('view', $spot);
-
     Head::title($spot->name)->description(__('ui.spots.show.description'));
 
-    return $view->with('breadcrumbs', SpotBreadcrumbs::for($spot));
+    return $view->with('breadcrumbs', Breadcrumbs::spot($spot));
 });
 ?>
 
@@ -33,20 +30,19 @@ render(function (View $view, Spot $spot) {
                 @endcan
 
                 @can('delete', $spot)
-                    <x-spots.delete-modal :spot="$spot">
+                    <x-confirm-modal
+                        :id="'delete-spot-'.$spot->uuid.'-modal'"
+                        :action="route('spots.destroy', ['spot' => $spot->uuid])"
+                        :title="__('ui.spots.delete.title')"
+                        :warning="__('ui.spots.delete.warning')"
+                        :confirm="__('ui.spots.delete.actions.submit')"
+                    >
                         {{ __('ui.spots.show.actions.delete') }}
-                    </x-spots.delete-modal>
+                    </x-confirm-modal>
                 @endcan
             </div>
         @endcanany
     </div>
-
-    @if (session('status') === 'spot-created')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.spots.feedback.spot-created') }}</span>
-        </p>
-    @endif
 
     <dl>
         <dt>{{ __('ui.spots.show.fields.organization') }}</dt>
@@ -57,7 +53,7 @@ render(function (View $view, Spot $spot) {
         </dd>
         @can('viewCreator', $spot)
             <dt>{{ __('ui.spots.show.fields.creator') }}</dt>
-            <dd>{{ $spot->creator?->name ?? __('ui.spots.common.unknown-creator') }}</dd>
+            <dd>{{ $spot->creator?->name ?? __('ui.spots.common.unknown_creator') }}</dd>
         @endcan
         <dt>{{ __('ui.spots.show.fields.created') }}</dt>
         <dd>{{ $spot->created_at->isoFormat('LLL') }}</dd>

@@ -57,6 +57,20 @@ class Spot extends Model
     }
 
     /**
+     * Scope the query to what a list of spots shows: with their organization and creator, sorted by name,
+     * optionally only the spots whose name contains the search query or that the user created.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
+    {
+        $query->with(['organization', 'creator'])
+            ->search(trim($searchQuery))
+            ->when($mine && $user, fn (Builder $query) => $query->mine($user))
+            ->orderBy('name');
+    }
+
+    /**
      * Scope the query to the spots whose name contains the search query.
      *
      * @param  Builder<static>  $query

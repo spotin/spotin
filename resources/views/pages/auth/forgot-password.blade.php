@@ -11,15 +11,15 @@ middleware(['guest']);
 name('password.request');
 
 render(function (View $view) {
-    Head::title(__('ui.auth.forgot-password.title'))
-        ->description(__('ui.auth.forgot-password.description'));
+    Head::title(__('ui.auth.forgot_password.title'))
+        ->description(__('ui.auth.forgot_password.description'));
 
     return $view;
 });
 ?>
 
 <x-default-layout>
-    <h1>{{ __('ui.auth.forgot-password.title') }}</h1>
+    <h1>{{ __('ui.auth.forgot_password.title') }}</h1>
 
     @if (session('status'))
         <p role="alert" class="alert alert-success">
@@ -32,7 +32,7 @@ render(function (View $view) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
@@ -54,6 +54,6 @@ render(function (View $view) {
             </div>
         </fieldset>
 
-        <button type="submit" class="btn btn-block">{{ __('ui.auth.forgot-password.form.actions.submit') }}</button>
+        <button type="submit" class="btn btn-block">{{ __('ui.auth.forgot_password.form.actions.submit') }}</button>
     </form>
 </x-default-layout>

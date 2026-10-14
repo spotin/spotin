@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Organization;
-use App\Support\OrganizationBreadcrumbs;
+use App\Support\Breadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -19,7 +19,7 @@ render(function (View $view, Organization $organization) {
 
     Gate::authorize('update', $organization);
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.edit.title')]];
+    $breadcrumbs = [...Breadcrumbs::organization($organization), ['label' => __('ui.organizations.edit.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });
@@ -28,19 +28,12 @@ render(function (View $view, Organization $organization) {
 <x-default-layout :breadcrumbs="$breadcrumbs">
     <h1>{{ __('ui.organizations.edit.title') }}</h1>
 
-    @if (session('status') === 'organization-updated')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.feedback.organization-updated') }}</span>
-        </p>
-    @endif
-
     <form method="POST" action="{{ route('organizations.update', $organization) }}">
         @csrf
         @method('PUT')
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">

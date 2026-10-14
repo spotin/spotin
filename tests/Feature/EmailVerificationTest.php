@@ -17,7 +17,7 @@ test('the verification notice renders for unverified users', function () {
     $this->actingAs(User::factory()->unverified()->create())
         ->get(route('verification.notice'))
         ->assertOk()
-        ->assertSee(__('ui.auth.verify-email.explanation'));
+        ->assertSee(__('ui.auth.verify_email.explanation'));
 });
 
 test('verified users are redirected away from the verification notice', function () {

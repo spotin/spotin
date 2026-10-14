@@ -24,11 +24,11 @@ class ChangeMemberRole
             Organization::whereKey($organization->id)->lockForUpdate()->first();
 
             if (! $user->belongsToOrganization($organization)) {
-                throw ValidationException::withMessages(['member' => __('ui.organizations.members.feedback.not-a-member')]);
+                throw ValidationException::withMessages(['member' => __('ui.organizations.members.feedback.not_a_member')]);
             }
 
             if ($role !== OrganizationRole::Responsible && $organization->isLastResponsible($user)) {
-                throw ValidationException::withMessages(['member' => __('ui.organizations.members.feedback.last-responsible')]);
+                throw ValidationException::withMessages(['member' => __('ui.organizations.members.feedback.last_responsible')]);
             }
 
             $organization->users()->updateExistingPivot($user->id, ['role' => $role]);

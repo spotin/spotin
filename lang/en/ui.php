@@ -13,7 +13,7 @@ return [
             ],
         ],
         'version' => 'Version :version',
-        'fill-the-form' => 'Please fill out the form below to continue.',
+        'fill_the_form' => 'Please fill out the form below to continue.',
         'account' => 'Account menu',
         'filters' => [
             'search' => 'Search',
@@ -23,7 +23,7 @@ return [
         'actions' => [
             'cancel' => 'Cancel',
             'close' => 'Close',
-            'see-all' => 'See all',
+            'see_all' => 'See all',
         ],
         'pagination' => [
             'page' => 'Page :current of :last',
@@ -45,22 +45,22 @@ return [
                         'label' => 'Password',
                         'placeholder' => 'Enter your password',
                     ],
-                    'password-confirmation' => [
+                    'password_confirmation' => [
                         'label' => 'Password confirmation',
                         'placeholder' => 'Confirm your password',
                     ],
                     'remember' => [
                         'label' => 'Remember me',
                     ],
-                    'current-password' => [
+                    'current_password' => [
                         'label' => 'Current password',
                         'placeholder' => 'Enter your current password',
                     ],
-                    'new-password' => [
+                    'new_password' => [
                         'label' => 'New password',
                         'placeholder' => 'Enter your new password',
                     ],
-                    'new-password-confirmation' => [
+                    'new_password_confirmation' => [
                         'label' => 'Confirm new password',
                         'placeholder' => 'Confirm your new password',
                     ],
@@ -68,7 +68,7 @@ return [
             ],
         ],
         'feedback' => [
-            'verification-link-sent' => 'A new verification link has been sent to your email address.',
+            'verification_link_sent' => 'A new verification link has been sent to your email address.',
         ],
         'register' => [
             'title' => 'Register',
@@ -79,7 +79,7 @@ return [
                     'submit' => 'Register',
                 ],
             ],
-            'already-have-an-account' => 'Already have an account?',
+            'already_have_an_account' => 'Already have an account?',
             'login' => 'Log in',
         ],
         'login' => [
@@ -90,12 +90,12 @@ return [
                     'submit' => 'Log in',
                 ],
             ],
-            'forgot-your-password' => 'Forgot your password?',
-            'reset-your-password' => 'Reset your password',
-            'dont-have-an-account' => "Don't have an account?",
+            'forgot_your_password' => 'Forgot your password?',
+            'reset_your_password' => 'Reset your password',
+            'dont_have_an_account' => "Don't have an account?",
             'register' => 'Register',
         ],
-        'forgot-password' => [
+        'forgot_password' => [
             'title' => 'Forgot your password?',
             'description' => 'Request a password reset link for your account.',
             'form' => [
@@ -104,7 +104,7 @@ return [
                 ],
             ],
         ],
-        'reset-password' => [
+        'reset_password' => [
             'title' => 'Reset your password',
             'description' => 'Choose a new password for your account.',
             'form' => [
@@ -113,7 +113,7 @@ return [
                 ],
             ],
         ],
-        'verify-email' => [
+        'verify_email' => [
             'title' => 'Verify your email address',
             'description' => 'Confirm your email address to complete account setup.',
             'explanation' => 'A verification link has been sent to your email address. Please check your inbox and click the link to verify your email. You will then be able to use your account. If you did not receive the email, you can request another verification link below.',
@@ -123,7 +123,7 @@ return [
                 ],
             ],
         ],
-        'password-confirmation' => [
+        'password_confirmation' => [
             'title' => 'Confirm your password',
             'description' => 'Confirm your password to continue.',
             'explanation' => 'For security reasons, please confirm your password before continuing.',
@@ -152,11 +152,57 @@ return [
         'title' => 'Welcome to Spot in',
         'description' => 'Discover locations and places of interest in your area.',
         'intro' => 'Spots represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
-        'explore-spots' => 'Explore the spots',
-        'explore-organizations' => 'Browse the organizations',
+        'explore_spots' => 'Explore the spots',
+        'explore_organizations' => 'Browse the organizations',
         'dashboard' => 'Go to my dashboard',
-        'latest-spots' => 'Latest spots',
-        'latest-spots-empty' => 'No spot has been created yet.',
+        'latest_spots' => 'Latest spots',
+        'latest_spots_empty' => 'No spot has been created yet.',
+    ],
+    'invitations' => [
+        'common' => [
+            'alert' => [
+                'message' => 'You have :count pending invitation.|You have :count pending invitations.',
+                'action' => 'View invitations',
+            ],
+        ],
+        'feedback' => [
+            'invitation_accepted' => 'You have joined the organization.',
+            'invitation_declined' => 'The invitation has been declined.',
+            'invalid_invitation' => 'This invitation is invalid, has expired, or was sent to another email address.',
+        ],
+        'index' => [
+            'title' => 'Pending invitations',
+            'description' => 'The invitations you have received to join an organization.',
+            'table' => [
+                'empty' => 'You have no pending invitation.',
+                'invited_by' => 'Invited by :name',
+                'columns' => [
+                    'organization' => 'Organization',
+                    'role' => 'Role',
+                    'actions' => 'Actions',
+                ],
+                'actions' => [
+                    'accept' => 'Accept',
+                    'decline' => [
+                        'label' => 'Decline',
+                        'title' => 'Decline the invitation',
+                        'warning' => 'You will not join this organization. A responsible user will have to invite you again if you change your mind.',
+                        'actions' => [
+                            'submit' => 'Decline the invitation',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'show' => [
+            'title' => 'Join an organization',
+            'description' => 'Accept your invitation to join an organization.',
+            'explanation' => 'You have been invited to join :organization as :role.',
+            'actions' => [
+                'register' => 'Create an account',
+                'login' => 'I already have an account',
+            ],
+        ],
     ],
     'organizations' => [
         'common' => [
@@ -177,9 +223,22 @@ return [
             ],
         ],
         'feedback' => [
-            'organization-created' => 'The organization has been created.',
-            'organization-updated' => 'The organization has been updated.',
-            'organization-deleted' => 'The organization has been deleted.',
+            'organization_created' => 'The organization has been created.',
+            'organization_updated' => 'The organization has been updated.',
+            'organization_deleted' => 'The organization has been deleted.',
+        ],
+        'index' => [
+            'create' => 'New organization',
+            'title' => 'Organizations',
+            'description' => 'Discover the organizations of the platform.',
+            'empty' => 'No organization to show.',
+            'count' => ':count organization|:count organizations',
+            'no_result' => 'No organization matches your filters.',
+            'filter' => [
+                'search' => 'Search an organization',
+                'label' => 'Filter the organizations',
+                'mine' => 'Only the organizations I belong to',
+            ],
         ],
         'create' => [
             'title' => 'New organization',
@@ -189,37 +248,6 @@ return [
                     'submit' => 'Create the organization',
                 ],
             ],
-        ],
-        'edit' => [
-            'title' => 'Edit the organization',
-            'description' => 'Edit or delete an organization.',
-            'form' => [
-                'actions' => [
-                    'submit' => 'Save',
-                ],
-            ],
-        ],
-        'delete' => [
-            'title' => 'Delete the organization',
-            'warning' => 'This permanently deletes the organization, its memberships and its pending invitations. This cannot be undone.',
-            'actions' => [
-                'submit' => 'Delete the organization',
-            ],
-        ],
-        'index' => [
-            'create' => 'New organization',
-            'title' => 'Organizations',
-            'description' => 'Discover the organizations of the platform.',
-            'empty' => 'No organization to show.',
-            'count' => ':count organization|:count organizations',
-            'no-result' => 'No organization matches your filters.',
-            'filter' => [
-                'search' => 'Search an organization',
-                'label' => 'Filter the organizations',
-                'mine' => 'Only the organizations I belong to',
-            ],
-            'pending-invitations' => 'You have :count pending invitation.|You have :count pending invitations.',
-            'view-pending-invitations' => 'View invitations',
         ],
         'show' => [
             'description' => 'The spots, members and invitations of the organization.',
@@ -242,14 +270,36 @@ return [
                 ],
             ],
         ],
+        'edit' => [
+            'title' => 'Edit the organization',
+            'description' => 'Edit or delete an organization.',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Save',
+                ],
+            ],
+        ],
+        'delete' => [
+            'title' => 'Delete the organization',
+            'warning' => 'This permanently deletes the organization, its memberships and its pending invitations. This cannot be undone.',
+            'actions' => [
+                'submit' => 'Delete the organization',
+            ],
+        ],
         'invitations' => [
+            'common' => [
+                'mail' => [
+                    'subject' => 'You have been invited to join :organization',
+                    'line' => 'You have been invited to join :organization as :role.',
+                    'action' => 'View the invitation',
+                    'expires' => 'This invitation expires on :date.',
+                    'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
+                ],
+            ],
             'feedback' => [
-                'invitation-sent' => 'The invitation has been sent.',
-                'invitation-revoked' => 'The invitation has been revoked.',
-                'invitation-accepted' => 'You have joined the organization.',
-                'invitation-declined' => 'The invitation has been declined.',
-                'invalid-invitation' => 'This invitation is invalid, has expired, or was sent to another email address.',
-                'already-member' => 'This person already belongs to the organization.',
+                'invitation_sent' => 'The invitation has been sent.',
+                'invitation_revoked' => 'The invitation has been revoked.',
+                'already_member' => 'This person already belongs to the organization.',
             ],
             'index' => [
                 'title' => 'Invitations',
@@ -266,7 +316,14 @@ return [
                     ],
                     'actions' => [
                         'resend' => 'Resend',
-                        'revoke' => 'Revoke',
+                        'revoke' => [
+                            'label' => 'Revoke',
+                            'title' => 'Revoke the invitation',
+                            'warning' => 'This permanently revokes the invitation. The person will not be able to accept it anymore.',
+                            'actions' => [
+                                'submit' => 'Revoke the invitation',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -282,62 +339,15 @@ return [
                 'actions' => [
                     'submit' => 'Send the invitation',
                 ],
-                'mail' => [
-                    'subject' => 'You have been invited to join :organization',
-                    'line' => 'You have been invited to join :organization as :role.',
-                    'action' => 'View the invitation',
-                    'expires' => 'This invitation expires on :date.',
-                    'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
-                ],
-            ],
-            'pending' => [
-                'title' => 'Pending invitations',
-                'description' => 'The invitations you have received to join an organization.',
-                'table' => [
-                    'empty' => 'You have no pending invitation.',
-                    'invited-by' => 'Invited by :name',
-                    'columns' => [
-                        'organization' => 'Organization',
-                        'role' => 'Role',
-                        'actions' => 'Actions',
-                    ],
-                    'actions' => [
-                        'accept' => 'Accept',
-                        'decline' => 'Decline',
-                    ],
-                ],
-            ],
-            'decline' => [
-                'title' => 'Decline the invitation',
-                'warning' => 'You will not join this organization. A responsible user will have to invite you again if you change your mind.',
-                'actions' => [
-                    'submit' => 'Decline the invitation',
-                ],
-            ],
-            'revoke' => [
-                'title' => 'Revoke the invitation',
-                'warning' => 'This permanently revokes the invitation. The person will not be able to accept it anymore.',
-                'actions' => [
-                    'submit' => 'Revoke the invitation',
-                ],
-            ],
-            'show' => [
-                'title' => 'Join an organization',
-                'description' => 'Accept your invitation to join an organization.',
-                'explanation' => 'You have been invited to join :organization as :role.',
-                'actions' => [
-                    'register' => 'Create an account',
-                    'login' => 'I already have an account',
-                ],
             ],
         ],
         'members' => [
             'feedback' => [
-                'member-role-updated' => 'The role has been updated.',
-                'member-removed' => 'The member has been removed.',
-                'not-a-member' => 'This person does not belong to the organization.',
-                'last-responsible' => 'An organization must keep at least one responsible user.',
-                'organization-left' => 'You have left the organization.',
+                'member_role_updated' => 'The role has been updated.',
+                'member_removed' => 'The member has been removed.',
+                'not_a_member' => 'This person does not belong to the organization.',
+                'last_responsible' => 'An organization must keep at least one responsible user.',
+                'organization_left' => 'You have left the organization.',
             ],
             'index' => [
                 'title' => 'Members',
@@ -353,36 +363,126 @@ return [
                     'actions' => [
                         'invite' => 'Invite someone',
                         'save' => 'Save',
-                        'leave' => 'Leave',
-                        'remove' => 'Remove',
+                        'leave' => [
+                            'label' => 'Leave',
+                            'title' => 'Leave the organization',
+                            'warning' => 'You will lose access to this organization. A responsible user will have to invite you again if you want to come back.',
+                            'confirm' => 'Leave the organization',
+                            'last_responsible' => 'You are the only responsible user of this organization. Promote another member to responsible before you can leave.',
+                        ],
+                        'remove' => [
+                            'label' => 'Remove',
+                            'title' => 'Remove the member',
+                            'warning' => 'This person will lose access to the organization. A responsible user will have to invite them again if they want to come back.',
+                            'actions' => [
+                                'submit' => 'Remove the member',
+                            ],
+                        ],
                     ],
                 ],
             ],
-            'remove' => [
-                'title' => 'Remove the member',
-                'warning' => 'This person will lose access to the organization. A responsible user will have to invite them again if they want to come back.',
-                'actions' => [
-                    'submit' => 'Remove the member',
-                ],
+        ],
+        'spots' => [
+            'feedback' => [
+                'spot_created' => 'The spot has been created.',
             ],
-            'leave' => [
-                'title' => 'Leave the organization',
-                'warning' => 'You will lose access to this organization. A responsible user will have to invite you again if you want to come back.',
-                'confirm' => 'Leave the organization',
-                'last-responsible' => 'You are the only responsible user of this organization. Promote another member to responsible before you can leave.',
+            'create' => [
+                'title' => 'New spot',
+                'description' => 'Create a new spot.',
+                'form' => [
+                    'actions' => [
+                        'submit' => 'Create the spot',
+                    ],
+                ],
             ],
         ],
     ],
     'settings' => [
         'title' => 'Settings',
         'description' => 'Manage your account.',
-        'feedback' => [
-            'profile-information-updated' => 'Your profile has been updated.',
-            'password-updated' => 'Your password has been updated.',
+        'developer' => [
+            'common' => [
+                'forms' => [
+                    'fields' => [
+                        'name' => [
+                            'label' => 'Token name',
+                            'placeholder' => 'Enter a name for the token',
+                        ],
+                        'abilities' => [
+                            'label' => 'Abilities',
+                            'options' => [
+                                'organizations_read' => 'Read organizations',
+                                'organizations_create' => 'Create organizations',
+                                'organizations_update' => 'Update organizations',
+                                'organizations_delete' => 'Delete organizations',
+                                'spots_read' => 'Read spots',
+                                'spots_create' => 'Create spots',
+                                'spots_update' => 'Update spots',
+                                'spots_delete' => 'Delete spots',
+                            ],
+                        ],
+                        'expiry' => [
+                            'label' => 'Expiration',
+                            'placeholder' => 'Select the expiration',
+                            'options' => [
+                                '30' => '30 days',
+                                '90' => '90 days',
+                                '365' => '1 year',
+                                'never' => 'Never',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'feedback' => [
+                'token_created' => 'The token has been created. Copy this token now. For security reasons, it will not be shown again.',
+                'token_revoked' => 'The token has been revoked.',
+            ],
+            'index' => [
+                'title' => 'Developer settings',
+                'description' => 'Manage the personal access tokens used to access the API.',
+                'warning' => 'This section is for advanced users only. Personal access tokens give an application access to the API on your behalf: only create one if you know what you are doing, keep it secret and revoke it when you no longer need it.',
+                'your_tokens' => 'Your tokens',
+                'table' => [
+                    'empty' => 'You have no token yet.',
+                    'never_used' => 'Never used',
+                    'never_expires' => 'Never expires',
+                    'last_used' => 'Last used :when',
+                    'expires' => 'Expires on :date',
+                    'expired' => 'Expired',
+                    'columns' => [
+                        'name' => 'Name',
+                        'abilities' => 'Abilities',
+                        'actions' => 'Actions',
+                    ],
+                    'actions' => [
+                        'revoke' => [
+                            'label' => 'Revoke',
+                            'title' => 'Revoke the token',
+                            'warning' => 'Applications using this token will immediately lose access. This cannot be undone.',
+                            'actions' => [
+                                'submit' => 'Revoke the token',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'create' => [
+                'title' => 'New token',
+                'description' => 'A token gives an application access to the API on your behalf, within the abilities you choose.',
+                'form' => [
+                    'actions' => [
+                        'submit' => 'Create the token',
+                    ],
+                ],
+            ],
         ],
         'profile' => [
             'title' => 'Profile settings',
             'description' => 'Manage your profile information.',
+            'feedback' => [
+                'profile_information_updated' => 'Your profile has been updated.',
+            ],
             'form' => [
                 'actions' => [
                     'submit' => 'Save profile',
@@ -391,7 +491,10 @@ return [
         ],
         'security' => [
             'title' => 'Security settings',
-            'description' => 'Update your password.',
+            'description' => 'Manage your security preferences.',
+            'feedback' => [
+                'password_updated' => 'Your password has been updated.',
+            ],
             'form' => [
                 'actions' => [
                     'submit' => 'Change password',
@@ -400,47 +503,31 @@ return [
         ],
     ],
     'spots' => [
-        'index' => [
-            'create' => 'New spot',
-            'title' => 'Spots',
-            'description' => 'Discover the spots of the platform.',
-            'empty' => 'No spot to show.',
-            'count' => ':count spot|:count spots',
-            'no-result' => 'No spot matches your filters.',
-            'filter' => [
-                'search' => 'Search a spot',
-                'label' => 'Filter the spots',
-                'mine' => 'Only the spots I created',
-            ],
-        ],
         'common' => [
-            'unknown-creator' => 'Unknown',
+            'unknown_creator' => 'Unknown',
             'forms' => [
                 'fields' => [
                     'name' => [
                         'label' => 'Spot name',
                         'placeholder' => 'Enter the spot name',
                     ],
-                    'organization' => [
-                        'label' => 'Organization',
-                        'placeholder' => 'Select an organization',
-                    ],
                 ],
             ],
         ],
         'feedback' => [
-            'spot-created' => 'The spot has been created.',
-            'spot-updated' => 'The spot has been updated.',
-            'spot-deleted' => 'The spot has been deleted.',
+            'spot_updated' => 'The spot has been updated.',
+            'spot_deleted' => 'The spot has been deleted.',
         ],
-        'create' => [
-            'title' => 'New spot',
-            'description' => 'Create a new spot.',
-            'no-organization' => 'You need to belong to an organization to create a spot.',
-            'form' => [
-                'actions' => [
-                    'submit' => 'Create the spot',
-                ],
+        'index' => [
+            'title' => 'Spots',
+            'description' => 'Discover the spots of the platform.',
+            'empty' => 'No spot to show.',
+            'count' => ':count spot|:count spots',
+            'no_result' => 'No spot matches your filters.',
+            'filter' => [
+                'search' => 'Search a spot',
+                'label' => 'Filter the spots',
+                'mine' => 'Only the spots I created',
             ],
         ],
         'show' => [

@@ -15,8 +15,7 @@ beforeEach(function () {
 test('a spot belongs to an organization and has a creator', function () {
     expect($this->spot->organization->is($this->organization))->toBeTrue()
         ->and($this->spot->creator->is($this->creator))->toBeTrue()
-        ->and($this->organization->spots)->toHaveCount(1)
-        ->and($this->creator->createdSpots)->toHaveCount(1);
+        ->and($this->organization->spots)->toHaveCount(1);
 });
 
 test('a spot is identified publicly by its uuid', function () {

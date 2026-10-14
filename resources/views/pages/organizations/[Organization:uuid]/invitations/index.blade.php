@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Organization;
-use App\Support\OrganizationBreadcrumbs;
+use App\Support\Breadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -19,35 +19,23 @@ render(function (View $view, Organization $organization) {
     Head::title(__('ui.organizations.invitations.index.title').' - '.$organization->name)
         ->description(__('ui.organizations.invitations.index.description'));
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.invitations.index.title')]];
+    $breadcrumbs = Breadcrumbs::organizationInvitations($organization);
 
     return $view->with(['breadcrumbs' => $breadcrumbs, 'invitations' => $organization->invitations()->orderBy('email')->paginate(25)]);
 });
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <h1>{{ __('ui.organizations.invitations.index.title') }}</h1>
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <h1 class="m-0! min-w-0 break-words">{{ __('ui.organizations.invitations.index.title') }}</h1>
 
-    @if (session('status') === 'invitation-sent')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.feedback.invitation-sent') }}</span>
-        </p>
-    @elseif (session('status') === 'invitation-revoked')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.feedback.invitation-revoked') }}</span>
-        </p>
-    @endif
-
-    <p>
         <a
             href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
-            class="btn btn-primary"
+            class="btn btn-primary btn-sm shrink-0"
         >
             {{ __('ui.organizations.invitations.index.invite') }}
         </a>
-    </p>
+    </div>
 
     @if ($invitations->isEmpty())
         <p>{{ __('ui.organizations.invitations.index.table.empty') }}</p>
@@ -93,13 +81,16 @@ render(function (View $view, Organization $organization) {
                                             {{ __('ui.organizations.invitations.index.table.actions.resend') }}
                                         </button>
                                     </form>
-                                    <x-organizations.revoke-invitation-modal
-                                        :organization="$organization"
-                                        :invitation="$invitation"
+                                    <x-confirm-modal
+                                        :id="'revoke-invitation-'.$invitation->id.'-modal'"
+                                        :action="route('organizations.invitations.destroy', ['organization' => $organization->uuid, 'invitation' => $invitation->id])"
+                                        :title="__('ui.organizations.invitations.index.table.actions.revoke.title')"
+                                        :warning="__('ui.organizations.invitations.index.table.actions.revoke.warning')"
+                                        :confirm="__('ui.organizations.invitations.index.table.actions.revoke.actions.submit')"
                                         class="w-full sm:w-auto"
                                     >
-                                        {{ __('ui.organizations.invitations.index.table.actions.revoke') }}
-                                    </x-organizations.revoke-invitation-modal>
+                                        {{ __('ui.organizations.invitations.index.table.actions.revoke.label') }}
+                                    </x-confirm-modal>
                                 </div>
                             </td>
                         </tr>

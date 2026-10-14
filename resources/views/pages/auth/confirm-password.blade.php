@@ -11,22 +11,22 @@ middleware(['auth']);
 name('password.confirm');
 
 render(function (View $view) {
-    Head::title(__('ui.auth.password-confirmation.title'))
-        ->description(__('ui.auth.password-confirmation.description'));
+    Head::title(__('ui.auth.password_confirmation.title'))
+        ->description(__('ui.auth.password_confirmation.description'));
 
     return $view;
 });
 ?>
 
 <x-default-layout>
-    <h1>{{ __('ui.auth.password-confirmation.title') }}</h1>
-    <p>{{ __('ui.auth.password-confirmation.explanation') }}</p>
+    <h1>{{ __('ui.auth.password_confirmation.title') }}</h1>
+    <p>{{ __('ui.auth.password_confirmation.explanation') }}</p>
 
     <form method="POST" action="{{ route('password.confirm.store') }}">
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
@@ -49,7 +49,7 @@ render(function (View $view) {
         </fieldset>
 
         <button type="submit" class="btn btn-block">
-            {{ __('ui.auth.password-confirmation.form.actions.submit') }}
+            {{ __('ui.auth.password_confirmation.form.actions.submit') }}
         </button>
     </form>
 </x-default-layout>

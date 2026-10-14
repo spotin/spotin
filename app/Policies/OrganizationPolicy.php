@@ -10,6 +10,8 @@ class OrganizationPolicy
     /**
      * Platform administrators can do everything with organizations, except leaving
      * one they do not belong to.
+     *
+     * The pages of organizations and spots are public: they have no ability to check.
      */
     public function before(User $user, string $ability): ?bool
     {
@@ -18,14 +20,6 @@ class OrganizationPolicy
         }
 
         return null;
-    }
-
-    /**
-     * Determine whether anyone, guests included, can view the organization and its spots.
-     */
-    public function view(?User $user, Organization $organization): bool
-    {
-        return true;
     }
 
     /**

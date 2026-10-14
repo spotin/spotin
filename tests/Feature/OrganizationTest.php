@@ -1,9 +1,9 @@
 <?php
 
 use App\Enums\OrganizationRole;
+use App\Models\Invitation;
 use App\Models\Membership;
 use App\Models\Organization;
-use App\Models\OrganizationInvitation;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -76,12 +76,12 @@ test('deleting an organization or a user removes the memberships and invitations
     $user = User::factory()->create();
     $organization = Organization::factory()->create();
     $organization->users()->attach($user);
-    OrganizationInvitation::factory()->for($organization)->create();
+    Invitation::factory()->for($organization)->create();
 
     $organization->delete();
 
     expect(DB::table('memberships')->count())->toBe(0)
-        ->and(OrganizationInvitation::count())->toBe(0);
+        ->and(Invitation::count())->toBe(0);
 
     $other = Organization::factory()->create();
     $other->users()->attach($user);
@@ -93,10 +93,10 @@ test('deleting an organization or a user removes the memberships and invitations
 
 test('invitations store a hashed token, hide it, and expire', function () {
     $inviter = User::factory()->create();
-    $token = OrganizationInvitation::generateToken();
+    $token = Invitation::generateToken();
 
-    $invitation = OrganizationInvitation::factory()->create([
-        'token' => OrganizationInvitation::hashToken($token),
+    $invitation = Invitation::factory()->create([
+        'token' => Invitation::hashToken($token),
         'invited_by' => $inviter->id,
     ]);
 
@@ -106,15 +106,15 @@ test('invitations store a hashed token, hide it, and expire', function () {
         ->and($invitation->inviter->is($inviter))->toBeTrue()
         ->and($invitation->isExpired())->toBeFalse();
 
-    $expired = OrganizationInvitation::factory()->expired()->create();
+    $expired = Invitation::factory()->expired()->create();
 
     expect($expired->isExpired())->toBeTrue()
-        ->and(OrganizationInvitation::active()->pluck('id')->all())->toBe([$invitation->id]);
+        ->and(Invitation::active()->pluck('id')->all())->toBe([$invitation->id]);
 });
 
 test('deleting the inviter keeps the invitation', function () {
     $inviter = User::factory()->create();
-    $invitation = OrganizationInvitation::factory()->create(['invited_by' => $inviter->id]);
+    $invitation = Invitation::factory()->create(['invited_by' => $inviter->id]);
 
     $inviter->delete();
 
