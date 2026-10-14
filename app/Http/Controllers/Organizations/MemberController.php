@@ -21,7 +21,7 @@ class MemberController extends Controller
     {
         $changeMemberRole->change($organization, $user, OrganizationRole::from($request->validated('role')));
 
-        return back()->with('status', 'member-role-updated');
+        return back()->with('success', __('ui.organizations.members.feedback.member_role_updated'));
     }
 
     /**
@@ -31,7 +31,7 @@ class MemberController extends Controller
     {
         $removeMember->remove($organization, $user);
 
-        return back()->with('status', 'member-removed');
+        return back()->with('success', __('ui.organizations.members.feedback.member_removed'));
     }
 
     /**
@@ -41,6 +41,6 @@ class MemberController extends Controller
     {
         $removeMember->remove($organization, $request->user());
 
-        return redirect()->route('organizations.index', ['mine' => 1])->with('status', 'organization-left');
+        return redirect()->route('organizations.index', ['mine' => 1])->with('success', __('ui.organizations.members.feedback.organization_left'));
     }
 }

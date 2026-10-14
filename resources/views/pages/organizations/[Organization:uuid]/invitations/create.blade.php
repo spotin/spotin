@@ -2,7 +2,7 @@
 
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
-use App\Support\OrganizationBreadcrumbs;
+use App\Support\Breadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -20,7 +20,7 @@ render(function (View $view, Organization $organization) {
     Head::title(__('ui.organizations.invitations.create.title').' - '.$organization->name)
         ->description(__('ui.organizations.invitations.create.description'));
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.invitations.index.title'), 'url' => route('organizations.invitations.index', ['organization' => $organization->uuid])], ['label' => __('ui.organizations.invitations.create.title')]];
+    $breadcrumbs = [...Breadcrumbs::organizationInvitations($organization), ['label' => __('ui.organizations.invitations.create.title')]];
 
     return $view->with(['breadcrumbs' => $breadcrumbs, 'roles' => OrganizationRole::cases()]);
 });
@@ -36,7 +36,7 @@ render(function (View $view, Organization $organization) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
@@ -58,7 +58,7 @@ render(function (View $view, Organization $organization) {
             </div>
 
             <div>
-                <label class="select w-full">
+                <label class="select validator w-full">
                     <span class="label">
                         <x-lucide-user-shield class="h-[1em]" />
                     </span>

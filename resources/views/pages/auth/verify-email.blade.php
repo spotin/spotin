@@ -12,8 +12,8 @@ middleware(['auth']);
 name('verification.notice');
 
 render(function (View $view, Request $request) {
-    Head::title(__('ui.auth.verify-email.title'))
-        ->description(__('ui.auth.verify-email.description'));
+    Head::title(__('ui.auth.verify_email.title'))
+        ->description(__('ui.auth.verify_email.description'));
 
     return $request->user()->hasVerifiedEmail()
         ? redirect()->intended(config('fortify.home'))
@@ -22,19 +22,19 @@ render(function (View $view, Request $request) {
 ?>
 
 <x-default-layout>
-    <h1>{{ __('ui.auth.verify-email.title') }}</h1>
-    <p>{{ __('ui.auth.verify-email.explanation') }}</p>
+    <h1>{{ __('ui.auth.verify_email.title') }}</h1>
+    <p>{{ __('ui.auth.verify_email.explanation') }}</p>
 
     @if (session('status') == 'verification-link-sent')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.auth.feedback.verification-link-sent') }}</span>
+            <span>{{ __('ui.auth.feedback.verification_link_sent') }}</span>
         </p>
     @endif
 
     <form method="POST" action="{{ route('verification.send') }}">
         @csrf
 
-        <button type="submit" class="btn btn-block">{{ __('ui.auth.verify-email.form.actions.resend') }}</button>
+        <button type="submit" class="btn btn-block">{{ __('ui.auth.verify_email.form.actions.resend') }}</button>
     </form>
 </x-default-layout>

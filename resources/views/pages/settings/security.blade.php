@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Breadcrumbs;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -14,7 +15,7 @@ render(function (View $view) {
     Head::title(__('ui.settings.security.title'))
         ->description(__('ui.settings.security.description'));
 
-    $breadcrumbs = [['label' => __('ui.settings.title'), 'url' => route('settings.index')], ['label' => __('ui.settings.security.title')]];
+    $breadcrumbs = [...Breadcrumbs::settings(), ['label' => __('ui.settings.security.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });
@@ -26,7 +27,7 @@ render(function (View $view) {
     @if (session('status') === 'password-updated')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.settings.feedback.password-updated') }}</span>
+            <span>{{ __('ui.settings.security.feedback.password_updated') }}</span>
         </p>
     @endif
 
@@ -35,17 +36,17 @@ render(function (View $view) {
         @method('PUT')
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.current-password.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.current_password.placeholder') }}</span>
                     <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
                     <input
                         name="current_password"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.common.forms.fields.current-password.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.current_password.label') }}"
                         @error('current_password', 'updatePassword') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -57,13 +58,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.new-password.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.new_password.placeholder') }}</span>
                     <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
                     <input
                         name="password"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.common.forms.fields.new-password.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.new_password.label') }}"
                         @error('password', 'updatePassword') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -75,13 +76,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.new-password-confirmation.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.new_password_confirmation.placeholder') }}</span>
                     <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
                     <input
                         name="password_confirmation"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.common.forms.fields.new-password-confirmation.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.new_password_confirmation.label') }}"
                         @error('password', 'updatePassword') aria-invalid="true" @enderror
                         class="input w-full"
                     />

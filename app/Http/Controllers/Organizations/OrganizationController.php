@@ -17,7 +17,7 @@ class OrganizationController extends Controller
     {
         $organization = Organization::create($request->validated());
 
-        return redirect()->route('organizations.show', ['organization' => $organization->uuid])->with('status', 'organization-created');
+        return redirect()->route('organizations.show', ['organization' => $organization->uuid])->with('success', __('ui.organizations.feedback.organization_created'));
     }
 
     /**
@@ -27,7 +27,7 @@ class OrganizationController extends Controller
     {
         $organization->update($request->validated());
 
-        return back()->with('status', 'organization-updated');
+        return back()->with('success', __('ui.organizations.feedback.organization_updated'));
     }
 
     /**
@@ -37,6 +37,6 @@ class OrganizationController extends Controller
     {
         $organization->delete();
 
-        return redirect()->route('organizations.index')->with('status', 'organization-deleted');
+        return redirect()->route('organizations.index')->with('success', __('ui.organizations.feedback.organization_deleted'));
     }
 }

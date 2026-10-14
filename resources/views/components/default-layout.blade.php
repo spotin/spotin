@@ -138,8 +138,8 @@
                         <span class="text-base-content line-clamp-1 break-all">{{ auth()->user()->name }}</span>
                         <span class="line-clamp-1 text-xs font-normal break-all">{{ auth()->user()->email }}</span>
                     </li>
-                    <li><a href="{{ route('settings.profile') }}">{{ __('ui.settings.profile.title') }}</a></li>
-                    <li><a href="{{ route('settings.security') }}">{{ __('ui.settings.security.title') }}</a></li>
+                    <li><a href="{{ route('invitations.index') }}">{{ __('ui.invitations.index.title') }}</a></li>
+                    <li><a href="{{ route('settings.index') }}">{{ __('ui.settings.title') }}</a></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}" class="grid-cols-1 p-0">
                             @csrf
@@ -179,7 +179,16 @@
 
     <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
         <x-breadcrumbs :items="$breadcrumbs" />
-        <div class="prose max-w-none">{{ $slot }}</div>
+        <div class="prose max-w-none">
+            @if (session('success'))
+                <p role="alert" class="alert alert-success">
+                    <x-lucide-check-circle class="h-6 w-6" />
+                    <span>{{ session('success') }}</span>
+                </p>
+            @endif
+
+            {{ $slot }}
+        </div>
     </main>
 
     <footer class="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">

@@ -74,11 +74,11 @@ class Organization extends Model
     /**
      * The pending invitations to join the organization.
      *
-     * @return HasMany<OrganizationInvitation, $this>
+     * @return HasMany<Invitation, $this>
      */
     public function invitations(): HasMany
     {
-        return $this->hasMany(OrganizationInvitation::class);
+        return $this->hasMany(Invitation::class);
     }
 
     /**
@@ -89,6 +89,20 @@ class Organization extends Model
     public function spots(): HasMany
     {
         return $this->hasMany(Spot::class);
+    }
+
+    /**
+     * Scope the query to what a list of organizations shows: with their number of spots, sorted by name,
+     * optionally only the organizations whose name contains the search query or that the user belongs to.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
+    {
+        $query->withCount('spots')
+            ->search($searchQuery)
+            ->when($mine && $user, fn (Builder $query) => $query->mine($user))
+            ->orderBy('organizations.name');
     }
 
     /**

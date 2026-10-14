@@ -11,6 +11,7 @@
         "laravel/fortify": "^1.40",
         "laravel/framework": "^13.17",
         "laravel/head": "^0.2.2",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "mallardduck/blade-lucide-icons": "^2.0",
         "ublabs/blade-simple-icons": "^0.214.0"

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Organization;
+use App\Support\Breadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -18,7 +19,7 @@ render(function (View $view) {
 
     Gate::authorize('create', Organization::class);
 
-    $breadcrumbs = [['label' => __('ui.organizations.index.title'), 'url' => route('organizations.index')], ['label' => __('ui.organizations.create.title')]];
+    $breadcrumbs = [...Breadcrumbs::organizations(), ['label' => __('ui.organizations.create.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });
@@ -31,7 +32,7 @@ render(function (View $view) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">

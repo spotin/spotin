@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\OrganizationRole;
+use App\Models\Invitation;
 use App\Models\Organization;
-use App\Models\OrganizationInvitation;
 use App\Models\Spot;
 use App\Models\User;
 use Database\Seeders\DevelopmentSeeder;
@@ -71,7 +71,7 @@ test('the development seeder creates enough data for every list to have several 
         ->and(User::where('email', 'member@example.com')->sole()->organizations()->count())->toBeGreaterThan($perPage)
         // The members and the invitations of an organization.
         ->and($largest('memberships', 'organization_id'))->toBeGreaterThan($perPage)
-        ->and($largest('organization_invitations', 'organization_id'))->toBeGreaterThan($perPage);
+        ->and($largest('invitations', 'organization_id'))->toBeGreaterThan($perPage);
 });
 
 test('every organization of the development seeder with members has a responsible user', function () {
@@ -83,9 +83,9 @@ test('every organization of the development seeder with members has a responsibl
 test('the development seeder creates a mix of roles, expired invitations and unverified users', function () {
     $this->seed(DevelopmentSeeder::class);
 
-    expect(OrganizationInvitation::where('expires_at', '<', now())->exists())->toBeTrue()
-        ->and(OrganizationInvitation::where('role', OrganizationRole::Responsible)->exists())->toBeTrue()
-        ->and(OrganizationInvitation::where('role', OrganizationRole::Member)->exists())->toBeTrue()
+    expect(Invitation::where('expires_at', '<', now())->exists())->toBeTrue()
+        ->and(Invitation::where('role', OrganizationRole::Responsible)->exists())->toBeTrue()
+        ->and(Invitation::where('role', OrganizationRole::Member)->exists())->toBeTrue()
         ->and(User::whereNull('email_verified_at')->exists())->toBeTrue();
 });
 

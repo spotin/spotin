@@ -3,7 +3,6 @@
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
 
 beforeEach(function () {
     $this->organization = Organization::factory()->create();
@@ -21,7 +20,7 @@ beforeEach(function () {
 
 test('admins can manage every organization', function (string $ability) {
     expect($this->admin->can($ability, $this->organization))->toBeTrue();
-})->with(['view', 'update', 'delete', 'manageMembers']);
+})->with(['update', 'delete', 'manageMembers']);
 
 test('admins can create organizations', function () {
     expect($this->admin->can('create', Organization::class))->toBeTrue();
@@ -33,10 +32,8 @@ test('only admins can create, edit and delete organizations', function (string $
         ->and($this->$user->can('delete', $this->organization))->toBeFalse();
 })->with(['responsible', 'member', 'outsider']);
 
-test('everyone can view an organization, but only its members see its members', function () {
-    expect($this->outsider->can('view', $this->organization))->toBeTrue()
-        ->and(Gate::forUser(null)->allows('view', $this->organization))->toBeTrue()
-        ->and($this->responsible->can('viewMembers', $this->organization))->toBeTrue()
+test('only the members of an organization and the admins see its members', function () {
+    expect($this->responsible->can('viewMembers', $this->organization))->toBeTrue()
         ->and($this->member->can('viewMembers', $this->organization))->toBeTrue()
         ->and($this->outsider->can('viewMembers', $this->organization))->toBeFalse()
         ->and($this->admin->can('viewMembers', $this->organization))->toBeTrue();

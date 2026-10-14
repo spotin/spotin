@@ -32,7 +32,7 @@ render(function (View $view) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
@@ -81,12 +81,12 @@ render(function (View $view) {
     </form>
 
     <p class="text-center text-sm">
-        {{ __('ui.auth.login.dont-have-an-account') }}
+        {{ __('ui.auth.login.dont_have_an_account') }}
         <a href="{{ route('register') }}"> {{ __('ui.auth.login.register') }} </a>
     </p>
 
     <p class="text-center text-sm">
-        {{ __('ui.auth.login.forgot-your-password') }}
-        <a href="{{ route('password.request') }}"> {{ __('ui.auth.login.reset-your-password') }} </a>
+        {{ __('ui.auth.login.forgot_your_password') }}
+        <a href="{{ route('password.request') }}"> {{ __('ui.auth.login.reset_your_password') }} </a>
     </p>
 </x-default-layout>

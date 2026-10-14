@@ -2,7 +2,7 @@
 
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
-use App\Support\OrganizationBreadcrumbs;
+use App\Support\Breadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -23,7 +23,7 @@ render(function (View $view, Organization $organization) {
     $responsibleIds = $organization->responsibles()->pluck('users.id');
     $lastResponsibleId = $responsibleIds->count() === 1 ? $responsibleIds->first() : null;
 
-    $breadcrumbs = [...OrganizationBreadcrumbs::for($organization), ['label' => __('ui.organizations.members.index.title')]];
+    $breadcrumbs = [...Breadcrumbs::organization($organization), ['label' => __('ui.organizations.members.index.title')]];
 
     return $view->with([
         'breadcrumbs' => $breadcrumbs,
@@ -38,14 +38,18 @@ render(function (View $view, Organization $organization) {
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <h1>{{ __('ui.organizations.members.index.title') }}</h1>
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <h1 class="m-0! min-w-0 break-words">{{ __('ui.organizations.members.index.title') }}</h1>
 
-    @if (in_array(session('status'), ['member-role-updated', 'member-removed'], true))
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.members.feedback.' . session('status')) }}</span>
-        </p>
-    @endif
+        @if ($canManage)
+            <a
+                href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
+                class="btn btn-primary btn-sm shrink-0"
+            >
+                {{ __('ui.organizations.members.index.table.actions.invite') }}
+            </a>
+        @endif
+    </div>
 
     @error('member')
         <p role="alert" class="alert alert-error">
@@ -53,17 +57,6 @@ render(function (View $view, Organization $organization) {
             <span>{{ $message }}</span>
         </p>
     @enderror
-
-    @if ($canManage)
-        <p>
-            <a
-                href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
-                class="btn btn-primary"
-            >
-                {{ __('ui.organizations.members.index.table.actions.invite') }}
-            </a>
-        </p>
-    @endif
 
     @if ($members->isEmpty())
         <p>{{ __('ui.organizations.members.index.table.empty') }}</p>
@@ -142,22 +135,31 @@ render(function (View $view, Organization $organization) {
                                                 disabled
                                                 aria-describedby="last-responsible-hint"
                                             >
-                                                {{ __('ui.organizations.members.index.table.actions.leave') }}
+                                                {{ __('ui.organizations.members.index.table.actions.leave.label') }}
                                             </button>
                                         @else
-                                            <x-organizations.leave-modal
-                                                :organization="$organization"
+                                            <x-confirm-modal
+                                                :id="'leave-organization-'.$organization->uuid.'-modal'"
+                                                :action="route('organizations.leave', ['organization' => $organization->uuid])"
+                                                :title="__('ui.organizations.members.index.table.actions.leave.title')"
+                                                :warning="__('ui.organizations.members.index.table.actions.leave.warning')"
+                                                :confirm="__('ui.organizations.members.index.table.actions.leave.confirm')"
                                                 class="w-full sm:w-auto"
-                                            />
+                                            >
+                                                {{ __('ui.organizations.members.index.table.actions.leave.label') }}
+                                            </x-confirm-modal>
                                         @endif
                                     @elseif ($canManage)
-                                        <x-organizations.remove-member-modal
-                                            :organization="$organization"
-                                            :member="$member"
+                                        <x-confirm-modal
+                                            :id="'remove-member-'.$member->id.'-modal'"
+                                            :action="route('organizations.members.destroy', ['organization' => $organization->uuid, 'user' => $member->id])"
+                                            :title="__('ui.organizations.members.index.table.actions.remove.title')"
+                                            :warning="__('ui.organizations.members.index.table.actions.remove.warning')"
+                                            :confirm="__('ui.organizations.members.index.table.actions.remove.actions.submit')"
                                             class="w-full sm:w-auto"
                                         >
-                                            {{ __('ui.organizations.members.index.table.actions.remove') }}
-                                        </x-organizations.remove-member-modal>
+                                            {{ __('ui.organizations.members.index.table.actions.remove.label') }}
+                                        </x-confirm-modal>
                                     @endif
                                 </div>
                             </td>
@@ -171,6 +173,8 @@ render(function (View $view, Organization $organization) {
     {{ $members->links() }}
 
     @if ($isLastResponsible)
-        <p id="last-responsible-hint">{{ __('ui.organizations.members.leave.last-responsible') }}</p>
+        <p id="last-responsible-hint">
+            {{ __('ui.organizations.members.index.table.actions.leave.last_responsible') }}
+        </p>
     @endif
 </x-default-layout>

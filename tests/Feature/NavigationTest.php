@@ -24,10 +24,10 @@ test('logged-in users get an avatar menu with their identity and the account lin
         ->assertSee('JD')
         ->assertSee('Jane Doe')
         ->assertSee('jane@example.com')
-        ->assertSee(route('settings.profile'), false)
-        ->assertSee(route('settings.security'), false)
-        ->assertSee(route('logout'), false)
-        ->assertDontSee('settings-popover', false);
+        ->assertSee(route('invitations.index'), false)
+        ->assertSee(__('ui.invitations.index.title'))
+        ->assertSee(route('settings.index'), false)
+        ->assertSee(route('logout'), false);
 })->with(['en', 'fr']);
 
 test('logged-in users get a dashboard link in both navigation menus, outside of the avatar menu', function () {
