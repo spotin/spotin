@@ -4,48 +4,55 @@ namespace App\Http\Resources;
 
 use App\Models\Spot;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\JsonApi\JsonApiResource;
 
 /**
  * @mixin Spot
  */
-class SpotResource extends JsonResource
+class SpotResource extends JsonApiResource
 {
+    public function toId(Request $request): string
+    {
+        return $this->uuid;
+    }
+
+    public function toType(Request $request): string
+    {
+        return 'spots';
+    }
+
     /**
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toAttributes(Request $request): array
     {
         return [
-            'id' => $this->uuid,
             'name' => $this->name,
-            'organization' => $this->whenLoaded('organization', fn () => [
-                'id' => $this->organization->uuid,
-                'name' => $this->organization->name,
-            ]),
-            $this->mergeWhen($this->canViewCreator($request), fn () => [
-                'creator' => $this->creator ? ['name' => $this->creator->name] : null,
-            ]),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
     }
 
     /**
-     * Same rule as SpotPolicy::viewCreator, with the organizations of the user loaded once per request
-     * instead of once per spot of the list.
+     * The relationships a client can include. The creator is `null` when the user cannot see it.
+     *
+     * @return array<string, mixed>
+     */
+    public function toRelationships(Request $request): array
+    {
+        return [
+            'organization' => OrganizationResource::class,
+            // Always a UserResource, possibly of nothing, so that the documentation knows the relationship.
+            'creator' => fn () => new UserResource($this->canViewCreator($request) ? $this->creator : null),
+        ];
+    }
+
+    /**
+     * The organizations of the user are loaded once for the whole request, so that the policy checks the
+     * membership without a query per spot of the list.
      */
     private function canViewCreator(Request $request): bool
     {
-        $user = $request->user();
-
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        $organizations = $request->attributes->get('member_organization_ids')
-            ?? tap($user->organizations()->pluck('organizations.id')->all(), fn (array $ids) => $request->attributes->set('member_organization_ids', $ids));
-
-        return in_array($this->organization_id, $organizations);
+        return $request->user()->loadMissing('organizations')->can('viewCreator', $this->resource);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasVersion4Uuids, Notifiable;
 
     /**
      * The model's default attribute values, matching the database defaults.
@@ -30,6 +31,18 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $attributes = [
         'is_admin' => false,
     ];
+
+    /**
+     * Get the columns that should receive a unique identifier.
+     *
+     * The UUID is the public identifier in the API, the integer primary key stays internal.
+     *
+     * @return list<string>
+     */
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -96,11 +109,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Determine whether the user belongs to the organization, whatever their role.
+     * Determine whether the user belongs to the organization, whatever their role. Uses the organizations of the
+     * user when they are loaded, to check many organizations without a query each.
      */
-    public function belongsToOrganization(Organization $organization): bool
+    public function belongsToOrganization(Organization|int $organization): bool
     {
-        return $this->organizations()->whereKey($organization->getKey())->exists();
+        $id = $organization instanceof Organization ? $organization->getKey() : $organization;
+
+        return $this->relationLoaded('organizations')
+            ? $this->organizations->contains($id)
+            : $this->organizations()->whereKey($id)->exists();
     }
 
     /**

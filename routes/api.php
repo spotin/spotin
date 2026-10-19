@@ -1,16 +1,16 @@
 <?php
 
+use App\Http\Controllers\Api\V1\MeController;
 use App\Http\Controllers\Api\V1\Organizations\OrganizationController;
 use App\Http\Controllers\Api\V1\Organizations\SpotController as OrganizationSpotController;
 use App\Http\Controllers\Api\V1\Spots\SpotController;
-use App\Http\Controllers\Api\V1\UserController;
 use App\Models\Organization;
 use App\Models\Spot;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->middleware(['auth:sanctum', 'verified', 'throttle:api'])->group(function () {
     // Needs a valid token but no specific ability, so that a client can check what its token allows.
-    Route::get('user', UserController::class)->name('user');
+    Route::get('me', MeController::class)->name('me');
 
     Route::prefix('organizations')->name('organizations.')->group(function () {
         Route::get('/', [OrganizationController::class, 'index'])

@@ -20,7 +20,7 @@ class UpdateSpotRequest extends FormRequest
         return [
             'name' => [
                 'required', 'string', 'min:2', 'max:100',
-                Rule::unique(Spot::class, 'name')->where('organization_id', $spot->organization_id)->ignore($spot),
+                Rule::unique(Spot::class, 'name')->where('organization_id', $spot?->organization_id)->ignore($spot),
             ],
         ];
     }

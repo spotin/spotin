@@ -5,7 +5,7 @@ namespace App\Models;
 use Database\Factories\SpotFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Spot extends Model
 {
     /** @use HasFactory<SpotFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory, HasVersion4Uuids;
 
     /**
      * Get the columns that should receive a unique identifier.
@@ -65,7 +65,7 @@ class Spot extends Model
     public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
     {
         $query->with(['organization', 'creator'])
-            ->search(trim($searchQuery))
+            ->search($searchQuery)
             ->when($mine && $user, fn (Builder $query) => $query->mine($user))
             ->orderBy('name');
     }

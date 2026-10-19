@@ -9,7 +9,8 @@ test('the home page renders with its title and description', function () {
         ->assertOk()
         ->assertSee('<title>'.e(__('ui.homepage.title')).' - '.e(config('app.name')).'</title>', false)
         ->assertSee('<meta name="description" content="'.e(__('ui.homepage.description')).'">', false)
-        ->assertSee(e(config('app.name')).'<sup>®</sup>', false);
+        ->assertSee(e(config('app.name')), false)
+        ->assertSee('2021-'.date('Y'), false);
 });
 
 test('the home page invites guests to explore the platform and to log in or register, in every language', function (string $locale) {

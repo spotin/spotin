@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\Api\V1\Spots;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ListFiltersRequest;
+use App\Http\Requests\ApiListFiltersRequest;
 use App\Http\Requests\Spots\UpdateSpotRequest;
 use App\Http\Resources\SpotResource;
 use App\Models\Spot;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Dedoc\Scramble\Attributes\Group;
+use Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
+#[Group('Spots')]
 class SpotController extends Controller
 {
     /**
      * List the spots of all the organizations, optionally only the ones the user created or matching a
      * search query.
      */
-    public function index(ListFiltersRequest $request): AnonymousResourceCollection
+    public function index(ApiListFiltersRequest $request): AnonymousResourceCollection
     {
         $spots = Spot::listed($request->user(), $request->searchQuery(), $request->mine())
             ->paginate(25)
@@ -30,7 +32,7 @@ class SpotController extends Controller
      */
     public function show(Spot $spot): SpotResource
     {
-        return new SpotResource($spot->load(['organization', 'creator']));
+        return new SpotResource($spot);
     }
 
     /**
@@ -40,7 +42,7 @@ class SpotController extends Controller
     {
         $spot->update($request->validated());
 
-        return new SpotResource($spot->load(['organization', 'creator']));
+        return new SpotResource($spot);
     }
 
     /**

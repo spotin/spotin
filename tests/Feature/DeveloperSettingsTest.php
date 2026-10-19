@@ -245,7 +245,7 @@ test('a user revokes their own token', function () {
 
     expect(PersonalAccessToken::count())->toBe(0);
 
-    $this->withToken($token->plainTextToken)->getJson('/api/v1/user')->assertUnauthorized();
+    $this->withToken($token->plainTextToken)->getJson('/api/v1/me')->assertUnauthorized();
 });
 
 test('a user cannot revoke the token of someone else', function () {

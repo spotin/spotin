@@ -21,7 +21,7 @@ class SpotPolicy
      */
     public function viewCreator(User $user, Spot $spot): bool
     {
-        return $user->belongsToOrganization($spot->organization);
+        return $user->belongsToOrganization($spot->organization_id);
     }
 
     /**
@@ -37,7 +37,7 @@ class SpotPolicy
      */
     public function update(User $user, Spot $spot): bool
     {
-        return $user->belongsToOrganization($spot->organization);
+        return $user->belongsToOrganization($spot->organization_id);
     }
 
     /**
@@ -45,6 +45,6 @@ class SpotPolicy
      */
     public function delete(User $user, Spot $spot): bool
     {
-        return $user->belongsToOrganization($spot->organization);
+        return $user->belongsToOrganization($spot->organization_id);
     }
 }
