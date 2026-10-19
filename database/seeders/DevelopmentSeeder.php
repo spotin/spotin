@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\OrganizationRole;
+use App\Models\Invitation;
 use App\Models\Organization;
-use App\Models\OrganizationInvitation;
 use App\Models\Spot;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -220,12 +220,12 @@ class DevelopmentSeeder extends Seeder
 
         $roles = fn () => ['role' => fake()->boolean(15) ? OrganizationRole::Responsible : OrganizationRole::Member];
 
-        OrganizationInvitation::factory()->for($organization)->count($count - $expired)
+        Invitation::factory()->for($organization)->count($count - $expired)
             ->sequence($roles)
             ->create(['invited_by' => $inviter?->id]);
 
         if ($expired > 0) {
-            OrganizationInvitation::factory()->for($organization)->expired()->count($expired)
+            Invitation::factory()->for($organization)->expired()->count($expired)
                 ->sequence($roles)
                 ->create(['invited_by' => $inviter?->id]);
         }

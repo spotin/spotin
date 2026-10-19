@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\OrganizationInvitation;
+use App\Models\Invitation;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -15,7 +15,7 @@ render(function (View $view) {
     Head::title(__('ui.auth.register.title'))
         ->description(__('ui.auth.register.description'));
 
-    return $view->with('invitation', OrganizationInvitation::findInSession()?->load('organization'));
+    return $view->with('invitation', Invitation::findInSession()?->load('organization'));
 });
 ?>
 
@@ -33,7 +33,7 @@ render(function (View $view) {
         @csrf
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
@@ -94,13 +94,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.password-confirmation.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.password_confirmation.placeholder') }}</span>
                     <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
                     <input
                         name="password_confirmation"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.common.forms.fields.password-confirmation.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.password_confirmation.label') }}"
                         @error('password') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -115,7 +115,7 @@ render(function (View $view) {
     </form>
 
     <p class="text-center text-sm">
-        {{ __('ui.auth.register.already-have-an-account') }}
+        {{ __('ui.auth.register.already_have_an_account') }}
         <a href="{{ route('login') }}"> {{ __('ui.auth.register.login') }} </a>
     </p>
 </x-default-layout>

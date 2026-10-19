@@ -11,15 +11,15 @@ middleware(['guest']);
 name('password.reset');
 
 render(function (View $view) {
-    Head::title(__('ui.auth.reset-password.title'))
-        ->description(__('ui.auth.reset-password.description'));
+    Head::title(__('ui.auth.reset_password.title'))
+        ->description(__('ui.auth.reset_password.description'));
 
     return $view;
 });
 ?>
 
 <x-default-layout>
-    <h1>{{ __('ui.auth.reset-password.title') }}</h1>
+    <h1>{{ __('ui.auth.reset_password.title') }}</h1>
 
     <form method="POST" action="{{ route('password.update') }}">
         @csrf
@@ -27,7 +27,7 @@ render(function (View $view) {
         <input type="hidden" name="token" value="{{ $token }}" />
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">
@@ -50,13 +50,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.new-password.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.new_password.placeholder') }}</span>
                     <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
                     <input
                         name="password"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.common.forms.fields.new-password.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.new_password.label') }}"
                         @error('password') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -68,13 +68,13 @@ render(function (View $view) {
 
             <div>
                 <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.new-password-confirmation.placeholder') }}</span>
+                    <span>{{ __('ui.auth.common.forms.fields.new_password_confirmation.placeholder') }}</span>
                     <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
                     <input
                         name="password_confirmation"
                         type="password"
                         required
-                        placeholder="{{ __('ui.auth.common.forms.fields.new-password-confirmation.label') }}"
+                        placeholder="{{ __('ui.auth.common.forms.fields.new_password_confirmation.label') }}"
                         @error('password') aria-invalid="true" @enderror
                         class="input w-full"
                     />
@@ -85,6 +85,6 @@ render(function (View $view) {
             </div>
         </fieldset>
 
-        <button type="submit" class="btn btn-block">{{ __('ui.auth.reset-password.form.actions.submit') }}</button>
+        <button type="submit" class="btn btn-block">{{ __('ui.auth.reset_password.form.actions.submit') }}</button>
     </form>
 </x-default-layout>

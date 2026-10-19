@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\OrganizationRole;
+use App\Models\Invitation;
 use App\Models\Organization;
-use App\Models\OrganizationInvitation;
 use App\Models\User;
 
 beforeEach(function () {
@@ -59,9 +59,9 @@ test('admins can create an organization and land on its page', function () {
     $organization = Organization::where('name', 'Globex')->sole();
 
     $response->assertRedirect(route('organizations.show', ['organization' => $organization->uuid]))
-        ->assertSessionHas('status', 'organization-created');
+        ->assertSessionHas('success', __('ui.organizations.feedback.organization_created'));
 
-    $this->get(route('organizations.show', ['organization' => $organization->uuid]))->assertOk()->assertSee(__('ui.organizations.feedback.organization-created'));
+    $this->get(route('organizations.show', ['organization' => $organization->uuid]))->assertOk()->assertSee(__('ui.organizations.feedback.organization_created'));
 
     expect($organization->users)->toBeEmpty()
         ->and($organization->invitations)->toBeEmpty();
@@ -108,7 +108,7 @@ test('admins can rename an organization', function () {
     $this->actingAs($this->admin)
         ->put(route('organizations.update', $this->organization), ['name' => ' Acme Corp '])
         ->assertRedirect()
-        ->assertSessionHas('status', 'organization-updated');
+        ->assertSessionHas('success', __('ui.organizations.feedback.organization_updated'));
 
     expect($this->organization->fresh()->name)->toBe('Acme Corp');
 });
@@ -123,17 +123,17 @@ test('renaming validates the name', function () {
 
 test('deleting an organization removes everything linked to it', function () {
     $this->organization->users()->attach($this->user);
-    OrganizationInvitation::factory()->for($this->organization)->create();
+    Invitation::factory()->for($this->organization)->create();
 
     $this->actingAs($this->admin)
         ->delete(route('organizations.destroy', $this->organization))
         ->assertRedirect(route('organizations.index'))
-        ->assertSessionHas('status', 'organization-deleted');
+        ->assertSessionHas('success', __('ui.organizations.feedback.organization_deleted'));
 
-    $this->get(route('organizations.index'))->assertSee(__('ui.organizations.feedback.organization-deleted'));
+    $this->get(route('organizations.index'))->assertSee(__('ui.organizations.feedback.organization_deleted'));
 
     expect(Organization::count())->toBe(0)
-        ->and(OrganizationInvitation::count())->toBe(0)
+        ->and(Invitation::count())->toBe(0)
         ->and($this->user->fresh()->organizations)->toBeEmpty();
 });
 

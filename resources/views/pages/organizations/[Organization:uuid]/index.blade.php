@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Organization;
-use App\Support\OrganizationBreadcrumbs;
+use App\Support\Breadcrumbs;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -12,11 +12,9 @@ use function Laravel\Folio\render;
 name('organizations.show');
 
 render(function (View $view, Organization $organization) {
-    Gate::authorize('view', $organization);
-
     Head::title($organization->name)->description(__('ui.organizations.show.description'));
 
-    $breadcrumbs = OrganizationBreadcrumbs::for($organization);
+    $breadcrumbs = Breadcrumbs::organization($organization);
 
     return $view->with([
         'breadcrumbs' => $breadcrumbs,
@@ -32,7 +30,7 @@ render(function (View $view, Organization $organization) {
         <h1 class="m-0! min-w-0 break-words">{{ $organization->name }}</h1>
 
         @canany(['update', 'delete'], $organization)
-            <div class="not-prose flex shrink-0 gap-2">
+            <div class="flex shrink-0 gap-2">
                 @can('update', $organization)
                     <a
                         href="{{ route('organizations.edit', ['organization' => $organization->uuid]) }}"
@@ -43,29 +41,23 @@ render(function (View $view, Organization $organization) {
                 @endcan
 
                 @can('delete', $organization)
-                    <x-organizations.delete-modal :organization="$organization">
+                    <x-confirm-modal
+                        :id="'delete-organization-'.$organization->uuid.'-modal'"
+                        :action="route('organizations.destroy', ['organization' => $organization->uuid])"
+                        :title="__('ui.organizations.delete.title')"
+                        :warning="__('ui.organizations.delete.warning')"
+                        :confirm="__('ui.organizations.delete.actions.submit')"
+                    >
                         {{ __('ui.organizations.show.actions.delete') }}
-                    </x-organizations.delete-modal>
+                    </x-confirm-modal>
                 @endcan
             </div>
         @endcanany
     </div>
 
-    @if (session('status') === 'organization-created')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.feedback.organization-created') }}</span>
-        </p>
-    @elseif (session('status') === 'invitation-accepted')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.organizations.invitations.feedback.invitation-accepted') }}</span>
-        </p>
-    @endif
-
     <div class="not-prose grid gap-4 sm:grid-cols-2">
         <a
-            href="{{ route('spots.index', ['organization' => $organization->uuid]) }}"
+            href="{{ route('organizations.spots.index', ['organization' => $organization->uuid]) }}"
             class="card border-base-content/5 bg-base-100 hover:bg-base-200 focus-visible:outline-primary border transition-colors focus-visible:outline-2"
         >
             <div class="card-body flex-row items-center gap-4">

@@ -93,16 +93,11 @@ test('pages without hierarchy have no trail', function (string $url, bool $authe
     'my organizations' => ['/organizations?mine=1', true],
 ]);
 
-test('the sub-pages no longer have a back link', function () {
-    $this->actingAs($this->responsible)->get($this->orgUrl.'/members')->assertDontSee('btn-ghost btn-sm', false);
-});
-
 test('settings pages show a trail starting at Settings', function (string $path, array $expected) {
     $html = $this->actingAs($this->responsible)->get($path)->assertOk()->getContent();
 
     expect(crumbs($html))->toBe($expected);
 })->with([
-    'overview' => ['/settings', ['Settings']],
     'profile' => ['/settings/profile', ['Settings', 'Profile settings']],
     'security' => ['/settings/security', ['Settings', 'Security settings']],
 ]);

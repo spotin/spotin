@@ -32,7 +32,7 @@ return new class extends Migration
             $table->index('user_id');
         });
 
-        Schema::create('organization_invitations', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->string('email')->index();
@@ -49,7 +49,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('organization_invitations');
+        Schema::dropIfExists('invitations');
         Schema::dropIfExists('memberships');
         Schema::dropIfExists('organizations');
 

@@ -37,7 +37,7 @@ test('users can update their profile and see a confirmation', function () {
             'email' => 'jane@example.com',
         ])
         ->assertOk()
-        ->assertSee(__('ui.settings.feedback.profile-information-updated'))
+        ->assertSee(__('ui.settings.profile.feedback.profile_information_updated'))
         ->assertDontSee('profile-information-updated');
 
     expect($this->user->fresh())
@@ -87,7 +87,7 @@ test('users can change their password and see a confirmation', function () {
             'password_confirmation' => 'a-brand-new-password',
         ])
         ->assertOk()
-        ->assertSee(__('ui.settings.feedback.password-updated'))
+        ->assertSee(__('ui.settings.security.feedback.password_updated'))
         ->assertDontSee('password-updated');
 
     expect(Hash::check('a-brand-new-password', $this->user->fresh()->password))->toBeTrue();
@@ -103,4 +103,16 @@ test('the password is not changed when the current password is wrong', function 
         ->assertSessionHasErrorsIn('updatePassword', 'current_password');
 
     expect(Hash::check('password', $this->user->fresh()->password))->toBeTrue();
+});
+
+test('the settings page links to the settings sections', function () {
+    $this->actingAs(User::factory()->create())
+        ->get('/settings')
+        ->assertOk()
+        ->assertSee(route('settings.profile'), false)
+        ->assertSee(route('settings.security'), false);
+});
+
+test('guests are sent to log in from the settings page', function () {
+    $this->get('/settings')->assertRedirect(route('login'));
 });

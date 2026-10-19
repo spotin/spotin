@@ -3,10 +3,10 @@
 use App\Actions\Organizations\ChangeMemberRole;
 use App\Actions\Organizations\RemoveMember;
 use App\Enums\OrganizationRole;
+use App\Models\Invitation;
 use App\Models\Organization;
-use App\Models\OrganizationInvitation;
 use App\Models\User;
-use App\Notifications\OrganizationInvitationNotification;
+use App\Notifications\InvitationNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
@@ -57,14 +57,14 @@ test('responsible users can change the role of and remove members', function () 
     $this->actingAs($this->responsible)
         ->put(route('organizations.members.update', [$this->organization, $this->member]), ['role' => 'responsible'])
         ->assertRedirect()
-        ->assertSessionHas('status', 'member-role-updated');
+        ->assertSessionHas('success', __('ui.organizations.members.feedback.member_role_updated'));
 
     expect($this->member->isResponsibleOf($this->organization))->toBeTrue();
 
     $this->actingAs($this->responsible)
         ->delete(route('organizations.members.destroy', [$this->organization, $this->member]))
         ->assertRedirect()
-        ->assertSessionHas('status', 'member-removed');
+        ->assertSessionHas('success', __('ui.organizations.members.feedback.member_removed'));
 
     expect($this->member->belongsToOrganization($this->organization))->toBeFalse();
 });
@@ -91,7 +91,7 @@ test('the last responsible user is protected through the routes too', function (
 });
 
 test('members and outsiders cannot manage members or invitations', function (string $user) {
-    $invitation = OrganizationInvitation::factory()->for($this->organization)->create();
+    $invitation = Invitation::factory()->for($this->organization)->create();
 
     $this->actingAs($this->$user)->put(route('organizations.members.update', [$this->organization, $this->member]), ['role' => 'responsible'])->assertForbidden();
     $this->actingAs($this->$user)->delete(route('organizations.members.destroy', [$this->organization, $this->member]))->assertForbidden();
@@ -129,26 +129,26 @@ test('responsible users can invite, resend and revoke', function () {
     $this->actingAs($this->responsible)
         ->post(route('organizations.invitations.store', $this->organization), ['email' => 'New@Example.com', 'role' => 'member'])
         ->assertRedirect()
-        ->assertSessionHas('status', 'invitation-sent');
+        ->assertSessionHas('success', __('ui.organizations.invitations.feedback.invitation_sent'));
 
-    $invitation = OrganizationInvitation::sole();
+    $invitation = Invitation::sole();
     expect($invitation->email)->toBe('new@example.com');
-    Notification::assertSentOnDemandTimes(OrganizationInvitationNotification::class, 1);
+    Notification::assertSentOnDemandTimes(InvitationNotification::class, 1);
 
     $this->actingAs($this->responsible)
         ->post(route('organizations.invitations.resend', [$this->organization, $invitation]))
-        ->assertSessionHas('status', 'invitation-sent');
-    Notification::assertSentOnDemandTimes(OrganizationInvitationNotification::class, 2);
+        ->assertSessionHas('success', __('ui.organizations.invitations.feedback.invitation_sent'));
+    Notification::assertSentOnDemandTimes(InvitationNotification::class, 2);
 
     $this->actingAs($this->responsible)
         ->delete(route('organizations.invitations.destroy', [$this->organization, $invitation]))
-        ->assertSessionHas('status', 'invitation-revoked');
+        ->assertSessionHas('success', __('ui.organizations.invitations.feedback.invitation_revoked'));
 
-    expect(OrganizationInvitation::count())->toBe(0);
+    expect(Invitation::count())->toBe(0);
 });
 
 test('invitations of another organization cannot be touched', function () {
-    $invitation = OrganizationInvitation::factory()->for($this->other)->create();
+    $invitation = Invitation::factory()->for($this->other)->create();
 
     $this->actingAs($this->responsible)
         ->delete(route('organizations.invitations.destroy', [$this->organization, $invitation]))
@@ -171,7 +171,7 @@ test('members can leave an organization, the last responsible user cannot', func
     $this->actingAs($this->member)
         ->delete(route('organizations.leave', $this->organization))
         ->assertRedirect(route('organizations.index', ['mine' => 1]))
-        ->assertSessionHas('status', 'organization-left');
+        ->assertSessionHas('success', __('ui.organizations.members.feedback.organization_left'));
 
     expect($this->member->belongsToOrganization($this->organization))->toBeFalse();
 
@@ -217,7 +217,7 @@ test('the members page says so when the organization has no members', function (
 });
 
 test('removing a member and revoking an invitation are confirmed in a modal', function () {
-    $invitation = OrganizationInvitation::factory()->for($this->organization)->create();
+    $invitation = Invitation::factory()->for($this->organization)->create();
 
     $this->actingAs($this->responsible)->get("/organizations/{$this->organization->uuid}/members")
         ->assertOk()

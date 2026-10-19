@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Breadcrumbs;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -14,7 +15,7 @@ render(function (View $view) {
     Head::title(__('ui.settings.profile.title'))
         ->description(__('ui.settings.profile.description'));
 
-    $breadcrumbs = [['label' => __('ui.settings.title'), 'url' => route('settings.index')], ['label' => __('ui.settings.profile.title')]];
+    $breadcrumbs = [...Breadcrumbs::settings(), ['label' => __('ui.settings.profile.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });
@@ -26,7 +27,7 @@ render(function (View $view) {
     @if (session('status') === 'profile-information-updated')
         <p role="alert" class="alert alert-success">
             <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.settings.feedback.profile-information-updated') }}</span>
+            <span>{{ __('ui.settings.profile.feedback.profile_information_updated') }}</span>
         </p>
     @endif
 
@@ -35,7 +36,7 @@ render(function (View $view) {
         @method('PUT')
 
         <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill-the-form') }}</legend>
+            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
             <div>
                 <label class="floating-label input validator w-full">

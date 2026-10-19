@@ -26,4 +26,6 @@ test('pages show no untranslated keys', function (string $locale, string $route,
     'confirm password' => ['password.confirm', true],
     'profile settings' => ['settings.profile', true],
     'security settings' => ['settings.security', true],
+    'developer settings' => ['settings.developer', true],
+    'new developer token' => ['settings.developer.tokens.create', true],
 ]);

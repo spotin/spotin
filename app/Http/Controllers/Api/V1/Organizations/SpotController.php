@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Organizations;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ListFiltersRequest;
+use App\Http\Requests\Spots\StoreSpotRequest;
+use App\Http\Resources\SpotResource;
+use App\Models\Organization;
+use App\Models\Spot;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+
+class SpotController extends Controller
+{
+    /**
+     * List the spots of an organization, optionally only the ones the user created or matching a search query.
+     */
+    public function index(ListFiltersRequest $request, Organization $organization): AnonymousResourceCollection
+    {
+        $spots = Spot::listed($request->user(), $request->searchQuery(), $request->mine())
+            ->whereBelongsTo($organization)
+            ->paginate(25)
+            ->withQueryString();
+
+        return SpotResource::collection($spots);
+    }
+
+    /**
+     * Create a spot in the organization of the URL, on behalf of the owner of the token.
+     */
+    public function store(StoreSpotRequest $request, Organization $organization): JsonResponse
+    {
+        $spot = new Spot($request->safe()->only('name'));
+        $spot->organization()->associate($organization);
+        $spot->creator()->associate($request->user());
+        $spot->save();
+
+        return (new SpotResource($spot->load(['organization', 'creator'])))->response()->setStatusCode(Response::HTTP_CREATED);
+    }
+}
