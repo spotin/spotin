@@ -13,7 +13,9 @@ test('the documentation is rendered by Scalar, loaded from a pinned version, wit
     expect($html)->toMatch('/<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/@scalar\/api-reference@\d+\.\d+\.\d+"><\/script>/')
         ->and($html)->toContain('Scalar.createApiReference')
         ->and($html)->not->toContain('proxy.scalar.com')
-        ->and($html)->toContain('"persistAuth":true');
+        ->and($html)->toContain('"persistAuth":true')
+        // The title of the renderer, not the one of the spec, names the downloaded document.
+        ->and($html)->toMatch('/\.\.\.\{[^\n]*"title":"Spot in\\\\u00ae API"/');
 });
 
 test('every route of the API is documented, behind a bearer token', function () {

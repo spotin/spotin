@@ -115,6 +115,8 @@ MD,
             // Pinned, so that the documentation does not change when Scalar releases a new version.
             'cdn' => 'https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.74.0',
             'theme' => 'laravel',
+            // Scalar names the downloaded document after this title (`spot-in-api.json`), instead of `api-1.json`.
+            'title' => 'Spot in® API',
             // The documentation is on the same origin as the API, so requests need no proxy, which would
             // otherwise see the token.
             'proxyUrl' => null,

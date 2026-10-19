@@ -172,9 +172,9 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
-                      php artisan optimize:clear
-
                       composer setup
+
+                      php artisan optimize:clear
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
@@ -209,9 +209,9 @@ jobs:
 
                       git checkout --detach FETCH_HEAD
 
-                      php artisan optimize:clear
-
                       composer setup-prod
+
+                      php artisan optimize:clear
 
                       ref="${{ env.BRANCH_NAME }}"
                       sha="${{ env.GITHUB_SHA }}"
