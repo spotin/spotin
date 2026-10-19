@@ -28,6 +28,13 @@ return [
         'pagination' => [
             'page' => 'Page :current of :last',
         ],
+        'steps' => [
+            'previous' => 'Previous',
+            'next' => 'Continue',
+            'position' => 'Step :current of :total',
+            'done' => 'Completed',
+            'error' => 'Contains errors',
+        ],
     ],
     'auth' => [
         'common' => [
@@ -74,6 +81,17 @@ return [
             'title' => 'Register',
             'description' => 'Create a new account',
             'invitation' => 'You are creating an account to join :organization. Your invitation was sent to this email address, so it cannot be changed.',
+            'steps' => [
+                'information' => [
+                    'title' => 'Information',
+                    'audience' => 'Spot in® is made for public administrations and organizations that manage spots. It is not meant for personal use.',
+                    'membership' => 'Registering does not let you create spots on its own: an organization must first invite you to join it. Only the members of an organization can create its spots.',
+                    'discover' => 'To discover the spots, you do not need an account.',
+                ],
+                'account' => [
+                    'title' => 'Account',
+                ],
+            ],
             'form' => [
                 'actions' => [
                     'submit' => 'Register',

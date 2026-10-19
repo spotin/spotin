@@ -28,6 +28,13 @@ return [
         'pagination' => [
             'page' => 'Page :current sur :last',
         ],
+        'steps' => [
+            'previous' => 'Précédent',
+            'next' => 'Continuer',
+            'position' => 'Étape :current sur :total',
+            'done' => 'Terminée',
+            'error' => 'Contient des erreurs',
+        ],
     ],
     'auth' => [
         'common' => [
@@ -74,6 +81,17 @@ return [
             'title' => 'Inscription',
             'description' => 'Créez un compte',
             'invitation' => 'Vous créez un compte pour rejoindre :organization. Votre invitation a été envoyée à cette adresse e-mail, elle ne peut donc pas être modifiée.',
+            'steps' => [
+                'information' => [
+                    'title' => 'Information',
+                    'audience' => "Spot in® est conçu pour les administrations publiques et les organisations qui gèrent des spots. Il n'est pas destiné à un usage personnel.",
+                    'membership' => "L'inscription seule ne permet pas de créer des spots : une organisation doit d'abord vous inviter à la rejoindre. Seuls les membres d'une organisation peuvent créer ses spots.",
+                    'discover' => "Vous n'avez pas besoin de compte pour découvrir les spots.",
+                ],
+                'account' => [
+                    'title' => 'Compte',
+                ],
+            ],
             'form' => [
                 'actions' => [
                     'submit' => "S'inscrire",

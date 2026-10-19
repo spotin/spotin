@@ -1,3 +1,5 @@
+import "./steps.js";
+
 const prefersDark = matchMedia("(prefers-color-scheme: dark)");
 
 document.querySelectorAll(".theme-controller").forEach((controller) => {
