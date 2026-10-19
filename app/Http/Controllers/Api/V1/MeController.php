@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class MeController extends Controller
 {
     /**
-     * The owner of the token and what the token allows, whatever its abilities.
+     * Get the user of the token.
      */
     public function __invoke(Request $request): MeResource
     {

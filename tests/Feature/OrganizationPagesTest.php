@@ -88,7 +88,7 @@ test('everyone, guests included, can discover the organizations and see an organ
 
     $this->get(($this->url)('organizations.show'))
         ->assertOk()
-        ->assertSee('<title>Acme - Spot in</title>', false)
+        ->assertSee('<title>Acme - Spot in®</title>', false)
         ->assertSee('</footer>', false)
         ->assertDontSee('ui.')
         ->assertSee(route('organizations.spots.index', ['organization' => $this->organization->uuid]), false)

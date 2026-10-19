@@ -32,6 +32,15 @@ render(function (View $view) {
 
     <p>{{ __('ui.settings.developer.index.warning') }}</p>
 
+    <p>
+        {!!
+            __('ui.settings.developer.index.access_the_api', [
+                'ui' => '<a href="'.e(route('api.ui')).'" target="_blank">/api</a>',
+                'document' => '<a href="'.e(route('api.document')).'" target="_blank">/api.json</a>',
+            ])
+        !!}
+    </p>
+
     <div class="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <h2 class="m-0! min-w-0 break-words">{{ __('ui.settings.developer.index.your_tokens') }}</h2>
 

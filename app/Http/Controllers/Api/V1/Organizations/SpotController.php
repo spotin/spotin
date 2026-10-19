@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
 class SpotController extends Controller
 {
     /**
-     * List the spots of an organization, optionally only the ones the user created or matching a search query.
+     * Get the spots of an organization.
      */
     public function index(ApiListFiltersRequest $request, Organization $organization): AnonymousResourceCollection
     {
@@ -30,7 +30,7 @@ class SpotController extends Controller
     }
 
     /**
-     * Create a spot in the organization of the URL, on behalf of the owner of the token.
+     * Create a new spot in a specific organization.
      */
     public function store(StoreSpotRequest $request, Organization $organization): JsonResponse
     {

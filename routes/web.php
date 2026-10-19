@@ -50,14 +50,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('settings.developer.tokens.destroy');
 
     Route::prefix('spots/{spot:uuid}')->name('spots.')->group(function () {
-        Route::put('/', [SpotController::class, 'update'])->middleware('can:update,spot')->name('update');
+        Route::patch('/', [SpotController::class, 'update'])->middleware('can:update,spot')->name('update');
         Route::delete('/', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('destroy');
     });
 
     Route::post('organizations', [OrganizationController::class, 'store'])
         ->middleware('can:create,'.Organization::class)
         ->name('organizations.store');
-    Route::put('organizations/{organization:uuid}', [OrganizationController::class, 'update'])
+    Route::patch('organizations/{organization:uuid}', [OrganizationController::class, 'update'])
         ->middleware('can:update,organization')
         ->name('organizations.update');
     Route::delete('organizations/{organization:uuid}', [OrganizationController::class, 'destroy'])

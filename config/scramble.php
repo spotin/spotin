@@ -50,51 +50,31 @@ return [
         'version' => env('API_VERSION', '1.0.0'),
 
         /*
-         * Description rendered on the home page of the API documentation (`/docs/api`).
+         * Description rendered on the home page of the API documentation (`/api`).
          */
         'description' => <<<'MD'
-Read and manage the organizations and the spots of Spot in®.
+## Introduction
 
-## Authentication
+Welcome to the Spot in® API documentation.
 
-Every request needs a personal access token, sent as a bearer token. Create one in **Settings > Developer settings**
-of the application, choose its abilities and its expiration, and copy it when it is shown: it is shown only once.
+### Authentication
 
-```
-Authorization: Bearer <token>
-Accept: application/vnd.api+json
-```
+Every request needs a personal access token, sent as a bearer token. Create one
+in [**Settings > Developer settings**](/settings/developer) of the application.
 
-A token never allows more than its owner can do. The owner needs a verified email address.
+Only administrators can create, update and delete organizations, and only the
+members of an organization and the administrators can create, update and delete
+its spots.
 
-This documentation remembers the token you enter in your browser, until you remove it from the authentication panel.
-To try the API here, prefer a token with only the abilities you need and a short expiration.
+**Note**: this API documentation remembers the token you enter in your browser,
+until you remove it from the authentication panel.
 
-| Ability                | Allows to                  |
-| ---------------------- | -------------------------- |
-| `organizations:read`   | list and show organizations |
-| `organizations:create` | create organizations       |
-| `organizations:update` | update organizations       |
-| `organizations:delete` | delete organizations       |
-| `spots:read`           | list and show spots        |
-| `spots:create`         | create spots               |
-| `spots:update`         | update spots               |
-| `spots:delete`         | delete spots               |
+### Conventions
 
-Only administrators can create, update and delete organizations, and only the members of an organization and the
-administrators can create, update and delete its spots.
-
-## Conventions
-
-- The responses follow [JSON:API](https://jsonapi.org): each resource has an `id`, its UUID, a `type` and its
-  `attributes`, with the content type `application/vnd.api+json`. The request bodies stay plain JSON objects.
-- The related resources are only returned when asked for with `include`, in `relationships` and `included`: the
-  organization and the creator of a spot with `include=organization,creator`. `fields[<type>]` keeps only some
-  attributes.
-- The lists are sorted by name and paginated by 25 (`page`). `filter[query]` keeps the names containing the text, and
-  `filter[mine]` keeps what is yours: the organizations you belong to, the spots you created.
-- The creator of a spot is only visible to the members of its organization and to administrators: it is `null` for
-  the others.
+- The responses follow [JSON:API](https://jsonapi.org).
+- The related resources are only returned when asked for with `include`.
+- The creator of a spot is only visible to the members of its organization and
+  to administrators. It is `null` for the others.
 - Requests are limited to 60 per minute, and answer `429` beyond.
 MD,
     ],

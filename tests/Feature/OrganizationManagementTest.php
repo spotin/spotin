@@ -34,7 +34,7 @@ test('other users cannot reach the admin pages or actions', function () {
     $this->get(route('organizations.create'))->assertForbidden();
     $this->get(route('organizations.edit', ['organization' => $this->organization->uuid]))->assertForbidden();
     $this->post(route('organizations.store'), ['name' => 'Nope'])->assertForbidden();
-    $this->put(route('organizations.update', $this->organization), ['name' => 'Nope'])->assertForbidden();
+    $this->patch(route('organizations.update', $this->organization), ['name' => 'Nope'])->assertForbidden();
     $this->delete(route('organizations.destroy', $this->organization))->assertForbidden();
 
     expect(Organization::pluck('name')->all())->toBe(['Acme']);
@@ -43,7 +43,7 @@ test('other users cannot reach the admin pages or actions', function () {
 test('responsible users cannot edit or delete their own organization', function () {
     $this->organization->users()->attach($this->user, ['role' => OrganizationRole::Responsible]);
 
-    $this->actingAs($this->user)->put(route('organizations.update', $this->organization), ['name' => 'Nope'])->assertForbidden();
+    $this->actingAs($this->user)->patch(route('organizations.update', $this->organization), ['name' => 'Nope'])->assertForbidden();
     $this->delete(route('organizations.destroy', $this->organization))->assertForbidden();
 });
 
@@ -95,10 +95,10 @@ test('an organization can be saved again under its own name but not under anothe
     Organization::factory()->create(['name' => 'Globex']);
 
     $this->actingAs($this->admin)
-        ->put(route('organizations.update', $this->organization), ['name' => 'Acme'])
+        ->patch(route('organizations.update', $this->organization), ['name' => 'Acme'])
         ->assertSessionHasNoErrors();
 
-    $this->put(route('organizations.update', $this->organization), ['name' => 'Globex'])
+    $this->patch(route('organizations.update', $this->organization), ['name' => 'Globex'])
         ->assertSessionHasErrors('name');
 
     expect($this->organization->fresh()->name)->toBe('Acme');
@@ -106,7 +106,7 @@ test('an organization can be saved again under its own name but not under anothe
 
 test('admins can rename an organization', function () {
     $this->actingAs($this->admin)
-        ->put(route('organizations.update', $this->organization), ['name' => ' Acme Corp '])
+        ->patch(route('organizations.update', $this->organization), ['name' => ' Acme Corp '])
         ->assertRedirect()
         ->assertSessionHas('success', __('ui.organizations.feedback.organization_updated'));
 
@@ -115,7 +115,7 @@ test('admins can rename an organization', function () {
 
 test('renaming validates the name', function () {
     $this->actingAs($this->admin)
-        ->put(route('organizations.update', $this->organization), ['name' => 'A'])
+        ->patch(route('organizations.update', $this->organization), ['name' => 'A'])
         ->assertSessionHasErrors('name');
 
     expect($this->organization->fresh()->name)->toBe('Acme');

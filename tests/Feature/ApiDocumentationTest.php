@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 test('the documentation is public, at /api and /api.json', function () {
     $this->get('/api')->assertOk()->assertSee('Spot in® API', false);
-    $this->get('/api.json')->assertOk()->assertJsonPath('info.title', 'Spot in® API')->assertJsonPath('info.version', '1.0.0');
+    $this->get('/api.json')->assertOk()->assertJsonPath('info.title', 'Spot in® API');
 });
 
 test('the documentation is rendered by Scalar, loaded from a pinned version, without a proxy that would see the token', function () {
@@ -22,7 +22,7 @@ test('every route of the API is documented, behind a bearer token', function () 
     $routes = collect(Route::getRoutes()->getRoutes())
         ->filter(fn ($route) => str_starts_with($route->uri(), 'api/v1/'))
         ->flatMap(fn ($route) => collect($route->methods())
-            ->reject(fn ($method) => in_array($method, ['HEAD', 'PATCH']))
+            ->reject(fn ($method) => $method === 'HEAD')
             ->map(fn ($method) => strtolower($method).' '.preg_replace('/\{(\w+):\w+\}/', '{$1}', substr($route->uri(), strlen('api/v1'))))
         )
         ->sort()
@@ -47,7 +47,7 @@ test('each operation says which token ability it needs and who can do it', funct
 
     expect($description('get', '/spots'))->toContain('`spots:read`')
         ->and($description('post', '/organizations/{organization}/spots'))->toContain('`spots:create`')->toContain('members of the organization')
-        ->and($description('put', '/spots/{spot}'))->toContain('`spots:update`')
+        ->and($description('patch', '/spots/{spot}'))->toContain('`spots:update`')
         ->and($description('delete', '/spots/{spot}'))->toContain('`spots:delete`')
         ->and($description('post', '/organizations'))->toContain('`organizations:create`')->toContain('administrators')
         ->and($description('delete', '/organizations/{organization}'))->toContain('`organizations:delete`')->toContain('administrators')

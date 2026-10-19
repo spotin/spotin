@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
 class OrganizationController extends Controller
 {
     /**
-     * List the organizations, optionally only the ones of the user or matching a search query.
+     * Get the organizations.
      */
     public function index(ApiListFiltersRequest $request): AnonymousResourceCollection
     {
@@ -29,7 +29,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Show an organization.
+     * Get the specific organization.
      */
     public function show(Organization $organization): OrganizationResource
     {
@@ -37,7 +37,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Create an organization.
+     * Create a new organization.
      */
     public function store(StoreOrganizationRequest $request): JsonResponse
     {
@@ -47,7 +47,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Update an organization.
+     * Update a specific organization.
      */
     public function update(UpdateOrganizationRequest $request, Organization $organization): OrganizationResource
     {
@@ -57,7 +57,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Permanently delete an organization.
+     * Delete a specific organization.
      */
     public function destroy(Organization $organization): Response
     {

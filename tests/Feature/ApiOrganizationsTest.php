@@ -77,7 +77,7 @@ test('an organization can be shown by its uuid', function () {
 test('a token needs the matching ability for every action', function (string $method, string $ability) {
     Sanctum::actingAs($this->admin, array_values(array_diff($this->abilities, [$ability])));
 
-    $url = '/api/v1/organizations'.(in_array($method, ['putJson', 'deleteJson']) ? '/'.$this->acme->uuid : '');
+    $url = '/api/v1/organizations'.(in_array($method, ['patchJson', 'deleteJson']) ? '/'.$this->acme->uuid : '');
 
     $this->$method($url, ['name' => 'Whatever'])->assertForbidden();
 
@@ -86,7 +86,7 @@ test('a token needs the matching ability for every action', function (string $me
 })->with([
     'list' => ['getJson', 'organizations:read'],
     'create' => ['postJson', 'organizations:create'],
-    'update' => ['putJson', 'organizations:update'],
+    'update' => ['patchJson', 'organizations:update'],
     'delete' => ['deleteJson', 'organizations:delete'],
 ]);
 
@@ -100,11 +100,11 @@ test('administrators can create, rename and delete organizations', function () {
 
     expect(Organization::firstWhere('uuid', $uuid)->name)->toBe('Initech');
 
-    $this->putJson('/api/v1/organizations/'.$uuid, ['name' => 'Initech Corp'])
+    $this->patchJson('/api/v1/organizations/'.$uuid, ['name' => 'Initech Corp'])
         ->assertOk()
         ->assertJsonPath('data.attributes.name', 'Initech Corp');
 
-    $this->patchJson('/api/v1/organizations/'.$uuid, ['name' => 'Initech Inc'])->assertOk();
+    $this->putJson('/api/v1/organizations/'.$uuid, ['name' => 'Initech Inc'])->assertMethodNotAllowed();
 
     $this->deleteJson('/api/v1/organizations/'.$uuid)->assertNoContent();
 
@@ -115,7 +115,7 @@ test('the abilities of a token never exceed the rights of its owner', function (
     Sanctum::actingAs($this->member, $this->abilities);
 
     $this->postJson('/api/v1/organizations', ['name' => 'Initech'])->assertForbidden();
-    $this->putJson('/api/v1/organizations/'.$this->acme->uuid, ['name' => 'Renamed'])->assertForbidden();
+    $this->patchJson('/api/v1/organizations/'.$this->acme->uuid, ['name' => 'Renamed'])->assertForbidden();
     $this->deleteJson('/api/v1/organizations/'.$this->acme->uuid)->assertForbidden();
 
     expect($this->acme->fresh()->name)->toBe('Acme')
@@ -128,8 +128,8 @@ test('the organization input is validated', function () {
     $this->postJson('/api/v1/organizations', [])->assertUnprocessable()->assertJsonValidationErrors('name');
     $this->postJson('/api/v1/organizations', ['name' => 'A'])->assertUnprocessable()->assertJsonValidationErrors('name');
     $this->postJson('/api/v1/organizations', ['name' => 'Acme'])->assertUnprocessable()->assertJsonValidationErrors('name');
-    $this->putJson('/api/v1/organizations/'.$this->acme->uuid, ['name' => 'Globex'])->assertUnprocessable()->assertJsonValidationErrors('name');
-    $this->putJson('/api/v1/organizations/'.$this->acme->uuid, ['name' => 'Acme'])->assertOk();
+    $this->patchJson('/api/v1/organizations/'.$this->acme->uuid, ['name' => 'Globex'])->assertUnprocessable()->assertJsonValidationErrors('name');
+    $this->patchJson('/api/v1/organizations/'.$this->acme->uuid, ['name' => 'Acme'])->assertOk();
 });
 
 test('tokens are required', function () {

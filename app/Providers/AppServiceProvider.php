@@ -8,6 +8,7 @@ use Dedoc\Scramble\Support\RouteInfo;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -34,7 +35,10 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('vendor.pagination.daisyui');
 
         Scramble::configure()
-            ->expose(ui: '/api', document: '/api.json')
+            ->expose(
+                ui: fn (Router $router, $action) => $router->get('api', $action)->name('api.ui'),
+                document: fn (Router $router, $action) => $router->get('api.json', $action)->name('api.document'),
+            )
             ->withOperationTransformers(function (Operation $operation, RouteInfo $routeInfo): void {
                 $abilities = collect($routeInfo->route->gatherMiddleware())
                     ->filter(fn ($middleware) => is_string($middleware) && Str::startsWith($middleware, 'abilities:'))

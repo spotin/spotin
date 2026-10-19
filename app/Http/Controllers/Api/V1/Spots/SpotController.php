@@ -15,8 +15,7 @@ use Illuminate\Http\Response;
 class SpotController extends Controller
 {
     /**
-     * List the spots of all the organizations, optionally only the ones the user created or matching a
-     * search query.
+     * Get the spots.
      */
     public function index(ApiListFiltersRequest $request): AnonymousResourceCollection
     {
@@ -28,7 +27,7 @@ class SpotController extends Controller
     }
 
     /**
-     * Show a spot.
+     * Get a specific spot.
      */
     public function show(Spot $spot): SpotResource
     {
@@ -36,7 +35,7 @@ class SpotController extends Controller
     }
 
     /**
-     * Update a spot.
+     * Update a specific spot.
      */
     public function update(UpdateSpotRequest $request, Spot $spot): SpotResource
     {
@@ -46,7 +45,7 @@ class SpotController extends Controller
     }
 
     /**
-     * Permanently delete a spot.
+     * Delete a specific spot.
      */
     public function destroy(Spot $spot): Response
     {
