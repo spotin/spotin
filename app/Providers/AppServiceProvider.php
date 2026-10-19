@@ -2,11 +2,16 @@
 
 namespace App\Providers;
 
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\Operation;
+use Dedoc\Scramble\Support\RouteInfo;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Laravel\Head\Enums\ImageType;
 use Laravel\Head\Enums\OgType;
 use Laravel\Head\Facades\Head;
@@ -28,6 +33,31 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::defaultView('vendor.pagination.daisyui');
+
+        Scramble::configure()
+            ->expose(
+                ui: fn (Router $router, $action) => $router->get('api', $action)->name('api.ui'),
+                document: fn (Router $router, $action) => $router->get('api.json', $action)->name('api.document'),
+            )
+            ->withOperationTransformers(function (Operation $operation, RouteInfo $routeInfo): void {
+                $abilities = collect($routeInfo->route->gatherMiddleware())
+                    ->filter(fn ($middleware) => is_string($middleware) && Str::startsWith($middleware, 'abilities:'))
+                    ->map(fn (string $middleware) => Str::after($middleware, 'abilities:'));
+
+                $note = $abilities->isEmpty()
+                    ? 'Needs a valid token, whatever its abilities.'
+                    : 'Needs a token with the '.$abilities->map(fn (string $ability) => "`$ability`")->join(', ', ' and ').' ability.';
+
+                $writes = fn (string $resource) => $abilities->contains(fn (string $ability) => Str::startsWith($ability, $resource.':') && ! Str::endsWith($ability, ':read'));
+
+                if ($writes('organizations')) {
+                    $note .= ' Only administrators can do it.';
+                } elseif ($writes('spots')) {
+                    $note .= ' Only the members of the organization and the administrators can do it.';
+                }
+
+                $operation->description(trim($operation->description."\n\n".$note));
+            });
 
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
 

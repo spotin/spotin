@@ -23,8 +23,8 @@ in understanding its components, configurations, and functionalities.
 ## Architecture
 
 The application is built with [Laravel](https://laravel.com/docs). The primary
-PHP dependencies, as declared in `composer.json` and `package.json`, are listed
-below.
+dependencies, as declared in `composer.json` (PHP) and `package.json`
+(JavaScript), are listed below.
 
 ### Conventions
 
@@ -36,18 +36,18 @@ below.
   under `Api\V1`.
 - **Routes.** Pages (`GET`) are Folio pages in `resources/views/pages`, and name
   themselves with `name()`. Everything that changes data (`POST`, `PUT`,
-  `DELETE`) is a route of `routes/web.php`, and `routes/api.php` for the API.
-  The pages of a public domain (organizations, spots) need no login. A page that
-  is not under a dynamic segment is `create.blade.php`, unless a dynamic sibling
-  would take its URL: then it is `create/index.blade.php`.
+  `PATCH`, `DELETE`) is a route of `routes/web.php`, and `routes/api.php` for
+  the API. The pages of a public domain (organizations, spots) need no login. A
+  page that is not under a dynamic segment is `create.blade.php`, unless a
+  dynamic sibling would take its URL: then it is `create/index.blade.php`.
 - **Authorization.** Routes check abilities with the `can:` middleware, pages
   with `Gate::authorize()` in their render function, and controllers never
   authorize. Public pages have no ability to check.
-- **Lists.** The filters (`query`, `mine`) are validated by
-  `ListFiltersRequest`, on the pages as well as in the API. The query is in the
-  `listed()` scope of the model, and the page is an `OrganizationListing` or
-  `SpotListing` class with an `x-organizations.list` or `x-spots.list`
-  component.
+- **Lists.** The filters (`query`, `mine`) are validated by `ListFiltersRequest`
+  on the pages, and by its `ApiListFiltersRequest` subclass in the API. The
+  query is in the `listed()` scope of the model, and the page is an
+  `OrganizationListing` or `SpotListing` class with an `x-organizations.list` or
+  `x-spots.list` component.
 - **Feedback.** Controllers flash the translated message with
   `->with('success', __('ui…'))`, and the layout shows it once. Only the pages
   of Fortify use its own `status` values.
@@ -70,6 +70,10 @@ below.
   (login, registration, passwords).
 - [Laravel Head](https://github.com/laravel/head): management of the page title,
   description and meta tags.
+- [Laravel Sanctum](https://laravel.com/docs/sanctum): personal access tokens
+  for the API.
+- [Scramble](https://scramble.dedoc.co): OpenAPI documentation generated from
+  the API code.
 - [Blade Icons](https://github.com/blade-ui-kit/blade-icons): base package for
   using SVG icons in Blade.
 - [Blade Lucide Icons](https://github.com/mallardduck/blade-lucide-icons): the
@@ -112,4 +116,19 @@ _Coming soon._
 
 ## API
 
-_Coming soon._
+The application exposes a REST API under `/api/v1` to read and manage the
+organizations and the spots. The responses follow
+[JSON:API](https://jsonapi.org).
+
+Every request needs a personal access token, sent as a bearer token. Tokens are
+created in **Settings > Developer settings** of the application, and their owner
+needs a verified email address.
+
+The API is documented with Scramble:
+
+- `/api`: the interactive documentation, where requests can be tried with a
+  token.
+- `/api.json`: the OpenAPI document.
+
+The documentation is generated from the controllers in
+`app/Http/Controllers/Api` and from the description in `config/scramble.php`.

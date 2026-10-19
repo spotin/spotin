@@ -1,5 +1,5 @@
 {
-    "name": "Spot in Development Container",
+    "name": "Spot in® Development Container",
     "image": "mcr.microsoft.com/devcontainers/base:trixie",
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "workspaceFolder": "/workspace",

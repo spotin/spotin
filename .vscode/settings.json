@@ -1,4 +1,7 @@
 {
+    "[blade]": {
+        "editor.defaultFormatter": "open-southeners.laravel-pint"
+    },
     "[php]": {
         "editor.defaultFormatter": "open-southeners.laravel-pint"
     },
@@ -8,6 +11,7 @@
     "files.encoding": "utf8",
     "files.eol": "\n",
     "files.insertFinalNewline": true,
+    "laravel-pint.formatBlade": true,
     "markdown.extension.toc.levels": "2..3",
     "plantuml.render": "PlantUMLServer",
     "plantuml.server": "http://plantuml:8080",

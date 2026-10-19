@@ -73,9 +73,11 @@ test('the organizations can be explored by anyone and filtered to the ones of th
 
     $this->get('/organizations?mine=1')->assertOk()
         ->assertSee('>'.__('ui.organizations.index.title').'</h1>', false)
-        ->assertSee('<title>'.__('ui.organizations.index.title').' - Spot in</title>', false)
+        ->assertSee('<title>'.__('ui.organizations.index.title').' - Spot in®</title>', false)
         ->assertSee(__('ui.organizations.index.filter.mine'))
         ->assertDontSee('Globex');
+    $this->get('/organizations?mine=true')->assertOk()->assertDontSee('Globex');
+    $this->get('/organizations?mine=false')->assertOk()->assertSee('Globex');
 });
 
 test('a user without organization sees an empty filtered list', function () {

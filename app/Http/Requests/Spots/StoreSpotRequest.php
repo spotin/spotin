@@ -20,7 +20,7 @@ class StoreSpotRequest extends FormRequest
         return [
             'name' => [
                 'required', 'string', 'min:2', 'max:100',
-                Rule::unique(Spot::class, 'name')->where('organization_id', $this->route('organization')->getKey()),
+                Rule::unique(Spot::class, 'name')->where('organization_id', $this->route('organization')?->getKey()),
             ],
         ];
     }

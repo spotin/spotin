@@ -44,7 +44,7 @@ The following prerequisites must be filled to run this project:
 - [Docker](https://docs.docker.com/get-docker/) must be installed.
 - [Visual Studio Code](https://code.visualstudio.com/download) must be
   installed.
-- [Visual Studio Code Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Visual Studio Code Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
   extension must be installed.
 
 ### Clone the repository
@@ -67,8 +67,8 @@ The following prerequisites must be filled to run this project:
 2. Click on "File" > "Open Folder..." and select the folder where you cloned the
    repository.
 3. Click on the green "><" icon in the bottom-left corner of the Visual Studio
-   Code window and select "Remote-Containers: Reopen in Container". This will
-   open the project in a development container, which provides a consistent
+   Code window and select "Dev Containers: Reopen in Container". This will open
+   the project in a development container, which provides a consistent
    development environment with all the necessary dependencies and tools.
 
 ### Start the application for local development
@@ -182,7 +182,7 @@ composer update
    ```
 
 3. Install Node.js using the instructions provided by the official Node.js
-   website: <https://nodejs.org/en/download>. Ensure the
+   website: <https://nodejs.org/en/download>.
 4. Verify the installation by running the following command:
 
    ```bash
@@ -368,15 +368,16 @@ ready to deploy the application.
 
 ### Run the deployment workflow
 
-The deployment workflow is triggered automatically when you push changes to the
-GitHub repository.
+The deployment is triggered automatically by the workflow defined in the
+`.github/workflows/main.yaml` file, once the tests have run.
 
-Two workflows are defined in the `.github/workflows/main.yaml` file:
+Two deployment jobs are defined in this workflow:
 
-1. The `deploy-development` workflow is triggered when you push changes to any
-   branch of your GitHub repository. The migration and seeding of the database
-   are performed in this workflow. The `deploy-development` workflow is intended
-   for development and testing purposes only.
-2. The `deploy-production` workflow is triggered when you push changes to the
-   `main` branch of your GitHub repository. The migration and seeding of the
-   database are not performed in this workflow.
+1. The `deploy-development` job is triggered by pull requests. It runs
+   `composer setup`, which recreates the database from scratch and seeds it with
+   the development data: all the existing data is lost at each deployment. The
+   `deploy-development` job is intended for development and testing purposes
+   only.
+2. The `deploy-production` job is triggered when you push changes to the `main`
+   branch. It runs `composer setup-prod` and applies the pending migrations
+   (`php artisan migrate --force`). The database is not seeded.

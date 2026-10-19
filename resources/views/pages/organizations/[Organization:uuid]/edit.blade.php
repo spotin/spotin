@@ -30,7 +30,7 @@ render(function (View $view, Organization $organization) {
 
     <form method="POST" action="{{ route('organizations.update', $organization) }}">
         @csrf
-        @method('PUT')
+        @method('PATCH')
 
         <fieldset class="fieldset mb-4 gap-3">
             <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>

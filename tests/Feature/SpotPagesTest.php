@@ -89,7 +89,7 @@ test('outsiders cannot create, update or delete spots', function () {
     $this->actingAs($this->outsider);
 
     $this->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), ['name' => 'Lighthouse'])->assertForbidden();
-    $this->put(route('spots.update', $this->spot), ['name' => 'Renamed'])->assertForbidden();
+    $this->patch(route('spots.update', $this->spot), ['name' => 'Renamed'])->assertForbidden();
     $this->delete(route('spots.destroy', $this->spot))->assertForbidden();
 
     expect(Spot::count())->toBe(1)->and($this->spot->fresh()->name)->toBe('Harbour');
@@ -114,8 +114,8 @@ test('spot names are validated and unique within the organization', function () 
 });
 
 test('a member renames a spot, keeping its creator', function () {
-    $this->actingAs($this->admin)->put(route('spots.update', $this->spot), ['name' => 'Harbour'])->assertSessionHasNoErrors();
-    $this->put(route('spots.update', $this->spot), ['name' => 'Marina'])->assertSessionHas('success', __('ui.spots.feedback.spot_updated'));
+    $this->actingAs($this->admin)->patch(route('spots.update', $this->spot), ['name' => 'Harbour'])->assertSessionHasNoErrors();
+    $this->patch(route('spots.update', $this->spot), ['name' => 'Marina'])->assertSessionHas('success', __('ui.spots.feedback.spot_updated'));
 
     expect($this->spot->fresh()->name)->toBe('Marina')
         ->and($this->spot->fresh()->created_by)->toBe($this->member->id);

@@ -149,7 +149,7 @@ return [
         ],
     ],
     'homepage' => [
-        'title' => 'Welcome to Spot in',
+        'title' => 'Welcome to Spot in®',
         'description' => 'Discover locations and places of interest in your area.',
         'intro' => 'Spots represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
         'explore_spots' => 'Explore the spots',
@@ -442,6 +442,7 @@ return [
                 'title' => 'Developer settings',
                 'description' => 'Manage the personal access tokens used to access the API.',
                 'warning' => 'This section is for advanced users only. Personal access tokens give an application access to the API on your behalf: only create one if you know what you are doing, keep it secret and revoke it when you no longer need it.',
+                'access_the_api' => 'The API documentation is available at :ui and :document.',
                 'your_tokens' => 'Your tokens',
                 'table' => [
                     'empty' => 'You have no token yet.',

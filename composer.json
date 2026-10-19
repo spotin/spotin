@@ -2,11 +2,12 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "spotin/spotin",
     "type": "project",
-    "description": "The main project for Spot in.",
+    "description": "The main project for Spot in®.",
     "license": "AGPL-3.0",
     "require": {
         "php": "^8.3",
         "blade-ui-kit/blade-icons": "^1.10",
+        "dedoc/scramble": "^0.13.47",
         "laravel/folio": "^1.2",
         "laravel/fortify": "^1.40",
         "laravel/framework": "^13.17",

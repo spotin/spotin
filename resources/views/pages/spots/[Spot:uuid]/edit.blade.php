@@ -29,7 +29,7 @@ render(function (View $view, Spot $spot) {
 
     <form method="POST" action="{{ route('spots.update', $spot) }}">
         @csrf
-        @method('PUT')
+        @method('PATCH')
 
         <fieldset class="fieldset mb-4 gap-3">
             <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>

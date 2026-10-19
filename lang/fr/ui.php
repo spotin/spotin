@@ -149,7 +149,7 @@ return [
         ],
     ],
     'homepage' => [
-        'title' => 'Bienvenue sur Spot in',
+        'title' => 'Bienvenue sur Spot in®',
         'description' => "Découvrez les lieux et les points d'intérêt près de chez vous.",
         'intro' => "Les spots représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
         'explore_spots' => 'Explorer les spots',
@@ -442,6 +442,7 @@ return [
                 'title' => 'Paramètres développeur',
                 'description' => "Gérez les jetons d'accès personnels utilisés pour accéder à l'API.",
                 'warning' => "Cette section est réservée aux utilisateurs avancés. Les jetons d'accès personnels donnent à une application l'accès à l'API en votre nom : ne créez un jeton que si vous savez ce que vous faites, gardez-le secret et révoquez-le quand vous n'en avez plus besoin.",
+                'access_the_api' => "La documentation de l'API est disponible à l'adresse :ui et :document.",
                 'your_tokens' => 'Vos jetons',
                 'table' => [
                     'empty' => "Vous n'avez encore aucun jeton.",

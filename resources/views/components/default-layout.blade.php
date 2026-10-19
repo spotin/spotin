@@ -210,7 +210,7 @@
             </div>
         </nav>
         <aside>
-            <p>{{ config('app.name') }}<sup>®</sup> 2021-{{ date('Y') }}</p>
+            <p>{{ config('app.name') }} 2021-{{ date('Y') }}</p>
         </aside>
     </footer>
 </body>
