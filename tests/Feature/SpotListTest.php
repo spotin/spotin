@@ -6,7 +6,7 @@ use App\Models\Spot;
 use App\Models\User;
 
 beforeEach(function () {
-    $this->organization = Organization::factory()->create();
+    $this->organization = Organization::factory()->create(['name' => 'Acme']);
     $this->other = Organization::factory()->create();
 
     $this->admin = User::factory()->admin()->create();

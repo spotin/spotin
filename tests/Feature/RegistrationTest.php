@@ -21,6 +21,24 @@ test('the registration page renders', function () {
         ->assertSee('name="password_confirmation"', false);
 });
 
+test('the registration form is split into the information step and the account step, submitted at once', function () {
+    $html = $this->get(route('register'))->assertOk()->getContent();
+
+    expect(substr_count($html, 'action="'.route('register.store').'"'))->toBe(1)
+        ->and(substr_count($html, 'data-step '))->toBe(2)
+        ->and($html)->toContain('data-steps-position="'.e(__('ui.common.steps.position')).'"')
+        ->and($html)->toContain(e(__('ui.auth.register.steps.information.membership')))
+        ->and(strpos($html, e(__('ui.auth.register.steps.information.membership'))))->toBeLessThan(strpos($html, 'name="email"'));
+});
+
+test('a failed registration marks the field in the account step, where the page reopens', function () {
+    $this->followingRedirects()
+        ->from(route('register'))
+        ->post(route('register.store'), registrationData(['email' => 'not-an-email']))
+        ->assertOk()
+        ->assertSeeInOrder([e(__('ui.auth.register.steps.account.title')), 'name="email"', 'aria-invalid="true"'], false);
+});
+
 test('users can register and receive a verification email', function () {
     Notification::fake();
 

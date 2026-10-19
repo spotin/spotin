@@ -32,86 +32,100 @@ render(function (View $view) {
     <form method="POST" action="{{ route('register.store') }}">
         @csrf
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+        <x-steps>
+            <x-steps.step :title="__('ui.auth.register.steps.information.title')">
+                <p>{{ __('ui.auth.register.steps.information.audience') }}</p>
+                <p>{{ __('ui.auth.register.steps.information.membership') }}</p>
+                <p>{{ __('ui.auth.register.steps.information.discover') }}</p>
+            </x-steps.step>
 
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.name.placeholder') }}</span>
-                    <x-lucide-id-card class="h-[1em] opacity-50" />
-                    <input
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.name.label') }}"
-                        value="{{ old('name') }}"
-                        @error('name') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('name')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+            <x-steps.step :title="__('ui.auth.register.steps.account.title')">
+                <fieldset class="fieldset mb-4 gap-3">
+                    <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
 
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
-                    <x-lucide-mail class="h-[1em] opacity-50" />
-                    <input
-                        name="email"
-                        type="email"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
-                        value="{{ old('email', $invitation?->email) }}"
-                        @readonly($invitation)
-                        @error('email') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('email')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+                    <div>
+                        <label class="floating-label input validator w-full">
+                            <span>{{ __('ui.auth.common.forms.fields.name.placeholder') }}</span>
+                            <x-lucide-id-card class="h-[1em] opacity-50" />
+                            <input
+                                name="name"
+                                type="text"
+                                required
+                                placeholder="{{ __('ui.auth.common.forms.fields.name.label') }}"
+                                value="{{ old('name') }}"
+                                @error('name') aria-invalid="true" @enderror
+                                class="input w-full"
+                            />
+                        </label>
+                        @error('name')
+                            <span class="validator-hint">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.password.placeholder') }}</span>
-                    <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
-                    <input
-                        name="password"
-                        type="password"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.password.label') }}"
-                        @error('password') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('password')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+                    <div>
+                        <label class="floating-label input validator w-full">
+                            <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
+                            <x-lucide-mail class="h-[1em] opacity-50" />
+                            <input
+                                name="email"
+                                type="email"
+                                required
+                                placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
+                                value="{{ old('email', $invitation?->email) }}"
+                                @readonly($invitation)
+                                @error('email') aria-invalid="true" @enderror
+                                class="input w-full"
+                            />
+                        </label>
+                        @error('email')
+                            <span class="validator-hint">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.password_confirmation.placeholder') }}</span>
-                    <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
-                    <input
-                        name="password_confirmation"
-                        type="password"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.password_confirmation.label') }}"
-                        @error('password') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('password')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-        </fieldset>
+                    <div>
+                        <label class="floating-label input validator w-full">
+                            <span>{{ __('ui.auth.common.forms.fields.password.placeholder') }}</span>
+                            <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
+                            <input
+                                name="password"
+                                type="password"
+                                required
+                                placeholder="{{ __('ui.auth.common.forms.fields.password.label') }}"
+                                @error('password') aria-invalid="true" @enderror
+                                class="input w-full"
+                            />
+                        </label>
+                        @error('password')
+                            <span class="validator-hint">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-        <button type="submit" class="btn btn-block">{{ __('ui.auth.register.form.actions.submit') }}</button>
+                    <div>
+                        <label class="floating-label input validator w-full">
+                            <span>{{ __('ui.auth.common.forms.fields.password_confirmation.placeholder') }}</span>
+                            <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
+                            <input
+                                name="password_confirmation"
+                                type="password"
+                                required
+                                placeholder="{{ __('ui.auth.common.forms.fields.password_confirmation.label') }}"
+                                @error('password') aria-invalid="true" @enderror
+                                class="input w-full"
+                            />
+                        </label>
+                        @error('password')
+                            <span class="validator-hint">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </fieldset>
+
+                <x-slot:actions>
+                    <button type="submit" class="btn btn-primary">
+                        {{ __('ui.auth.register.form.actions.submit') }}
+                    </button>
+                </x-slot:actions>
+            </x-steps.step>
+        </x-steps>
     </form>
 
     <p class="text-center text-sm">

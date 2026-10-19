@@ -51,6 +51,16 @@ dependencies, as declared in `composer.json` (PHP) and `package.json`
 - **Feedback.** Controllers flash the translated message with
   `->with('success', __('ui…'))`, and the layout shows it once. Only the pages
   of Fortify use its own `status` values.
+- **Steps.** A long form is split with `x-steps` and one `x-steps.step` per
+  step, inside a single `<form>`. Each step has a title, also shown in the
+  indicator, and can hold any content, such as several fieldsets. Its `actions`
+  slot holds the buttons next to Previous and Continue, such as the submit
+  button of the last step. `resources/js/steps.js` shows one step at a time,
+  checks its fields before the next one, marks the steps done or with errors in
+  the indicator, records the step in the URL for the back button of the browser,
+  and warns before leaving the page with what was typed. The form is submitted
+  at once to a single route. After a failed submit, the page reopens on the
+  first step with an error. Without JavaScript, all the steps are shown.
 - **Breadcrumbs.** Pages build their trail from `App\Support\Breadcrumbs` and
   add their own last crumb.
 - **Translations.** `lang/{en,fr}/ui.php` have the same keys, in `snake_case`. A
