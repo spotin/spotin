@@ -57,12 +57,10 @@
             "npm run build"
         ],
         "format": [
-            "pint --blade",
-            "npm run format"
+            "pint --blade"
         ],
         "format-check": [
-            "pint --blade --test",
-            "npm run format-check"
+            "pint --blade --test"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
