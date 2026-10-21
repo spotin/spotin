@@ -39,7 +39,11 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-        ])->validate();
+        ], [], array_map(Str::lcfirst(...), [
+            'name' => __('ui.auth.common.forms.fields.name.label'),
+            'email' => __('ui.auth.common.forms.fields.email.label'),
+            'password' => __('ui.auth.common.forms.fields.password.label'),
+        ]))->validate();
 
         $user = new User([
             'name' => $input['name'],

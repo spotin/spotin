@@ -34,7 +34,7 @@ class SpotController extends Controller
      */
     public function store(StoreSpotRequest $request, Organization $organization): JsonResponse
     {
-        $spot = new Spot($request->safe()->only('name'));
+        $spot = new Spot($request->validated());
         $spot->organization()->associate($organization);
         $spot->creator()->associate($request->user());
         $spot->save();

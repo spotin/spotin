@@ -3,20 +3,18 @@
 namespace App\Http\Requests\Organizations;
 
 use App\Models\Organization;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Unique;
 
-class UpdateOrganizationRequest extends FormRequest
+// The fields of an organization, as when it is created, for the organization of the URL.
+// Not a doc comment: Scramble would show it in the API documentation.
+class UpdateOrganizationRequest extends StoreOrganizationRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
+     * The name is unique among the organizations, which keeps its own name.
      */
-    public function rules(): array
+    protected function uniqueName(): Unique
     {
-        return [
-            'name' => ['required', 'string', 'min:2', 'max:100', Rule::unique(Organization::class, 'name')->ignore($this->route('organization'))],
-        ];
+        return Rule::unique(Organization::class, 'name')->ignore($this->route('organization'));
     }
 }

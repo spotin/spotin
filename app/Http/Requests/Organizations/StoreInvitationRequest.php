@@ -31,4 +31,19 @@ class StoreInvitationRequest extends FormRequest
             $this->merge(['email' => Str::lower($this->input('email'))]);
         }
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * The labels of the fields of the form, in the sentences of the messages.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return array_map(Str::lcfirst(...), [
+            'email' => __('ui.organizations.invitations.create.fields.email.label'),
+            'role' => __('ui.organizations.common.forms.fields.role.label'),
+        ]);
+    }
 }
