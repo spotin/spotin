@@ -23,7 +23,7 @@ final readonly class SpotListing
         public bool $canCreate,
         public LengthAwarePaginator $spots,
         public string $action,
-        public ?string $map,
+        public string $map,
     ) {}
 
     /**
@@ -45,10 +45,25 @@ final readonly class SpotListing
             action: $organization
                 ? route('organizations.spots.index', ['organization' => $organization->uuid])
                 : route('spots.index'),
-            // The map of all the results, with the filters of the list but not its page: only for an organization so far
+            // The map of all the results, with the filters of the list but not its page
             map: $organization
                 ? route('organizations.spots.map', ['organization' => $organization->uuid, ...Arr::except($request->query(), 'page')])
-                : null,
+                : route('spots.map', Arr::except($request->query(), 'page')),
+        );
+    }
+
+    /**
+     * All the results of the list as GeoJSON, for its map, optionally of the organization of the page: the same spots as
+     * the list, without its pages.
+     *
+     * @return array{type: 'FeatureCollection', features: list<array<string, mixed>>}
+     */
+    public static function features(ListFiltersRequest $request, ?Organization $organization = null): array
+    {
+        return Spot::featureCollection(
+            Spot::filtered($request->user(), $request->searchQuery(), $request->mine())
+                ->when($organization, fn ($query) => $query->whereBelongsTo($organization))
+                ->get(['uuid', 'name', 'latitude', 'longitude']),
         );
     }
 

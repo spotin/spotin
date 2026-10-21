@@ -29,13 +29,15 @@ render(function (View $view) {
     <h1>{{ __('ui.dashboard.title') }}</h1>
 
     @if ($pendingInvitations > 0)
-        <p role="alert" class="alert alert-info alert-vertical sm:alert-horizontal">
-            <x-lucide-mail class="h-6 w-6" />
-            <span>{{ trans_choice('ui.invitations.common.alert.message', $pendingInvitations) }}</span>
-            <a href="{{ route('invitations.index') }}" class="btn btn-sm">
-                {{ __('ui.invitations.common.alert.action') }}
-            </a>
-        </p>
+        <x-alert type="info" icon="mail" class="alert-vertical sm:alert-horizontal">
+            {{ trans_choice('ui.invitations.common.alert.message', $pendingInvitations) }}
+
+            <x-slot:actions>
+                <a href="{{ route('invitations.index') }}" class="btn btn-sm">
+                    {{ __('ui.invitations.common.alert.action') }}
+                </a>
+            </x-slot:actions>
+        </x-alert>
     @endif
 
     <p>{{ __('ui.dashboard.greeting', ['name' => auth()->user()->name]) }}</p>

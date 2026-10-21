@@ -37,7 +37,8 @@
     @endif
     role="region"
     aria-label="{{ $label ?? __('ui.common.map.label') }}"
-    {{ $attributes->class(['not-prose w-full overflow-hidden', 'rounded-box border-base-content/10 border' => $framed]) }}
+    {{-- `isolate`: the controls of MapLibre stay above the map only, not above the menus of the page --}}
+    {{ $attributes->class(['not-prose isolate w-full overflow-hidden', 'rounded-box border-base-content/10 border' => $framed]) }}
 >
     {{-- The icon of the button that goes back to the point or the spots, copied by resources/js/map.js --}}
     <template data-map-recenter-icon>

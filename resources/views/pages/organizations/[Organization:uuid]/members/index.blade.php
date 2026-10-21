@@ -52,10 +52,7 @@ render(function (View $view, Organization $organization) {
     </div>
 
     @error('member')
-        <p role="alert" class="alert alert-error">
-            <x-lucide-circle-alert class="h-6 w-6" />
-            <span>{{ $message }}</span>
-        </p>
+        <x-alert type="error" closable>{{ $message }}</x-alert>
     @enderror
 
     @if ($members->isEmpty())

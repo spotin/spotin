@@ -5,11 +5,8 @@
     request.
 --}}
 @if (session('scanned'))
-    <div role="status" class="alert alert-info not-prose mb-6">
-        <x-lucide-scan-qr-code class="h-6 w-6 shrink-0" aria-hidden="true" />
-        <div>
-            <p class="font-semibold">{{ $title }}</p>
-            <p>{{ __('ui.common.scanned', ['app' => config('app.name')]) }}</p>
-        </div>
-    </div>
+    <x-alert type="info" icon="scan-qr-code" role="status" closable class="not-prose mb-6">
+        <p class="font-semibold">{{ $title }}</p>
+        <p>{{ __('ui.common.scanned', ['app' => config('app.name')]) }}</p>
+    </x-alert>
 @endif

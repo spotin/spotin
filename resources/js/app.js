@@ -27,6 +27,14 @@ if (markdownEditors.length > 0) {
     import("./markdown-editor.js");
 }
 
+// The alerts close with their button, hidden without JS.
+document.querySelectorAll("[data-alert-close]").forEach((button) => {
+    button.hidden = false;
+    button.addEventListener("click", () =>
+        button.closest("[data-alert]").remove(),
+    );
+});
+
 const prefersDark = matchMedia("(prefers-color-scheme: dark)");
 
 document.querySelectorAll(".theme-controller").forEach((controller) => {

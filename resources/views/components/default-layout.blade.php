@@ -178,16 +178,22 @@
         </div>
     </header>
 
-    <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
-        <x-breadcrumbs :items="$breadcrumbs" />
-        <div class="prose max-w-none">
-            @unless ($manualSuccessMessage)
-                <x-success-message />
-            @endunless
+    {{-- A section across the whole width, above the content of the page, such as a map --}}
+    {{ $hero ?? '' }}
 
-            {{ $slot }}
-        </div>
-    </main>
+    {{-- Left out when there is nothing to show in it, such as on a page that is only a hero, which then fills the page --}}
+    @if ($slot->hasActualContent() || $breadcrumbs || (session('success') && ! $manualSuccessMessage))
+        <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
+            <x-breadcrumbs :items="$breadcrumbs" />
+            <div class="prose max-w-none">
+                @unless ($manualSuccessMessage)
+                    <x-success-message />
+                @endunless
+
+                {{ $slot }}
+            </div>
+        </main>
+    @endif
 
     <footer class="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
         <nav class="grid grid-flow-col gap-4">

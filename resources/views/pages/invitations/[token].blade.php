@@ -48,9 +48,6 @@ render(function (View $view, string $token) {
             <a href="{{ route('login') }}" class="btn"> {{ __('ui.invitations.show.actions.login') }} </a>
         </div>
     @else
-        <p role="alert" class="alert alert-error">
-            <x-lucide-circle-alert class="h-6 w-6" />
-            <span>{{ __('ui.invitations.feedback.invalid_invitation') }}</span>
-        </p>
+        <x-alert type="error">{{ __('ui.invitations.feedback.invalid_invitation') }}</x-alert>
     @endif
 </x-default-layout>
