@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 return [
     'common' => [
+        'leave' => [
+            'title' => 'Vous êtes sur le point de quitter :app',
+            'warning' => "Ce lien mène à :website, un site web externe à :app, qui n'est pas responsable de son contenu. Continuez seulement si vous lui faites confiance, et soyez prudent avant de donner des informations personnelles.",
+            'continue' => 'Continuer vers le site web',
+        ],
+        'scanned' => ':app ajoute des informations numériques à notre monde physique à l\'aide de « spots ». Partagez des spots avec vos amis et découvrez de nouveaux lieux et de nouvelles choses !',
         'theme' => 'Changer de thème',
         'locale' => [
             'label' => 'Changer de langue',
@@ -13,7 +19,6 @@ return [
             ],
         ],
         'version' => 'Version :version',
-        'fill_the_form' => 'Veuillez remplir le formulaire ci-dessous pour continuer.',
         'account' => 'Menu du compte',
         'filters' => [
             'search' => 'Rechercher',
@@ -32,8 +37,63 @@ return [
             'previous' => 'Précédent',
             'next' => 'Continuer',
             'position' => 'Étape :current sur :total',
-            'done' => 'Terminée',
-            'error' => 'Contient des erreurs',
+        ],
+        'map' => [
+            'label' => 'Carte',
+            'hint' => "Cliquez sur la carte ou déplacez le marqueur pour choisir l'emplacement.",
+            'controls' => [
+                'zoom_in' => 'Zoomer',
+                'zoom_out' => 'Dézoomer',
+                'reset_bearing' => 'Réorienter vers le nord',
+                'recenter' => 'Centrer sur le spot',
+                'fullscreen_enter' => 'Afficher en plein écran',
+                'fullscreen_exit' => 'Quitter le plein écran',
+                'locate' => 'Afficher ma position',
+                'locate_unavailable' => 'Position non disponible',
+                'marker' => 'Marqueur de la carte',
+                'attribution' => 'Afficher ou masquer les sources de la carte',
+                'scroll_windows' => 'Utilisez Ctrl + molette pour zoomer sur la carte',
+                'scroll_mac' => 'Utilisez ⌘ + molette pour zoomer sur la carte',
+                'two_fingers' => 'Utilisez deux doigts pour déplacer la carte',
+            ],
+            'fields' => [
+                'latitude' => [
+                    'label' => 'Latitude',
+                    'placeholder' => 'Saisissez la latitude, entre -90 et 90',
+                ],
+                'longitude' => [
+                    'label' => 'Longitude',
+                    'placeholder' => 'Saisissez la longitude, entre -180 et 180',
+                ],
+            ],
+        ],
+        'markdown_editor' => [
+            'toolbar' => 'Mise en forme',
+            'hint' => 'Vous pouvez mettre en forme le texte avec Markdown.',
+            'block' => [
+                'label' => 'Type de texte',
+                'paragraph' => 'Paragraphe',
+                'heading' => 'Titre :level',
+            ],
+            'commands' => [
+                'bold' => 'Gras',
+                'italic' => 'Italique',
+                'strike' => 'Barré',
+                'code' => 'Code',
+                'bullet_list' => 'Liste à puces',
+                'ordered_list' => 'Liste numérotée',
+                'blockquote' => 'Citation',
+                'code_block' => 'Bloc de code',
+                'horizontal_rule' => 'Ligne horizontale',
+                'link' => 'Lien',
+                'image' => 'Image',
+            ],
+            'prompts' => [
+                'link' => 'Adresse du lien (laissez vide pour retirer le lien) :',
+                'image' => "Adresse de l'image :",
+                'image_alt' => "Description de l'image, pour les personnes qui ne peuvent pas la voir :",
+            ],
+            'markdown' => 'Afficher le code Markdown',
         ],
     ],
     'auth' => [
@@ -57,7 +117,7 @@ return [
                         'placeholder' => 'Confirmez votre mot de passe',
                     ],
                     'remember' => [
-                        'label' => 'Se souvenir de moi',
+                        'label' => 'Rester connecté sur cet appareil',
                     ],
                     'current_password' => [
                         'label' => 'Mot de passe actuel',
@@ -104,6 +164,7 @@ return [
             'title' => 'Connexion',
             'description' => 'Accédez à votre compte',
             'form' => [
+                'options' => 'Options de connexion',
                 'actions' => [
                     'submit' => 'Se connecter',
                 ],
@@ -169,7 +230,7 @@ return [
     'homepage' => [
         'title' => 'Bienvenue sur Spot in®',
         'description' => "Découvrez les lieux et les points d'intérêt près de chez vous.",
-        'intro' => "Les spots représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
+        'introduction' => "Les spots représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
         'explore_spots' => 'Explorer les spots',
         'explore_organizations' => 'Parcourir les organisations',
         'dashboard' => 'Aller à mon tableau de bord',
@@ -227,11 +288,12 @@ return [
             'forms' => [
                 'fields' => [
                     'name' => [
-                        'label' => "Nom de l'organisation",
+                        'label' => 'Nom',
                         'placeholder' => "Saisissez le nom de l'organisation",
                     ],
                     'role' => [
                         'label' => 'Rôle',
+                        'placeholder' => 'Sélectionnez le rôle',
                         'options' => [
                             'responsible' => 'Responsable',
                             'member' => 'Membre',
@@ -268,6 +330,7 @@ return [
             ],
         ],
         'show' => [
+            'scanned' => 'Vous venez de scanner une organisation !',
             'description' => "Les spots, les membres et les invitations de l'organisation.",
             'actions' => [
                 'edit' => 'Modifier',
@@ -407,6 +470,7 @@ return [
             'create' => [
                 'title' => 'Nouveau spot',
                 'description' => 'Créez un nouveau spot.',
+                'introduction' => "Vous êtes sur le point de créer un nouveau spot dans l'organisation :organization.",
                 'form' => [
                     'actions' => [
                         'submit' => 'Créer le spot',
@@ -423,7 +487,7 @@ return [
                 'forms' => [
                     'fields' => [
                         'name' => [
-                            'label' => 'Nom du jeton',
+                            'label' => 'Nom',
                             'placeholder' => 'Saisissez un nom pour le jeton',
                         ],
                         'abilities' => [
@@ -524,12 +588,35 @@ return [
     'spots' => [
         'common' => [
             'unknown_creator' => 'Inconnu',
+            'hidden' => 'Masqué',
             'forms' => [
                 'fields' => [
                     'name' => [
-                        'label' => 'Nom du spot',
+                        'label' => 'Nom',
                         'placeholder' => 'Saisissez le nom du spot',
                     ],
+                    'description' => [
+                        'label' => 'Description',
+                        'placeholder' => 'Décrivez le spot',
+                    ],
+                    'website' => [
+                        'label' => 'Site web',
+                        'placeholder' => 'https://example.com',
+                    ],
+                    'redirect_to_website' => [
+                        'label' => 'Rediriger les visiteurs directement vers le site web',
+                        'hint' => "Les visiteurs qui scannent le spot vont directement sur le site web, sans voir sa page. Ne s'applique que si le spot a un site web.",
+                        'needs_website' => 'Ajoutez un site web vers lequel rediriger les visiteurs, ou désactivez la redirection.',
+                    ],
+                    'is_hidden' => [
+                        'label' => 'Masquer le spot des listes publiques',
+                        'hint' => "Seuls les membres de l'organisation trouvent le spot dans les listes et la recherche. Le spot reste accessible par son lien.",
+                    ],
+                ],
+                'steps' => [
+                    'location' => 'Emplacement',
+                    'details' => 'Détails',
+                    'website' => 'Site web et visibilité',
                 ],
             ],
         ],
@@ -550,8 +637,13 @@ return [
             ],
         ],
         'show' => [
+            'scanned' => 'Vous venez de scanner un spot !',
             'description' => 'Les détails du spot.',
             'actions' => [
+                'label' => 'Actions',
+                'like' => "J'aime",
+                'report' => 'Signaler',
+                'share' => 'Partager',
                 'edit' => 'Modifier',
                 'delete' => 'Supprimer',
             ],
@@ -559,11 +651,19 @@ return [
                 'organization' => 'Organisation',
                 'creator' => 'Créé par',
                 'created' => 'Créé le',
+                'coordinates' => 'Coordonnées',
+            ],
+            'visit' => 'Visiter :website',
+            'map' => 'Emplacement du spot',
+            'notes' => [
+                'redirect' => 'Les visiteurs qui scannent ce spot sont redirigés directement vers :website.',
+                'hidden' => 'Ce spot est masqué des listes publiques : seuls les membres de :organization le trouvent dans les listes. Il reste accessible par son lien.',
             ],
         ],
         'edit' => [
             'title' => 'Modifier le spot',
             'description' => 'Modifiez ou supprimez un spot.',
+            'introduction' => "Vous modifiez le spot :spot de l'organisation :organization.",
             'form' => [
                 'actions' => [
                     'submit' => 'Enregistrer',

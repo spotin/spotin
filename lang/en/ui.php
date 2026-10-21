@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 return [
     'common' => [
+        'leave' => [
+            'title' => 'You are about to leave :app',
+            'warning' => 'This link leads to :website, a website outside of :app, which is not responsible for its content. Continue only if you trust it, and be careful before giving any personal information.',
+            'continue' => 'Continue to the website',
+        ],
+        'scanned' => ':app adds digital information to our physical world with the help of "spots". Share spots with your friends and discover new places and things!',
         'theme' => 'Toggle theme',
         'locale' => [
             'label' => 'Change language',
@@ -13,7 +19,6 @@ return [
             ],
         ],
         'version' => 'Version :version',
-        'fill_the_form' => 'Please fill out the form below to continue.',
         'account' => 'Account menu',
         'filters' => [
             'search' => 'Search',
@@ -32,8 +37,63 @@ return [
             'previous' => 'Previous',
             'next' => 'Continue',
             'position' => 'Step :current of :total',
-            'done' => 'Completed',
-            'error' => 'Contains errors',
+        ],
+        'map' => [
+            'label' => 'Map',
+            'hint' => 'Click on the map or drag the marker to set the location.',
+            'controls' => [
+                'zoom_in' => 'Zoom in',
+                'zoom_out' => 'Zoom out',
+                'reset_bearing' => 'Reset to north',
+                'recenter' => 'Centre on the spot',
+                'fullscreen_enter' => 'Enter fullscreen',
+                'fullscreen_exit' => 'Exit fullscreen',
+                'locate' => 'Show my position',
+                'locate_unavailable' => 'Location not available',
+                'marker' => 'Map marker',
+                'attribution' => 'Show or hide the sources of the map',
+                'scroll_windows' => 'Use Ctrl + scroll to zoom the map',
+                'scroll_mac' => 'Use ⌘ + scroll to zoom the map',
+                'two_fingers' => 'Use two fingers to move the map',
+            ],
+            'fields' => [
+                'latitude' => [
+                    'label' => 'Latitude',
+                    'placeholder' => 'Enter the latitude, between -90 and 90',
+                ],
+                'longitude' => [
+                    'label' => 'Longitude',
+                    'placeholder' => 'Enter the longitude, between -180 and 180',
+                ],
+            ],
+        ],
+        'markdown_editor' => [
+            'toolbar' => 'Formatting',
+            'hint' => 'You can format the text with Markdown.',
+            'block' => [
+                'label' => 'Type of text',
+                'paragraph' => 'Paragraph',
+                'heading' => 'Heading :level',
+            ],
+            'commands' => [
+                'bold' => 'Bold',
+                'italic' => 'Italic',
+                'strike' => 'Strikethrough',
+                'code' => 'Code',
+                'bullet_list' => 'Bulleted list',
+                'ordered_list' => 'Numbered list',
+                'blockquote' => 'Quote',
+                'code_block' => 'Code block',
+                'horizontal_rule' => 'Horizontal line',
+                'link' => 'Link',
+                'image' => 'Image',
+            ],
+            'prompts' => [
+                'link' => 'Address of the link (leave empty to remove the link):',
+                'image' => 'Address of the image:',
+                'image_alt' => 'Description of the image, for the people who cannot see it:',
+            ],
+            'markdown' => 'Show the Markdown code',
         ],
     ],
     'auth' => [
@@ -57,7 +117,7 @@ return [
                         'placeholder' => 'Confirm your password',
                     ],
                     'remember' => [
-                        'label' => 'Remember me',
+                        'label' => 'Keep me logged in on this device',
                     ],
                     'current_password' => [
                         'label' => 'Current password',
@@ -104,6 +164,7 @@ return [
             'title' => 'Login',
             'description' => 'Access your account',
             'form' => [
+                'options' => 'Login options',
                 'actions' => [
                     'submit' => 'Log in',
                 ],
@@ -169,7 +230,7 @@ return [
     'homepage' => [
         'title' => 'Welcome to Spot in®',
         'description' => 'Discover locations and places of interest in your area.',
-        'intro' => 'Spots represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
+        'introduction' => 'Spots represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
         'explore_spots' => 'Explore the spots',
         'explore_organizations' => 'Browse the organizations',
         'dashboard' => 'Go to my dashboard',
@@ -227,11 +288,12 @@ return [
             'forms' => [
                 'fields' => [
                     'name' => [
-                        'label' => 'Organization name',
+                        'label' => 'Name',
                         'placeholder' => 'Enter the organization name',
                     ],
                     'role' => [
                         'label' => 'Role',
+                        'placeholder' => 'Select the role',
                         'options' => [
                             'responsible' => 'Responsible',
                             'member' => 'Member',
@@ -268,6 +330,7 @@ return [
             ],
         ],
         'show' => [
+            'scanned' => 'You have just scanned an organization!',
             'description' => 'The spots, members and invitations of the organization.',
             'actions' => [
                 'edit' => 'Edit',
@@ -407,6 +470,7 @@ return [
             'create' => [
                 'title' => 'New spot',
                 'description' => 'Create a new spot.',
+                'introduction' => 'You are about to create a new spot in the organization :organization.',
                 'form' => [
                     'actions' => [
                         'submit' => 'Create the spot',
@@ -423,7 +487,7 @@ return [
                 'forms' => [
                     'fields' => [
                         'name' => [
-                            'label' => 'Token name',
+                            'label' => 'Name',
                             'placeholder' => 'Enter a name for the token',
                         ],
                         'abilities' => [
@@ -524,12 +588,35 @@ return [
     'spots' => [
         'common' => [
             'unknown_creator' => 'Unknown',
+            'hidden' => 'Hidden',
             'forms' => [
                 'fields' => [
                     'name' => [
-                        'label' => 'Spot name',
+                        'label' => 'Name',
                         'placeholder' => 'Enter the spot name',
                     ],
+                    'description' => [
+                        'label' => 'Description',
+                        'placeholder' => 'Describe the spot',
+                    ],
+                    'website' => [
+                        'label' => 'Website',
+                        'placeholder' => 'https://example.com',
+                    ],
+                    'redirect_to_website' => [
+                        'label' => 'Redirect the visitors directly to the website',
+                        'hint' => 'The visitors who scan the spot go straight to the website, without seeing its page. Only applies when the spot has a website.',
+                        'needs_website' => 'Add a website to redirect the visitors to, or turn off the redirect.',
+                    ],
+                    'is_hidden' => [
+                        'label' => 'Hide the spot from the public lists',
+                        'hint' => 'Only the members of the organization find the spot in the lists and the search. The spot stays reachable by its link.',
+                    ],
+                ],
+                'steps' => [
+                    'location' => 'Location',
+                    'details' => 'Details',
+                    'website' => 'Website and visibility',
                 ],
             ],
         ],
@@ -550,8 +637,13 @@ return [
             ],
         ],
         'show' => [
+            'scanned' => 'You have just scanned a spot!',
             'description' => 'The details of the spot.',
             'actions' => [
+                'label' => 'Actions',
+                'like' => 'Like',
+                'report' => 'Report',
+                'share' => 'Share',
                 'edit' => 'Edit',
                 'delete' => 'Delete',
             ],
@@ -559,11 +651,19 @@ return [
                 'organization' => 'Organization',
                 'creator' => 'Created by',
                 'created' => 'Created on',
+                'coordinates' => 'Coordinates',
+            ],
+            'visit' => 'Visit :website',
+            'map' => 'Location of the spot',
+            'notes' => [
+                'redirect' => 'The visitors who scan this spot are redirected directly to :website.',
+                'hidden' => 'This spot is hidden from the public lists: only the members of :organization find it in the lists. It stays reachable by its link.',
             ],
         ],
         'edit' => [
             'title' => 'Edit the spot',
             'description' => 'Edit or delete a spot.',
+            'introduction' => 'You are editing the spot :spot in the organization :organization.',
             'form' => [
                 'actions' => [
                     'submit' => 'Save',
