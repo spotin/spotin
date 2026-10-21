@@ -56,7 +56,7 @@ render(function (View $view, Organization $organization) {
             <legend class="fieldset-legend">{{ __('ui.organizations.common.forms.fields.role.label') }}</legend>
             <select
                 name="role"
-                class="select validator w-full invalid:text-base-content/50! [&>option]:text-base-content"
+                class="select validator invalid:text-base-content/50! [&>option]:text-base-content w-full"
                 required
                 @error('role') aria-invalid="true" @enderror
             >

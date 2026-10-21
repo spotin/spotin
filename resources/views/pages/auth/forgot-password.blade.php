@@ -48,6 +48,8 @@ render(function (View $view) {
             @enderror
         </fieldset>
 
-        <button type="submit" class="btn btn-block mt-4">{{ __('ui.auth.forgot_password.form.actions.submit') }}</button>
+        <button type="submit" class="btn btn-block mt-4">
+            {{ __('ui.auth.forgot_password.form.actions.submit') }}
+        </button>
     </form>
 </x-default-layout>

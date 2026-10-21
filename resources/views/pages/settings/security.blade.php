@@ -66,7 +66,9 @@ render(function (View $view) {
         </fieldset>
 
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.new_password_confirmation.label') }}</legend>
+            <legend class="fieldset-legend">
+                {{ __('ui.auth.common.forms.fields.new_password_confirmation.label') }}
+            </legend>
             <input
                 name="password_confirmation"
                 type="password"
