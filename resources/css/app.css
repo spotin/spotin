@@ -10,3 +10,10 @@
 @theme {
     --color-logo: light-dark(#e53935, #ffffff);
 }
+
+@layer components {
+    /* The default height of the maps of `x-map`: any `h-*` class given to a map replaces it */
+    [data-map] {
+        height: --spacing(72);
+    }
+}

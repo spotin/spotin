@@ -27,6 +27,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'map' => [
+        'style' => env('MAP_STYLE_URL', 'https://tiles.openfreemap.org/styles/bright'),
+        // Where a new spot starts, before a point is picked. Switzerland by default.
+        'center' => [
+            'latitude' => (float) env('MAP_CENTER_LATITUDE', 46.8),
+            'longitude' => (float) env('MAP_CENTER_LONGITUDE', 8.23),
+        ],
+        'zoom' => (float) env('MAP_ZOOM', 6),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
