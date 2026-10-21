@@ -213,5 +213,8 @@
             <p>{{ config('app.name') }} 2021-{{ date('Y') }}</p>
         </aside>
     </footer>
+
+    {{-- The dialogs of the page, out of the elements whose buttons open them, such as joined buttons --}}
+    @stack('dialogs')
 </body>
 </html>

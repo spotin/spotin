@@ -8,7 +8,6 @@
         value="{{ $value }}"
         placeholder="{{ $placeholder }}"
         aria-label="{{ $placeholder }}"
-        maxlength="100"
         class="grow"
     />
 </label>

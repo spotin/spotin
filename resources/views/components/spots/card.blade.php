@@ -11,6 +11,13 @@
                 <span class="line-clamp-2 break-words" title="{{ $spot->name }}"> {{ $spot->name }} </span>
             </h2>
             <p class="text-sm opacity-70">{{ $spot->organization->name }}</p>
+            {{-- Only the members of the organization and administrators find hidden spots in the lists --}}
+            @if ($spot->is_hidden)
+                <span class="badge badge-sm badge-ghost mt-1 gap-1">
+                    <x-lucide-eye-off class="h-3 w-3" aria-hidden="true" />
+                    {{ __('ui.spots.common.hidden') }}
+                </span>
+            @endif
         </div>
     </div>
 </a>

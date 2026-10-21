@@ -83,8 +83,11 @@ test('the trail of the spots of an organization starts at the organizations', fu
         return $labels[1];
     };
 
+    // The trail is shown to the logged in users only
+    $this->actingAs($this->member);
+
     expect($crumbs($this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'Spots'])
-        ->and($crumbs($this->actingAs($this->member)->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'Spots', 'New spot'])
+        ->and($crumbs($this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'Spots', 'New spot'])
         ->and($crumbs($this->get(route('spots.index'))->getContent()))->toBe([]);
 });
 
@@ -186,4 +189,24 @@ test('my spots only lists the spots the user created, not the other ones of thei
         ->assertDontSee('Orphan Spot');
 
     $this->get('/spots')->assertSee('Colleague Spot')->assertSee('Orphan Spot');
+});
+
+test('hidden spots are only listed for the members of their organization and administrators, and stay reachable', function () {
+    Spot::factory()->for($this->organization)->hidden()->create(['name' => 'Secret Cove']);
+
+    $this->get(route('spots.index'))->assertOk()->assertSee('Harbour')->assertDontSee('Secret Cove');
+    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('Secret Cove');
+    $this->get(route('spots.index', ['query' => 'Secret']))->assertOk()->assertDontSee('Secret Cove');
+    $this->actingAs($this->outsider)->get(route('spots.index'))->assertOk()->assertDontSee('Secret Cove');
+
+    foreach ([$this->member, $this->admin] as $user) {
+        $this->actingAs($user)->get(route('spots.index'))
+            ->assertOk()
+            ->assertSee('Secret Cove')
+            ->assertSee(__('ui.spots.common.hidden'));
+    }
+
+    auth()->logout();
+
+    $this->get(route('spots.show', ['spot' => Spot::firstWhere('name', 'Secret Cove')->uuid]))->assertOk()->assertSee('Secret Cove');
 });

@@ -35,65 +35,52 @@ render(function (View $view) {
         @csrf
         @method('PUT')
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.current_password.placeholder') }}</span>
-                    <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
-                    <input
-                        name="current_password"
-                        type="password"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.current_password.label') }}"
-                        @error('current_password', 'updatePassword') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('current_password', 'updatePassword')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.new_password.placeholder') }}</span>
-                    <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
-                    <input
-                        name="password"
-                        type="password"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.new_password.label') }}"
-                        @error('password', 'updatePassword') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('password', 'updatePassword')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.new_password_confirmation.placeholder') }}</span>
-                    <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
-                    <input
-                        name="password_confirmation"
-                        type="password"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.new_password_confirmation.label') }}"
-                        @error('password', 'updatePassword') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('password', 'updatePassword')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.current_password.label') }}</legend>
+            <input
+                name="current_password"
+                type="password"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.auth.common.forms.fields.current_password.placeholder') }}"
+                @error('current_password', 'updatePassword') aria-invalid="true" @enderror
+            />
+            @error('current_password', 'updatePassword')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
         </fieldset>
 
-        <footer>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.new_password.label') }}</legend>
+            <input
+                name="password"
+                type="password"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.auth.common.forms.fields.new_password.placeholder') }}"
+                @error('password', 'updatePassword') aria-invalid="true" @enderror
+            />
+            @error('password', 'updatePassword')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.new_password_confirmation.label') }}</legend>
+            <input
+                name="password_confirmation"
+                type="password"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.auth.common.forms.fields.new_password_confirmation.placeholder') }}"
+                @error('password', 'updatePassword') aria-invalid="true" @enderror
+            />
+            @error('password', 'updatePassword')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
+        </fieldset>
+
+        <footer class="mt-4">
             <button type="submit" class="btn btn-block">{{ __('ui.settings.security.form.actions.submit') }}</button>
         </footer>
     </form>

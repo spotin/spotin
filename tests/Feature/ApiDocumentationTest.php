@@ -65,7 +65,7 @@ test('the lists document their filters and the creation of a spot its body', fun
     expect($parameters('/spots'))->toContain('filter[query]', 'filter[mine]', 'include')
         ->and($parameters('/organizations'))->toContain('filter[query]', 'filter[mine]')
         ->and($parameters('/organizations/{organization}/spots'))->toContain('filter[query]', 'filter[mine]', 'include')
-        ->and($document->json('components.schemas.StoreSpotRequest.required'))->toBe(['name']);
+        ->and($document->json('components.schemas.StoreSpotRequest.required'))->toBe(['name', 'latitude', 'longitude']);
 });
 
 test('the resources are documented in the JSON:API format, with their relationships', function () {

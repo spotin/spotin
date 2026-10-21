@@ -31,30 +31,23 @@ render(function (View $view) {
     <form method="POST" action="{{ route('organizations.store') }}">
         @csrf
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.organizations.common.forms.fields.name.placeholder') }}</span>
-                    <x-lucide-building-complex class="h-[1em] opacity-50" />
-                    <input
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="{{ __('ui.organizations.common.forms.fields.name.label') }}"
-                        value="{{ old('name') }}"
-                        @error('name') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('name')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.organizations.common.forms.fields.name.label') }}</legend>
+            <input
+                name="name"
+                type="text"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.organizations.common.forms.fields.name.placeholder') }}"
+                value="{{ old('name') }}"
+                @error('name') aria-invalid="true" @enderror
+            />
+            @error('name')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
         </fieldset>
 
-        <footer>
+        <footer class="mt-4">
             <button type="submit" class="btn btn-block">{{ __('ui.organizations.create.form.actions.submit') }}</button>
         </footer>
     </form>

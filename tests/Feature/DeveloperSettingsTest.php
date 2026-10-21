@@ -281,6 +281,8 @@ test('the errors of the selects are shown, as the hint only appears after an ele
     ];
 
     foreach ($pages as $page) {
-        $this->actingAs($this->user)->get($page)->assertOk()->assertSee('<label class="select validator w-full">', false);
+        $html = $this->actingAs($this->user)->get($page)->assertOk()->getContent();
+
+        expect($html)->toMatch('/<select[^>]*\sclass="select validator /');
     }
 });
