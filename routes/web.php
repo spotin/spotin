@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::singleton('locale', LocaleController::class)->only(['update']);
 
+// The addresses of the QR codes.
+Route::get('spots/{spot:uuid}/redirect', [SpotController::class, 'redirect'])->name('spots.redirect');
+Route::get('organizations/{organization:uuid}/redirect', [OrganizationController::class, 'redirect'])->name('organizations.redirect');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('organizations/{organization:uuid}')->group(function () {
         Route::post('spots', [OrganizationSpotController::class, 'store'])

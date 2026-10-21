@@ -11,6 +11,14 @@ use Illuminate\Http\RedirectResponse;
 class OrganizationController extends Controller
 {
     /**
+     * The address of the QR code of the organization: its page, which says it was just scanned.
+     */
+    public function redirect(Organization $organization): RedirectResponse
+    {
+        return redirect()->route('organizations.show', ['organization' => $organization->uuid])->with('scanned', true);
+    }
+
+    /**
      * Create an organization, then show it so people can be invited.
      */
     public function store(StoreOrganizationRequest $request): RedirectResponse
