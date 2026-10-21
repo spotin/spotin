@@ -188,3 +188,69 @@ test('the number of spots of an organization leaves out the hidden spots, except
     $this->actingAs($this->member)->get(route('organizations.show', ['organization' => $this->organization->uuid]))
         ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 3));
 });
+
+test('the spots of an organization are given as GeoJSON for its map, without the hidden ones for the others than its members', function () {
+    $lighthouse = Spot::factory()->for($this->organization)->create(['name' => 'Lighthouse', 'latitude' => 46.5, 'longitude' => 6.6]);
+    Spot::factory()->for($this->organization)->create(['name' => 'Harbour']);
+    Spot::factory()->for($this->organization)->create(['name' => 'Secret cove', 'is_hidden' => true]);
+    Spot::factory()->for($this->other)->create(['name' => 'Elsewhere']);
+
+    $url = route('organizations.spots.map', ['organization' => $this->organization->uuid]);
+    $names = fn ($response) => collect($response->json('features'))->pluck('properties.name')->sort()->values()->all();
+
+    $response = $this->getJson($url)->assertOk()->assertJsonPath('type', 'FeatureCollection');
+
+    expect($names($response))->toBe(['Harbour', 'Lighthouse'])
+        ->and(collect($response->json('features'))->firstWhere('properties.name', 'Lighthouse'))->toBe([
+            'type' => 'Feature',
+            'geometry' => ['type' => 'Point', 'coordinates' => [6.6, 46.5]],
+            'properties' => ['name' => 'Lighthouse', 'url' => route('spots.show', ['spot' => $lighthouse->uuid])],
+        ]);
+
+    // As in the lists: its members find the hidden spots, and the search applies
+    expect($names($this->actingAs($this->member)->getJson($url)))->toBe(['Harbour', 'Lighthouse', 'Secret cove'])
+        ->and($names($this->getJson($url.'?query=light')))->toBe(['Lighthouse']);
+
+    $this->getJson('/organizations/unknown/spots.geojson')->assertNotFound();
+});
+
+test('the page of an organization is a card with the map of its spots, its details and the actions of its editors', function () {
+    $url = route('organizations.show', ['organization' => $this->organization->uuid]);
+
+    // Without spots, there is no map
+    $this->get($url)->assertOk()->assertDontSee('data-map-spots', false);
+
+    Spot::factory()->for($this->organization)->count(2)->create();
+    $map = 'data-map-spots="'.route('organizations.spots.map', ['organization' => $this->organization->uuid]).'"';
+
+    $this->get($url)->assertOk()
+        ->assertSeeInOrder(['<article', $map, '<h1', 'Acme', trans_choice('ui.organizations.show.sections.spots.summary', 2)], false)
+        // Everyone sees the actions to like, report and share it; the guests see neither the number of members nor the
+        // actions of the editors
+        ->assertSeeInOrder(['<footer', __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share')], false)
+        ->assertDontSee(trans_choice('ui.organizations.show.sections.members.summary', 2))
+        ->assertDontSee(route('organizations.edit', ['organization' => $this->organization->uuid]), false);
+
+    $this->actingAs($this->member)->get($url)
+        ->assertSee(trans_choice('ui.organizations.show.sections.members.summary', 2))
+        ->assertDontSee(route('organizations.edit', ['organization' => $this->organization->uuid]), false);
+
+    $this->actingAs($this->admin)->get($url)
+        ->assertSeeInOrder(['<footer', route('organizations.edit', ['organization' => $this->organization->uuid]), __('ui.organizations.show.actions.delete')], false);
+});
+
+test('the details of an organization lead to its spots, and to its members and invitations for those who can see them', function () {
+    $url = route('organizations.show', ['organization' => $this->organization->uuid]);
+    $spots = route('organizations.spots.index', ['organization' => $this->organization->uuid]);
+    $members = route('organizations.members.index', ['organization' => $this->organization->uuid]);
+    $invitations = route('organizations.invitations.index', ['organization' => $this->organization->uuid]);
+
+    $this->get($url)->assertOk()->assertSee('href="'.$spots.'"', false)
+        ->assertDontSee('href="'.$members.'"', false)
+        ->assertDontSee('href="'.$invitations.'"', false);
+
+    $this->actingAs($this->member)->get($url)->assertSee('href="'.$members.'"', false)->assertDontSee('href="'.$invitations.'"', false);
+
+    $this->actingAs($this->responsible)->get($url)
+        ->assertSeeInOrder(['<h1', 'href="'.$spots.'"', 'href="'.$members.'"', 'href="'.$invitations.'"', '</header>'], false);
+});

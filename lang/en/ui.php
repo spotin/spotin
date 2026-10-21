@@ -26,6 +26,10 @@ return [
         ],
         'breadcrumbs' => 'Breadcrumb',
         'actions' => [
+            'label' => 'Actions',
+            'like' => 'Like',
+            'report' => 'Report',
+            'share' => 'Share',
             'cancel' => 'Cancel',
             'close' => 'Close',
             'see_all' => 'See all',
@@ -41,11 +45,13 @@ return [
         'map' => [
             'label' => 'Map',
             'hint' => 'Click on the map or drag the marker to set the location.',
+            'spot_link' => 'See the spot',
             'controls' => [
                 'zoom_in' => 'Zoom in',
                 'zoom_out' => 'Zoom out',
                 'reset_bearing' => 'Reset to north',
                 'recenter' => 'Centre on the spot',
+                'recenter_spots' => 'Show all the spots',
                 'fullscreen_enter' => 'Enter fullscreen',
                 'fullscreen_exit' => 'Exit fullscreen',
                 'locate' => 'Show my position',
@@ -331,6 +337,7 @@ return [
         ],
         'show' => [
             'scanned' => 'You have just scanned an organization!',
+            'map' => 'Spots of the organization',
             'description' => 'The spots, members and invitations of the organization.',
             'actions' => [
                 'edit' => 'Edit',
@@ -629,6 +636,7 @@ return [
             'description' => 'Discover the spots of the platform.',
             'empty' => 'No spot to show.',
             'count' => ':count spot|:count spots',
+            'map' => 'Map of the spots',
             'no_result' => 'No spot matches your filters.',
             'filter' => [
                 'search' => 'Search a spot',
@@ -640,10 +648,6 @@ return [
             'scanned' => 'You have just scanned a spot!',
             'description' => 'The details of the spot.',
             'actions' => [
-                'label' => 'Actions',
-                'like' => 'Like',
-                'report' => 'Report',
-                'share' => 'Share',
                 'edit' => 'Edit',
                 'delete' => 'Delete',
             ],

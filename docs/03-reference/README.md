@@ -116,7 +116,7 @@ dependencies, as declared in `composer.json` (PHP) and `package.json`
 - [Tailwind CSS Typography](https://github.com/tailwindlabs/tailwindcss-typography):
   `prose` classes for styling rich text.
 - [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/): the maps of the
-  spots, drawn with the Liberty style of [OpenFreeMap](https://openfreemap.org/)
+  spots, drawn with the Bright style of [OpenFreeMap](https://openfreemap.org/)
   by default (`MAP_STYLE_URL`), from
   [OpenStreetMap](https://www.openstreetmap.org/copyright) data, whose credits
   must stay visible.

@@ -1,8 +1,9 @@
-@props(['mode' => 'display', 'latitude' => null, 'longitude' => null, 'label' => null, 'framed' => true])
+@props(['mode' => 'display', 'spots' => null, 'label' => null, 'framed' => true])
 
 {{--
-    A map drawn by resources/js/map.js, hidden without JS. `display` shows the point of the given coordinates. `picker` is
-    used by `x-map.picker`. `framed` gives it a border and rounded corners, unless it is inside something that has them.
+    A map drawn by resources/js/map.js, hidden without JS. `display` shows `spots`: the address of their GeoJSON, or the
+    GeoJSON itself (`Spot::featureCollection()`). `picker` is used by `x-map.picker`, which gives its point. `framed` gives
+    it a border and rounded corners, unless it is inside something that has them.
 --}}
 @php($locale = [
     'Map.Title' => $label ?? __('ui.common.map.label'),
@@ -27,16 +28,18 @@
     data-map-center="{{ json_encode([config('services.map.center.longitude'), config('services.map.center.latitude')]) }}"
     data-map-zoom="{{ config('services.map.zoom') }}"
     data-map-locale="{{ json_encode($locale) }}"
-    data-map-recenter="{{ __('ui.common.map.controls.recenter') }}"
-    @if ($latitude !== null && $longitude !== null)
-        data-latitude="{{ $latitude }}"
-        data-longitude="{{ $longitude }}"
+    @if ($spots !== null)
+        data-map-spots="{{ is_string($spots) ? $spots : json_encode($spots) }}"
+        data-map-spot-link="{{ __('ui.common.map.spot_link') }}"
+        data-map-recenter="{{ __('ui.common.map.controls.recenter_spots') }}"
+    @else
+        data-map-recenter="{{ __('ui.common.map.controls.recenter') }}"
     @endif
     role="region"
     aria-label="{{ $label ?? __('ui.common.map.label') }}"
     {{ $attributes->class(['not-prose w-full overflow-hidden', 'rounded-box border-base-content/10 border' => $framed]) }}
 >
-    {{-- The icon of the button that goes back to the point, copied by resources/js/map.js --}}
+    {{-- The icon of the button that goes back to the point or the spots, copied by resources/js/map.js --}}
     <template data-map-recenter-icon>
         <x-lucide-crosshair class="mx-auto h-4 w-4 stroke-3" aria-hidden="true" />
     </template>
