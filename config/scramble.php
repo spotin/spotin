@@ -47,7 +47,7 @@ return [
         /*
          * API version.
          */
-        'version' => env('API_VERSION', '1.0.0'),
+        'version' => env('API_VERSION', '0.0.1'),
 
         /*
          * Description rendered on the home page of the API documentation (`/api`).
@@ -80,7 +80,7 @@ MD,
     ],
 
     'ui' => [
-        'title' => 'Spot in® API',
+        'title' => null,
     ],
 
     /*
@@ -123,8 +123,6 @@ MD,
             'darkMode' => false,
             'showDeveloperTools' => 'never',
             'agent' => ['disabled' => true],
-            // Keeps the token in the browser's localStorage, so that it survives a reload. See the warning in the
-            // description above.
             'persistAuth' => true,
             'credentials' => 'include',
         ],
@@ -182,7 +180,6 @@ MD,
      */
     'flatten_deep_query_parameters' => true,
 
-    // The documentation is public.
     'middleware' => [
         'web',
     ],
