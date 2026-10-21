@@ -18,6 +18,9 @@ Route::singleton('locale', LocaleController::class)->only(['update']);
 Route::get('spots/{spot:uuid}/redirect', [SpotController::class, 'redirect'])->name('spots.redirect');
 Route::get('organizations/{organization:uuid}/redirect', [OrganizationController::class, 'redirect'])->name('organizations.redirect');
 
+// The spots of an organization, for its map: public as its page, without the hidden ones for the others than its members.
+Route::get('organizations/{organization:uuid}/spots.geojson', [OrganizationSpotController::class, 'map'])->name('organizations.spots.map');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('organizations/{organization:uuid}')->group(function () {
         Route::post('spots', [OrganizationSpotController::class, 'store'])

@@ -116,18 +116,29 @@ class Spot extends Model
     }
 
     /**
-     * Scope the query to what a list of spots shows: with their organization and creator, sorted by name,
-     * optionally only the spots whose name contains the search query or that the user created.
+     * Scope the query to what a list of spots shows: with their organization and creator, sorted by name, with the
+     * filters of the lists.
      *
      * @param  Builder<static>  $query
      */
     public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
     {
-        $query->with(['organization', 'creator'])
-            ->visibleTo($user)
-            ->search($searchQuery)
-            ->when($mine && $user, fn (Builder $query) => $query->mine($user))
+        $query->filtered($user, $searchQuery, $mine)
+            ->with(['organization', 'creator'])
             ->orderBy('name');
+    }
+
+    /**
+     * Scope the query to the spots the user can find in the lists, optionally only the ones whose name contains the
+     * search query or that the user created. Shared by the lists and the maps of spots.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeFiltered(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
+    {
+        $query->visibleTo($user)
+            ->search($searchQuery)
+            ->when($mine && $user, fn (Builder $query) => $query->mine($user));
     }
 
     /**
@@ -167,5 +178,33 @@ class Spot extends Model
     public function scopeMine(Builder $query, User $user): void
     {
         $query->where('created_by', $user->id);
+    }
+
+    /**
+     * The spots as a GeoJSON collection of points, for the maps: their name and, with `$links`, the address of their
+     * page.
+     *
+     * @param  iterable<self>  $spots
+     * @return array{type: 'FeatureCollection', features: list<array<string, mixed>>}
+     */
+    public static function featureCollection(iterable $spots, bool $links = true): array
+    {
+        $features = [];
+
+        foreach ($spots as $spot) {
+            $features[] = [
+                'type' => 'Feature',
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => [(float) $spot->longitude, (float) $spot->latitude],
+                ],
+                'properties' => [
+                    'name' => $spot->name,
+                    ...($links ? ['url' => route('spots.show', ['spot' => $spot->uuid])] : []),
+                ],
+            ];
+        }
+
+        return ['type' => 'FeatureCollection', 'features' => $features];
     }
 }

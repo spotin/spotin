@@ -210,3 +210,15 @@ test('hidden spots are only listed for the members of their organization and adm
 
     $this->get(route('spots.show', ['spot' => Spot::firstWhere('name', 'Secret Cove')->uuid]))->assertOk()->assertSee('Secret Cove');
 });
+
+test('the list of the spots of an organization shows all its results on a map, with its filters but not its page', function () {
+    $list = route('organizations.spots.index', ['organization' => $this->organization->uuid]);
+    $map = route('organizations.spots.map', ['organization' => $this->organization->uuid]);
+
+    $this->get($list)->assertOk()->assertSee('data-map-spots="'.$map.'"', false);
+    $this->get($list.'?query=harb&page=1')->assertOk()->assertSee('data-map-spots="'.e($map.'?query=harb').'"', false);
+
+    // Without result, and on the list of all the spots so far, there is no map
+    $this->get($list.'?query=nothing')->assertOk()->assertDontSee('data-map-spots', false);
+    $this->get(route('spots.index'))->assertOk()->assertDontSee('data-map-spots', false);
+});

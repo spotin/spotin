@@ -40,9 +40,9 @@ render(function (View $view, Spot $spot) {
     <article class="card bg-base-100 overflow-hidden shadow-md">
         {{-- Without JS, the map is hidden and the coordinates stay --}}
         <figure class="mt-0 mb-0 flex-col items-stretch">
+            {{-- The spot in the page, without a link to the page itself --}}
             <x-map
-                :latitude="$spot->latitude"
-                :longitude="$spot->longitude"
+                :spots="App\Models\Spot::featureCollection([$spot], links: false)"
                 :label="__('ui.spots.show.map')"
                 :framed="false"
                 class="h-64 sm:h-80"
@@ -109,21 +109,21 @@ render(function (View $view, Spot $spot) {
         <footer class="bg-base-200 px-6 py-4">
             <div
                 role="group"
-                aria-label="{{ __('ui.spots.show.actions.label') }}"
+                aria-label="{{ __('ui.common.actions.label') }}"
                 class="join join-vertical lg:join-horizontal not-prose w-full"
             >
                 {{-- TODO: Like, report and share the spot --}}
                 <button type="button" class="btn btn-ghost join-item lg:flex-1">
                     <x-lucide-heart class="h-4 w-4" aria-hidden="true" />
-                    {{ __('ui.spots.show.actions.like') }}
+                    {{ __('ui.common.actions.like') }}
                 </button>
                 <button type="button" class="btn btn-ghost join-item lg:flex-1">
                     <x-lucide-flag class="h-4 w-4" aria-hidden="true" />
-                    {{ __('ui.spots.show.actions.report') }}
+                    {{ __('ui.common.actions.report') }}
                 </button>
                 <button type="button" class="btn btn-ghost join-item lg:flex-1">
                     <x-lucide-share-2 class="h-4 w-4" aria-hidden="true" />
-                    {{ __('ui.spots.show.actions.share') }}
+                    {{ __('ui.common.actions.share') }}
                 </button>
 
                 @can('update', $spot)

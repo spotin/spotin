@@ -6,6 +6,7 @@ use App\Http\Requests\ListFiltersRequest;
 use App\Models\Organization;
 use App\Models\Spot;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 
 /**
  * The list of spots, with its filters, shared by /spots and /organizations/{uuid}/spots.
@@ -22,6 +23,7 @@ final readonly class SpotListing
         public bool $canCreate,
         public LengthAwarePaginator $spots,
         public string $action,
+        public ?string $map,
     ) {}
 
     /**
@@ -43,6 +45,10 @@ final readonly class SpotListing
             action: $organization
                 ? route('organizations.spots.index', ['organization' => $organization->uuid])
                 : route('spots.index'),
+            // The map of all the results, with the filters of the list but not its page: only for an organization so far
+            map: $organization
+                ? route('organizations.spots.map', ['organization' => $organization->uuid, ...Arr::except($request->query(), 'page')])
+                : null,
         );
     }
 

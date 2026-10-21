@@ -211,7 +211,7 @@ test('the page of a spot shows its map and coordinates, its name and details, it
             __('ui.spots.show.visit', ['website' => 'harbour.example.com']),
             e(__('ui.common.leave.title', ['app' => config('app.name')])), '<strong class="break-all">https://harbour.example.com</strong>',
             __('ui.common.leave.continue'),
-            '<footer', __('ui.spots.show.actions.like'), __('ui.spots.show.actions.report'), __('ui.spots.show.actions.share'),
+            '<footer', __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share'),
         ], false)
         // The guests do not see who created the spot
         ->assertDontSee('Mike Member');
@@ -266,14 +266,26 @@ test('the headings of the description are shifted under the title of the page, k
         ->and(substr_count($html, '<h1'))->toBe(1);
 });
 
-test('the page of a spot shows its location on a map and its coordinates', function () {
+test('the page of a spot shows its location on a map, given in the page, and its coordinates', function () {
     $this->spot->update(['latitude' => 46.5197, 'longitude' => 6.6323]);
 
-    $this->get(route('spots.show', ['spot' => $this->spot->uuid]))
+    $html = $this->get(route('spots.show', ['spot' => $this->spot->uuid]))
         ->assertOk()
         ->assertSee('data-map="display"', false)
-        ->assertSee('data-latitude="46.5197"', false)
-        ->assertSee('46.519700, 6.632300');
+        ->assertSee('46.519700, 6.632300')
+        ->getContent();
+
+    preg_match('/data-map-spots="([^"]*)"/', $html, $spots);
+
+    // One point, longitude first, without a link to the page itself
+    expect(json_decode(html_entity_decode($spots[1]), true))->toBe([
+        'type' => 'FeatureCollection',
+        'features' => [[
+            'type' => 'Feature',
+            'geometry' => ['type' => 'Point', 'coordinates' => [6.6323, 46.5197]],
+            'properties' => ['name' => 'Harbour'],
+        ]],
+    ]);
 });
 
 test('the members are told when a spot is hidden from the public lists, the visitors are not', function () {

@@ -26,6 +26,10 @@ return [
         ],
         'breadcrumbs' => "Fil d'Ariane",
         'actions' => [
+            'label' => 'Actions',
+            'like' => "J'aime",
+            'report' => 'Signaler',
+            'share' => 'Partager',
             'cancel' => 'Annuler',
             'close' => 'Fermer',
             'see_all' => 'Tout voir',
@@ -41,11 +45,13 @@ return [
         'map' => [
             'label' => 'Carte',
             'hint' => "Cliquez sur la carte ou déplacez le marqueur pour choisir l'emplacement.",
+            'spot_link' => 'Voir le spot',
             'controls' => [
                 'zoom_in' => 'Zoomer',
                 'zoom_out' => 'Dézoomer',
                 'reset_bearing' => 'Réorienter vers le nord',
                 'recenter' => 'Centrer sur le spot',
+                'recenter_spots' => 'Afficher tous les spots',
                 'fullscreen_enter' => 'Afficher en plein écran',
                 'fullscreen_exit' => 'Quitter le plein écran',
                 'locate' => 'Afficher ma position',
@@ -331,6 +337,7 @@ return [
         ],
         'show' => [
             'scanned' => 'Vous venez de scanner une organisation !',
+            'map' => "Spots de l'organisation",
             'description' => "Les spots, les membres et les invitations de l'organisation.",
             'actions' => [
                 'edit' => 'Modifier',
@@ -629,6 +636,7 @@ return [
             'description' => 'Découvrez les spots de la plateforme.',
             'empty' => 'Aucun spot à afficher.',
             'count' => ':count spot|:count spots',
+            'map' => 'Carte des spots',
             'no_result' => 'Aucun spot ne correspond à vos filtres.',
             'filter' => [
                 'search' => 'Rechercher un spot',
@@ -640,10 +648,6 @@ return [
             'scanned' => 'Vous venez de scanner un spot !',
             'description' => 'Les détails du spot.',
             'actions' => [
-                'label' => 'Actions',
-                'like' => "J'aime",
-                'report' => 'Signaler',
-                'share' => 'Partager',
                 'edit' => 'Modifier',
                 'delete' => 'Supprimer',
             ],

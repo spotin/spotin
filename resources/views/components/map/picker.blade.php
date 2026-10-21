@@ -8,7 +8,7 @@
     {{-- Hidden with its map, without JS or WebGL: the coordinates can still be typed --}}
     <fieldset class="fieldset has-[>[data-map][hidden]]:hidden">
         <legend class="fieldset-legend">{{ __('ui.common.map.label') }}</legend>
-        <x-map mode="picker" :latitude="$latitude" :longitude="$longitude" class="h-96" />
+        <x-map mode="picker" class="h-96" />
         <span class="label">{{ __('ui.common.map.hint') }}</span>
     </fieldset>
 
