@@ -67,7 +67,11 @@
 
     {{-- The actions on the organization: on one line when they fit, on more otherwise --}}
     <footer class="mt-6">
-        <div role="group" aria-label="{{ __('ui.common.actions.label') }}" class="not-prose flex flex-wrap justify-center gap-2">
+        <div
+            role="group"
+            aria-label="{{ __('ui.common.actions.label') }}"
+            class="not-prose flex flex-wrap justify-center gap-2"
+        >
             {{-- TODO: Like, report and share the organization --}}
             <button type="button" class="btn btn-ghost">
                 <x-lucide-heart class="h-4 w-4" aria-hidden="true" />
@@ -83,7 +87,10 @@
             </button>
 
             @can('update', $organization)
-                <a href="{{ route('organizations.edit', ['organization' => $organization->uuid]) }}" class="btn btn-ghost">
+                <a
+                    href="{{ route('organizations.edit', ['organization' => $organization->uuid]) }}"
+                    class="btn btn-ghost"
+                >
                     <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
                     {{ __('ui.organizations.show.actions.edit') }}
                 </a>

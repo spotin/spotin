@@ -23,7 +23,10 @@ render(function (View $view) {
     <h1>{{ __('ui.auth.register.title') }}</h1>
 
     @if ($invitation)
-        <x-alert type="info" icon="mail">{{ __('ui.auth.register.invitation', ['organization' => $invitation->organization->name]) }}</x-alert>
+        <x-alert
+            type="info"
+            icon="mail"
+        >{{ __('ui.auth.register.invitation', ['organization' => $invitation->organization->name]) }}</x-alert>
     @endif
 
     <form method="POST" action="{{ route('register.store') }}">

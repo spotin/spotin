@@ -10,8 +10,6 @@
     <x-map :spots="$spots" :label="$label" :framed="false" class="h-full" />
 
     @if ($slot->hasActualContent())
-        <div class="hero-content pointer-events-none w-full max-w-6xl justify-start">
-            {{ $slot }}
-        </div>
+        <div class="hero-content pointer-events-none w-full max-w-6xl justify-start">{{ $slot }}</div>
     @endif
 </section>

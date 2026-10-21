@@ -37,11 +37,19 @@ render(function (View $view, Spot $spot) {
 
     @can('update', $spot)
         @if ($spot->redirectsVisitors())
-            <x-alert type="info" icon="external-link" role="status">{{ __('ui.spots.show.notes.redirect', ['website' => $spot->website]) }}</x-alert>
+            <x-alert
+                type="info"
+                icon="external-link"
+                role="status"
+            >{{ __('ui.spots.show.notes.redirect', ['website' => $spot->website]) }}</x-alert>
         @endif
 
         @if ($spot->is_hidden)
-            <x-alert type="info" icon="eye-off" role="status">{{ __('ui.spots.show.notes.hidden', ['organization' => $spot->organization->name]) }}</x-alert>
+            <x-alert
+                type="info"
+                icon="eye-off"
+                role="status"
+            >{{ __('ui.spots.show.notes.hidden', ['organization' => $spot->organization->name]) }}</x-alert>
         @endif
     @endcan
 
@@ -101,7 +109,11 @@ render(function (View $view, Spot $spot) {
 
         {{-- The actions on the spot: on one line when they fit, on more otherwise --}}
         <footer class="mt-6">
-            <div role="group" aria-label="{{ __('ui.common.actions.label') }}" class="not-prose flex flex-wrap justify-center gap-2">
+            <div
+                role="group"
+                aria-label="{{ __('ui.common.actions.label') }}"
+                class="not-prose flex flex-wrap justify-center gap-2"
+            >
                 {{-- TODO: Like, report and share the spot --}}
                 <button type="button" class="btn btn-ghost">
                     <x-lucide-heart class="h-4 w-4" aria-hidden="true" />
