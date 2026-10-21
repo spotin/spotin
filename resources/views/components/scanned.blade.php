@@ -6,7 +6,8 @@
 --}}
 @if (session('scanned'))
     <x-alert type="info" icon="scan-qr-code" role="status" closable class="not-prose mb-6">
-        <p class="font-semibold">{{ $title }}</p>
-        <p>{{ __('ui.common.scanned', ['app' => config('app.name')]) }}</p>
+        {{-- Lines of the paragraph of the alert --}}
+        <span class="block font-semibold">{{ $title }}</span>
+        <span class="block">{{ __('ui.common.scanned', ['app' => config('app.name')]) }}</span>
     </x-alert>
 @endif
