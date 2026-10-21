@@ -18,7 +18,7 @@
         "@tiptap/starter-kit": "^3.32.0",
         "concurrently": "^10.0.6",
         "daisyui": "^5.7.43",
-        "fontaine": "^0.8.2",
+        "fontaine": "^1.0.1",
         "laravel-vite-plugin": "^3.2",
         "prettier": "^3.9.10",
         "maplibre-gl": "^6.15.0",
