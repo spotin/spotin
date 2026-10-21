@@ -27,35 +27,12 @@ render(function (View $view, Spot $spot) {
 <x-default-layout :breadcrumbs="$breadcrumbs">
     <h1>{{ __('ui.spots.edit.title') }}</h1>
 
-    <form method="POST" action="{{ route('spots.update', $spot) }}">
-        @csrf
-        @method('PATCH')
+    <p>{{ __('ui.spots.edit.introduction', ['spot' => $spot->name, 'organization' => $spot->organization->name]) }}</p>
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.spots.common.forms.fields.name.placeholder') }}</span>
-                    <x-lucide-map-pin class="h-[1em] opacity-50" />
-                    <input
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="{{ __('ui.spots.common.forms.fields.name.label') }}"
-                        value="{{ old('name', $spot->name) }}"
-                        @error('name') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('name')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-        </fieldset>
-
-        <footer>
-            <button type="submit" class="btn btn-block">{{ __('ui.spots.edit.form.actions.submit') }}</button>
-        </footer>
-    </form>
+    <x-spots.form
+        :action="route('spots.update', $spot)"
+        method="PATCH"
+        :spot="$spot"
+        :submit="__('ui.spots.edit.form.actions.submit')"
+    />
 </x-default-layout>

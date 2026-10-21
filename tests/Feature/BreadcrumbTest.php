@@ -2,6 +2,7 @@
 
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
+use App\Models\Spot;
 use App\Models\User;
 
 beforeEach(function () {
@@ -36,6 +37,17 @@ test('organization pages show a trail starting at Organizations', function (stri
     'invitations' => ['/invitations', ['Organizations', 'Acme', 'Invitations']],
     'invite someone' => ['/invitations/create', ['Organizations', 'Acme', 'Invitations', 'Invite someone']],
 ]);
+
+test('guests see no trail on the public pages', function () {
+    $spot = Spot::factory()->for($this->organization)->create();
+
+    foreach ([$this->orgUrl, route('spots.show', ['spot' => $spot->uuid])] as $url) {
+        $this->get($url)->assertOk()->assertDontSee('class="breadcrumbs', false);
+    }
+
+    // The same pages show it once logged in
+    $this->actingAs($this->responsible)->get($this->orgUrl)->assertSee('class="breadcrumbs', false);
+});
 
 test('the crumbs link to their page and the last one is the current page', function () {
     $html = $this->actingAs($this->responsible)->get($this->orgUrl.'/invitations/create')->getContent();

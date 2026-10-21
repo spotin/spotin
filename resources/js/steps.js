@@ -4,10 +4,6 @@ document.querySelectorAll("[data-steps]").forEach((container) => {
     const titles = steps.map((step) => step.querySelector("[data-step-title]"));
     const form = container.closest("form");
     const scroller = container.querySelector("[data-steps-scroller]");
-    const icons = {
-        done: container.querySelector('[data-steps-icon="done"]'),
-        error: container.querySelector('[data-steps-icon="error"]'),
-    };
     const last = steps.length - 1;
     let current = 0;
     // The furthest step reached: the indicator opens any step up to it.
@@ -19,56 +15,66 @@ document.querySelectorAll("[data-steps]").forEach((container) => {
     const fields = (index) => [
         ...steps[index].querySelectorAll("input, select, textarea"),
     ];
-    const valid = (index) =>
-        fields(index).every((field) => field.checkValidity());
     // Set by the server after a failed submit, until the field is changed.
     const rejected = (index) =>
         fields(index).some(
             (field) => field.getAttribute("aria-invalid") === "true",
         );
 
-    // The indicator lists the titles of the steps, so that they always match.
+    // The titles are the anchors of the steps in the URL, by their position, so that a link opens the same step in
+    // every language.
+    titles.forEach((title, i) => {
+        title.id = `step-${i + 1}`;
+        steps[i].setAttribute("aria-labelledby", title.id);
+    });
+
+    // The indicator lists the titles of the steps, so that they always match, as links to their anchors: they show
+    // where they go, and can be opened in a new tab. A click opens the step here, after the checks of `goTo`.
     const indicators = titles.map((title, i) => {
         const indicator = document.createElement("li");
-        const button = document.createElement("button");
+        const link = document.createElement("a");
 
         indicator.className = "step";
-        button.type = "button";
-        button.className =
-            "cursor-pointer enabled:hover:underline focus-visible:underline disabled:cursor-default";
-        button.textContent = title.textContent;
-        button.addEventListener("click", () => goTo(i));
-        indicator.append(button);
+        link.className = "[&[href]]:hover:underline focus-visible:underline";
+        link.textContent = title.textContent;
+        link.addEventListener("click", (event) => {
+            // With a modifier key, the browser opens the link in a new tab or window.
+            if (
+                event.ctrlKey ||
+                event.metaKey ||
+                event.shiftKey ||
+                event.altKey
+            ) {
+                return;
+            }
+
+            event.preventDefault();
+            goTo(i);
+        });
+        indicator.append(link);
         container.querySelector("[data-steps-indicator]").append(indicator);
 
         return indicator;
     });
 
-    // A step left behind is done, with a check, or has errors, with a cross. The current step and the furthest one
-    // reached keep their number.
+    // The steps up to the furthest one reached are highlighted, and can be opened: the others are links without an
+    // address, which cannot be followed. The errors are shown by the fields themselves.
     const render = () => {
         indicators.forEach((indicator, i) => {
-            const button = indicator.querySelector("button");
-            const error =
-                i !== current && (rejected(i) || (i < reached && !valid(i)));
-            const done = !error && i !== current && i < reached;
+            const link = indicator.querySelector("a");
 
-            indicator.querySelector(".step-icon")?.remove();
+            indicator.classList.toggle("step-primary", i <= reached);
 
-            if (error || done) {
-                indicator.prepend(
-                    icons[error ? "error" : "done"].content.cloneNode(true),
-                );
+            if (i <= reached) {
+                link.href = `#${titles[i].id}`;
+            } else {
+                link.removeAttribute("href");
             }
 
-            indicator.classList.toggle("step-error", error);
-            indicator.classList.toggle("step-primary", !error && i <= reached);
-            button.disabled = i > reached;
-
             if (i === current) {
-                button.setAttribute("aria-current", "step");
+                link.setAttribute("aria-current", "step");
             } else {
-                button.removeAttribute("aria-current");
+                link.removeAttribute("aria-current");
             }
         });
 
@@ -93,6 +99,14 @@ document.querySelectorAll("[data-steps]").forEach((container) => {
         });
 
         render();
+
+        // Lets the content of the step react, such as a map that needs its size once visible.
+        steps[index].dispatchEvent(
+            new CustomEvent("steps:show", {
+                bubbles: true,
+                detail: { index, steps },
+            }),
+        );
 
         const hash = `#${titles[index].id}`;
 
@@ -217,7 +231,8 @@ document.querySelectorAll("[data-steps]").forEach((container) => {
     } else {
         const target = fromHash();
 
-        reached = target;
+        // A form whose fields are all filled, such as an edit form, can open any step.
+        reached = "stepsComplete" in container.dataset ? last : target;
         show(0, { focus: false, history: null });
         goTo(target, { focus: false, history: "replace" });
     }

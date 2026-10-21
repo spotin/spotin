@@ -14,23 +14,23 @@ name('organizations.show');
 render(function (View $view, Organization $organization) {
     Head::title($organization->name)->description(__('ui.organizations.show.description'));
 
-    $breadcrumbs = Breadcrumbs::organization($organization);
-
     return $view->with([
-        'breadcrumbs' => $breadcrumbs,
+        'breadcrumbs' => Breadcrumbs::organization($organization),
         'membersCount' => Gate::allows('viewMembers', $organization) ? $organization->users()->count() : null,
         'invitationsCount' => Gate::allows('manageMembers', $organization) ? $organization->invitations()->count() : null,
-        'spotsCount' => $organization->spots()->count(),
+        // The spots the user finds in the list of the organization, without the hidden ones for the others
+        'spotsCount' => $organization->spots()->visibleTo(request()->user())->count(),
     ]);
 });
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h1 class="m-0! min-w-0 break-words">{{ $organization->name }}</h1>
+    {{-- The title, centered, with the actions of the editors under it --}}
+    <div class="mb-6 flex flex-col items-center gap-3 text-center">
+        <h1 class="m-0! max-w-full break-words">{{ $organization->name }}</h1>
 
         @canany(['update', 'delete'], $organization)
-            <div class="flex shrink-0 gap-2">
+            <div class="not-prose flex flex-wrap justify-center gap-2">
                 @can('update', $organization)
                     <a
                         href="{{ route('organizations.edit', ['organization' => $organization->uuid]) }}"
@@ -54,6 +54,8 @@ render(function (View $view, Organization $organization) {
             </div>
         @endcanany
     </div>
+
+    <x-scanned :title="__('ui.organizations.show.scanned')" />
 
     <div class="not-prose grid gap-4 sm:grid-cols-2">
         <a

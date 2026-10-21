@@ -2,6 +2,7 @@
 
 use App\Enums\OrganizationRole;
 use App\Models\Organization;
+use App\Models\Spot;
 use App\Models\User;
 
 beforeEach(function () {
@@ -127,4 +128,15 @@ test('the organizations can be searched by name, with a count and a way to reset
     $this->get('/organizations?query=nothing-like-this')->assertOk()->assertSee(__('ui.organizations.index.no_result'));
 
     $this->actingAs($this->member)->get('/organizations?query=globex&mine=1')->assertOk()->assertSee(__('ui.organizations.index.no_result'));
+});
+
+test('the number of spots of the organizations in the list and the API leaves out the hidden spots, except for their members', function () {
+    Spot::factory()->for($this->organization)->count(2)->create();
+    Spot::factory()->for($this->organization)->create(['is_hidden' => true]);
+
+    $this->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 2));
+    $this->actingAs($this->member)->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 3));
+
+    expect(Organization::listed(null)->firstWhere('id', $this->organization->id)->spots_count)->toBe(2)
+        ->and(Organization::listed($this->member)->firstWhere('id', $this->organization->id)->spots_count)->toBe(3);
 });

@@ -162,7 +162,7 @@ test('a token needs the matching ability for every action', function (string $me
 test('a member creates a spot and becomes its creator', function () {
     Sanctum::actingAs($this->member, $this->abilities);
 
-    $uuid = $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots?include=organization,creator', ['name' => 'Pier'])
+    $uuid = $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots?include=organization,creator', spotData(['name' => 'Pier']))
         ->assertCreated()
         ->assertJsonPath('data.attributes.name', 'Pier')
         ->assertJsonPath('data.relationships.organization.data.id', $this->acme->uuid)
@@ -178,7 +178,7 @@ test('a member creates a spot and becomes its creator', function () {
 test('the abilities of a token never exceed the rights of its owner', function () {
     Sanctum::actingAs($this->outsider, $this->abilities);
 
-    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', ['name' => 'Pier'])->assertForbidden();
+    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', spotData(['name' => 'Pier']))->assertForbidden();
     $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['name' => 'Renamed'])->assertForbidden();
     $this->deleteJson('/api/v1/spots/'.$this->harbour->uuid)->assertForbidden();
 
@@ -189,7 +189,7 @@ test('the abilities of a token never exceed the rights of its owner', function (
 test('administrators can manage the spots of any organization', function () {
     Sanctum::actingAs($this->admin, $this->abilities);
 
-    $this->postJson('/api/v1/organizations/'.$this->globex->uuid.'/spots', ['name' => 'Pier'])->assertCreated();
+    $this->postJson('/api/v1/organizations/'.$this->globex->uuid.'/spots', spotData(['name' => 'Pier']))->assertCreated();
     $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['name' => 'Marina'])->assertOk()->assertJsonPath('data.attributes.name', 'Marina');
     $this->putJson('/api/v1/spots/'.$this->harbour->uuid, ['name' => 'Dock'])->assertMethodNotAllowed();
     $this->deleteJson('/api/v1/spots/'.$this->harbour->uuid)->assertNoContent();
@@ -213,19 +213,92 @@ test('the spot input is validated', function () {
     Sanctum::actingAs($this->member, $this->abilities);
 
     $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', [])->assertUnprocessable()->assertJsonValidationErrors('name');
-    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', ['name' => 'A'])->assertUnprocessable()->assertJsonValidationErrors('name');
-    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', ['name' => 'Harbour'])->assertUnprocessable()->assertJsonValidationErrors('name');
-    $this->postJson('/api/v1/organizations/unknown/spots', ['name' => 'Pier'])->assertNotFound();
+    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', spotData(['name' => 'A']))->assertUnprocessable()->assertJsonValidationErrors('name');
+    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', spotData(['name' => 'Harbour']))->assertUnprocessable()->assertJsonValidationErrors('name');
+    $this->postJson('/api/v1/organizations/unknown/spots', spotData(['name' => 'Pier']))->assertNotFound();
 
     $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['name' => 'Harbour'])->assertOk();
 
     // The same name is allowed in another organization.
     $this->member->organizations()->attach($this->globex);
-    $this->postJson('/api/v1/organizations/'.$this->globex->uuid.'/spots', ['name' => 'Harbour'])->assertCreated();
+    $this->postJson('/api/v1/organizations/'.$this->globex->uuid.'/spots', spotData(['name' => 'Harbour']))->assertCreated();
 });
 
 test('tokens are required', function () {
     $this->getJson('/api/v1/spots')->assertUnauthorized();
     $this->getJson('/api/v1/organizations/'.$this->acme->uuid.'/spots')->assertUnauthorized();
-    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', ['name' => 'Pier'])->assertUnauthorized();
+    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', spotData(['name' => 'Pier']))->assertUnauthorized();
+});
+
+test('a spot is created and returned with all its details', function () {
+    Sanctum::actingAs($this->member, $this->abilities);
+
+    $this->postJson('/api/v1/organizations/'.$this->acme->uuid.'/spots', spotData([
+        'name' => 'Pier',
+        'description' => 'A **long** pier.',
+        'website' => 'https://pier.example.com',
+        'redirect_to_website' => true,
+        'is_hidden' => true,
+    ]))
+        ->assertCreated()
+        ->assertJsonPath('data.attributes.description', 'A **long** pier.')
+        ->assertJsonPath('data.attributes.latitude', 46.5197)
+        ->assertJsonPath('data.attributes.longitude', 6.6323)
+        ->assertJsonPath('data.attributes.website', 'https://pier.example.com')
+        ->assertJsonPath('data.attributes.redirect_to_website', true)
+        ->assertJsonPath('data.attributes.is_hidden', true);
+});
+
+test('a PATCH only changes the fields it sends, and validates them', function () {
+    Sanctum::actingAs($this->member, $this->abilities);
+
+    $latitude = $this->harbour->latitude;
+
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['website' => 'https://harbour.example.com'])
+        ->assertOk()
+        ->assertJsonPath('data.attributes.name', 'Harbour')
+        ->assertJsonPath('data.attributes.latitude', $latitude)
+        ->assertJsonPath('data.attributes.website', 'https://harbour.example.com');
+
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['latitude' => 100, 'website' => 'ftp://example.com'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['latitude', 'website']);
+});
+
+test('hidden spots are only listed for the members of their organization and administrators, and stay reachable', function () {
+    $secret = Spot::factory()->for($this->acme)->hidden()->create(['name' => 'Secret Cove']);
+
+    Sanctum::actingAs($this->outsider, ['spots:read']);
+
+    $this->getJson('/api/v1/spots')->assertOk()->assertJsonMissing(['name' => 'Secret Cove']);
+    $this->getJson('/api/v1/organizations/'.$this->acme->uuid.'/spots')->assertOk()->assertJsonMissing(['name' => 'Secret Cove']);
+    $this->getJson('/api/v1/spots/'.$secret->uuid)->assertOk()->assertJsonPath('data.attributes.is_hidden', true);
+
+    foreach ([$this->member, $this->admin] as $user) {
+        Sanctum::actingAs($user, ['spots:read']);
+
+        $this->getJson('/api/v1/spots')->assertOk()->assertJsonFragment(['name' => 'Secret Cove']);
+    }
+});
+
+test('a PATCH cannot leave a spot redirecting its visitors without a website', function () {
+    Sanctum::actingAs($this->member, $this->abilities);
+
+    $this->harbour->update(['website' => null, 'redirect_to_website' => false]);
+
+    // The redirect alone, on a spot without a website
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['redirect_to_website' => true])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('redirect_to_website');
+
+    // The website removed from a spot that redirects
+    $this->harbour->update(['website' => 'https://harbour.example.com', 'redirect_to_website' => true]);
+
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['website' => null])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('redirect_to_website');
+
+    // Both together are fine
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['website' => null, 'redirect_to_website' => false])->assertOk();
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['website' => 'https://pier.example.com', 'redirect_to_website' => true])->assertOk();
 });

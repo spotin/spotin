@@ -165,3 +165,26 @@ test('the lists are paginated with page numbers and equal-width Previous and Nex
     'members' => ['organizations.members.index', fn ($t) => $t->organization->users()->attach(User::factory()->count(30)->create())],
     'invitations' => ['organizations.invitations.index', fn ($t) => Invitation::factory()->for($t->organization)->count(30)->create()],
 ]);
+
+test('the redirect address of an organization leads to its page, which says it was just scanned, once', function () {
+    $this->get(route('organizations.redirect', ['organization' => $this->organization->uuid]))
+        ->assertRedirect(route('organizations.show', ['organization' => $this->organization->uuid]));
+
+    $this->followingRedirects()->get(route('organizations.redirect', ['organization' => $this->organization->uuid]))
+        ->assertOk()
+        ->assertSee(__('ui.organizations.show.scanned'));
+
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee(__('ui.organizations.show.scanned'));
+    $this->get('/organizations/unknown/redirect')->assertNotFound();
+});
+
+test('the number of spots of an organization leaves out the hidden spots, except for its members', function () {
+    Spot::factory()->for($this->organization)->count(2)->create();
+    Spot::factory()->for($this->organization)->create(['is_hidden' => true]);
+
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))
+        ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 2));
+
+    $this->actingAs($this->member)->get(route('organizations.show', ['organization' => $this->organization->uuid]))
+        ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 3));
+});

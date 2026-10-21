@@ -1,5 +1,6 @@
 @props(['title', 'actions' => null])
 
+{{-- Named by its title without JS: resources/js/steps.js names it by its position, `step-1`, for the URL --}}
 @php($id = 'step-'.Str::slug($title))
 
 <section data-step aria-labelledby="{{ $id }}" {{ $attributes->merge(['class' => 'mb-4']) }}>
@@ -15,7 +16,7 @@
         Shown by resources/js/steps.js: Previous on every step but the first, Continue on every step but the last. The
         actions of the step, such as the submit button of the last one, come after them.
     --}}
-    <footer class="flex flex-wrap gap-2">
+    <footer class="mt-6 flex flex-wrap gap-2">
         <button type="button" class="btn" data-steps-previous hidden>{{ __('ui.common.steps.previous') }}</button>
         <div class="ml-auto flex flex-wrap gap-2">
             <button type="button" class="btn btn-primary" data-steps-next hidden>

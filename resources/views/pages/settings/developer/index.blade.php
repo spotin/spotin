@@ -27,7 +27,8 @@ render(function (View $view) {
 });
 ?>
 
-<x-default-layout :breadcrumbs="$breadcrumbs">
+{{-- The message of the actions on the tokens is shown with the new token, next to the list --}}
+<x-default-layout :breadcrumbs="$breadcrumbs" manual-success-message>
     <h1>{{ __('ui.settings.developer.index.title') }}</h1>
 
     <p>{{ __('ui.settings.developer.index.warning') }}</p>
@@ -49,10 +50,10 @@ render(function (View $view) {
         </a>
     </div>
 
+    <x-success-message />
+
     @if (session('new-token'))
-        <code class="bg-base-100 rounded-field not-prose mb-4 block w-full p-3 break-all select-all">
-            {{ session('new-token') }}
-        </code>
+        <code class="bg-base-100 rounded-field not-prose mb-4 block w-full p-3 break-all select-all">{{ session('new-token') }}</code>
     @endif
 
     @if ($tokens->isEmpty())

@@ -28,36 +28,10 @@ render(function (View $view, Organization $organization) {
 <x-default-layout :breadcrumbs="$breadcrumbs">
     <h1>{{ __('ui.organizations.spots.create.title') }}</h1>
 
-    <form method="POST" action="{{ route('organizations.spots.store', ['organization' => $organization->uuid]) }}">
-        @csrf
+    <p>{{ __('ui.organizations.spots.create.introduction', ['organization' => $organization->name]) }}</p>
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.spots.common.forms.fields.name.placeholder') }}</span>
-                    <x-lucide-map-pin class="h-[1em] opacity-50" />
-                    <input
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="{{ __('ui.spots.common.forms.fields.name.label') }}"
-                        value="{{ old('name') }}"
-                        @error('name') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('name')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-        </fieldset>
-
-        <footer>
-            <button type="submit" class="btn btn-block">
-                {{ __('ui.organizations.spots.create.form.actions.submit') }}
-            </button>
-        </footer>
-    </form>
+    <x-spots.form
+        :action="route('organizations.spots.store', ['organization' => $organization->uuid])"
+        :submit="__('ui.organizations.spots.create.form.actions.submit')"
+    />
 </x-default-layout>

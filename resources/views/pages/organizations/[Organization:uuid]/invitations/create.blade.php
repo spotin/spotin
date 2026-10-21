@@ -35,56 +35,46 @@ render(function (View $view, Organization $organization) {
     >
         @csrf
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.organizations.invitations.create.fields.email.placeholder') }}</span>
-                    <x-lucide-mail class="h-[1em] opacity-50" />
-                    <input
-                        name="email"
-                        type="email"
-                        required
-                        placeholder="{{ __('ui.organizations.invitations.create.fields.email.label') }}"
-                        value="{{ old('email') }}"
-                        @error('email') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('email')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div>
-                <label class="select validator w-full">
-                    <span class="label">
-                        <x-lucide-user-shield class="h-[1em]" />
-                    </span>
-                    <select
-                        name="role"
-                        required
-                        @error('role') aria-invalid="true" @enderror
-                        class="invalid:text-base-content/50! [&>option]:text-base-content"
-                    >
-                        <option value="" disabled selected>
-                            {{ __('ui.organizations.common.forms.fields.role.label') }}
-                        </option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->value }}" @selected(old('role') === $role->value)>
-                                {{ __('ui.organizations.common.forms.fields.role.options.' . $role->value) }}
-                            </option>
-                        @endforeach
-                    </select>
-                </label>
-                @error('role')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.organizations.invitations.create.fields.email.label') }}</legend>
+            <input
+                name="email"
+                type="text"
+                inputmode="email"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.organizations.invitations.create.fields.email.placeholder') }}"
+                value="{{ old('email') }}"
+                @error('email') aria-invalid="true" @enderror
+            />
+            @error('email')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
         </fieldset>
 
-        <footer>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.organizations.common.forms.fields.role.label') }}</legend>
+            <select
+                name="role"
+                class="select validator invalid:text-base-content/50! [&>option]:text-base-content w-full"
+                required
+                @error('role') aria-invalid="true" @enderror
+            >
+                <option value="" disabled selected>
+                    {{ __('ui.organizations.common.forms.fields.role.placeholder') }}
+                </option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->value }}" @selected(old('role') === $role->value)>
+                        {{ __('ui.organizations.common.forms.fields.role.options.' . $role->value) }}
+                    </option>
+                @endforeach
+            </select>
+            @error('role')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
+        </fieldset>
+
+        <footer class="mt-4">
             <button type="submit" class="btn btn-block">
                 {{ __('ui.organizations.invitations.create.actions.submit') }}
             </button>

@@ -25,3 +25,16 @@ function mineIsChecked(string $html): bool
 
     return isset($input[0]) && preg_match('/\schecked(\s|=|>|\/)/', $input[0]) === 1;
 }
+
+/**
+ * The fields of a valid spot, to create one through a form or the API.
+ */
+function spotData(array $overrides = []): array
+{
+    return [
+        'name' => 'Lighthouse',
+        'latitude' => 46.5197,
+        'longitude' => 6.6323,
+        ...$overrides,
+    ];
+}

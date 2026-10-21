@@ -13,14 +13,15 @@ render(function (View $view) {
     Head::title(__('ui.homepage.title'))
         ->description(__('ui.homepage.description'));
 
-    return $view->with('latestSpots', Spot::with('organization')->latest('id')->limit(6)->get());
+    // Without the hidden spots, as in the lists
+    return $view->with('latestSpots', Spot::visibleTo(request()->user())->with('organization')->latest('id')->limit(6)->get());
 });
 ?>
 
 <x-default-layout>
     <section aria-labelledby="page-title" class="text-center">
         <h1 id="page-title">{{ __('ui.homepage.title') }}</h1>
-        <p class="opacity-80">{{ __('ui.homepage.intro') }}</p>
+        <p class="opacity-80">{{ __('ui.homepage.introduction') }}</p>
 
         <div class="flex flex-wrap justify-center gap-2">
             <a href="{{ route('spots.index') }}" class="btn btn-primary">{{ __('ui.homepage.explore_spots') }}</a>

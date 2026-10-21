@@ -40,83 +40,70 @@ render(function (View $view) {
             </x-steps.step>
 
             <x-steps.step :title="__('ui.auth.register.steps.account.title')">
-                <fieldset class="fieldset mb-4 gap-3">
-                    <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.name.label') }}</legend>
+                    <input
+                        name="name"
+                        type="text"
+                        class="input validator w-full"
+                        required
+                        placeholder="{{ __('ui.auth.common.forms.fields.name.placeholder') }}"
+                        value="{{ old('name') }}"
+                        @error('name') aria-invalid="true" @enderror
+                    />
+                    @error('name')
+                        <span class="validator-hint mt-0">{{ $message }}</span>
+                    @enderror
+                </fieldset>
 
-                    <div>
-                        <label class="floating-label input validator w-full">
-                            <span>{{ __('ui.auth.common.forms.fields.name.placeholder') }}</span>
-                            <x-lucide-id-card class="h-[1em] opacity-50" />
-                            <input
-                                name="name"
-                                type="text"
-                                required
-                                placeholder="{{ __('ui.auth.common.forms.fields.name.label') }}"
-                                value="{{ old('name') }}"
-                                @error('name') aria-invalid="true" @enderror
-                                class="input w-full"
-                            />
-                        </label>
-                        @error('name')
-                            <span class="validator-hint">{{ $message }}</span>
-                        @enderror
-                    </div>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.email.label') }}</legend>
+                    <input
+                        name="email"
+                        type="text"
+                        inputmode="email"
+                        class="input validator w-full"
+                        required
+                        placeholder="{{ __('ui.auth.common.forms.fields.email.placeholder') }}"
+                        value="{{ old('email', $invitation?->email) }}"
+                        @readonly($invitation)
+                        @error('email') aria-invalid="true" @enderror
+                    />
+                    @error('email')
+                        <span class="validator-hint mt-0">{{ $message }}</span>
+                    @enderror
+                </fieldset>
 
-                    <div>
-                        <label class="floating-label input validator w-full">
-                            <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
-                            <x-lucide-mail class="h-[1em] opacity-50" />
-                            <input
-                                name="email"
-                                type="email"
-                                required
-                                placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
-                                value="{{ old('email', $invitation?->email) }}"
-                                @readonly($invitation)
-                                @error('email') aria-invalid="true" @enderror
-                                class="input w-full"
-                            />
-                        </label>
-                        @error('email')
-                            <span class="validator-hint">{{ $message }}</span>
-                        @enderror
-                    </div>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.password.label') }}</legend>
+                    <input
+                        name="password"
+                        type="password"
+                        class="input validator w-full"
+                        required
+                        placeholder="{{ __('ui.auth.common.forms.fields.password.placeholder') }}"
+                        @error('password') aria-invalid="true" @enderror
+                    />
+                    @error('password')
+                        <span class="validator-hint mt-0">{{ $message }}</span>
+                    @enderror
+                </fieldset>
 
-                    <div>
-                        <label class="floating-label input validator w-full">
-                            <span>{{ __('ui.auth.common.forms.fields.password.placeholder') }}</span>
-                            <x-lucide-lock-keyhole class="h-[1em] opacity-50" />
-                            <input
-                                name="password"
-                                type="password"
-                                required
-                                placeholder="{{ __('ui.auth.common.forms.fields.password.label') }}"
-                                @error('password') aria-invalid="true" @enderror
-                                class="input w-full"
-                            />
-                        </label>
-                        @error('password')
-                            <span class="validator-hint">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="floating-label input validator w-full">
-                            <span>{{ __('ui.auth.common.forms.fields.password_confirmation.placeholder') }}</span>
-                            <x-lucide-lock-keyhole-open class="h-[1em] opacity-50" />
-                            <input
-                                name="password_confirmation"
-                                type="password"
-                                required
-                                placeholder="{{ __('ui.auth.common.forms.fields.password_confirmation.label') }}"
-                                @error('password') aria-invalid="true" @enderror
-                                class="input w-full"
-                            />
-                        </label>
-                        @error('password')
-                            <span class="validator-hint">{{ $message }}</span>
-                        @enderror
-                    </div>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        {{ __('ui.auth.common.forms.fields.password_confirmation.label') }}
+                    </legend>
+                    <input
+                        name="password_confirmation"
+                        type="password"
+                        class="input validator w-full"
+                        required
+                        placeholder="{{ __('ui.auth.common.forms.fields.password_confirmation.placeholder') }}"
+                        @error('password') aria-invalid="true" @enderror
+                    />
+                    @error('password')
+                        <span class="validator-hint mt-0">{{ $message }}</span>
+                    @enderror
                 </fieldset>
 
                 <x-slot:actions>

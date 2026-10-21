@@ -1,4 +1,5 @@
-@props(['breadcrumbs' => []])
+{{-- `manualSuccessMessage`: the page places the message of a successful action itself, instead of above the page --}}
+@props(['breadcrumbs' => [], 'manualSuccessMessage' => false])
 
 @php
     $theme = in_array(request()->cookie('theme'), ['light', 'dark'], true) ? request()->cookie('theme') : null;
@@ -180,12 +181,9 @@
     <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
         <x-breadcrumbs :items="$breadcrumbs" />
         <div class="prose max-w-none">
-            @if (session('success'))
-                <p role="alert" class="alert alert-success">
-                    <x-lucide-check-circle class="h-6 w-6" />
-                    <span>{{ session('success') }}</span>
-                </p>
-            @endif
+            @unless ($manualSuccessMessage)
+                <x-success-message />
+            @endunless
 
             {{ $slot }}
         </div>
@@ -213,5 +211,8 @@
             <p>{{ config('app.name') }} 2021-{{ date('Y') }}</p>
         </aside>
     </footer>
+
+    {{-- The dialogs of the page, out of the elements whose buttons open them, such as joined buttons --}}
+    @stack('dialogs')
 </body>
 </html>

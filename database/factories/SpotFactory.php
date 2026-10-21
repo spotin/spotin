@@ -23,7 +23,28 @@ class SpotFactory extends Factory
             'organization_id' => Organization::factory(),
             'created_by' => User::factory(),
             'name' => fake()->unique()->words(2, true),
+            'description' => fake()->optional()->paragraphs(2, true),
+            // Around Switzerland, where the default map is centered
+            'latitude' => fake()->latitude(45.8, 47.8),
+            'longitude' => fake()->longitude(5.9, 10.5),
+            'website' => fake()->optional()->url(),
         ];
+    }
+
+    /**
+     * Indicate that the spot is only listed for the members of its organization.
+     */
+    public function hidden(): static
+    {
+        return $this->state(fn () => ['is_hidden' => true]);
+    }
+
+    /**
+     * Indicate that the visitors of the spot are redirected to its website.
+     */
+    public function redirecting(): static
+    {
+        return $this->state(fn () => ['website' => fake()->url(), 'redirect_to_website' => true]);
     }
 
     /**

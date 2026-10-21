@@ -35,49 +35,40 @@ render(function (View $view) {
         @csrf
         @method('PUT')
 
-        <fieldset class="fieldset mb-4 gap-3">
-            <legend class="fieldset-legend">{{ __('ui.common.fill_the_form') }}</legend>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.name.placeholder') }}</span>
-                    <x-lucide-id-card class="h-[1em] opacity-50" />
-                    <input
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.name.label') }}"
-                        value="{{ old('name', auth()->user()->name) }}"
-                        @error('name', 'updateProfileInformation') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('name', 'updateProfileInformation')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div>
-                <label class="floating-label input validator w-full">
-                    <span>{{ __('ui.auth.common.forms.fields.email.placeholder') }}</span>
-                    <x-lucide-mail class="h-[1em] opacity-50" />
-                    <input
-                        name="email"
-                        type="email"
-                        required
-                        placeholder="{{ __('ui.auth.common.forms.fields.email.label') }}"
-                        value="{{ old('email', auth()->user()->email) }}"
-                        @error('email', 'updateProfileInformation') aria-invalid="true" @enderror
-                        class="input w-full"
-                    />
-                </label>
-                @error('email', 'updateProfileInformation')
-                    <span class="validator-hint">{{ $message }}</span>
-                @enderror
-            </div>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.name.label') }}</legend>
+            <input
+                name="name"
+                type="text"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.auth.common.forms.fields.name.placeholder') }}"
+                value="{{ old('name', auth()->user()->name) }}"
+                @error('name', 'updateProfileInformation') aria-invalid="true" @enderror
+            />
+            @error('name', 'updateProfileInformation')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
         </fieldset>
 
-        <footer>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ __('ui.auth.common.forms.fields.email.label') }}</legend>
+            <input
+                name="email"
+                type="text"
+                inputmode="email"
+                class="input validator w-full"
+                required
+                placeholder="{{ __('ui.auth.common.forms.fields.email.placeholder') }}"
+                value="{{ old('email', auth()->user()->email) }}"
+                @error('email', 'updateProfileInformation') aria-invalid="true" @enderror
+            />
+            @error('email', 'updateProfileInformation')
+                <span class="validator-hint mt-0">{{ $message }}</span>
+            @enderror
+        </fieldset>
+
+        <footer class="mt-4">
             <button type="submit" class="btn btn-block">{{ __('ui.settings.profile.form.actions.submit') }}</button>
         </footer>
     </form>

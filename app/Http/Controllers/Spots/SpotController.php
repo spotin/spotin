@@ -10,13 +10,26 @@ use Illuminate\Http\RedirectResponse;
 class SpotController extends Controller
 {
     /**
+     * The address of the QR code of the spot: everyone goes straight to its website when the spot redirects its
+     * visitors, otherwise to its page, which says it was just scanned.
+     */
+    public function redirect(Spot $spot): RedirectResponse
+    {
+        if ($spot->redirectsVisitors()) {
+            return redirect()->away($spot->website);
+        }
+
+        return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('scanned', true);
+    }
+
+    /**
      * Update the spot.
      */
     public function update(UpdateSpotRequest $request, Spot $spot): RedirectResponse
     {
         $spot->update($request->validated());
 
-        return back()->with('success', __('ui.spots.feedback.spot_updated'));
+        return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', __('ui.spots.feedback.spot_updated'));
     }
 
     /**
