@@ -97,19 +97,41 @@ class DevelopmentSeeder extends Seeder
         $other = $member->organizations()->whereKeyNot($organization->getKey())->orderBy('organizations.id')->first();
 
         $spots = [
-            ['Responsible Spot', $organization, $responsible],
-            ['Member Spot', $organization, $member],
-            ['Admin Spot', $organization, $admin],
-            ['Orphan Spot', $organization, null],
-            ['Other Organization Spot', $other, $member],
+            ['Responsible Spot', $organization, $responsible, []],
+            ['Member Spot', $organization, $member, []],
+            ['Admin Spot', $organization, $admin, []],
+            ['Orphan Spot', $organization, null, []],
+            ['Other Organization Spot', $other, $member, []],
+            ['Hidden Spot', $organization, $member, ['is_hidden' => true]],
+            ['Redirecting Spot', $organization, $member, ['website' => 'https://www.myswitzerland.com', 'redirect_to_website' => true]],
         ];
 
-        foreach ($spots as [$name, $spotOrganization, $creator]) {
+        // Known places, so that the spots are easy to find on the map
+        $places = [
+            ['Lausanne Cathedral', 46.522860, 6.635480],
+            ['Château de Chillon', 46.414167, 6.927500],
+            ["Jet d'Eau", 46.207389, 6.155917],
+            ['Federal Palace', 46.946667, 7.444167],
+            ['Chapel Bridge', 47.051667, 8.307500],
+            ['Rhine Falls', 47.677778, 8.615278],
+            ['Matterhorn', 45.976389, 7.658333],
+        ];
+
+        foreach ($spots as $index => [$name, $spotOrganization, $creator, $attributes]) {
             if ($spotOrganization === null) {
                 continue;
             }
 
-            Spot::factory()->for($spotOrganization)->create(['name' => $name, 'created_by' => $creator?->id]);
+            [$place, $latitude, $longitude] = $places[$index];
+
+            Spot::factory()->for($spotOrganization)->create([
+                'name' => $name,
+                'description' => "A spot near **{$place}**, seeded for testing.",
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'created_by' => $creator?->id,
+                ...$attributes,
+            ]);
         }
     }
 
