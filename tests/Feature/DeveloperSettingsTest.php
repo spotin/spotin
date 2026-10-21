@@ -76,9 +76,12 @@ test('creating a token shows its plain text value once and stores the chosen abi
 
     expect($plainText)->toStartWith($token->id.'|');
 
-    $this->get(route('settings.developer'))->assertOk()
-        ->assertSee($plainText)
-        ->assertSee(__('ui.settings.developer.feedback.token_created'));
+    $html = $this->get(route('settings.developer'))->assertOk()
+        // The message comes just before the new token, below the title of the list, once
+        ->assertSeeInOrder([__('ui.settings.developer.index.your_tokens'), __('ui.settings.developer.feedback.token_created'), $plainText])
+        ->getContent();
+
+    expect(substr_count($html, __('ui.settings.developer.feedback.token_created')))->toBe(1);
     $this->get(route('settings.developer'))->assertOk()->assertDontSee($plainText);
 
     // The token works against the API, within its abilities.

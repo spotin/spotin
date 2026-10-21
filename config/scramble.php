@@ -80,7 +80,8 @@ MD,
     ],
 
     'ui' => [
-        'title' => null,
+        // The title of the documentation page and of the OpenAPI document, as the one of Scalar below.
+        'title' => 'Spot in® API',
     ],
 
     /*
