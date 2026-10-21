@@ -38,7 +38,7 @@ test('the pages render in every language without untranslated keys', function (s
     $this->get(($this->url)('organizations.members.index'))->assertOk()->assertDontSee('ui.');
 })->with(['en', 'fr']);
 
-test('the organization page shows cards linking to the members, without the role', function () {
+test('the organization page links to its members in its details, without the role', function () {
     Invitation::factory()->for($this->organization)->create();
 
     $content = $this->actingAs($this->member)->get(($this->url)('organizations.show'))
@@ -49,10 +49,9 @@ test('the organization page shows cards linking to the members, without the role
         ->assertDontSee(($this->url)('organizations.invitations.index'), false)
         ->getContent();
 
-    // The whole card is the link, there is no separate button.
+    // A single link, in the details: there is no separate button.
     expect(substr_count($content, 'href="'.($this->url)('organizations.members.index').'"'))->toBe(1)
-        ->and($content)->toContain('class="card ')
-        ->not->toContain('btn btn-sm');
+        ->and($content)->not->toContain('btn btn-sm');
 });
 
 test('responsible users and admins also get a link to the invitations', function (string $user) {
@@ -214,17 +213,18 @@ test('the spots of an organization are given as GeoJSON for its map, without the
     $this->getJson('/organizations/unknown/spots.geojson')->assertNotFound();
 });
 
-test('the page of an organization is a card with the map of its spots, its details and the actions of its editors', function () {
+test('the page of an organization shows the map of its spots across the page, then its details and the actions of its editors', function () {
     $url = route('organizations.show', ['organization' => $this->organization->uuid]);
 
-    // Without spots, there is no map
-    $this->get($url)->assertOk()->assertDontSee('data-map-spots', false);
+    // Without spots, there is no map: the details are in the page
+    $this->get($url)->assertOk()->assertDontSee('data-map-spots', false)->assertSeeInOrder(['<main', '<article', 'Acme'], false);
 
     Spot::factory()->for($this->organization)->count(2)->create();
     $map = 'data-map-spots="'.route('organizations.spots.map', ['organization' => $this->organization->uuid]).'"';
 
     $this->get($url)->assertOk()
-        ->assertSeeInOrder(['<article', $map, '<h1', 'Acme', trans_choice('ui.organizations.show.sections.spots.summary', 2)], false)
+        ->assertSeeInOrder(['class="hero ', $map, '<main', '<article', '<h1', 'Acme', trans_choice('ui.organizations.show.sections.spots.summary', 2), $this->organization->created_at->isoFormat('LL')], false)
+        ->assertDontSee('hero-content', false)
         // Everyone sees the actions to like, report and share it; the guests see neither the number of members nor the
         // actions of the editors
         ->assertSeeInOrder(['<footer', __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share')], false)
@@ -236,7 +236,7 @@ test('the page of an organization is a card with the map of its spots, its detai
         ->assertDontSee(route('organizations.edit', ['organization' => $this->organization->uuid]), false);
 
     $this->actingAs($this->admin)->get($url)
-        ->assertSeeInOrder(['<footer', route('organizations.edit', ['organization' => $this->organization->uuid]), __('ui.organizations.show.actions.delete')], false);
+        ->assertSeeInOrder(['class="hero ', '<footer', route('organizations.edit', ['organization' => $this->organization->uuid]), __('ui.organizations.show.actions.delete')], false);
 });
 
 test('the details of an organization lead to its spots, and to its members and invitations for those who can see them', function () {

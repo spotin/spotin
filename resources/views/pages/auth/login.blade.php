@@ -22,10 +22,7 @@ render(function (View $view) {
     <h1>{{ __('ui.auth.login.title') }}</h1>
 
     @if (session('status'))
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ session('status') }}</span>
-        </p>
+        <x-alert type="success" closable>{{ session('status') }}</x-alert>
     @endif
 
     <form method="POST" action="{{ route('login.store') }}">

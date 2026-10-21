@@ -2,7 +2,6 @@
 
 use App\Http\Requests\ListFiltersRequest;
 use App\Models\Organization;
-use App\Support\Breadcrumbs;
 use App\Support\SpotListing;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -17,10 +16,17 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
 
     $listing = SpotListing::for($request, $organization);
 
-    return $view->with(['listing' => $listing, 'breadcrumbs' => [...Breadcrumbs::organization($organization), ['label' => __('ui.spots.index.title')]]]);
+    return $view->with('listing', $listing);
 });
 ?>
 
-<x-default-layout :breadcrumbs="$breadcrumbs">
+<x-default-layout>
+    @if ($listing->spots->isNotEmpty())
+        {{-- All the results across the page, while the list shows them page by page --}}
+        <x-slot:hero>
+            <x-map.hero :spots="$listing->map" :label="__('ui.spots.index.map')" />
+        </x-slot:hero>
+    @endif
+
     <x-spots.list :listing="$listing" />
 </x-default-layout>

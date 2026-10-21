@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Spot;
-use App\Support\Breadcrumbs;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -13,48 +12,50 @@ name('spots.show');
 render(function (View $view, Spot $spot) {
     Head::title($spot->name)->description(__('ui.spots.show.description'));
 
-    return $view->with('breadcrumbs', Breadcrumbs::spot($spot));
+    return $view;
 });
 ?>
 
-<x-default-layout :breadcrumbs="$breadcrumbs">
+<x-default-layout>
+    <x-slot:hero>
+        {{-- The spot across the page, given in the page without a link to itself, and its coordinates under it --}}
+        <x-map.hero
+            :spots="App\Models\Spot::featureCollection([$spot], links: false)"
+            :label="__('ui.spots.show.map')"
+            class="max-lg:h-[40vh]"
+        />
+        {{-- Without JS, the map is hidden and the coordinates stay --}}
+        <p class="bg-base-200 flex items-center justify-center gap-1 px-4 py-2 text-xs">
+            <x-lucide-map-pin class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span class="sr-only">{{ __('ui.spots.show.fields.coordinates') }}</span>
+            {{-- In their own element, without space around: copied as they are --}}
+            <span>{{ number_format($spot->latitude, 6, '.', '') }}, {{ number_format($spot->longitude, 6, '.', '') }}</span>
+        </p>
+    </x-slot:hero>
+
     <x-scanned :title="__('ui.spots.show.scanned')" />
 
     @can('update', $spot)
         @if ($spot->redirectsVisitors())
-            <p role="status" class="alert alert-info">
-                <x-lucide-external-link class="h-6 w-6 shrink-0" aria-hidden="true" />
-                <span>{{ __('ui.spots.show.notes.redirect', ['website' => $spot->website]) }}</span>
-            </p>
+            <x-alert
+                type="info"
+                icon="external-link"
+                role="status"
+            >{{ __('ui.spots.show.notes.redirect', ['website' => $spot->website]) }}</x-alert>
         @endif
 
         @if ($spot->is_hidden)
-            <p role="status" class="alert alert-info">
-                <x-lucide-eye-off class="h-6 w-6 shrink-0" aria-hidden="true" />
-                <span>{{ __('ui.spots.show.notes.hidden', ['organization' => $spot->organization->name]) }}</span>
-            </p>
+            <x-alert
+                type="info"
+                icon="eye-off"
+                role="status"
+            >{{ __('ui.spots.show.notes.hidden', ['organization' => $spot->organization->name]) }}</x-alert>
         @endif
     @endcan
 
-    {{-- The spot: its map, its name and details, its description, and the way to its website --}}
-    <article class="card bg-base-100 overflow-hidden shadow-md">
-        {{-- Without JS, the map is hidden and the coordinates stay --}}
-        <figure class="mt-0 mb-0 flex-col items-stretch">
-            {{-- The spot in the page, without a link to the page itself --}}
-            <x-map
-                :spots="App\Models\Spot::featureCollection([$spot], links: false)"
-                :label="__('ui.spots.show.map')"
-                :framed="false"
-                class="h-64 sm:h-80"
-            />
-            <figcaption class="bg-base-200 mt-0 flex items-center gap-1 px-6 py-2 text-xs">
-                <x-lucide-map-pin class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                <span class="sr-only">{{ __('ui.spots.show.fields.coordinates') }}</span>
-                {{ number_format($spot->latitude, 6, '.', '') }}, {{ number_format($spot->longitude, 6, '.', '') }}
-            </figcaption>
-        </figure>
-
-        <div class="card-body">
+    {{-- The spot: its name and details, its description, and the way to its website, in the page as its organization --}}
+    <article>
+        <div class="flex flex-col gap-2">
             {{-- Spaced from the description, which may start with a heading of its own --}}
             <header class="mb-4 flex flex-col items-center gap-2 text-center">
                 <h1 class="card-title m-0! max-w-full justify-center text-3xl font-extrabold break-words">
@@ -106,31 +107,29 @@ render(function (View $view, Spot $spot) {
             @endif
         </div>
 
-        <footer class="bg-base-200 px-6 py-4">
+        {{-- The actions on the spot: on one line when they fit, on more otherwise --}}
+        <footer class="mt-6">
             <div
                 role="group"
                 aria-label="{{ __('ui.common.actions.label') }}"
-                class="join join-vertical lg:join-horizontal not-prose w-full"
+                class="not-prose flex flex-wrap justify-center gap-2"
             >
                 {{-- TODO: Like, report and share the spot --}}
-                <button type="button" class="btn btn-ghost join-item lg:flex-1">
+                <button type="button" class="btn btn-ghost">
                     <x-lucide-heart class="h-4 w-4" aria-hidden="true" />
                     {{ __('ui.common.actions.like') }}
                 </button>
-                <button type="button" class="btn btn-ghost join-item lg:flex-1">
+                <button type="button" class="btn btn-ghost">
                     <x-lucide-flag class="h-4 w-4" aria-hidden="true" />
                     {{ __('ui.common.actions.report') }}
                 </button>
-                <button type="button" class="btn btn-ghost join-item lg:flex-1">
+                <button type="button" class="btn btn-ghost">
                     <x-lucide-share-2 class="h-4 w-4" aria-hidden="true" />
                     {{ __('ui.common.actions.share') }}
                 </button>
 
                 @can('update', $spot)
-                    <a
-                        href="{{ route('spots.edit', ['spot' => $spot->uuid]) }}"
-                        class="btn btn-ghost join-item lg:flex-1"
-                    >
+                    <a href="{{ route('spots.edit', ['spot' => $spot->uuid]) }}" class="btn btn-ghost">
                         <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
                         {{ __('ui.spots.show.actions.edit') }}
                     </a>
@@ -145,7 +144,6 @@ render(function (View $view, Spot $spot) {
                         :confirm="__('ui.spots.delete.actions.submit')"
                         :small="false"
                         :ghost="true"
-                        class="join-item lg:flex-1"
                     >
                         <x-lucide-trash-2 class="h-4 w-4" aria-hidden="true" />
                         {{ __('ui.spots.show.actions.delete') }}

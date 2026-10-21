@@ -377,7 +377,7 @@ test('a member deletes a spot', function () {
     expect(Spot::count())->toBe(0);
 });
 
-test('the spot pages show a trail starting at the spots, without the organization', function () {
+test('the edit page of a spot shows a trail starting at the spots, without the organization, the page of the spot has none', function () {
     $crumbs = function (string $html) {
         preg_match('/<nav aria-label="[^"]*" class="breadcrumbs[^"]*">(.*?)<\/nav>/s', $html, $nav);
         preg_match_all('/<(?:a|span)\b[^>]*>\s*([^<]+?)\s*<\/(?:a|span)>/', $nav[1], $labels);
@@ -387,6 +387,7 @@ test('the spot pages show a trail starting at the spots, without the organizatio
 
     $this->actingAs($this->member);
 
-    expect($crumbs($this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->getContent()))->toBe(['Spots', 'Harbour'])
-        ->and($crumbs($this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk()->getContent()))->toBe(['Spots', 'Harbour', 'Edit the spot']);
+    $this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertDontSee('class="breadcrumbs', false);
+
+    expect($crumbs($this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk()->getContent()))->toBe(['Spots', 'Harbour', 'Edit the spot']);
 });
