@@ -18,7 +18,8 @@ render(function (View $view, Organization $organization) {
         'breadcrumbs' => Breadcrumbs::organization($organization),
         'membersCount' => Gate::allows('viewMembers', $organization) ? $organization->users()->count() : null,
         'invitationsCount' => Gate::allows('manageMembers', $organization) ? $organization->invitations()->count() : null,
-        'spotsCount' => $organization->spots()->count(),
+        // The spots the user finds in the list of the organization, without the hidden ones for the others
+        'spotsCount' => $organization->spots()->visibleTo(request()->user())->count(),
     ]);
 });
 ?>

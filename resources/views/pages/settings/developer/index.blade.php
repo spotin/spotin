@@ -50,9 +50,7 @@ render(function (View $view) {
     </div>
 
     @if (session('new-token'))
-        <code class="bg-base-100 rounded-field not-prose mb-4 block w-full p-3 break-all select-all">
-            {{ session('new-token') }}
-        </code>
+        <code class="bg-base-100 rounded-field not-prose mb-4 block w-full p-3 break-all select-all">{{ session('new-token') }}</code>
     @endif
 
     @if ($tokens->isEmpty())

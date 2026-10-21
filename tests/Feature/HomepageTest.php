@@ -42,3 +42,17 @@ test('the home page sends logged-in users to their dashboard', function () {
         ->assertSee(route('dashboard'), false)
         ->assertDontSee(route('register'), false);
 });
+
+test('the latest spots of the home page leave out the hidden spots, except for the members of their organization', function () {
+    $organization = Organization::factory()->create();
+    Spot::factory()->for($organization)->create(['name' => 'Harbour']);
+    Spot::factory()->for($organization)->create(['name' => 'Secret cove', 'is_hidden' => true]);
+
+    $this->get(route('index'))->assertOk()->assertSee('Harbour')->assertDontSee('Secret cove');
+    $this->actingAs(User::factory()->create())->get(route('index'))->assertDontSee('Secret cove');
+
+    $member = User::factory()->create();
+    $organization->users()->attach($member);
+
+    $this->actingAs($member)->get(route('index'))->assertSee('Secret cove');
+});

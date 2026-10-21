@@ -177,3 +177,14 @@ test('the redirect address of an organization leads to its page, which says it w
     $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee(__('ui.organizations.show.scanned'));
     $this->get('/organizations/unknown/redirect')->assertNotFound();
 });
+
+test('the number of spots of an organization leaves out the hidden spots, except for its members', function () {
+    Spot::factory()->for($this->organization)->count(2)->create();
+    Spot::factory()->for($this->organization)->create(['is_hidden' => true]);
+
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))
+        ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 2));
+
+    $this->actingAs($this->member)->get(route('organizations.show', ['organization' => $this->organization->uuid]))
+        ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 3));
+});

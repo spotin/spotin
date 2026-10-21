@@ -13,7 +13,8 @@ render(function (View $view) {
     Head::title(__('ui.homepage.title'))
         ->description(__('ui.homepage.description'));
 
-    return $view->with('latestSpots', Spot::with('organization')->latest('id')->limit(6)->get());
+    // Without the hidden spots, as in the lists
+    return $view->with('latestSpots', Spot::visibleTo(request()->user())->with('organization')->latest('id')->limit(6)->get());
 });
 ?>
 

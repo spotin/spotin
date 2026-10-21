@@ -92,14 +92,14 @@ class Organization extends Model
     }
 
     /**
-     * Scope the query to what a list of organizations shows: with their number of spots, sorted by name,
-     * optionally only the organizations whose name contains the search query or that the user belongs to.
+     * Scope the query to what a list of organizations shows: with their number of spots the user can find in the lists,
+     * sorted by name, optionally only the organizations whose name contains the search query or that the user belongs to.
      *
      * @param  Builder<static>  $query
      */
     public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
     {
-        $query->withCount('spots')
+        $query->withCount(['spots' => fn (Builder $query) => $query->visibleTo($user)])
             ->search($searchQuery)
             ->when($mine && $user, fn (Builder $query) => $query->mine($user))
             ->orderBy('organizations.name');
