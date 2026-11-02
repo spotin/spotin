@@ -44,7 +44,8 @@ return [
         ],
         'map' => [
             'label' => 'Map',
-            'hint' => 'Click on the map or drag the marker to set the location.',
+            'hint' => 'Click on the map or drag the marker to set the location. Leave the coordinates empty if the spot has no location.',
+            'incomplete' => 'Enter both the latitude and the longitude, or leave both empty.',
             'spot_link' => 'See the spot',
             'controls' => [
                 'zoom_in' => 'Zoom in',
@@ -624,7 +625,7 @@ return [
                 ],
                 'steps' => [
                     'location' => 'Location',
-                    'details' => 'Details',
+                    'name_and_description' => 'Name and description',
                     'website' => 'Website and visibility',
                 ],
             ],

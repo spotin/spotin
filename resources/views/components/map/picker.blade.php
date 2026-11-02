@@ -2,7 +2,7 @@
 
 {{--
     Picks a point: on the map, drawn by resources/js/map.js, or by typing its coordinates, which also works without JS.
-    The fields are named `latitude` and `longitude`.
+    The fields are named `latitude` and `longitude`, and can both be left empty.
 --}}
 <div id="{{ $id }}" data-map-picker class="flex flex-col gap-3">
     {{-- Hidden with its map, without JS or WebGL: the coordinates can still be typed --}}
@@ -23,7 +23,6 @@
                     min="{{ $min }}"
                     max="{{ $max }}"
                     class="input validator w-full"
-                    required
                     placeholder="{{ __("ui.common.map.fields.{$field}.placeholder") }}"
                     value="{{ old($field, $value) }}"
                     @error($field) aria-invalid="true" @enderror

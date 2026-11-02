@@ -108,6 +108,14 @@ class Spot extends Model
     }
 
     /**
+     * Whether the spot has a location, to show on the maps.
+     */
+    public function hasLocation(): bool
+    {
+        return $this->latitude !== null && $this->longitude !== null;
+    }
+
+    /**
      * Whether the visitors of the spot are redirected to its website, without seeing the spot.
      */
     public function redirectsVisitors(): bool
@@ -159,6 +167,16 @@ class Spot extends Model
     }
 
     /**
+     * Scope the query to the spots that have a location, the only ones the maps can show.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeLocated(Builder $query): void
+    {
+        $query->whereNotNull('latitude')->whereNotNull('longitude');
+    }
+
+    /**
      * Scope the query to the spots whose name contains the search query.
      *
      * @param  Builder<static>  $query
@@ -182,7 +200,7 @@ class Spot extends Model
 
     /**
      * The spots as a GeoJSON collection of points, for the maps: their name and, with `$links`, the address of their
-     * page.
+     * page. The spots without a location are left out.
      *
      * @param  iterable<self>  $spots
      * @return array{type: 'FeatureCollection', features: list<array<string, mixed>>}
@@ -192,6 +210,10 @@ class Spot extends Model
         $features = [];
 
         foreach ($spots as $spot) {
+            if (! $spot->hasLocation()) {
+                continue;
+            }
+
             $features[] = [
                 'type' => 'Feature',
                 'geometry' => [

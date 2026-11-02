@@ -32,6 +32,14 @@ class SpotFactory extends Factory
     }
 
     /**
+     * Indicate that the spot has no location.
+     */
+    public function withoutLocation(): static
+    {
+        return $this->state(fn () => ['latitude' => null, 'longitude' => null]);
+    }
+
+    /**
      * Indicate that the spot is only listed for the members of its organization.
      */
     public function hidden(): static

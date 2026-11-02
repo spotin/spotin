@@ -18,12 +18,14 @@ render(function (View $view, Organization $organization) {
         'invitationsCount' => Gate::allows('manageMembers', $organization) ? $organization->invitations()->count() : null,
         // The spots the user finds in the list of the organization, without the hidden ones for the others
         'spotsCount' => $organization->spots()->visibleTo(request()->user())->count(),
+        // The map is only shown when one of these spots has a location
+        'hasMap' => $organization->spots()->visibleTo(request()->user())->located()->exists(),
     ]);
 });
 ?>
 
 <x-default-layout>
-    @if ($spotsCount > 0)
+    @if ($hasMap)
         {{-- Its spots across the page --}}
         <x-slot:hero>
             <x-map.hero

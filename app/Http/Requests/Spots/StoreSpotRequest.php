@@ -24,8 +24,9 @@ class StoreSpotRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:2', 'max:100', $this->uniqueName()],
             'description' => ['nullable', 'string', 'max:10000'],
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            // The location is optional, but both coordinates are given together, checked by `locationIsComplete()`
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'website' => ['nullable', 'url:http,https', 'max:2048'],
             // Needs a website, checked by `redirectNeedsWebsite()`
             'redirect_to_website' => ['boolean'],
@@ -41,7 +42,7 @@ class StoreSpotRequest extends FormRequest
      */
     public function after(): array
     {
-        return [$this->redirectNeedsWebsite(...)];
+        return [$this->locationIsComplete(...), $this->redirectNeedsWebsite(...)];
     }
 
     /**
@@ -84,6 +85,30 @@ class StoreSpotRequest extends FormRequest
     protected function website(): ?string
     {
         return $this->input('website');
+    }
+
+    /**
+     * The coordinate the spot will have: `latitude` or `longitude`.
+     */
+    protected function coordinate(string $field): mixed
+    {
+        return $this->input($field);
+    }
+
+    /**
+     * Reject a location with a single coordinate, which no map can show.
+     */
+    protected function locationIsComplete(Validator $validator): void
+    {
+        if ($validator->errors()->hasAny(['latitude', 'longitude'])) {
+            return;
+        }
+
+        foreach (['latitude', 'longitude'] as $field) {
+            if (blank($this->coordinate($field)) && filled($this->coordinate($field === 'latitude' ? 'longitude' : 'latitude'))) {
+                $validator->errors()->add($field, __('ui.common.map.incomplete'));
+            }
+        }
     }
 
     /**

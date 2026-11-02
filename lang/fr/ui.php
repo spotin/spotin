@@ -44,7 +44,8 @@ return [
         ],
         'map' => [
             'label' => 'Carte',
-            'hint' => "Cliquez sur la carte ou déplacez le marqueur pour choisir l'emplacement.",
+            'hint' => "Cliquez sur la carte ou déplacez le marqueur pour choisir l'emplacement. Laissez les coordonnées vides si le spot n'a pas d'emplacement.",
+            'incomplete' => 'Saisissez la latitude et la longitude, ou laissez-les vides.',
             'spot_link' => 'Voir le spot',
             'controls' => [
                 'zoom_in' => 'Zoomer',
@@ -624,7 +625,7 @@ return [
                 ],
                 'steps' => [
                     'location' => 'Emplacement',
-                    'details' => 'Détails',
+                    'name_and_description' => 'Nom et description',
                     'website' => 'Site web et visibilité',
                 ],
             ],
