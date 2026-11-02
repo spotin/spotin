@@ -14,7 +14,7 @@
         "@tailwindcss/vite": "^4.3.3",
         "@tiptap/core": "^3.32.0",
         "@tiptap/extension-image": "^3.32.0",
-        "@tiptap/markdown": "^3.32.0",
+        "@tiptap/markdown": "^3.32.2",
         "@tiptap/starter-kit": "^3.32.0",
         "concurrently": "^10.0.6",
         "daisyui": "^5.7.50",
