@@ -25,10 +25,7 @@ render(function (View $view) {
     <h1>{{ __('ui.settings.security.title') }}</h1>
 
     @if (session('status') === 'password-updated')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.settings.security.feedback.password_updated') }}</span>
-        </p>
+        <x-alert type="success" closable>{{ __('ui.settings.security.feedback.password_updated') }}</x-alert>
     @endif
 
     <form method="POST" action="{{ route('user-password.update') }}">

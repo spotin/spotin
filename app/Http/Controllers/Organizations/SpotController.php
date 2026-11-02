@@ -7,6 +7,7 @@ use App\Http\Requests\ListFiltersRequest;
 use App\Http\Requests\Spots\StoreSpotRequest;
 use App\Models\Organization;
 use App\Models\Spot;
+use App\Support\SpotListing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
@@ -20,11 +21,7 @@ class SpotController extends Controller
      */
     public function map(ListFiltersRequest $request, Organization $organization): JsonResponse
     {
-        $spots = Spot::filtered($request->user(), $request->searchQuery(), $request->mine())
-            ->whereBelongsTo($organization)
-            ->get(['uuid', 'name', 'latitude', 'longitude']);
-
-        return response()->json(Spot::featureCollection($spots));
+        return response()->json(SpotListing::features($request, $organization));
     }
 
     /**

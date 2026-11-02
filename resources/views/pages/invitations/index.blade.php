@@ -25,10 +25,7 @@ render(function (View $view) {
     <h1>{{ __('ui.invitations.index.title') }}</h1>
 
     @error('invitation')
-        <p role="alert" class="alert alert-error">
-            <x-lucide-circle-alert class="h-6 w-6" />
-            <span>{{ $message }}</span>
-        </p>
+        <x-alert type="error" closable>{{ $message }}</x-alert>
     @enderror
 
     @if ($invitations->isEmpty())

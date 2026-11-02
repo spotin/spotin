@@ -23,10 +23,10 @@ render(function (View $view) {
     <h1>{{ __('ui.auth.register.title') }}</h1>
 
     @if ($invitation)
-        <p role="alert" class="alert alert-info">
-            <x-lucide-mail class="h-6 w-6" />
-            <span>{{ __('ui.auth.register.invitation', ['organization' => $invitation->organization->name]) }}</span>
-        </p>
+        <x-alert
+            type="info"
+            icon="mail"
+        >{{ __('ui.auth.register.invitation', ['organization' => $invitation->organization->name]) }}</x-alert>
     @endif
 
     <form method="POST" action="{{ route('register.store') }}">

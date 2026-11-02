@@ -26,10 +26,7 @@ render(function (View $view, Request $request) {
     <p>{{ __('ui.auth.verify_email.explanation') }}</p>
 
     @if (session('status') == 'verification-link-sent')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.auth.feedback.verification_link_sent') }}</span>
-        </p>
+        <x-alert type="success" closable>{{ __('ui.auth.feedback.verification_link_sent') }}</x-alert>
     @endif
 
     <form method="POST" action="{{ route('verification.send') }}">

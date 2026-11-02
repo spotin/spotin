@@ -50,7 +50,7 @@ render(function (View $view) {
         </a>
     </div>
 
-    <x-success-message />
+    <x-success-message :closable="false" />
 
     @if (session('new-token'))
         <code class="bg-base-100 rounded-field not-prose mb-4 block w-full p-3 break-all select-all">{{ session('new-token') }}</code>

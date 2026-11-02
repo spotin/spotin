@@ -28,11 +28,6 @@
 @else
     <p class="text-sm opacity-70">{{ trans_choice('ui.spots.index.count', $listing->spots->total()) }}</p>
 
-    @if ($listing->map)
-        {{-- All the results, while the list shows them page by page --}}
-        <x-map :spots="$listing->map" :label="__('ui.spots.index.map')" class="mb-6 h-64 sm:h-80" />
-    @endif
-
     <div class="not-prose grid grid-cols-1 gap-4 sm:grid-cols-2">
         @foreach ($listing->spots as $spot)
             <x-spots.card :spot="$spot" />

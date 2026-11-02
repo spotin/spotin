@@ -236,12 +236,11 @@ return [
     'homepage' => [
         'title' => 'Bienvenue sur Spot in®',
         'description' => "Découvrez les lieux et les points d'intérêt près de chez vous.",
-        'introduction' => "Les spots représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
+        'introduction' => "Les « spots » représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
+        'map' => 'Carte de tous les spots',
         'explore_spots' => 'Explorer les spots',
         'explore_organizations' => 'Parcourir les organisations',
         'dashboard' => 'Aller à mon tableau de bord',
-        'latest_spots' => 'Derniers spots',
-        'latest_spots_empty' => "Aucun spot n'a encore été créé.",
     ],
     'invitations' => [
         'common' => [
@@ -343,6 +342,9 @@ return [
                 'edit' => 'Modifier',
                 'delete' => 'Supprimer',
             ],
+            'fields' => [
+                'created' => 'Créée le',
+            ],
             'sections' => [
                 'members' => [
                     'title' => 'Membres',
@@ -354,7 +356,7 @@ return [
                 ],
                 'invitations' => [
                     'title' => 'Invitations',
-                    'summary' => ':count invitation en attente|:count invitations en attente',
+                    'summary' => ':count invitation|:count invitations',
                 ],
             ],
         ],

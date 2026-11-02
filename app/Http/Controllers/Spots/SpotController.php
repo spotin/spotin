@@ -3,12 +3,26 @@
 namespace App\Http\Controllers\Spots;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListFiltersRequest;
 use App\Http\Requests\Spots\UpdateSpotRequest;
 use App\Models\Spot;
+use App\Support\SpotListing;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 class SpotController extends Controller
 {
+    /**
+     * The spots as GeoJSON, for the map of the list of all the spots: the ones the user finds in it, with its filters.
+     *
+     * All of them at once: the map groups the close ones. Well beyond thousands of spots, the map would rather load
+     * them by visible area, or as vector tiles.
+     */
+    public function map(ListFiltersRequest $request): JsonResponse
+    {
+        return response()->json(SpotListing::features($request));
+    }
+
     /**
      * The address of the QR code of the spot: everyone goes straight to its website when the spot redirects its
      * visitors, otherwise to its page, which says it was just scanned.

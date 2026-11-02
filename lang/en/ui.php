@@ -236,12 +236,11 @@ return [
     'homepage' => [
         'title' => 'Welcome to Spot in®',
         'description' => 'Discover locations and places of interest in your area.',
-        'introduction' => 'Spots represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
+        'introduction' => '"Spots" represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
+        'map' => 'Map of all the spots',
         'explore_spots' => 'Explore the spots',
         'explore_organizations' => 'Browse the organizations',
         'dashboard' => 'Go to my dashboard',
-        'latest_spots' => 'Latest spots',
-        'latest_spots_empty' => 'No spot has been created yet.',
     ],
     'invitations' => [
         'common' => [
@@ -343,6 +342,9 @@ return [
                 'edit' => 'Edit',
                 'delete' => 'Delete',
             ],
+            'fields' => [
+                'created' => 'Created on',
+            ],
             'sections' => [
                 'members' => [
                     'title' => 'Members',
@@ -354,7 +356,7 @@ return [
                 ],
                 'invitations' => [
                     'title' => 'Invitations',
-                    'summary' => ':count pending invitation|:count pending invitations',
+                    'summary' => ':count invitation|:count invitations',
                 ],
             ],
         ],

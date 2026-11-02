@@ -72,7 +72,7 @@ test('only the members of an organization are offered to create a spot in it', f
 
 });
 
-test('the trail of the spots of an organization starts at the organizations', function () {
+test('the trail of the creation of a spot starts at the organizations, the lists of spots have none', function () {
     $crumbs = function (string $html) {
         if (! preg_match('/<nav aria-label="[^"]*" class="breadcrumbs[^"]*">(.*?)<\/nav>/s', $html, $nav)) {
             return [];
@@ -86,7 +86,7 @@ test('the trail of the spots of an organization starts at the organizations', fu
     // The trail is shown to the logged in users only
     $this->actingAs($this->member);
 
-    expect($crumbs($this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'Spots'])
+    expect($crumbs($this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->getContent()))->toBe([])
         ->and($crumbs($this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'Spots', 'New spot'])
         ->and($crumbs($this->get(route('spots.index'))->getContent()))->toBe([]);
 });
@@ -211,14 +211,30 @@ test('hidden spots are only listed for the members of their organization and adm
     $this->get(route('spots.show', ['spot' => Spot::firstWhere('name', 'Secret Cove')->uuid]))->assertOk()->assertSee('Secret Cove');
 });
 
-test('the list of the spots of an organization shows all its results on a map, with its filters but not its page', function () {
-    $list = route('organizations.spots.index', ['organization' => $this->organization->uuid]);
-    $map = route('organizations.spots.map', ['organization' => $this->organization->uuid]);
+test('the lists of spots show all their results on a map, with their filters but not their page', function () {
+    $lists = [
+        route('spots.index') => route('spots.map'),
+        route('organizations.spots.index', ['organization' => $this->organization->uuid]) => route('organizations.spots.map', ['organization' => $this->organization->uuid]),
+    ];
 
-    $this->get($list)->assertOk()->assertSee('data-map-spots="'.$map.'"', false);
-    $this->get($list.'?query=harb&page=1')->assertOk()->assertSee('data-map-spots="'.e($map.'?query=harb').'"', false);
+    foreach ($lists as $list => $map) {
+        // Across the page, above the list
+        $this->get($list)->assertOk()->assertSeeInOrder(['class="hero ', 'data-map-spots="'.$map.'"', '<main'], false);
+        $this->get($list.'?query=harb&page=1')->assertOk()->assertSee('data-map-spots="'.e($map.'?query=harb').'"', false);
 
-    // Without result, and on the list of all the spots so far, there is no map
-    $this->get($list.'?query=nothing')->assertOk()->assertDontSee('data-map-spots', false);
-    $this->get(route('spots.index'))->assertOk()->assertDontSee('data-map-spots', false);
+        // Without result, there is no map
+        $this->get($list.'?query=nothing')->assertOk()->assertDontSee('data-map-spots', false);
+    }
+});
+
+test('all the spots are given as GeoJSON for the map of their list, without the hidden ones for the others than the members of their organization', function () {
+    Spot::factory()->for($this->other)->create(['name' => 'Lighthouse']);
+    Spot::factory()->for($this->organization)->create(['name' => 'Secret cove', 'is_hidden' => true]);
+
+    $names = fn ($response) => collect($response->assertOk()->assertJsonPath('type', 'FeatureCollection')->json('features'))
+        ->pluck('properties.name')->sort()->values()->all();
+
+    expect($names($this->getJson(route('spots.map'))))->toBe(['Harbour', 'Lighthouse'])
+        ->and($names($this->actingAs($this->member)->getJson(route('spots.map'))))->toBe(['Harbour', 'Lighthouse', 'Secret cove'])
+        ->and($names($this->getJson(route('spots.map', ['query' => 'light']))))->toBe(['Lighthouse']);
 });

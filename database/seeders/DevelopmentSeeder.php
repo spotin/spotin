@@ -16,6 +16,55 @@ class DevelopmentSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
+     * A long description, with the common elements of Markdown, to check how a spot shows them. Only the ones the editor
+     * of the descriptions also handles: no table nor task list, which it would drop.
+     */
+    private const MARKDOWN_DESCRIPTION = <<<'MD'
+        # The Aletsch Glacier
+
+        The **Aletsch Glacier** is the *largest glacier* of the Alps, about **20 kilometres** long. It is part of the
+        ~~Swiss Alps Jungfrau-Aletsch~~ UNESCO World Heritage site, listed in `2001`.
+
+        ## Getting there
+
+        The glacier is reached from the villages above the Rhône valley, by cable car:
+
+        - From **Fiesch**, to the Eggishorn
+        - From **Bettmeralp**, to the Bettmerhorn
+          - The viewpoint is a short walk from the station
+          - In winter, the paths may be closed
+        - From **Riederalp**, to the Moosfluh
+
+        ### On foot
+
+        1. Take the cable car up to the station.
+        2. Follow the signs to the viewpoint.
+        3. Come back the same way, or walk down to the next village.
+
+        #### Good to know
+
+        The weather changes quickly in the mountains: check it before leaving, on the [MeteoSwiss](https://www.meteoswiss.admin.ch) website.
+
+        ##### Safety
+
+        > Never walk on the glacier without a mountain guide: its crevasses are often hidden under the snow.
+
+        ## Coordinates
+
+        The viewpoint, for a GPS:
+
+        ```text
+        46.500000, 8.033333
+        ```
+
+        ---
+
+        ![The icon of Spot in®](/apple-touch-icon.png)
+
+        Share this spot with your friends!
+        MD;
+
+    /**
      * The number of verified users.
      */
     private const VERIFIED_USERS = 145;
@@ -104,6 +153,7 @@ class DevelopmentSeeder extends Seeder
             ['Other Organization Spot', $other, $member, []],
             ['Hidden Spot', $organization, $member, ['is_hidden' => true]],
             ['Redirecting Spot', $organization, $member, ['website' => 'https://www.myswitzerland.com', 'redirect_to_website' => true]],
+            ['Markdown Spot', $organization, $responsible, ['description' => self::MARKDOWN_DESCRIPTION, 'website' => 'https://www.jungfrau.ch']],
         ];
 
         // Known places, so that the spots are easy to find on the map
@@ -115,6 +165,7 @@ class DevelopmentSeeder extends Seeder
             ['Chapel Bridge', 47.051667, 8.307500],
             ['Rhine Falls', 47.677778, 8.615278],
             ['Matterhorn', 45.976389, 7.658333],
+            ['Aletsch Glacier', 46.500000, 8.033333],
         ];
 
         foreach ($spots as $index => [$name, $spotOrganization, $creator, $attributes]) {

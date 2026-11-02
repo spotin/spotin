@@ -1,10 +1,10 @@
+@props(['closable' => true])
+
 {{--
     The message of an action that succeeded, for the request after it. Shown by `x-default-layout` above the page, or by
-    a page that places it itself, next to what the action changed.
+    a page that places it itself, next to what the action changed. Closable, unless it goes with something that stays,
+    such as a new token.
 --}}
 @if (session('success'))
-    <p role="alert" class="alert alert-success">
-        <x-lucide-check-circle class="h-6 w-6" />
-        <span>{{ session('success') }}</span>
-    </p>
+    <x-alert type="success" :closable="$closable">{{ session('success') }}</x-alert>
 @endif

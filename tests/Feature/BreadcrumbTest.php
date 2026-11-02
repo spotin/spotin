@@ -27,12 +27,11 @@ function crumbs(string $html): array
     return array_map(fn (string $item) => trim(strip_tags($item)), $items[1]);
 }
 
-test('organization pages show a trail starting at Organizations', function (string $path, array $expected) {
+test('the pages of the management of an organization show a trail starting at Organizations', function (string $path, array $expected) {
     $html = $this->actingAs($this->responsible)->get($this->orgUrl.$path)->assertOk()->getContent();
 
     expect(crumbs($html))->toBe($expected);
 })->with([
-    'overview' => ['', ['Organizations', 'Acme']],
     'members' => ['/members', ['Organizations', 'Acme', 'Members']],
     'invitations' => ['/invitations', ['Organizations', 'Acme', 'Invitations']],
     'invite someone' => ['/invitations/create', ['Organizations', 'Acme', 'Invitations', 'Invite someone']],
@@ -45,8 +44,18 @@ test('guests see no trail on the public pages', function () {
         $this->get($url)->assertOk()->assertDontSee('class="breadcrumbs', false);
     }
 
-    // The same pages show it once logged in
-    $this->actingAs($this->responsible)->get($this->orgUrl)->assertSee('class="breadcrumbs', false);
+    // The edit page of a spot shows it once logged in
+    $this->actingAs($this->responsible)->get(route('spots.edit', ['spot' => $spot->uuid]))->assertSee('class="breadcrumbs', false);
+});
+
+test('the pages with a map of their spots across the page show no trail', function () {
+    $spot = Spot::factory()->for($this->organization)->create();
+
+    $this->actingAs($this->responsible);
+
+    foreach ([$this->orgUrl, $this->orgUrl.'/spots', route('spots.show', ['spot' => $spot->uuid])] as $url) {
+        $this->get($url)->assertOk()->assertDontSee('class="breadcrumbs', false);
+    }
 });
 
 test('the crumbs link to their page and the last one is the current page', function () {

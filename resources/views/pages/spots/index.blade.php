@@ -18,5 +18,12 @@ render(function (View $view, ListFiltersRequest $request) {
 ?>
 
 <x-default-layout>
+    @if ($listing->spots->isNotEmpty())
+        {{-- All the results across the page, while the list shows them page by page --}}
+        <x-slot:hero>
+            <x-map.hero :spots="$listing->map" :label="__('ui.spots.index.map')" />
+        </x-slot:hero>
+    @endif
+
     <x-spots.list :listing="$listing" />
 </x-default-layout>

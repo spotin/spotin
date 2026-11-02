@@ -25,10 +25,7 @@ render(function (View $view) {
     <h1>{{ __('ui.settings.profile.title') }}</h1>
 
     @if (session('status') === 'profile-information-updated')
-        <p role="alert" class="alert alert-success">
-            <x-lucide-check-circle class="h-6 w-6" />
-            <span>{{ __('ui.settings.profile.feedback.profile_information_updated') }}</span>
-        </p>
+        <x-alert type="success" closable>{{ __('ui.settings.profile.feedback.profile_information_updated') }}</x-alert>
     @endif
 
     <form method="POST" action="{{ route('user-profile-information.update') }}">

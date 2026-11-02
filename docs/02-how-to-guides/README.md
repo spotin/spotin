@@ -287,13 +287,19 @@ ready to deploy the application.
    cp .env.example .env
    ```
 
-5. Generate a new application key by running the following command:
+5. Invalid the application cache by running the following command:
+
+   ```bash
+   php artisan optimize:clear
+   ```
+
+6. Generate a new application key by running the following command:
 
    ```bash
    php artisan key:generate
    ```
 
-6. Set up the environment variables.
+7. Set up the environment variables.
 
    **Note**: make sure to update the `.env` file with the correct values for
    your production environment, such as database credentials, mail server
@@ -301,26 +307,26 @@ ready to deploy the application.
    `APP_ENV` variable to `production` and the `APP_DEBUG` variable to `false` in
    the `.env` file.
 
-7. Run the following command to migrate the database:
+8. Run the following command to migrate the database:
 
    ```bash
    php artisan migrate
    ```
 
-8. Optional: if you need to seed the database with initial data, run the
+9. Optional: if you need to seed the database with initial data, run the
    following command:
 
    ```bash
    php artisan db:seed
    ```
 
-9. Run the following command to optimize the application for production:
+10. Run the following command to optimize the application for production:
 
-   ```bash
-   php artisan optimize
-   ```
+    ```bash
+    php artisan optimize
+    ```
 
-10. Reload any running services to apply the changes:
+11. Reload any running services to apply the changes:
 
     ```bash
     php artisan reload
