@@ -110,7 +110,7 @@ class Spot extends Model
 
     /**
      * The name of the spot, or, until it is set up, a placeholder with the start of its UUID, which tells the unnamed
-     * spots apart and matches their printed code.
+     * spots apart.
      */
     public function displayName(): string
     {

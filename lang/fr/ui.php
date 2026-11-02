@@ -677,6 +677,16 @@ return [
             ],
             'visit' => 'Visiter :website',
             'map' => 'Emplacement du spot',
+            'qr_code' => [
+                'label' => 'Code QR',
+                'download_svg' => 'Télécharger en SVG',
+                'download_png' => 'Télécharger en PNG',
+                'scan_link' => 'Lien de scan',
+                'open' => 'Ouvrir le lien de scan',
+                'hint' => 'Ouvre le spot comme un scan. Un spot pas encore configuré ouvre ici votre formulaire : utilisez une fenêtre privée pour voir ce que voient les autres.',
+                'copy' => 'Copier',
+                'copied' => 'Copié',
+            ],
             'notes' => [
                 'redirect' => 'Les visiteurs qui scannent ce spot sont redirigés directement vers :website.',
                 'needs_setup' => "Ce spot n'est pas encore configuré : la première personne qui scanne son code finit de le configurer. D'ici là, seuls les membres de son organisation le trouvent dans les listes.",

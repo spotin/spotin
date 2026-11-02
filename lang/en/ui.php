@@ -677,6 +677,16 @@ return [
             ],
             'visit' => 'Visit :website',
             'map' => 'Location of the spot',
+            'qr_code' => [
+                'label' => 'QR code',
+                'download_svg' => 'Download as SVG',
+                'download_png' => 'Download as PNG',
+                'scan_link' => 'Scan link',
+                'open' => 'Open the scan link',
+                'hint' => 'Opens the spot as a scan does. A spot that is not set up yet opens your form here: use a private window to see what the others see.',
+                'copy' => 'Copy',
+                'copied' => 'Copied',
+            ],
             'notes' => [
                 'redirect' => 'The visitors who scan this spot are redirected directly to :website.',
                 'needs_setup' => 'This spot is not set up yet: the first person who scans its code finishes setting it up. Only the members of its organization find it in the lists until then.',

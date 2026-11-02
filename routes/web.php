@@ -64,6 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('settings.developer.tokens.destroy');
 
     Route::delete('spots/{spot:uuid}', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('spots.destroy');
+    Route::get('spots/{spot:uuid}/qr-code.{format}', [SpotController::class, 'qrCode'])
+        ->whereIn('format', ['svg', 'png'])
+        ->middleware('can:manage,spot')
+        ->name('spots.qr-code');
 
     Route::post('organizations', [OrganizationController::class, 'store'])
         ->middleware('can:create,'.Organization::class)

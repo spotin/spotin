@@ -39,6 +39,23 @@ document.querySelectorAll("[data-required-unless-checked]").forEach((field) => {
     choice.form.addEventListener("change", sync);
 });
 
+// The buttons that copy the value of a field, such as the scan link of a spot, hidden without JS. They say it was
+// copied, for a moment.
+document.querySelectorAll("[data-copy]").forEach((button) => {
+    const field = document.getElementById(button.dataset.copy);
+    const label = button.querySelector("span");
+    const text = label.textContent;
+
+    button.hidden = false;
+    button.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(field.value);
+        label.textContent = button.dataset.copied;
+        setTimeout(() => {
+            label.textContent = text;
+        }, 2000);
+    });
+});
+
 // The alerts close with their button, hidden without JS.
 document.querySelectorAll("[data-alert-close]").forEach((button) => {
     button.hidden = false;

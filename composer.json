@@ -3,9 +3,11 @@
     "name": "spotin/spotin",
     "type": "project",
     "description": "The main project for Spot in®.",
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-only",
     "require": {
         "php": "^8.3",
+        "ext-gd": "*",
+        "bacon/bacon-qr-code": "^3.0",
         "blade-ui-kit/blade-icons": "^1.10",
         "dedoc/scramble": "^0.13.47",
         "laravel/folio": "^1.2",
