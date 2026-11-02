@@ -61,7 +61,7 @@ test('the filters stay on the page they are used on', function () {
 });
 
 test('only the members of an organization are offered to create a spot in it, next to the heading of its spots', function () {
-    $create = route('organizations.spots.create', ['organization' => $this->organization->uuid]);
+    $create = route('spots.create', ['organization' => $this->organization->uuid]);
 
     $this->actingAs($this->member)->get(route('organizations.show', ['organization' => $this->organization->uuid]))
         ->assertSeeInOrder(['<h1', 'id="spots"', __('ui.spots.index.title'), $create], false);
@@ -74,7 +74,20 @@ test('only the members of an organization are offered to create a spot in it, ne
     $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertDontSee($create, false);
 });
 
-test('the trail of the creation of a spot starts at the organizations, the lists of spots have none', function () {
+test('the list of all the spots offers to create a spot to the users who create spots in an organization', function () {
+    $create = 'href="'.route('spots.create').'"';
+
+    foreach ([$this->member, $this->admin] as $user) {
+        $this->actingAs($user)->get(route('spots.index'))->assertOk()->assertSee($create, false);
+    }
+
+    $this->actingAs(User::factory()->create())->get(route('spots.index'))->assertOk()->assertDontSee($create, false);
+
+    auth()->logout();
+    $this->get(route('spots.index'))->assertOk()->assertDontSee($create, false);
+});
+
+test('the trail of the creation of a spot starts at the spots, the lists of spots have none', function () {
     $crumbs = function (string $html) {
         if (! preg_match('/<nav aria-label="[^"]*" class="breadcrumbs[^"]*">(.*?)<\/nav>/s', $html, $nav)) {
             return [];
@@ -89,7 +102,7 @@ test('the trail of the creation of a spot starts at the organizations, the lists
     $this->actingAs($this->member);
 
     expect($crumbs($this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->getContent()))->toBe([])
-        ->and($crumbs($this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'New spot'])
+        ->and($crumbs($this->get(route('spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Spots', 'New spot'])
         ->and($crumbs($this->get(route('spots.index'))->getContent()))->toBe([]);
 });
 

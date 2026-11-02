@@ -30,7 +30,6 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
 
 <x-default-layout>
     @if ($hasMap && $listing->spots->isNotEmpty())
-        {{-- Its spots across the page: all the results of its list, with its filters --}}
         <x-slot:hero>
             <x-map.hero :spots="$listing->map" :label="__('ui.organizations.show.map')" class="max-lg:h-[40vh]" />
         </x-slot:hero>
@@ -38,10 +37,6 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
 
     <x-scanned :title="__('ui.organizations.show.scanned')" />
 
-    {{--
-        What only the members of the organization and the administrators see: who manage it, or are part of it, with
-        their tools. Its deletion is on its edit page, away from the actions of the visitors.
-    --}}
     @can('viewMembers', $organization)
         <section aria-labelledby="manage-title" class="card card-border card-sm bg-base-200 not-prose mb-8">
             <div class="card-body">
@@ -54,7 +49,6 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
                         @endcan
                     </h2>
 
-                    {{-- Only actions, as in the box of the managers of a spot --}}
                     @canany(['update', 'manage'], $organization)
                         <div class="card-actions">
                             @can('update', $organization)
@@ -79,10 +73,6 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
                     @endcanany
                 </div>
 
-                {{--
-                    What only its members know about it, on one line: its members and invitations, leading to their pages,
-                    and when it was created
-                --}}
                 <p class="text-sm opacity-70">
                     <a
                         href="{{ route('organizations.members.index', ['organization' => $organization->uuid]) }}"
@@ -102,21 +92,15 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
         </section>
     @endcan
 
-    {{-- The organization: its name, the way to its spots, and the actions of its visitors --}}
     <article>
         <header class="not-prose flex flex-col gap-1">
             <h1 class="max-w-full text-3xl font-extrabold break-words">{{ $organization->name }}</h1>
 
-            {{--
-                The number of its spots, leading to their list below, and the actions on one row, as the box of its
-                members; below each other when narrow
-            --}}
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <a href="#spots" class="link link-hover text-sm opacity-80">
                     {{ trans_choice('ui.organizations.common.spots', $spotsCount) }}
                 </a>
 
-                {{-- Lighter than the tools of its members --}}
                 <div role="group" aria-label="{{ __('ui.common.actions.label') }}" class="flex flex-wrap gap-1">
                     {{-- TODO: Like, report and share the organization --}}
                     <button type="button" class="btn btn-ghost btn-sm">
@@ -136,7 +120,6 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
         </header>
     </article>
 
-    {{-- Its spots, with the filters and the pages of the list of all the spots --}}
     <section id="spots" class="mt-10">
         <x-spots.list :listing="$listing" nested />
     </section>

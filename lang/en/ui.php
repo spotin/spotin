@@ -476,21 +476,6 @@ return [
                 ],
             ],
         ],
-        'spots' => [
-            'feedback' => [
-                'spot_created' => 'The spot has been created.',
-            ],
-            'create' => [
-                'title' => 'New spot',
-                'description' => 'Create a new spot.',
-                'introduction' => 'You are about to create a new spot in the organization :organization.',
-                'form' => [
-                    'actions' => [
-                        'submit' => 'Create the spot',
-                    ],
-                ],
-            ],
-        ],
     ],
     'settings' => [
         'title' => 'Settings',
@@ -605,6 +590,12 @@ return [
             'unnamed' => 'Unnamed spot · :id',
             'forms' => [
                 'fields' => [
+                    'organization' => [
+                        // In the messages of the errors; the form asks the question
+                        'label' => 'Organization',
+                        'question' => 'Which organization does this spot belong to?',
+                        'not_allowed' => 'You cannot create spots in this organization.',
+                    ],
                     'needs_setup' => [
                         'label' => 'Who sets up the spot?',
                         'now' => [
@@ -639,6 +630,7 @@ return [
                     ],
                 ],
                 'steps' => [
+                    'organization' => 'Organization',
                     'location' => 'Location',
                     'setup' => 'Setup',
                     'name_and_description' => 'Name and description',
@@ -647,6 +639,7 @@ return [
             ],
         ],
         'feedback' => [
+            'spot_created' => 'The spot has been created.',
             'spot_updated' => 'The spot has been updated.',
             'spot_set_up' => 'Thank you! The spot is set up.',
             'spot_deleted' => 'The spot has been deleted.',
@@ -662,6 +655,18 @@ return [
                 'search' => 'Search a spot',
                 'label' => 'Filter the spots',
                 'mine' => 'Only the spots I created',
+            ],
+        ],
+        'create' => [
+            'title' => 'New spot',
+            'description' => 'Create a new spot.',
+            'introduction' => 'Choose the organization of the spot, then fill in its details.',
+            'introduction_in' => 'You are creating a spot in :organization.',
+            'change_organization' => 'Change the organization',
+            'form' => [
+                'actions' => [
+                    'submit' => 'Create the spot',
+                ],
             ],
         ],
         'show' => [

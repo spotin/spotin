@@ -126,18 +126,11 @@ render(function (View $view, Spot $spot) {
         </section>
     @endcan
 
-    {{--
-        The spot: its name, the organization behind it, the actions of its visitors, its description, and the way to its
-        website, in the page as its organization
-    --}}
     <article class="flex flex-col gap-2">
-        {{-- Spaced from the description, which may start with a heading of its own --}}
         <header class="not-prose mb-4 flex flex-col gap-1">
             <h1 class="max-w-full text-3xl font-extrabold break-words">{{ $spot->displayName() }}</h1>
 
-            {{-- The organization and the actions on one row, as the box of the managers; below each other when narrow --}}
             <div class="flex flex-wrap items-center justify-between gap-2">
-                {{-- Who stands behind the spot, which its visitors may want to know before trusting it --}}
                 <p class="text-sm opacity-80">
                     {!!
                         __('ui.spots.show.by', [
@@ -146,7 +139,6 @@ render(function (View $view, Spot $spot) {
                     !!}
                 </p>
 
-                {{-- Lighter than the tools of the managers --}}
                 <div role="group" aria-label="{{ __('ui.common.actions.label') }}" class="flex flex-wrap gap-1">
                     {{-- TODO: Like, report and share the spot --}}
                     <button type="button" class="btn btn-ghost btn-sm">

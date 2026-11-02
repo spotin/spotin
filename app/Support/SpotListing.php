@@ -37,7 +37,10 @@ final readonly class SpotListing
             organization: $organization,
             mine: $request->mine(),
             searchQuery: $request->searchQuery(),
-            canCreate: $organization !== null && $user?->can('create', [Spot::class, $organization]) === true,
+            // In the organization of the page, or in one of the organizations of the user on the list of all the spots
+            canCreate: $organization !== null
+                ? $user?->can('create', [Spot::class, $organization]) === true
+                : $user !== null && ($user->isAdmin() || $user->organizations()->exists()),
             spots: Spot::listed($user, $request->searchQuery(), $request->mine())
                 ->when($organization, fn ($query) => $query->whereBelongsTo($organization))
                 ->paginate(25)

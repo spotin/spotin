@@ -29,9 +29,9 @@ test('the pages render in every language without untranslated keys', function (s
     $this->withUnencryptedCookie('locale', $locale)->actingAs($this->member);
 
     $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.');
-    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Harbour')->assertSee(route('organizations.spots.create', ['organization' => $this->organization->uuid]), false);
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Harbour')->assertSee(route('spots.create', ['organization' => $this->organization->uuid]), false);
     $this->get(route('spots.index'))->assertOk()->assertDontSee('ui.')->assertSee('Harbour');
-    $this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.');
+    $this->get(route('spots.create', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.');
     $this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Mike Member');
     $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk()->assertDontSee('ui.');
 })->with(['en', 'fr']);
@@ -49,28 +49,46 @@ test('everyone can see the spots, but only members can edit them or see their cr
     $this->actingAs($this->member)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee('Mike Member');
 });
 
-test('only members and admins can edit a spot or open the form to create one in its organization', function () {
+test('only members and admins can edit a spot, and create one in its organization', function () {
+    // The organization of the address is the one of the new spot, sent as is, without choosing
+    $hidden = fn (Organization $organization) => '<input type="hidden" name="organization" value="'.$organization->uuid.'"';
+
     foreach ([$this->member, $this->admin] as $user) {
         $this->actingAs($user)->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk();
-        $this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->assertOk();
+        $this->get(route('spots.create', ['organization' => $this->organization->uuid]))
+            ->assertOk()
+            ->assertSee($hidden($this->organization), false)
+            ->assertSee(__('ui.spots.create.introduction_in', ['organization' => $this->organization->name]));
     }
 
+    // The members of another organization create spots in theirs only: their only one, without choosing
     $this->actingAs($this->outsider);
     $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertForbidden();
-    $this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->assertForbidden();
+    $this->get(route('spots.create', ['organization' => $this->organization->uuid]))
+        ->assertOk()
+        ->assertDontSee('value="'.$this->organization->uuid.'"', false)
+        ->assertSee($hidden($this->other), false)
+        // Nothing to change
+        ->assertDontSee(__('ui.spots.create.change_organization'));
+
+    // The users without an organization create no spot
+    $this->actingAs(User::factory()->create())->get(route('spots.create'))->assertForbidden();
 
     auth()->logout();
     $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertRedirect(route('login'));
-    $this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->assertRedirect(route('login'));
-
-    $this->actingAs($this->admin)->get('/organizations/unknown/spots/create')->assertNotFound();
+    $this->get(route('spots.create'))->assertRedirect(route('login'));
 });
 
-test('the creation form is in the organization, in steps: the setup, the name and description, the website and visibility, and the location, with the submit button', function () {
-    $html = $this->actingAs($this->member)->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))
+test('the creation form is in steps: the organization to choose, the setup, the name and description, the website and visibility, and the location, with the submit button', function () {
+    // A member of two organizations chooses the one of the spot, among cards
+    $this->other->users()->attach($this->member);
+
+    $html = $this->actingAs($this->member)->get(route('spots.create'))
         ->assertOk()
-        ->assertSee('<form method="POST" action="'.route('organizations.spots.store', ['organization' => $this->organization->uuid]).'"', false)
+        ->assertSee('<form method="POST" action="'.route('spots.store').'"', false)
+        ->assertSee(e(__('ui.spots.create.introduction')), false)
         ->assertSeeInOrder([
+            __('ui.spots.common.forms.steps.organization'), 'type="radio"', 'name="organization"',
             __('ui.spots.common.forms.steps.setup'), 'name="needs_setup"',
             __('ui.spots.common.forms.steps.name_and_description'), 'name="name"', 'name="description"',
             __('ui.spots.common.forms.steps.website'), 'name="website"', 'name="redirect_to_website"', 'name="is_hidden"',
@@ -78,21 +96,62 @@ test('the creation form is in the organization, in steps: the setup, the name an
         ], false)
         ->getContent();
 
-    expect(substr_count($html, 'data-step '))->toBe(4)
+    // A card for each of its organizations, sorted by name
+    expect(substr_count($html, 'data-step '))->toBe(5)
+        ->and($html)->toContain('value="'.$this->organization->uuid.'"')
+        ->and($html)->toContain('value="'.$this->other->uuid.'"')
         // A new spot opens on the first step, an existing one on any
         ->and($html)->not->toContain('data-steps-complete');
 
-    $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk()
+    // From the page of an organization: no step to choose it, and a way to choose another one
+    $html = $this->get(route('spots.create', ['organization' => $this->organization->uuid]))
+        ->assertOk()
+        ->assertSee('<input type="hidden" name="organization" value="'.$this->organization->uuid.'"', false)
+        ->assertSee(__('ui.spots.create.introduction_in', ['organization' => $this->organization->name]))
+        ->assertSee('href="'.route('spots.create').'"', false)
+        ->assertDontSee(__('ui.spots.common.forms.fields.organization.question'))
+        ->getContent();
+
+    expect(substr_count($html, 'data-step '))->toBe(4);
+
+    // An existing spot keeps its organization: no step to choose it
+    $edit = $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk()
+        ->assertDontSee('name="organization"', false)
         ->assertSee('data-steps-complete', false)
         ->assertSee('value="https://harbour.example.com"', false)
-        ->assertSee('A **harbour** by the lake.');
+        ->assertSee('A **harbour** by the lake.')
+        ->getContent();
+
+    expect(substr_count($edit, 'data-step '))->toBe(4);
+});
+
+test('the administrators choose among all the organizations, as cards', function () {
+    Organization::factory()->count(5)->create();
+
+    $html = $this->actingAs($this->admin)->get(route('spots.create'))->assertOk()->getContent();
+
+    // A radio for each organization, and no list
+    expect(preg_match_all('/type="radio"\s+name="organization"/', $html))->toBe(Organization::count())
+        ->and($html)->not->toMatch('/<select[^>]*name="organization"/s');
+});
+
+test('the organization is offered to choose again when it is refused', function () {
+    // Back on the form from the page of its organization, with the error of the one sent instead
+    $this->actingAs($this->member)
+        ->from(route('spots.create', ['organization' => $this->organization->uuid]))
+        ->followingRedirects()
+        ->post(route('spots.store'), ['organization' => $this->other->uuid] + spotData())
+        ->assertOk()
+        ->assertSee(__('ui.spots.common.forms.fields.organization.question'))
+        ->assertSee(__('ui.spots.common.forms.fields.organization.not_allowed'))
+        ->assertDontSee('<input type="hidden" name="organization"', false);
 });
 
 test('the creation and edit pages say which organization, and which spot, the form is for', function () {
     $this->actingAs($this->member);
 
-    $this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->assertOk()
-        ->assertSee(__('ui.organizations.spots.create.introduction', ['organization' => $this->organization->name]));
+    $this->get(route('spots.create', ['organization' => $this->organization->uuid]))->assertOk()
+        ->assertSee(__('ui.spots.create.introduction_in', ['organization' => $this->organization->name]));
 
     $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))->assertOk()
         ->assertSee(__('ui.spots.edit.introduction', ['spot' => 'Harbour', 'organization' => $this->organization->name]));
@@ -100,7 +159,7 @@ test('the creation and edit pages say which organization, and which spot, the fo
 
 test('a member creates a spot with all its details', function () {
     $this->actingAs($this->member)
-        ->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData([
+        ->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData([
             'description' => "## The light\n\nA *white* tower.",
             'website' => 'https://lighthouse.example.com',
             'redirect_to_website' => '1',
@@ -132,7 +191,7 @@ test('the unchecked toggles are sent by the form and turn the options off', func
 
 test('the details of a spot are validated', function (array $overrides, string $field) {
     $this->actingAs($this->member)
-        ->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData($overrides))
+        ->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData($overrides))
         ->assertSessionHasErrors($field);
 
     expect(Spot::where('name', 'Lighthouse')->exists())->toBeFalse();
@@ -148,7 +207,7 @@ test('the details of a spot are validated', function (array $overrides, string $
 
 test('a spot can be created without a location, and its location removed', function () {
     $this->actingAs($this->member)
-        ->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['latitude' => '', 'longitude' => '']))
+        ->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['latitude' => '', 'longitude' => '']))
         ->assertSessionHasNoErrors();
 
     expect(Spot::firstWhere('name', 'Lighthouse'))->latitude->toBeNull()->longitude->toBeNull();
@@ -162,7 +221,7 @@ test('a spot can be created without a location, and its location removed', funct
 
 test('a spot cannot redirect its visitors without a website', function () {
     $this->actingAs($this->member)
-        ->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['website' => '', 'redirect_to_website' => '1']))
+        ->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['website' => '', 'redirect_to_website' => '1']))
         ->assertSessionHasErrors(['redirect_to_website' => __('ui.spots.common.forms.fields.redirect_to_website.needs_website')]);
 
     $this->patch(route('spots.update', $this->spot), ['website' => '', 'redirect_to_website' => '1'])
@@ -379,11 +438,11 @@ test('a spot whose creator is gone is still shown', function () {
 
 test('a member creates a spot and becomes its creator', function () {
     $response = $this->actingAs($this->member)
-        ->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['name' => 'Lighthouse']));
+        ->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['name' => 'Lighthouse']));
 
     $spot = Spot::firstWhere('name', 'Lighthouse');
 
-    $response->assertRedirect(route('spots.show', ['spot' => $spot->uuid]))->assertSessionHas('success', __('ui.organizations.spots.feedback.spot_created'));
+    $response->assertRedirect(route('spots.show', ['spot' => $spot->uuid]))->assertSessionHas('success', __('ui.spots.feedback.spot_created'));
     expect($spot->organization->is($this->organization))->toBeTrue()
         ->and($spot->creator->is($this->member))->toBeTrue();
 });
@@ -391,29 +450,39 @@ test('a member creates a spot and becomes its creator', function () {
 test('outsiders cannot create, update or delete spots', function () {
     $this->actingAs($this->outsider);
 
-    $this->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['name' => 'Lighthouse']))->assertForbidden();
+    $this->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['name' => 'Lighthouse']))
+        ->assertSessionHasErrors(['organization' => __('ui.spots.common.forms.fields.organization.not_allowed')]);
     $this->patch(route('spots.update', $this->spot), ['name' => 'Renamed'])->assertForbidden();
     $this->delete(route('spots.destroy', $this->spot))->assertForbidden();
 
     expect(Spot::count())->toBe(1)->and($this->spot->fresh()->name)->toBe('Harbour');
 });
 
-test('spot names are validated and unique within the organization', function () {
+test('spot names are validated and unique within the organization chosen in the form', function () {
     $this->actingAs($this->member);
 
-    $this->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['name' => '']))->assertSessionHasErrors('name');
-    $this->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['name' => 'A']))->assertSessionHasErrors('name');
-    $this->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['name' => 'Harbour']))->assertSessionHasErrors('name');
+    $this->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['name' => '']))->assertSessionHasErrors('name');
+    $this->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['name' => 'A']))->assertSessionHasErrors('name');
+    $this->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['name' => 'Harbour']))->assertSessionHasErrors('name');
 
-    // The organization comes from the URL: nothing about it is read from the form.
-    $this->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['name' => 'Lighthouse', 'organization' => $this->other->uuid]))->assertSessionHasNoErrors();
+    $this->post(route('spots.store'), ['organization' => $this->organization->uuid] + spotData(['name' => 'Lighthouse']))->assertSessionHasNoErrors();
     expect(Spot::firstWhere('name', 'Lighthouse')->organization->is($this->organization))->toBeTrue();
 
+    // The same name in another organization, for the administrators, who create spots in all of them
     $this->actingAs($this->admin)
-        ->post(route('organizations.spots.store', ['organization' => $this->other->uuid]), spotData(['name' => 'Harbour']))
+        ->post(route('spots.store'), ['organization' => $this->other->uuid] + spotData(['name' => 'Harbour']))
         ->assertSessionHasNoErrors();
+});
 
-    $this->post('/organizations/unknown/spots', spotData(['name' => 'Pier']))->assertNotFound();
+test('the organization of a new spot is required, and one the user creates spots in', function () {
+    $this->actingAs($this->member);
+
+    $this->post(route('spots.store'), spotData())->assertSessionHasErrors('organization');
+    $this->post(route('spots.store'), ['organization' => 'a320f6e6-e69d-439a-b787-4d4f6974ad60'] + spotData())->assertSessionHasErrors('organization');
+    $this->post(route('spots.store'), ['organization' => $this->other->uuid] + spotData())
+        ->assertSessionHasErrors(['organization' => __('ui.spots.common.forms.fields.organization.not_allowed')]);
+
+    expect(Spot::where('name', 'Lighthouse')->exists())->toBeFalse();
 });
 
 test('a member renames a spot, keeping its creator', function () {
