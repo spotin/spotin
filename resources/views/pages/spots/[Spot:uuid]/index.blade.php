@@ -127,10 +127,11 @@ render(function (View $view, Spot $spot) {
     @endcan
 
     <article class="flex flex-col gap-2">
-        <header class="not-prose mb-4 flex flex-col gap-1">
-            <h1 class="max-w-full text-3xl font-extrabold break-words">{{ $spot->displayName() }}</h1>
+        {{-- The name as any title, by `prose`, close to the compact row under it --}}
+        <header class="prose-h1:mb-2 mb-4">
+            <h1>{{ $spot->displayName() }}</h1>
 
-            <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="not-prose flex flex-wrap items-center justify-between gap-2">
                 <p class="text-sm opacity-80">
                     {!!
                         __('ui.spots.show.by', [

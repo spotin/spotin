@@ -26,16 +26,18 @@ render(function (View $view, Organization $organization) {
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h1 class="m-0! min-w-0 break-words">{{ __('ui.organizations.invitations.index.title') }}</h1>
+    <x-page-heading class="mb-6">
+        {{ __('ui.organizations.invitations.index.title') }}
 
-        <a
-            href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
-            class="btn btn-primary btn-sm shrink-0"
-        >
-            {{ __('ui.organizations.invitations.index.invite') }}
-        </a>
-    </div>
+        <x-slot:action>
+            <a
+                href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
+                class="btn btn-primary btn-sm shrink-0"
+            >
+                {{ __('ui.organizations.invitations.index.invite') }}
+            </a>
+        </x-slot:action>
+    </x-page-heading>
 
     @if ($invitations->isEmpty())
         <p>{{ __('ui.organizations.invitations.index.table.empty') }}</p>

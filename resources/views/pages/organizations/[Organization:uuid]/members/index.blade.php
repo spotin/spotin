@@ -38,18 +38,20 @@ render(function (View $view, Organization $organization) {
 ?>
 
 <x-default-layout :breadcrumbs="$breadcrumbs">
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h1 class="m-0! min-w-0 break-words">{{ __('ui.organizations.members.index.title') }}</h1>
+    <x-page-heading class="mb-6">
+        {{ __('ui.organizations.members.index.title') }}
 
         @if ($canManage)
-            <a
-                href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
-                class="btn btn-primary btn-sm shrink-0"
-            >
-                {{ __('ui.organizations.members.index.table.actions.invite') }}
-            </a>
+            <x-slot:action>
+                <a
+                    href="{{ route('organizations.invitations.create', ['organization' => $organization->uuid]) }}"
+                    class="btn btn-primary btn-sm shrink-0"
+                >
+                    {{ __('ui.organizations.members.index.table.actions.invite') }}
+                </a>
+            </x-slot:action>
         @endif
-    </div>
+    </x-page-heading>
 
     @error('member')
         <x-alert type="error" closable>{{ $message }}</x-alert>

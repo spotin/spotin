@@ -93,10 +93,11 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
     @endcan
 
     <article>
-        <header class="not-prose flex flex-col gap-1">
-            <h1 class="max-w-full text-3xl font-extrabold break-words">{{ $organization->name }}</h1>
+        {{-- The name as any title, by `prose`, close to the compact row under it --}}
+        <header class="prose-h1:mb-2">
+            <h1>{{ $organization->name }}</h1>
 
-            <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="not-prose flex flex-wrap items-center justify-between gap-2">
                 <a href="#spots" class="link link-hover text-sm opacity-80">
                     {{ trans_choice('ui.organizations.common.spots', $spotsCount) }}
                 </a>

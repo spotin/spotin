@@ -1,14 +1,16 @@
 @props(['listing'])
 
-<div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-    <h1 class="m-0! min-w-0 break-words">{{ __('ui.organizations.index.title') }}</h1>
+<x-page-heading class="mb-6">
+    {{ __('ui.organizations.index.title') }}
 
     @if ($listing->canCreate)
-        <a href="{{ route('organizations.create') }}" class="btn btn-primary btn-sm shrink-0">
-            {{ __('ui.organizations.index.create') }}
-        </a>
+        <x-slot:action>
+            <a href="{{ route('organizations.create') }}" class="btn btn-primary btn-sm shrink-0">
+                {{ __('ui.organizations.index.create') }}
+            </a>
+        </x-slot:action>
     @endif
-</div>
+</x-page-heading>
 
 <x-filters
     :action="$listing->action"

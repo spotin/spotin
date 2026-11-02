@@ -11,6 +11,16 @@
     --color-logo: light-dark(#e53935, #ffffff);
 }
 
+@layer base {
+    /*
+     * A long word in a heading, such as the name of a spot, goes to the line rather than out of the page. `anywhere`
+     * also lets the heading shrink in a row, next to a button, without `min-w-0`.
+     */
+    :is(h1, h2, h3, h4, h5, h6) {
+        overflow-wrap: anywhere;
+    }
+}
+
 @layer components {
     /* The default height of the maps of `x-map`: any `h-*` class given to a map replaces it */
     [data-map] {
