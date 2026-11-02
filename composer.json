@@ -18,7 +18,7 @@
         "laravel/tinker": "^3.0",
         "league/commonmark": "^2.10",
         "mallardduck/blade-lucide-icons": "^2.0",
-        "ublabs/blade-simple-icons": "^0.214.0"
+        "ublabs/blade-simple-icons": "^0.215.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
