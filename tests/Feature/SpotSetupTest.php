@@ -35,20 +35,20 @@ test('the setup form renders in every language without untranslated keys', funct
 })->with(['en', 'fr']);
 
 test('a member creates a spot to set up on site without a name, the name is required otherwise', function () {
-    $store = route('organizations.spots.store', ['organization' => $this->organization->uuid]);
+    $organization = $this->organization->uuid;
 
     $this->actingAs($this->member)
-        ->post($store, ['name' => '', 'needs_setup' => '0'])
+        ->post(route('spots.store'), ['organization' => $organization, 'name' => '', 'needs_setup' => '0'])
         ->assertSessionHasErrors('name');
 
-    $this->post($store, ['name' => '', 'needs_setup' => '1'])->assertSessionHasNoErrors();
+    $this->post(route('spots.store'), ['organization' => $organization, 'name' => '', 'needs_setup' => '1'])->assertSessionHasNoErrors();
 
     expect(Spot::whereBelongsTo($this->organization)->where('needs_setup', true)->whereNull('name')->count())->toBe(2);
 });
 
 test('the creation form offers to set the spot up now or on site, with the name required only now', function () {
     $html = $this->actingAs($this->member)
-        ->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))
+        ->get(route('spots.create', ['organization' => $this->organization->uuid]))
         ->assertOk()
         ->assertSeeInOrder([
             __('ui.spots.common.forms.fields.needs_setup.now.label'),

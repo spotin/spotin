@@ -476,21 +476,6 @@ return [
                 ],
             ],
         ],
-        'spots' => [
-            'feedback' => [
-                'spot_created' => 'Le spot a été créé.',
-            ],
-            'create' => [
-                'title' => 'Nouveau spot',
-                'description' => 'Créez un nouveau spot.',
-                'introduction' => "Vous êtes sur le point de créer un nouveau spot dans l'organisation :organization.",
-                'form' => [
-                    'actions' => [
-                        'submit' => 'Créer le spot',
-                    ],
-                ],
-            ],
-        ],
     ],
     'settings' => [
         'title' => 'Paramètres',
@@ -605,6 +590,12 @@ return [
             'unnamed' => 'Spot sans nom · :id',
             'forms' => [
                 'fields' => [
+                    'organization' => [
+                        // In the messages of the errors; the form asks the question
+                        'label' => 'Organisation',
+                        'question' => 'À quelle organisation appartient ce spot ?',
+                        'not_allowed' => 'Vous ne pouvez pas créer de spots dans cette organisation.',
+                    ],
                     'needs_setup' => [
                         'label' => 'Qui configure le spot ?',
                         'now' => [
@@ -639,6 +630,7 @@ return [
                     ],
                 ],
                 'steps' => [
+                    'organization' => 'Organisation',
                     'location' => 'Emplacement',
                     'setup' => 'Configuration',
                     'name_and_description' => 'Nom et description',
@@ -647,6 +639,7 @@ return [
             ],
         ],
         'feedback' => [
+            'spot_created' => 'Le spot a été créé.',
             'spot_updated' => 'Le spot a été mis à jour.',
             'spot_set_up' => 'Merci ! Le spot est configuré.',
             'spot_deleted' => 'Le spot a été supprimé.',
@@ -662,6 +655,18 @@ return [
                 'search' => 'Rechercher un spot',
                 'label' => 'Filtrer les spots',
                 'mine' => "Uniquement les spots que j'ai créés",
+            ],
+        ],
+        'create' => [
+            'title' => 'Nouveau spot',
+            'description' => 'Créez un nouveau spot.',
+            'introduction' => "Choisissez l'organisation du spot, puis remplissez ses détails.",
+            'introduction_in' => 'Vous créez un spot dans :organization.',
+            'change_organization' => "Changer d'organisation",
+            'form' => [
+                'actions' => [
+                    'submit' => 'Créer le spot',
+                ],
             ],
         ],
         'show' => [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Spots;
 
+use App\Models\Organization;
 use App\Models\Spot;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -9,8 +10,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Validation\Validator;
 
-// The fields of a spot, created in the organization of the URL. The source of the update of a spot, which changes what
-// differs for an existing spot.
+// The fields of a spot, created in the organization of the URL, as in the API. The source of the creation from the form,
+// which chooses the organization, and of the update of a spot, which changes what differs for an existing spot.
 // Not a doc comment: Scramble would show it in the API documentation.
 class StoreSpotRequest extends FormRequest
 {
@@ -67,11 +68,19 @@ class StoreSpotRequest extends FormRequest
     }
 
     /**
-     * The name is unique in the organization of the spot: here, the one of the URL.
+     * The organization the spot is created in: the one of the URL.
+     */
+    public function organization(): ?Organization
+    {
+        return $this->route('organization');
+    }
+
+    /**
+     * The name is unique in the organization of the spot: here, the one it is created in.
      */
     protected function uniqueName(): Unique
     {
-        return Rule::unique(Spot::class, 'name')->where('organization_id', $this->route('organization')?->getKey());
+        return Rule::unique(Spot::class, 'name')->where('organization_id', $this->organization()?->getKey());
     }
 
     /**

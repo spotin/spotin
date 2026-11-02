@@ -1,25 +1,23 @@
 @props(['listing', 'nested' => false])
 
 {{--
-    A list of spots, with its filters and its pages, and the creation of a spot when it is the one of an organization.
-    `nested` puts it in the page of its organization, under its name: a section of the page.
+    A list of spots, with its filters and its pages, and the creation of a spot, in its organization when it is the one
+    of an organization. `nested` puts it in the page of its organization, under its name: a section of the page.
 --}}
-<div class="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-    @if ($nested)
-        <h2 class="m-0! min-w-0 break-words">{{ __('ui.spots.index.title') }}</h2>
-    @else
-        <h1 class="m-0! min-w-0 break-words">{{ __('ui.spots.index.title') }}</h1>
-    @endif
+<x-page-heading :level="$nested ? 2 : 1" class="mb-6">
+    {{ __('ui.spots.index.title') }}
 
     @if ($listing->canCreate)
-        <a
-            href="{{ route('organizations.spots.create', ['organization' => $listing->organization->uuid]) }}"
-            class="btn btn-primary btn-sm shrink-0"
-        >
-            {{ __('ui.organizations.spots.create.title') }}
-        </a>
+        <x-slot:action>
+            <a
+                href="{{ route('spots.create', $listing->organization ? ['organization' => $listing->organization->uuid] : []) }}"
+                class="btn btn-primary btn-sm shrink-0"
+            >
+                {{ __('ui.spots.create.title') }}
+            </a>
+        </x-slot:action>
     @endif
-</div>
+</x-page-heading>
 
 <x-filters :action="$listing->action" :label="__('ui.spots.index.filter.label')" :active="$listing->isFiltered()">
     <x-slot:search>

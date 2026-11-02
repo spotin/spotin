@@ -1,7 +1,5 @@
 @props(['id', 'action', 'title', 'warning', 'confirm', 'method' => 'DELETE', 'small' => true, 'ghost' => false])
 
-{{-- `ghost` shows the button without its outline, red on a transparent background, such as among other ghost buttons --}}
-
 <button
     type="button"
     onclick="document.getElementById('{{ $id }}').showModal()"

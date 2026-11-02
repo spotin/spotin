@@ -53,8 +53,18 @@ final class Breadcrumbs
     public static function spot(Spot $spot): array
     {
         return [
-            ['label' => __('ui.spots.index.title'), 'url' => route('spots.index')],
+            ...self::spots(),
             ['label' => $spot->displayName(), 'url' => route('spots.show', ['spot' => $spot->uuid])],
+        ];
+    }
+
+    /**
+     * @return list<array{label: string, url: string}>
+     */
+    public static function spots(): array
+    {
+        return [
+            ['label' => __('ui.spots.index.title'), 'url' => route('spots.index')],
         ];
     }
 

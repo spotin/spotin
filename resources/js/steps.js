@@ -59,13 +59,14 @@ document.querySelectorAll("[data-steps]").forEach((container) => {
         return indicator;
     });
 
-    // The steps up to the furthest one reached are highlighted, and can be opened: the others are links without an
-    // address, which cannot be followed. The errors are shown by the fields themselves.
+    // The steps up to the current one are highlighted, so that the indicator shows where the user is, even after going
+    // back. The ones up to the furthest one reached can be opened: the others are links without an address, which
+    // cannot be followed. The errors are shown by the fields themselves.
     const render = () => {
         indicators.forEach((indicator, i) => {
             const link = indicator.querySelector("a");
 
-            indicator.classList.toggle("step-primary", i <= reached);
+            indicator.classList.toggle("step-primary", i <= current);
 
             if (i <= reached) {
                 link.href = `#${titles[i].id}`;

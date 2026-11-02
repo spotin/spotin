@@ -21,11 +21,12 @@ render(function (View $view) {
         {{-- All the spots across the page, with the welcome in a card on top of them --}}
         <x-map.hero :spots="route('spots.map')" :label="__('ui.homepage.map')" full aria-labelledby="page-title">
             <div class="card bg-base-100 pointer-events-auto w-full max-w-sm shadow-2xl">
-                <div class="card-body gap-4">
-                    <h1 id="page-title" class="text-3xl font-extrabold">{{ __('ui.homepage.title') }}</h1>
+                {{-- Its title and texts as the ones of the pages, by `prose`, which spaces them; its buttons as they are --}}
+                <div class="card-body prose">
+                    <h1 id="page-title">{{ __('ui.homepage.title') }}</h1>
                     <p class="opacity-80">{{ __('ui.homepage.introduction') }}</p>
 
-                    <div class="flex flex-wrap gap-2">
+                    <div class="not-prose flex flex-wrap gap-2">
                         <a href="{{ route('spots.index') }}" class="btn btn-primary">
                             {{ __('ui.homepage.explore_spots') }}
                         </a>

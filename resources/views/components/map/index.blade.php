@@ -40,8 +40,14 @@
     {{-- `isolate`: the controls of MapLibre stay above the map only, not above the menus of the page --}}
     {{ $attributes->class(['not-prose isolate w-full overflow-hidden', 'rounded-box border-base-content/10 border' => $framed]) }}
 >
-    {{-- The icon of the button that goes back to the point or the spots, copied by resources/js/map.js --}}
+    {{--
+        The icon of the button that goes back to the point or the spots, copied by resources/js/map.js. In the dark grey
+        of the icons of MapLibre, whose buttons stay white in both themes, and dimmed as theirs while it is disabled.
+    --}}
     <template data-map-recenter-icon>
-        <x-lucide-crosshair class="mx-auto h-4 w-4 stroke-3" aria-hidden="true" />
+        <x-lucide-crosshair
+            class="[button:disabled_&]:opacity-25 mx-auto h-4 w-4 stroke-3 text-[#333]"
+            aria-hidden="true"
+        />
     </template>
 </div>

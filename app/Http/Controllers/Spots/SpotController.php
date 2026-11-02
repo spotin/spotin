@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Spots;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListFiltersRequest;
+use App\Http\Requests\Spots\StoreSpotFromFormRequest;
 use App\Http\Requests\Spots\UpdateSpotRequest;
 use App\Models\Spot;
 use App\Support\QrCode;
@@ -48,6 +49,19 @@ class SpotController extends Controller
     public function qrCode(Spot $spot, string $format): Response
     {
         return QrCode::download(route('spots.redirect', ['spot' => $spot->uuid]), $spot->displayName(), $format);
+    }
+
+    /**
+     * Create a spot in the organization chosen in its form, on behalf of the current user.
+     */
+    public function store(StoreSpotFromFormRequest $request): RedirectResponse
+    {
+        $spot = new Spot($request->safe()->except('organization'));
+        $spot->organization()->associate($request->organization());
+        $spot->creator()->associate($request->user());
+        $spot->save();
+
+        return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', __('ui.spots.feedback.spot_created'));
     }
 
     /**

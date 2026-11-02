@@ -30,10 +30,6 @@ Route::get('organizations/{organization:uuid}/spots.geojson', [OrganizationSpotC
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('organizations/{organization:uuid}')->group(function () {
-        Route::post('spots', [OrganizationSpotController::class, 'store'])
-            ->middleware('can:create,'.Spot::class.',organization')
-            ->name('organizations.spots.store');
-
         Route::delete('membership', [MemberController::class, 'leave'])
             ->middleware('can:leave,organization')
             ->name('organizations.leave');
@@ -63,6 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->whereNumber('token')
         ->name('settings.developer.tokens.destroy');
 
+    Route::post('spots', [SpotController::class, 'store'])->name('spots.store');
     Route::delete('spots/{spot:uuid}', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('spots.destroy');
     Route::get('spots/{spot:uuid}/qr-code.{format}', [SpotController::class, 'qrCode'])
         ->whereIn('format', ['svg', 'png'])
