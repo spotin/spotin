@@ -32,6 +32,9 @@ test('the pages render in every language without untranslated keys', function (s
         $this->get(($this->url)($route))->assertOk()->assertDontSee('ui.');
     }
 
+    // The administrators see the actions the responsible users do not, such as deleting the organization
+    $this->actingAs($this->admin)->get(($this->url)('organizations.show'))->assertOk()->assertDontSee('ui.');
+
     $this->get(($this->url)('organizations.invitations.index'))->assertSee(emailHtml('pending@example.com'), false);
 
     $this->actingAs($this->member)->get(($this->url)('organizations.show'))->assertOk()->assertDontSee('ui.');

@@ -186,10 +186,15 @@ test('everyone who scans the spot is redirected to the website, and its editors 
         $this->actingAs($user)->get(route('spots.redirect', ['spot' => $this->spot->uuid]))->assertRedirect('https://harbour.example.com');
     }
 
-    $note = e(__('ui.spots.show.notes.redirect', ['website' => 'https://harbour.example.com']));
+    // A badge, and the whole note, with the domain of the website, in its tooltip
+    $badge = e(__('ui.spots.show.manage.badges.redirect'));
+    $note = e(__('ui.spots.show.manage.notes.redirect', ['website' => 'harbour.example.com']));
 
     foreach ([$this->member, $this->admin] as $user) {
-        $this->actingAs($user)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee($note, false);
+        $this->actingAs($user)->get(route('spots.show', ['spot' => $this->spot->uuid]))
+            ->assertOk()
+            ->assertSee($badge, false)
+            ->assertSee('data-tip="'.$note.'"', false);
     }
 
     $this->actingAs($this->outsider)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertDontSee($note, false);
@@ -206,7 +211,7 @@ test('the visitors see the page of the spot when it does not redirect them, or h
         ->assertOk()
         ->assertSee(__('ui.spots.show.visit', ['website' => 'harbour.example.com']))
         ->assertSee('href="https://harbour.example.com"', false)
-        ->assertDontSee(e(__('ui.spots.show.notes.redirect', ['website' => 'https://harbour.example.com'])), false);
+        ->assertDontSee(e(__('ui.spots.show.manage.notes.redirect', ['website' => 'https://harbour.example.com'])), false);
 
     $this->spot->update(['website' => null, 'redirect_to_website' => true]);
 
@@ -216,27 +221,68 @@ test('the visitors see the page of the spot when it does not redirect them, or h
         ->assertDontSee(e(__('ui.common.leave.title', ['app' => config('app.name')])), false);
 });
 
-test('the page of a spot shows its map and coordinates, its name and details, its description, the way to its website with a warning, and its actions', function () {
+test('the page of a spot shows its map and coordinates, its name and organization, its actions, its description, and the way to its website with a warning', function () {
     $this->get(route('spots.show', ['spot' => $this->spot->uuid]))
         ->assertOk()
         ->assertSeeInOrder([
             'data-map=', __('ui.spots.show.fields.coordinates'),
-            '<h1', 'Harbour', __('ui.spots.show.fields.organization'), e($this->organization->name), __('ui.spots.show.fields.created'),
+            '<h1', 'Harbour',
+            route('organizations.show', ['organization' => $this->organization->uuid]), e($this->organization->name),
+            __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share'),
             '<strong>harbour</strong>',
             __('ui.spots.show.visit', ['website' => 'harbour.example.com']),
             e(__('ui.common.leave.title', ['app' => config('app.name')])), '<strong class="break-all">https://harbour.example.com</strong>',
             __('ui.common.leave.continue'),
-            '<footer', __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share'),
         ], false)
-        // The guests do not see who created the spot
-        ->assertDontSee('Mike Member');
+        // The guests do not see who created the spot, nor when, nor the tools of its managers
+        ->assertDontSee('Mike Member')
+        ->assertDontSee($this->spot->created_at->isoFormat('LL'))
+        ->assertDontSee(__('ui.spots.show.manage.title'));
 
-    // The members of the organization and the administrators do
+    // The members of the organization and the administrators do, in the box of the managers
+    $created = __('ui.spots.show.manage.created_by', ['creator' => 'Mike Member', 'date' => $this->spot->created_at->isoFormat('LL')]);
+
     foreach ([$this->member, $this->admin] as $user) {
-        $this->actingAs($user)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertSee('Mike Member');
+        $this->actingAs($user)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertSee($created);
     }
 
     $this->actingAs($this->outsider)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertDontSee('Mike Member');
+});
+
+test('the managers of a spot manage it from the top of its page, with its notes', function () {
+    $this->spot->update(['is_hidden' => true]);
+
+    $html = $this->actingAs($this->member)->get(route('spots.show', ['spot' => $this->spot->uuid]))
+        ->assertOk()
+        ->assertSeeInOrder([
+            __('ui.spots.show.manage.title'),
+            route('spots.edit', ['spot' => $this->spot->uuid]), 'popovertarget="qr-code-popover"',
+            e(__('ui.spots.show.manage.notes.hidden', ['organization' => $this->organization->name])),
+            '<h1', 'Harbour',
+            __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share'),
+        ], false)
+        ->getContent();
+
+    // Nothing to delete the spot by mistake
+    expect($html)->not->toContain('delete-spot-'.$this->spot->uuid.'-modal');
+});
+
+test('the spot is deleted from the danger zone of its edit page, for its managers only', function () {
+    // The deletion has the address of the spot, as its edit form: told apart by its dialog
+    $modal = 'delete-spot-'.$this->spot->uuid.'-modal';
+
+    $this->actingAs($this->member)->get(route('spots.edit', ['spot' => $this->spot->uuid]))
+        ->assertOk()
+        ->assertSeeInOrder(['name="name"', __('ui.spots.edit.danger.title'), $modal, '<input type="hidden" name="_method" value="DELETE"'], false);
+
+    // Who sets up a spot cannot delete it
+    $this->spot->update(['needs_setup' => true]);
+    auth()->logout();
+
+    $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))
+        ->assertOk()
+        ->assertDontSee(__('ui.spots.edit.danger.title'))
+        ->assertDontSee($modal, false);
 });
 
 test('the description is rendered from Markdown, without HTML or unsafe links', function () {
@@ -316,7 +362,7 @@ test('the page of a spot without a location has no map nor coordinates', functio
 test('the members are told when a spot is hidden from the public lists, the visitors are not', function () {
     $this->spot->update(['is_hidden' => true]);
 
-    $note = e(__('ui.spots.show.notes.hidden', ['organization' => $this->organization->name]));
+    $note = e(__('ui.spots.show.manage.notes.hidden', ['organization' => $this->organization->name]));
 
     $this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertDontSee($note, false);
     $this->actingAs($this->member)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee($note, false);
@@ -325,7 +371,10 @@ test('the members are told when a spot is hidden from the public lists, the visi
 test('a spot whose creator is gone is still shown', function () {
     $this->member->delete();
 
-    $this->actingAs($this->admin)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee('Harbour');
+    $this->actingAs($this->admin)->get(route('spots.show', ['spot' => $this->spot->uuid]))
+        ->assertOk()
+        ->assertSee('Harbour')
+        ->assertSee(__('ui.spots.show.manage.created', ['date' => $this->spot->created_at->isoFormat('LL')]));
 });
 
 test('a member creates a spot and becomes its creator', function () {

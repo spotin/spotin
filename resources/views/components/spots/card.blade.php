@@ -13,15 +13,18 @@
                 </span>
             </h2>
             <p class="text-sm opacity-70">{{ $spot->organization->name }}</p>
-            {{-- Only the members of the organization and administrators find these spots in the lists --}}
+            {{--
+                Only the members of the organization and administrators find these spots in the lists. Outlined, they
+                stay readable on the card, hovered or not.
+            --}}
             @if ($spot->needs_setup)
-                <span class="badge badge-sm badge-ghost mt-1 gap-1">
+                <span class="badge badge-sm badge-outline border-base-content/30 mt-1 gap-1">
                     <x-lucide-wrench class="h-3 w-3" aria-hidden="true" />
                     {{ __('ui.spots.common.needs_setup') }}
                 </span>
             @endif
             @if ($spot->is_hidden)
-                <span class="badge badge-sm badge-ghost mt-1 gap-1">
+                <span class="badge badge-sm badge-outline border-base-content/30 mt-1 gap-1">
                     <x-lucide-eye-off class="h-3 w-3" aria-hidden="true" />
                     {{ __('ui.spots.common.hidden') }}
                 </span>

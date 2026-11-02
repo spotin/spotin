@@ -44,7 +44,7 @@ test('the messages shown once after an action can be closed, but not the one of 
 
     // The page of the hidden spot has its note, without the message of the action
     $this->get(route('spots.show', ['spot' => $spot->uuid]))
-        ->assertSee(e(__('ui.spots.show.notes.hidden', ['organization' => $organization->name])), false)
+        ->assertSee(e(__('ui.spots.show.manage.notes.hidden', ['organization' => $organization->name])), false)
         ->assertDontSee('data-alert-close', false);
 
     $this->followingRedirects()

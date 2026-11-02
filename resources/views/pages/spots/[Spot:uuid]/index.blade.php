@@ -42,191 +42,201 @@ render(function (View $view, Spot $spot) {
 
     <x-scanned :title="__('ui.spots.show.scanned')" />
 
+    {{--
+        What only the managers of the spot see: what visitors do not know about it, and the tools to manage it. Its
+        deletion is on its edit page, away from the actions of the visitors.
+    --}}
     @can('manage', $spot)
-        @if ($spot->needs_setup)
-            <x-alert type="info" icon="wrench" role="status">{{ __('ui.spots.show.notes.needs_setup') }}</x-alert>
-        @endif
+        <section aria-labelledby="manage-title" class="card card-border card-sm bg-base-200 not-prose mb-8">
+            <div class="card-body">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="manage-title" class="card-title">{{ __('ui.spots.show.manage.title') }}</h2>
 
-        @if ($spot->redirectsVisitors())
-            <x-alert
-                type="info"
-                icon="external-link"
-                role="status"
-            >{{ __('ui.spots.show.notes.redirect', ['website' => $spot->website]) }}</x-alert>
-        @endif
+                    <div class="card-actions">
+                        <a href="{{ route('spots.edit', ['spot' => $spot->uuid]) }}" class="btn btn-sm">
+                            <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
+                            {{ __('ui.spots.show.manage.actions.edit') }}
+                        </a>
 
-        @if ($spot->is_hidden)
-            <x-alert
-                type="info"
-                icon="eye-off"
-                role="status"
-            >{{ __('ui.spots.show.notes.hidden', ['organization' => $spot->organization->name]) }}</x-alert>
-        @endif
-    @endcan
-
-    {{-- The spot: its name and details, its description, and the way to its website, in the page as its organization --}}
-    <article>
-        <div class="flex flex-col gap-2">
-            {{-- Spaced from the description, which may start with a heading of its own --}}
-            <header class="mb-4 flex flex-col items-center gap-2 text-center">
-                <h1 class="card-title m-0! max-w-full justify-center text-3xl font-extrabold break-words">
-                    {{ $spot->displayName() }}
-                </h1>
-
-                <dl class="not-prose flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm opacity-80">
-                    <div class="flex items-center gap-1">
-                        <dt class="sr-only">{{ __('ui.spots.show.fields.organization') }}</dt>
-                        <x-lucide-building-complex class="h-4 w-4 shrink-0" aria-hidden="true" />
-                        <dd>
-                            <a
-                                href="{{ route('organizations.show', ['organization' => $spot->organization->uuid]) }}"
-                                class="link link-hover"
-                            >
-                                {{ $spot->organization->name }}
-                            </a>
-                        </dd>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <dt class="sr-only">{{ __('ui.spots.show.fields.created') }}</dt>
-                        <x-lucide-calendar class="h-4 w-4 shrink-0" aria-hidden="true" />
-                        <dd>{{ $spot->created_at->isoFormat('LL') }}</dd>
-                    </div>
-                    @can('viewCreator', $spot)
-                        <div class="flex items-center gap-1">
-                            <dt class="sr-only">{{ __('ui.spots.show.fields.creator') }}</dt>
-                            <x-lucide-user class="h-4 w-4 shrink-0" aria-hidden="true" />
-                            <dd>{{ $spot->creator?->name ?? __('ui.spots.common.unknown_creator') }}</dd>
-                        </div>
-                    @endcan
-                </dl>
-            </header>
-
-            @if (filled($spot->description))
-                {{--
-                    Safe: HTML is stripped and unsafe links are dropped when rendering the Markdown. Its own `prose` removes
-                    the margin above its first element, and its images are kept to a reasonable height, centered.
-                --}}
-                <div class="prose prose-img:mx-auto prose-img:block prose-img:max-h-80 prose-img:w-auto prose-img:rounded-box max-w-none">
-                    {!! $spot->descriptionHtml() !!}
-                </div>
-            @endif
-
-            @if (filled($spot->website))
-                <x-leave-modal :id="'leave-spot-'.$spot->uuid.'-modal'" :url="$spot->website" class="btn-block mt-4">
-                    {{ __('ui.spots.show.visit', ['website' => parse_url($spot->website, PHP_URL_HOST) ?? $spot->website]) }}
-                </x-leave-modal>
-            @endif
-        </div>
-
-        {{-- The actions on the spot: on one line when they fit, on more otherwise --}}
-        <footer class="mt-6">
-            <div
-                role="group"
-                aria-label="{{ __('ui.common.actions.label') }}"
-                class="not-prose flex flex-wrap justify-center gap-2"
-            >
-                {{-- TODO: Like, report and share the spot --}}
-                <button type="button" class="btn btn-ghost">
-                    <x-lucide-heart class="h-4 w-4" aria-hidden="true" />
-                    {{ __('ui.common.actions.like') }}
-                </button>
-                <button type="button" class="btn btn-ghost">
-                    <x-lucide-flag class="h-4 w-4" aria-hidden="true" />
-                    {{ __('ui.common.actions.report') }}
-                </button>
-                <button type="button" class="btn btn-ghost">
-                    <x-lucide-share-2 class="h-4 w-4" aria-hidden="true" />
-                    {{ __('ui.common.actions.share') }}
-                </button>
-
-                @can('manage', $spot)
-                    <button
-                        type="button"
-                        class="btn btn-ghost"
-                        popovertarget="qr-code-popover"
-                        style="anchor-name: --qr-code-anchor"
-                    >
-                        <x-lucide-qr-code class="h-4 w-4" aria-hidden="true" />
-                        {{ __('ui.spots.show.qr_code.label') }}
-                    </button>
-                    <div
-                        popover
-                        id="qr-code-popover"
-                        style="position-anchor: --qr-code-anchor"
-                        class="dropdown dropdown-center bg-base-100 rounded-box w-72 p-2 shadow-sm"
-                    >
-                        <ul class="menu w-full p-0">
-                            @foreach (['svg', 'png'] as $format)
+                        {{-- The QR code to print, and the address it leads to, to try and share: a menu that needs no JS --}}
+                        <button
+                            type="button"
+                            class="btn btn-sm"
+                            popovertarget="qr-code-popover"
+                            style="anchor-name: --qr-code-anchor"
+                        >
+                            <x-lucide-qr-code class="h-4 w-4" aria-hidden="true" />
+                            {{ __('ui.spots.show.manage.qr_code.label') }}
+                        </button>
+                        <div
+                            popover
+                            id="qr-code-popover"
+                            style="position-anchor: --qr-code-anchor"
+                            class="dropdown dropdown-end bg-base-100 rounded-box w-72 p-2 shadow-sm"
+                        >
+                            <ul class="menu w-full p-0">
+                                @foreach (['svg', 'png'] as $format)
+                                    <li>
+                                        <a
+                                            href="{{ route('spots.qr-code', ['spot' => $spot->uuid, 'format' => $format]) }}"
+                                            download
+                                        >
+                                            <x-lucide-download class="h-4 w-4" aria-hidden="true" />
+                                            {{ __("ui.spots.show.manage.qr_code.download_{$format}") }}
+                                        </a>
+                                    </li>
+                                @endforeach
                                 <li>
-                                    <a
-                                        href="{{ route('spots.qr-code', ['spot' => $spot->uuid, 'format' => $format]) }}"
-                                        download
-                                    >
-                                        <x-lucide-download class="h-4 w-4" aria-hidden="true" />
-                                        {{ __("ui.spots.show.qr_code.download_{$format}") }}
+                                    <a href="{{ route('spots.redirect', ['spot' => $spot->uuid]) }}" target="_blank">
+                                        <x-lucide-external-link class="h-4 w-4" aria-hidden="true" />
+                                        {{ __('ui.spots.show.manage.qr_code.open') }}
                                     </a>
                                 </li>
-                            @endforeach
-                            <li>
-                                <a href="{{ route('spots.redirect', ['spot' => $spot->uuid]) }}" target="_blank">
-                                    <x-lucide-external-link class="h-4 w-4" aria-hidden="true" />
-                                    {{ __('ui.spots.show.qr_code.open') }}
-                                </a>
-                            </li>
-                        </ul>
+                            </ul>
 
-                        {{-- The link can be selected, and copied with the button, shown by resources/js/app.js --}}
-                        <div class="flex flex-col gap-1 px-3 pt-2 pb-1">
-                            <label
-                                for="scan-link"
-                                class="text-xs opacity-70"
-                            >{{ __('ui.spots.show.qr_code.scan_link') }}</label>
-                            <div class="join w-full">
-                                <input
-                                    id="scan-link"
-                                    type="text"
-                                    readonly
-                                    class="input input-sm join-item w-full"
-                                    value="{{ route('spots.redirect', ['spot' => $spot->uuid]) }}"
-                                />
-                                <button
-                                    type="button"
-                                    class="btn btn-sm join-item"
-                                    hidden
-                                    data-copy="scan-link"
-                                    data-copied="{{ __('ui.spots.show.qr_code.copied') }}"
-                                >
-                                    <x-lucide-copy class="h-4 w-4" aria-hidden="true" />
-                                    <span>{{ __('ui.spots.show.qr_code.copy') }}</span>
-                                </button>
+                            {{-- The link can be selected, and copied with the button, shown by resources/js/app.js --}}
+                            <div class="flex flex-col gap-1 px-3 pt-2 pb-1">
+                                <label
+                                    for="scan-link"
+                                    class="text-xs opacity-70"
+                                >{{ __('ui.spots.show.manage.qr_code.scan_link') }}</label>
+                                <div class="join w-full">
+                                    <input
+                                        id="scan-link"
+                                        type="text"
+                                        readonly
+                                        class="input input-sm join-item w-full"
+                                        value="{{ route('spots.redirect', ['spot' => $spot->uuid]) }}"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm join-item"
+                                        hidden
+                                        data-copy="scan-link"
+                                        data-copied="{{ __('ui.spots.show.manage.qr_code.copied') }}"
+                                    >
+                                        <x-lucide-copy class="h-4 w-4" aria-hidden="true" />
+                                        <span>{{ __('ui.spots.show.manage.qr_code.copy') }}</span>
+                                    </button>
+                                </div>
+                                <span class="text-xs opacity-70">{{ __('ui.spots.show.manage.qr_code.hint') }}</span>
                             </div>
-                            <span class="text-xs opacity-70">{{ __('ui.spots.show.qr_code.hint') }}</span>
                         </div>
                     </div>
-                @endcan
+                </div>
 
-                @can('update', $spot)
-                    <a href="{{ route('spots.edit', ['spot' => $spot->uuid]) }}" class="btn btn-ghost">
-                        <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
-                        {{ __('ui.spots.show.actions.edit') }}
-                    </a>
-                @endcan
+                {{--
+                    What visitors do not know about the spot, as quiet badges, below the actions: their full explanation
+                    is in their tooltip, and read by screen readers. Focusable, so that the keyboard shows the tooltip too.
+                --}}
+                @if ($spot->needs_setup || $spot->redirectsVisitors() || $spot->is_hidden)
+                    <ul class="flex flex-wrap gap-2">
+                        @if ($spot->needs_setup)
+                            <li class="tooltip" data-tip="{{ __('ui.spots.show.manage.notes.needs_setup') }}">
+                                <span tabindex="0" class="badge badge-sm badge-outline border-base-content/30">
+                                    <x-lucide-wrench class="h-3 w-3" aria-hidden="true" />
+                                    {{ __('ui.spots.common.needs_setup') }}
+                                    <span class="sr-only">: {{ __('ui.spots.show.manage.notes.needs_setup') }}</span>
+                                </span>
+                            </li>
+                        @endif
 
-                @can('delete', $spot)
-                    <x-confirm-modal
-                        :id="'delete-spot-'.$spot->uuid.'-modal'"
-                        :action="route('spots.destroy', ['spot' => $spot->uuid])"
-                        :title="__('ui.spots.delete.title')"
-                        :warning="__('ui.spots.delete.warning')"
-                        :confirm="__('ui.spots.delete.actions.submit')"
-                        :small="false"
-                        :ghost="true"
-                    >
-                        <x-lucide-trash-2 class="h-4 w-4" aria-hidden="true" />
-                        {{ __('ui.spots.show.actions.delete') }}
-                    </x-confirm-modal>
-                @endcan
+                        @if ($spot->redirectsVisitors())
+                            @php($host = parse_url($spot->website, PHP_URL_HOST) ?? $spot->website)
+                            <li
+                                class="tooltip"
+                                data-tip="{{ __('ui.spots.show.manage.notes.redirect', ['website' => $host]) }}"
+                            >
+                                <span tabindex="0" class="badge badge-sm badge-outline border-base-content/30">
+                                    <x-lucide-external-link class="h-3 w-3" aria-hidden="true" />
+                                    {{ __('ui.spots.show.manage.badges.redirect') }}
+                                    <span class="sr-only">: {{ __('ui.spots.show.manage.notes.redirect', ['website' => $host]) }}</span>
+                                </span>
+                            </li>
+                        @endif
+
+                        @if ($spot->is_hidden)
+                            <li
+                                class="tooltip"
+                                data-tip="{{ __('ui.spots.show.manage.notes.hidden', ['organization' => $spot->organization->name]) }}"
+                            >
+                                <span tabindex="0" class="badge badge-sm badge-outline border-base-content/30">
+                                    <x-lucide-eye-off class="h-3 w-3" aria-hidden="true" />
+                                    {{ __('ui.spots.common.hidden') }}
+                                    <span class="sr-only">
+                                        : {{ __('ui.spots.show.manage.notes.hidden', ['organization' => $spot->organization->name]) }}
+                                    </span>
+                                </span>
+                            </li>
+                        @endif
+                    </ul>
+                @endif
+
+                {{-- Who created the spot, and when: of use to its managers, not to its visitors --}}
+                <p class="text-sm opacity-70">
+                    @if ($spot->creator)
+                        {{ __('ui.spots.show.manage.created_by', ['creator' => $spot->creator->name, 'date' => $spot->created_at->isoFormat('LL')]) }}
+                    @else
+                        {{ __('ui.spots.show.manage.created', ['date' => $spot->created_at->isoFormat('LL')]) }}
+                    @endif
+                </p>
             </div>
-        </footer>
+        </section>
+    @endcan
+
+    {{--
+        The spot: its name, the organization behind it, the actions of its visitors, its description, and the way to its
+        website, in the page as its organization
+    --}}
+    <article class="flex flex-col gap-2">
+        {{-- Spaced from the description, which may start with a heading of its own --}}
+        <header class="not-prose mb-4 flex flex-col gap-1">
+            <h1 class="max-w-full text-3xl font-extrabold break-words">{{ $spot->displayName() }}</h1>
+
+            {{-- The organization and the actions on one row, as the box of the managers; below each other when narrow --}}
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                {{-- Who stands behind the spot, which its visitors may want to know before trusting it --}}
+                <p class="text-sm opacity-80">
+                    {!!
+                        __('ui.spots.show.by', [
+                            'organization' => '<a href="'.e(route('organizations.show', ['organization' => $spot->organization->uuid])).'" class="link link-hover">'.e($spot->organization->name).'</a>',
+                        ])
+                    !!}
+                </p>
+
+                {{-- Lighter than the tools of the managers --}}
+                <div role="group" aria-label="{{ __('ui.common.actions.label') }}" class="flex flex-wrap gap-1">
+                    {{-- TODO: Like, report and share the spot --}}
+                    <button type="button" class="btn btn-ghost btn-sm">
+                        <x-lucide-heart class="h-4 w-4" aria-hidden="true" />
+                        {{ __('ui.common.actions.like') }}
+                    </button>
+                    <button type="button" class="btn btn-ghost btn-sm">
+                        <x-lucide-flag class="h-4 w-4" aria-hidden="true" />
+                        {{ __('ui.common.actions.report') }}
+                    </button>
+                    <button type="button" class="btn btn-ghost btn-sm">
+                        <x-lucide-share-2 class="h-4 w-4" aria-hidden="true" />
+                        {{ __('ui.common.actions.share') }}
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        @if (filled($spot->description))
+            {{--
+                Safe: HTML is stripped and unsafe links are dropped when rendering the Markdown. Its own `prose` removes the
+                margin above its first element, and its images are kept to a reasonable height, centered.
+            --}}
+            <div class="prose prose-img:mx-auto prose-img:block prose-img:max-h-80 prose-img:w-auto prose-img:rounded-box max-w-none">
+                {!! $spot->descriptionHtml() !!}
+            </div>
+        @endif
+
+        @if (filled($spot->website))
+            <x-leave-modal :id="'leave-spot-'.$spot->uuid.'-modal'" :url="$spot->website" class="btn-block mt-4">
+                {{ __('ui.spots.show.visit', ['website' => parse_url($spot->website, PHP_URL_HOST) ?? $spot->website]) }}
+            </x-leave-modal>
+        @endif
     </article>
 </x-default-layout>

@@ -147,7 +147,7 @@ test('the members see the page of a spot that needs to be set up, with a note, a
     $this->actingAs($this->member)
         ->get(route('spots.show', ['spot' => $this->spot->uuid]))
         ->assertOk()
-        ->assertSee(__('ui.spots.show.notes.needs_setup'));
+        ->assertSee(__('ui.spots.show.manage.notes.needs_setup'));
 
     $this->get(route('spots.edit', ['spot' => $this->spot->uuid]))
         ->assertOk()
