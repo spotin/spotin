@@ -7,8 +7,10 @@ use App\Http\Requests\ListFiltersRequest;
 use App\Http\Requests\Spots\UpdateSpotRequest;
 use App\Models\Spot;
 use App\Support\SpotListing;
+use App\Support\SpotQrCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 class SpotController extends Controller
 {
@@ -38,6 +40,21 @@ class SpotController extends Controller
         }
 
         return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('scanned', true);
+    }
+
+    /**
+     * Download the QR code of the spot, to print, as SVG or PNG.
+     */
+    public function qrCode(Spot $spot, string $format): Response
+    {
+        [$image, $type] = $format === 'png'
+            ? [SpotQrCode::png($spot), 'image/png']
+            : [SpotQrCode::svg($spot), 'image/svg+xml'];
+
+        return response($image, headers: [
+            'Content-Type' => $type,
+            'Content-Disposition' => 'attachment; filename="'.SpotQrCode::filename($spot, $format).'"',
+        ]);
     }
 
     /**

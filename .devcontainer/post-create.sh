@@ -22,7 +22,7 @@ sudo apt install --yes dnsutils iputils-ping ncat
 sudo apt install --yes sqlite3 php-sqlite3
 
 # Install PHP and Composer
-sudo apt install --yes php-common php-cli php-mysql php-xml php-bcmath composer
+sudo apt install --yes php-common php-cli php-mysql php-xml php-bcmath php-gd composer
 
 ## Install Laravel Installer
 composer global require laravel/installer

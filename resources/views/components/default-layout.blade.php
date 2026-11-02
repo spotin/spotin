@@ -52,7 +52,7 @@
                 </ul>
             </div>
             <a href="{{ route('index') }}" aria-label="{{ config('app.name') }}">
-                <x-icon-logo class="text-logo h-20 w-20" aria-hidden="true" />
+                <x-icon-logo class="text-logo ml-4 h-13 w-13" aria-hidden="true" />
             </a>
         </div>
         <div class="group/nav flex flex-none items-center gap-2">

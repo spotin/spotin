@@ -39,6 +39,8 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ env.PHP_VERSION }}
+                  # GD draws the PNG QR codes of the spots
+                  extensions: gd
 
             - name: Get Composer cache directory
               id: composer-cache
@@ -107,6 +109,8 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ env.PHP_VERSION }}
+                  # GD draws the PNG QR codes of the spots
+                  extensions: gd
 
             - name: Get Composer cache directory
               id: composer-cache
