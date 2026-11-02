@@ -597,7 +597,6 @@ return [
     ],
     'spots' => [
         'common' => [
-            'unknown_creator' => 'Inconnu',
             'hidden' => 'Masqué',
             'needs_setup' => 'Pas encore configuré',
             'unnamed' => 'Spot sans nom · :id',
@@ -665,32 +664,37 @@ return [
         'show' => [
             'scanned' => 'Vous venez de scanner un spot !',
             'description' => 'Les détails du spot.',
-            'actions' => [
-                'edit' => 'Modifier',
-                'delete' => 'Supprimer',
-            ],
+            'by' => 'par :organization',
             'fields' => [
-                'organization' => 'Organisation',
-                'creator' => 'Créé par',
-                'created' => 'Créé le',
                 'coordinates' => 'Coordonnées',
             ],
             'visit' => 'Visiter :website',
             'map' => 'Emplacement du spot',
-            'qr_code' => [
-                'label' => 'Code QR',
-                'download_svg' => 'Télécharger en SVG',
-                'download_png' => 'Télécharger en PNG',
-                'scan_link' => 'Lien de scan',
-                'open' => 'Ouvrir le lien de scan',
-                'hint' => 'Ouvre le spot comme un scan. Un spot pas encore configuré ouvre ici votre formulaire : utilisez une fenêtre privée pour voir ce que voient les autres.',
-                'copy' => 'Copier',
-                'copied' => 'Copié',
-            ],
-            'notes' => [
-                'redirect' => 'Les visiteurs qui scannent ce spot sont redirigés directement vers :website.',
-                'needs_setup' => "Ce spot n'est pas encore configuré : la première personne qui scanne son code finit de le configurer. D'ici là, seuls les membres de son organisation le trouvent dans les listes.",
-                'hidden' => 'Ce spot est masqué des listes publiques : seuls les membres de :organization le trouvent dans les listes. Il reste accessible par son lien.',
+            'manage' => [
+                'title' => 'Vous pouvez gérer ce spot',
+                'created_by' => 'Créé par :creator le :date.',
+                'created' => 'Créé le :date.',
+                'actions' => [
+                    'edit' => 'Modifier',
+                ],
+                'qr_code' => [
+                    'label' => 'Code QR',
+                    'download_svg' => 'Télécharger en SVG',
+                    'download_png' => 'Télécharger en PNG',
+                    'scan_link' => 'Lien de scan',
+                    'open' => 'Ouvrir le lien de scan',
+                    'hint' => 'Ouvre le spot comme un scan. Un spot pas encore configuré ouvre ici votre formulaire : utilisez une fenêtre privée pour voir ce que voient les autres.',
+                    'copy' => 'Copier',
+                    'copied' => 'Copié',
+                ],
+                'badges' => [
+                    'redirect' => 'Redirige vers son site web',
+                ],
+                'notes' => [
+                    'redirect' => 'Les visiteurs qui scannent ce spot sont redirigés directement vers :website.',
+                    'needs_setup' => "Ce spot n'est pas encore configuré : la première personne qui scanne son code finit de le configurer. D'ici là, seuls les membres de son organisation le trouvent dans les listes.",
+                    'hidden' => 'Ce spot est masqué des listes publiques : seuls les membres de :organization le trouvent dans les listes. Il reste accessible par son lien.',
+                ],
             ],
         ],
         'setup' => [
@@ -705,6 +709,9 @@ return [
             'title' => 'Modifier le spot',
             'description' => 'Modifiez ou supprimez un spot.',
             'introduction' => "Vous modifiez le spot :spot de l'organisation :organization.",
+            'danger' => [
+                'title' => 'Zone de danger',
+            ],
             'form' => [
                 'actions' => [
                     'submit' => 'Enregistrer',
@@ -713,7 +720,7 @@ return [
         ],
         'delete' => [
             'title' => 'Supprimer le spot',
-            'warning' => 'Cela supprime définitivement le spot. Cette action est irréversible.',
+            'warning' => 'Supprimer le spot le retire pour tout le monde, avec tous ses détails. Ses codes QR imprimés ne mèneront plus nulle part. Cette action est irréversible.',
             'actions' => [
                 'submit' => 'Supprimer le spot',
             ],

@@ -65,4 +65,26 @@ render(function (View $view, Spot $spot) {
         :setup="$setup"
         :submit="$setup ? __('ui.spots.setup.actions.submit') : __('ui.spots.edit.form.actions.submit')"
     />
+
+    {{-- Away from the form and from the page of the spot, where it could be chosen by mistake --}}
+    @if (! $setup)
+        @can('delete', $spot)
+            <section aria-labelledby="danger-title" class="border-error/30 rounded-box not-prose mt-10 border p-4">
+                <h2 id="danger-title" class="text-error font-semibold">{{ __('ui.spots.edit.danger.title') }}</h2>
+                {{-- The same warning as the dialog that confirms the deletion --}}
+                <p class="mt-1 mb-4 text-sm">{{ __('ui.spots.delete.warning') }}</p>
+                <x-confirm-modal
+                    :id="'delete-spot-'.$spot->uuid.'-modal'"
+                    :action="route('spots.destroy', ['spot' => $spot->uuid])"
+                    :title="__('ui.spots.delete.title')"
+                    :warning="__('ui.spots.delete.warning')"
+                    :confirm="__('ui.spots.delete.actions.submit')"
+                    :small="false"
+                >
+                    <x-lucide-trash-2 class="h-4 w-4" aria-hidden="true" />
+                    {{ __('ui.spots.delete.title') }}
+                </x-confirm-modal>
+            </section>
+        @endcan
+    @endif
 </x-default-layout>

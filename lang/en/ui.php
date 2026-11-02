@@ -597,7 +597,6 @@ return [
     ],
     'spots' => [
         'common' => [
-            'unknown_creator' => 'Unknown',
             'hidden' => 'Hidden',
             'needs_setup' => 'Not set up yet',
             'unnamed' => 'Unnamed spot · :id',
@@ -665,32 +664,37 @@ return [
         'show' => [
             'scanned' => 'You have just scanned a spot!',
             'description' => 'The details of the spot.',
-            'actions' => [
-                'edit' => 'Edit',
-                'delete' => 'Delete',
-            ],
+            'by' => 'by :organization',
             'fields' => [
-                'organization' => 'Organization',
-                'creator' => 'Created by',
-                'created' => 'Created on',
                 'coordinates' => 'Coordinates',
             ],
             'visit' => 'Visit :website',
             'map' => 'Location of the spot',
-            'qr_code' => [
-                'label' => 'QR code',
-                'download_svg' => 'Download as SVG',
-                'download_png' => 'Download as PNG',
-                'scan_link' => 'Scan link',
-                'open' => 'Open the scan link',
-                'hint' => 'Opens the spot as a scan does. A spot that is not set up yet opens your form here: use a private window to see what the others see.',
-                'copy' => 'Copy',
-                'copied' => 'Copied',
-            ],
-            'notes' => [
-                'redirect' => 'The visitors who scan this spot are redirected directly to :website.',
-                'needs_setup' => 'This spot is not set up yet: the first person who scans its code finishes setting it up. Only the members of its organization find it in the lists until then.',
-                'hidden' => 'This spot is hidden from the public lists: only the members of :organization find it in the lists. It stays reachable by its link.',
+            'manage' => [
+                'title' => 'You can manage this spot',
+                'created_by' => 'Created by :creator on :date.',
+                'created' => 'Created on :date.',
+                'actions' => [
+                    'edit' => 'Edit',
+                ],
+                'qr_code' => [
+                    'label' => 'QR code',
+                    'download_svg' => 'Download as SVG',
+                    'download_png' => 'Download as PNG',
+                    'scan_link' => 'Scan link',
+                    'open' => 'Open the scan link',
+                    'hint' => 'Opens the spot as a scan does. A spot that is not set up yet opens your form here: use a private window to see what the others see.',
+                    'copy' => 'Copy',
+                    'copied' => 'Copied',
+                ],
+                'badges' => [
+                    'redirect' => 'Redirects to its website',
+                ],
+                'notes' => [
+                    'redirect' => 'The visitors who scan this spot are redirected directly to :website.',
+                    'needs_setup' => 'This spot is not set up yet: the first person who scans its code finishes setting it up. Only the members of its organization find it in the lists until then.',
+                    'hidden' => 'This spot is hidden from the public lists: only the members of :organization find it in the lists. It stays reachable by its link.',
+                ],
             ],
         ],
         'setup' => [
@@ -705,6 +709,9 @@ return [
             'title' => 'Edit the spot',
             'description' => 'Edit or delete a spot.',
             'introduction' => 'You are editing the spot :spot in the organization :organization.',
+            'danger' => [
+                'title' => 'Danger zone',
+            ],
             'form' => [
                 'actions' => [
                     'submit' => 'Save',
@@ -713,7 +720,7 @@ return [
         ],
         'delete' => [
             'title' => 'Delete the spot',
-            'warning' => 'This permanently deletes the spot. This cannot be undone.',
+            'warning' => 'Deleting the spot removes it for everyone, with all its details. Its printed QR codes will lead nowhere. This cannot be undone.',
             'actions' => [
                 'submit' => 'Delete the spot',
             ],
