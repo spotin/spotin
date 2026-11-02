@@ -599,8 +599,21 @@ return [
         'common' => [
             'unknown_creator' => 'Inconnu',
             'hidden' => 'Masqué',
+            'needs_setup' => 'Pas encore configuré',
+            'unnamed' => 'Spot sans nom · :id',
             'forms' => [
                 'fields' => [
+                    'needs_setup' => [
+                        'label' => 'Qui configure le spot ?',
+                        'now' => [
+                            'label' => 'Je le configure maintenant',
+                            'hint' => 'Vous remplissez le spot maintenant. Son nom est obligatoire.',
+                        ],
+                        'on_site' => [
+                            'label' => "Quelqu'un le configurera plus tard",
+                            'hint' => 'Remplissez ce que vous savez, ou rien. La première personne qui scanne son code finit de le configurer, même sans compte.',
+                        ],
+                    ],
                     'name' => [
                         'label' => 'Nom',
                         'placeholder' => 'Saisissez le nom du spot',
@@ -625,6 +638,7 @@ return [
                 ],
                 'steps' => [
                     'location' => 'Emplacement',
+                    'setup' => 'Configuration',
                     'name_and_description' => 'Nom et description',
                     'website' => 'Site web et visibilité',
                 ],
@@ -632,6 +646,7 @@ return [
         ],
         'feedback' => [
             'spot_updated' => 'Le spot a été mis à jour.',
+            'spot_set_up' => 'Merci ! Le spot est configuré.',
             'spot_deleted' => 'Le spot a été supprimé.',
         ],
         'index' => [
@@ -664,7 +679,16 @@ return [
             'map' => 'Emplacement du spot',
             'notes' => [
                 'redirect' => 'Les visiteurs qui scannent ce spot sont redirigés directement vers :website.',
+                'needs_setup' => "Ce spot n'est pas encore configuré : la première personne qui scanne son code finit de le configurer. D'ici là, seuls les membres de son organisation le trouvent dans les listes.",
                 'hidden' => 'Ce spot est masqué des listes publiques : seuls les membres de :organization le trouvent dans les listes. Il reste accessible par son lien.',
+            ],
+        ],
+        'setup' => [
+            'title' => 'Configurer le spot',
+            'description' => 'Configurer un spot sur place.',
+            'introduction' => "Ce spot de :organization n'est pas encore configuré : remplissez ses détails pour le configurer. Ses membres pourront les modifier ensuite.",
+            'actions' => [
+                'submit' => 'Configurer le spot',
             ],
         ],
         'edit' => [

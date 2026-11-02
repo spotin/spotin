@@ -27,6 +27,18 @@ if (markdownEditors.length > 0) {
     import("./markdown-editor.js");
 }
 
+// A field required unless a choice is checked, such as the name of a spot set up on site. Without JS, the server checks
+// it.
+document.querySelectorAll("[data-required-unless-checked]").forEach((field) => {
+    const choice = document.getElementById(field.dataset.requiredUnlessChecked);
+    const sync = () => {
+        field.required = !choice.checked;
+    };
+
+    sync();
+    choice.form.addEventListener("change", sync);
+});
+
 // The alerts close with their button, hidden without JS.
 document.querySelectorAll("[data-alert-close]").forEach((button) => {
     button.hidden = false;

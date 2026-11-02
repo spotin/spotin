@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
 use League\CommonMark\Extension\NormalizeHeadings\NormalizeHeadingsExtension;
 
-#[Fillable(['name', 'description', 'latitude', 'longitude', 'website', 'redirect_to_website', 'is_hidden'])]
+#[Fillable(['name', 'description', 'latitude', 'longitude', 'website', 'redirect_to_website', 'is_hidden', 'needs_setup'])]
 class Spot extends Model
 {
     /** @use HasFactory<SpotFactory> */
@@ -43,6 +43,7 @@ class Spot extends Model
             'longitude' => 'float',
             'redirect_to_website' => 'boolean',
             'is_hidden' => 'boolean',
+            'needs_setup' => 'boolean',
         ];
     }
 
@@ -108,6 +109,15 @@ class Spot extends Model
     }
 
     /**
+     * The name of the spot, or, until it is set up, a placeholder with the start of its UUID, which tells the unnamed
+     * spots apart and matches their printed code.
+     */
+    public function displayName(): string
+    {
+        return filled($this->name) ? $this->name : __('ui.spots.common.unnamed', ['id' => substr($this->uuid, 0, 6)]);
+    }
+
+    /**
      * Whether the spot has a location, to show on the maps.
      */
     public function hasLocation(): bool
@@ -150,8 +160,8 @@ class Spot extends Model
     }
 
     /**
-     * Scope the query to the spots the user can find in lists: the hidden spots are only listed for the members of
-     * their organization and for administrators. They stay reachable by their link.
+     * Scope the query to the spots the user can find in lists: the hidden spots, and the ones that need to be set up,
+     * are only listed for the members of their organization and for administrators. They stay reachable by their link.
      *
      * @param  Builder<static>  $query
      */
@@ -162,7 +172,7 @@ class Spot extends Model
         }
 
         $query->where(fn (Builder $query) => $query
-            ->where('is_hidden', false)
+            ->where(fn (Builder $query) => $query->where('is_hidden', false)->where('needs_setup', false))
             ->when($user, fn (Builder $query) => $query->orWhereIn('organization_id', $user->organizations()->select('organizations.id'))));
     }
 
@@ -221,7 +231,7 @@ class Spot extends Model
                     'coordinates' => [(float) $spot->longitude, (float) $spot->latitude],
                 ],
                 'properties' => [
-                    'name' => $spot->name,
+                    'name' => $spot->displayName(),
                     ...($links ? ['url' => route('spots.show', ['spot' => $spot->uuid])] : []),
                 ],
             ];

@@ -40,6 +40,14 @@ class SpotFactory extends Factory
     }
 
     /**
+     * Indicate that the spot is to be set up on site, by the first person who scans it.
+     */
+    public function needingSetup(): static
+    {
+        return $this->state(fn () => ['needs_setup' => true]);
+    }
+
+    /**
      * Indicate that the spot is only listed for the members of its organization.
      */
     public function hidden(): static

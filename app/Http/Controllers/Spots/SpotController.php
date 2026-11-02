@@ -24,11 +24,15 @@ class SpotController extends Controller
     }
 
     /**
-     * The address of the QR code of the spot: everyone goes straight to its website when the spot redirects its
-     * visitors, otherwise to its page, which says it was just scanned.
+     * The address of the QR code of the spot: everyone goes to its form while it needs to be set up, then straight to its
+     * website when the spot redirects its visitors, otherwise to its page. Both say it was just scanned.
      */
     public function redirect(Spot $spot): RedirectResponse
     {
+        if ($spot->needs_setup) {
+            return redirect()->route('spots.edit', ['spot' => $spot->uuid])->with('scanned', true);
+        }
+
         if ($spot->redirectsVisitors()) {
             return redirect()->away($spot->website);
         }
@@ -37,13 +41,15 @@ class SpotController extends Controller
     }
 
     /**
-     * Update the spot.
+     * Update the spot, or set it up.
      */
     public function update(UpdateSpotRequest $request, Spot $spot): RedirectResponse
     {
-        $spot->update($request->validated());
+        $feedback = $request->settingUp() ? __('ui.spots.feedback.spot_set_up') : __('ui.spots.feedback.spot_updated');
 
-        return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', __('ui.spots.feedback.spot_updated'));
+        $spot->update($request->fields());
+
+        return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', $feedback);
     }
 
     /**

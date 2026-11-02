@@ -39,7 +39,7 @@ class SpotController extends Controller
      */
     public function update(UpdateSpotRequest $request, Spot $spot): SpotResource
     {
-        $spot->update($request->validated());
+        $spot->update($request->fields());
 
         return new SpotResource($spot);
     }

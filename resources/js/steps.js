@@ -35,7 +35,9 @@ document.querySelectorAll("[data-steps]").forEach((container) => {
         const link = document.createElement("a");
 
         indicator.className = "step";
-        link.className = "[&[href]]:hover:underline focus-visible:underline";
+        // Spaced from the titles next to it, which can wrap.
+        link.className =
+            "px-2 [&[href]]:hover:underline focus-visible:underline";
         link.textContent = title.textContent;
         link.addEventListener("click", (event) => {
             // With a modifier key, the browser opens the link in a new tab or window.

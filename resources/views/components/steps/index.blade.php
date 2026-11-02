@@ -16,9 +16,12 @@
     <div data-steps-progress hidden>
         <div class="divider"></div>
 
-        {{-- Scrolls sideways when the steps do not fit, on small screens --}}
-        <div class="not-prose relative mb-4 overflow-x-auto" data-steps-scroller>
-            <ul class="steps w-full min-w-max" data-steps-indicator></ul>
+        {{--
+            Scrolls sideways when the steps do not fit, on small screens. The titles wrap, in steps wide enough to stay
+            readable. The padding below them keeps the scrollbar, drawn over the content by some systems, off them.
+        --}}
+        <div class="not-prose relative mb-2 overflow-x-auto pb-2" data-steps-scroller>
+            <ul class="steps [&>.step]:min-w-28 w-full" data-steps-indicator></ul>
         </div>
     </div>
 </div>

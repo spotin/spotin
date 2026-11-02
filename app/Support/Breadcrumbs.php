@@ -65,7 +65,7 @@ final class Breadcrumbs
     {
         return [
             ['label' => __('ui.spots.index.title'), 'url' => route('spots.index')],
-            ['label' => $spot->name, 'url' => route('spots.show', ['spot' => $spot->uuid])],
+            ['label' => $spot->displayName(), 'url' => route('spots.show', ['spot' => $spot->uuid])],
         ];
     }
 

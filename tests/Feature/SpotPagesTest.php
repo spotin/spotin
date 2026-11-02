@@ -66,18 +66,19 @@ test('only members and admins can edit a spot or open the form to create one in 
     $this->actingAs($this->admin)->get('/organizations/unknown/spots/create')->assertNotFound();
 });
 
-test('the creation form is in the organization, in steps: the name and description, the location, and the website, with the submit button', function () {
+test('the creation form is in the organization, in steps: the setup, the name and description, the website and visibility, and the location, with the submit button', function () {
     $html = $this->actingAs($this->member)->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))
         ->assertOk()
         ->assertSee('<form method="POST" action="'.route('organizations.spots.store', ['organization' => $this->organization->uuid]).'"', false)
         ->assertSeeInOrder([
+            __('ui.spots.common.forms.steps.setup'), 'name="needs_setup"',
             __('ui.spots.common.forms.steps.name_and_description'), 'name="name"', 'name="description"',
-            __('ui.spots.common.forms.steps.location'), 'name="latitude"', 'name="longitude"',
-            __('ui.spots.common.forms.steps.website'), 'name="website"', 'name="redirect_to_website"', 'name="is_hidden"', 'type="submit"',
+            __('ui.spots.common.forms.steps.website'), 'name="website"', 'name="redirect_to_website"', 'name="is_hidden"',
+            __('ui.spots.common.forms.steps.location'), 'name="latitude"', 'name="longitude"', 'type="submit"',
         ], false)
         ->getContent();
 
-    expect(substr_count($html, 'data-step '))->toBe(3)
+    expect(substr_count($html, 'data-step '))->toBe(4)
         // A new spot opens on the first step, an existing one on any
         ->and($html)->not->toContain('data-steps-complete');
 

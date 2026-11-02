@@ -22,7 +22,8 @@ class StoreSpotRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:2', 'max:100', $this->uniqueName()],
+            // Needed once the spot is set up, checked by `nameIsGiven()`
+            'name' => ['nullable', 'string', 'min:2', 'max:100', $this->uniqueName()],
             'description' => ['nullable', 'string', 'max:10000'],
             // The location is optional, but both coordinates are given together, checked by `locationIsComplete()`
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
@@ -32,6 +33,8 @@ class StoreSpotRequest extends FormRequest
             'redirect_to_website' => ['boolean'],
             // Hidden spots are only listed for the members of the organization, but stay reachable by their link
             'is_hidden' => ['boolean'],
+            // To be set up on site, by the first person who scans the spot
+            'needs_setup' => ['boolean'],
         ];
     }
 
@@ -42,7 +45,7 @@ class StoreSpotRequest extends FormRequest
      */
     public function after(): array
     {
-        return [$this->locationIsComplete(...), $this->redirectNeedsWebsite(...)];
+        return [$this->nameIsGiven(...), $this->locationIsComplete(...), $this->redirectNeedsWebsite(...)];
     }
 
     /**
@@ -85,6 +88,32 @@ class StoreSpotRequest extends FormRequest
     protected function website(): ?string
     {
         return $this->input('website');
+    }
+
+    /**
+     * Whether the spot will need to be set up on site.
+     */
+    protected function needsSetup(): bool
+    {
+        return $this->boolean('needs_setup');
+    }
+
+    /**
+     * The name the spot will have.
+     */
+    protected function name(): ?string
+    {
+        return $this->input('name');
+    }
+
+    /**
+     * Reject a spot without a name, unless it will be set up on site: the name is given then.
+     */
+    protected function nameIsGiven(Validator $validator): void
+    {
+        if (! $this->needsSetup() && blank($this->name()) && ! $validator->errors()->has('name')) {
+            $validator->errors()->add('name', __('validation.required', ['attribute' => $this->attributes()['name']]));
+        }
     }
 
     /**

@@ -11,10 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_admin')->default(false)->after('password');
-        });
-
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
@@ -52,9 +48,5 @@ return new class extends Migration
         Schema::dropIfExists('invitations');
         Schema::dropIfExists('memberships');
         Schema::dropIfExists('organizations');
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_admin');
-        });
     }
 };

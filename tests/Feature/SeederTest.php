@@ -106,5 +106,7 @@ test('the development seeder creates named spots linked to the named users and o
         ->and($spot('Orphan Spot')->created_by)->toBeNull()
         ->and($spot('Other Organization Spot')->organization->is($organization))->toBeFalse()
         ->and($member->belongsToOrganization($spot('Other Organization Spot')->organization))->toBeTrue()
+        ->and($spot('Spot To Set Up')->needs_setup)->toBeTrue()
+        ->and(Spot::whereBelongsTo($organization)->whereNull('name')->where('needs_setup', true)->exists())->toBeTrue()
         ->and(Spot::count())->toBeGreaterThan(25);
 });
