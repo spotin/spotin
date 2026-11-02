@@ -35,6 +35,7 @@ class SpotResource extends JsonApiResource
             'website' => $this->website,
             'redirect_to_website' => $this->redirect_to_website,
             'is_hidden' => $this->is_hidden,
+            'needs_setup' => $this->needs_setup,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

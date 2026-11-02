@@ -599,8 +599,21 @@ return [
         'common' => [
             'unknown_creator' => 'Unknown',
             'hidden' => 'Hidden',
+            'needs_setup' => 'Not set up yet',
+            'unnamed' => 'Unnamed spot · :id',
             'forms' => [
                 'fields' => [
+                    'needs_setup' => [
+                        'label' => 'Who sets up the spot?',
+                        'now' => [
+                            'label' => "I'll set it up now",
+                            'hint' => 'You fill in the spot now. Its name is required.',
+                        ],
+                        'on_site' => [
+                            'label' => 'Someone will set it up later',
+                            'hint' => 'Fill in what you know, or nothing. The first person who scans its code finishes setting it up, even without an account.',
+                        ],
+                    ],
                     'name' => [
                         'label' => 'Name',
                         'placeholder' => 'Enter the spot name',
@@ -625,6 +638,7 @@ return [
                 ],
                 'steps' => [
                     'location' => 'Location',
+                    'setup' => 'Setup',
                     'name_and_description' => 'Name and description',
                     'website' => 'Website and visibility',
                 ],
@@ -632,6 +646,7 @@ return [
         ],
         'feedback' => [
             'spot_updated' => 'The spot has been updated.',
+            'spot_set_up' => 'Thank you! The spot is set up.',
             'spot_deleted' => 'The spot has been deleted.',
         ],
         'index' => [
@@ -664,7 +679,16 @@ return [
             'map' => 'Location of the spot',
             'notes' => [
                 'redirect' => 'The visitors who scan this spot are redirected directly to :website.',
+                'needs_setup' => 'This spot is not set up yet: the first person who scans its code finishes setting it up. Only the members of its organization find it in the lists until then.',
                 'hidden' => 'This spot is hidden from the public lists: only the members of :organization find it in the lists. It stays reachable by its link.',
+            ],
+        ],
+        'setup' => [
+            'title' => 'Set up the spot',
+            'description' => 'Set up a spot on site.',
+            'introduction' => 'This spot of :organization is not set up yet: fill in its details to set it up. Its members can change them afterwards.',
+            'actions' => [
+                'submit' => 'Set up the spot',
             ],
         ],
         'edit' => [

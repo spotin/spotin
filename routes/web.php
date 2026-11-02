@@ -18,6 +18,11 @@ Route::singleton('locale', LocaleController::class)->only(['update']);
 Route::get('spots/{spot:uuid}/redirect', [SpotController::class, 'redirect'])->name('spots.redirect');
 Route::get('organizations/{organization:uuid}/redirect', [OrganizationController::class, 'redirect'])->name('organizations.redirect');
 
+// Open to everyone while the spot needs to be set up, by the first person who scans it: then, to its members only
+Route::patch('spots/{spot:uuid}', [SpotController::class, 'update'])
+    ->middleware('can:update,spot')
+    ->name('spots.update');
+
 // The spots of the lists, for their maps: public as the lists, without the hidden ones for the others than the members of
 // their organization.
 Route::get('spots.geojson', [SpotController::class, 'map'])->name('spots.map');
@@ -58,10 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->whereNumber('token')
         ->name('settings.developer.tokens.destroy');
 
-    Route::prefix('spots/{spot:uuid}')->name('spots.')->group(function () {
-        Route::patch('/', [SpotController::class, 'update'])->middleware('can:update,spot')->name('update');
-        Route::delete('/', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('destroy');
-    });
+    Route::delete('spots/{spot:uuid}', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('spots.destroy');
 
     Route::post('organizations', [OrganizationController::class, 'store'])
         ->middleware('can:create,'.Organization::class)

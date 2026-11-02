@@ -33,11 +33,22 @@ class SpotPolicy
     }
 
     /**
-     * Determine whether the user can edit the spot.
+     * Determine whether the user can edit the spot: anyone, guests included, while it needs to be set up, as the first
+     * person who scans it sets it up. Only who can manage it afterwards.
      */
-    public function update(User $user, Spot $spot): bool
+    public function update(?User $user, Spot $spot): bool
     {
-        return $user->belongsToOrganization($spot->organization_id);
+        return $spot->needs_setup || ($user !== null && $this->manage($user, $spot));
+    }
+
+    /**
+     * Determine whether the user can manage the spot: edit all of it, including its visibility and whether it needs to
+     * be set up, rather than only set it up. With a verified email, as on the other pages of the members: otherwise,
+     * the user only sets up the spots that need it, as anyone.
+     */
+    public function manage(User $user, Spot $spot): bool
+    {
+        return $user->hasVerifiedEmail() && $user->belongsToOrganization($spot->organization_id);
     }
 
     /**

@@ -10,7 +10,12 @@ use function Laravel\Folio\render;
 name('spots.show');
 
 render(function (View $view, Spot $spot) {
-    Head::title($spot->name)->description(__('ui.spots.show.description'));
+    // Until it is set up, only who manages it sees its page: the others set it up
+    if ($spot->needs_setup && request()->user()?->can('manage', $spot) !== true) {
+        return redirect()->route('spots.edit', ['spot' => $spot->uuid]);
+    }
+
+    Head::title($spot->displayName())->description(__('ui.spots.show.description'));
 
     return $view;
 });
@@ -37,7 +42,11 @@ render(function (View $view, Spot $spot) {
 
     <x-scanned :title="__('ui.spots.show.scanned')" />
 
-    @can('update', $spot)
+    @can('manage', $spot)
+        @if ($spot->needs_setup)
+            <x-alert type="info" icon="wrench" role="status">{{ __('ui.spots.show.notes.needs_setup') }}</x-alert>
+        @endif
+
         @if ($spot->redirectsVisitors())
             <x-alert
                 type="info"
@@ -61,7 +70,7 @@ render(function (View $view, Spot $spot) {
             {{-- Spaced from the description, which may start with a heading of its own --}}
             <header class="mb-4 flex flex-col items-center gap-2 text-center">
                 <h1 class="card-title m-0! max-w-full justify-center text-3xl font-extrabold break-words">
-                    {{ $spot->name }}
+                    {{ $spot->displayName() }}
                 </h1>
 
                 <dl class="not-prose flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm opacity-80">

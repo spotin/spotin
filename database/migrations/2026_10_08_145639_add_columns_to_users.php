@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->uuid('uuid')->unique()->after('id');
+            $table->boolean('is_admin')->default(false)->after('password');
         });
     }
 
@@ -24,6 +25,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropUnique(['uuid']);
             $table->dropColumn('uuid');
+            $table->dropColumn('is_admin');
         });
     }
 };

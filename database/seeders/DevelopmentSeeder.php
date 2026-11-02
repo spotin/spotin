@@ -184,6 +184,24 @@ class DevelopmentSeeder extends Seeder
                 ...$attributes,
             ]);
         }
+
+        // To be set up on site, by the first person who scans them: one prepared with a few details, one empty
+        Spot::factory()->for($organization)->needingSetup()->create([
+            'name' => 'Spot To Set Up',
+            'description' => 'A spot prepared by a member, seeded for testing: its location is given on site.',
+            'latitude' => null,
+            'longitude' => null,
+            'website' => null,
+            'created_by' => $member->id,
+        ]);
+        Spot::factory()->for($organization)->needingSetup()->create([
+            'name' => null,
+            'description' => null,
+            'latitude' => null,
+            'longitude' => null,
+            'website' => null,
+            'created_by' => $member->id,
+        ]);
     }
 
     /**
