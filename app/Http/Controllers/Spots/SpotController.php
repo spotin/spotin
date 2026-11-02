@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ListFiltersRequest;
 use App\Http\Requests\Spots\UpdateSpotRequest;
 use App\Models\Spot;
+use App\Support\QrCode;
 use App\Support\SpotListing;
-use App\Support\SpotQrCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -47,14 +47,7 @@ class SpotController extends Controller
      */
     public function qrCode(Spot $spot, string $format): Response
     {
-        [$image, $type] = $format === 'png'
-            ? [SpotQrCode::png($spot), 'image/png']
-            : [SpotQrCode::svg($spot), 'image/svg+xml'];
-
-        return response($image, headers: [
-            'Content-Type' => $type,
-            'Content-Disposition' => 'attachment; filename="'.SpotQrCode::filename($spot, $format).'"',
-        ]);
+        return QrCode::download(route('spots.redirect', ['spot' => $spot->uuid]), $spot->displayName(), $format);
     }
 
     /**
@@ -76,6 +69,6 @@ class SpotController extends Controller
     {
         $spot->delete();
 
-        return redirect()->route('organizations.spots.index', ['organization' => $spot->organization->uuid])->with('success', __('ui.spots.feedback.spot_deleted'));
+        return redirect()->route('organizations.show', ['organization' => $spot->organization->uuid])->with('success', __('ui.spots.feedback.spot_deleted'));
     }
 }

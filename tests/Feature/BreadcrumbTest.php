@@ -53,7 +53,7 @@ test('the pages with a map of their spots across the page show no trail', functi
 
     $this->actingAs($this->responsible);
 
-    foreach ([$this->orgUrl, $this->orgUrl.'/spots', route('spots.show', ['spot' => $spot->uuid])] as $url) {
+    foreach ([$this->orgUrl, route('spots.show', ['spot' => $spot->uuid])] as $url) {
         $this->get($url)->assertOk()->assertDontSee('class="breadcrumbs', false);
     }
 });

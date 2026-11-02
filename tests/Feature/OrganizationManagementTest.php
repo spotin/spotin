@@ -137,14 +137,18 @@ test('deleting an organization removes everything linked to it', function () {
         ->and($this->user->fresh()->organizations)->toBeEmpty();
 });
 
-test('admins get edit and delete buttons on the organization page', function () {
+test('admins get an edit button on the organization page, and the deletion in the danger zone of its edit page', function () {
     $uuid = $this->organization->uuid;
+    $modal = 'id="delete-organization-'.$uuid.'-modal"';
 
     $this->actingAs($this->admin)->get('/organizations/'.$uuid)
         ->assertOk()
         ->assertSee(route('organizations.edit', ['organization' => $uuid]), false)
-        ->assertSee('id="delete-organization-'.$uuid.'-modal"', false)
-        ->assertSee(route('organizations.destroy', $this->organization), false);
+        ->assertDontSee($modal, false);
+
+    $this->get(route('organizations.edit', ['organization' => $uuid]))
+        ->assertOk()
+        ->assertSeeInOrder(['name="name"', __('ui.organizations.edit.danger.title'), e(__('ui.organizations.delete.warning')), $modal], false);
 });
 
 test('responsible users do not get edit and delete buttons on their organization page', function () {

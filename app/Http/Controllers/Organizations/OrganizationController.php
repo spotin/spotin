@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Organizations\StoreOrganizationRequest;
 use App\Http\Requests\Organizations\UpdateOrganizationRequest;
 use App\Models\Organization;
+use App\Support\QrCode;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 class OrganizationController extends Controller
 {
@@ -16,6 +18,14 @@ class OrganizationController extends Controller
     public function redirect(Organization $organization): RedirectResponse
     {
         return redirect()->route('organizations.show', ['organization' => $organization->uuid])->with('scanned', true);
+    }
+
+    /**
+     * Download the QR code of the organization, to print, as SVG or PNG: it leads to the address of its scans.
+     */
+    public function qrCode(Organization $organization, string $format): Response
+    {
+        return QrCode::download(route('organizations.redirect', ['organization' => $organization->uuid]), $organization->name, $format);
     }
 
     /**

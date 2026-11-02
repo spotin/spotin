@@ -14,7 +14,7 @@
             </h2>
             @isset($organization->spots_count)
                 <p class="text-sm opacity-70">
-                    {{ trans_choice('ui.organizations.show.sections.spots.summary', $organization->spots_count) }}
+                    {{ trans_choice('ui.organizations.common.spots', $organization->spots_count) }}
                 </p>
             @endisset
 

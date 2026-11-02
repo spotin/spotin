@@ -4,6 +4,16 @@ declare(strict_types=1);
 
 return [
     'common' => [
+        'qr_code' => [
+            'label' => 'Code QR',
+            'download_svg' => 'Télécharger en SVG',
+            'download_png' => 'Télécharger en PNG',
+            'scan_link' => 'Lien de scan',
+            'open' => 'Ouvrir le lien de scan',
+            'hint' => 'Ouvre la page comme un scan.',
+            'copy' => 'Copier',
+            'copied' => 'Copié',
+        ],
         'leave' => [
             'title' => 'Vous êtes sur le point de quitter :app',
             'warning' => "Ce lien mène à :website, un site web externe à :app, qui n'est pas responsable de son contenu. Continuez seulement si vous lui faites confiance, et soyez prudent avant de donner des informations personnelles.",
@@ -291,6 +301,7 @@ return [
     ],
     'organizations' => [
         'common' => [
+            'spots' => ':count spot|:count spots',
             'forms' => [
                 'fields' => [
                     'name' => [
@@ -339,31 +350,23 @@ return [
             'scanned' => 'Vous venez de scanner une organisation !',
             'map' => "Spots de l'organisation",
             'description' => "Les spots, les membres et les invitations de l'organisation.",
-            'actions' => [
-                'edit' => 'Modifier',
-                'delete' => 'Supprimer',
-            ],
-            'fields' => [
-                'created' => 'Créée le',
-            ],
-            'sections' => [
-                'members' => [
-                    'title' => 'Membres',
-                    'summary' => ':count membre|:count membres',
-                ],
-                'spots' => [
-                    'title' => 'Spots',
-                    'summary' => ':count spot|:count spots',
-                ],
-                'invitations' => [
-                    'title' => 'Invitations',
-                    'summary' => ':count invitation|:count invitations',
+            'manage' => [
+                'title' => 'Vous pouvez gérer cette organisation',
+                'title_member' => 'Vous êtes membre de cette organisation',
+                'created' => 'Créée le :date.',
+                'members' => ':count membre|:count membres',
+                'invitations' => ':count invitation|:count invitations',
+                'actions' => [
+                    'edit' => 'Modifier',
                 ],
             ],
         ],
         'edit' => [
             'title' => "Modifier l'organisation",
             'description' => 'Modifiez ou supprimez une organisation.',
+            'danger' => [
+                'title' => 'Zone de danger',
+            ],
             'form' => [
                 'actions' => [
                     'submit' => 'Enregistrer',
@@ -677,16 +680,7 @@ return [
                 'actions' => [
                     'edit' => 'Modifier',
                 ],
-                'qr_code' => [
-                    'label' => 'Code QR',
-                    'download_svg' => 'Télécharger en SVG',
-                    'download_png' => 'Télécharger en PNG',
-                    'scan_link' => 'Lien de scan',
-                    'open' => 'Ouvrir le lien de scan',
-                    'hint' => 'Ouvre le spot comme un scan. Un spot pas encore configuré ouvre ici votre formulaire : utilisez une fenêtre privée pour voir ce que voient les autres.',
-                    'copy' => 'Copier',
-                    'copied' => 'Copié',
-                ],
+                'qr_code_hint' => 'Ouvre le spot comme un scan. Un spot pas encore configuré ouvre ici votre formulaire : utilisez une fenêtre privée pour voir ce que voient les autres.',
                 'badges' => [
                     'redirect' => 'Redirige vers son site web',
                 ],

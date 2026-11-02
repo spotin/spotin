@@ -9,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 
 /**
- * The list of spots, with its filters, shared by /spots and /organizations/{uuid}/spots.
+ * The list of spots, with its filters, shared by /spots and the page of each organization, /organizations/{uuid}.
  */
 final readonly class SpotListing
 {
@@ -43,7 +43,7 @@ final readonly class SpotListing
                 ->paginate(25)
                 ->withQueryString(),
             action: $organization
-                ? route('organizations.spots.index', ['organization' => $organization->uuid])
+                ? route('organizations.show', ['organization' => $organization->uuid])
                 : route('spots.index'),
             // The map of all the results, with the filters of the list but not its page
             map: $organization

@@ -52,4 +52,24 @@ render(function (View $view, Organization $organization) {
             <button type="submit" class="btn btn-block">{{ __('ui.organizations.edit.form.actions.submit') }}</button>
         </footer>
     </form>
+
+    {{-- Away from the form and from the page of the organization, where it could be chosen by mistake --}}
+    @can('delete', $organization)
+        <section aria-labelledby="danger-title" class="border-error/30 rounded-box not-prose mt-10 border p-4">
+            <h2 id="danger-title" class="text-error font-semibold">{{ __('ui.organizations.edit.danger.title') }}</h2>
+            {{-- The same warning as the dialog that confirms the deletion --}}
+            <p class="mt-1 mb-4 text-sm">{{ __('ui.organizations.delete.warning') }}</p>
+            <x-confirm-modal
+                :id="'delete-organization-'.$organization->uuid.'-modal'"
+                :action="route('organizations.destroy', ['organization' => $organization->uuid])"
+                :title="__('ui.organizations.delete.title')"
+                :warning="__('ui.organizations.delete.warning')"
+                :confirm="__('ui.organizations.delete.actions.submit')"
+                :small="false"
+            >
+                <x-lucide-trash-2 class="h-4 w-4" aria-hidden="true" />
+                {{ __('ui.organizations.delete.title') }}
+            </x-confirm-modal>
+        </section>
+    @endcan
 </x-default-layout>

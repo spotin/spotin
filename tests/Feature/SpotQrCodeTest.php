@@ -4,7 +4,7 @@ use App\Enums\OrganizationRole;
 use App\Models\Organization;
 use App\Models\Spot;
 use App\Models\User;
-use App\Support\SpotQrCode;
+use App\Support\QrCode;
 
 beforeEach(function () {
     $this->organization = Organization::factory()->create();
@@ -28,7 +28,7 @@ test('the managers of a spot download its QR code as SVG and PNG, named after th
         ->getContent();
 
     // The QR code of the scan address of the spot
-    expect($svg)->toContain('<svg')->toBe(SpotQrCode::svg($this->spot));
+    expect($svg)->toContain('<svg')->toBe(QrCode::svg(route('spots.redirect', ['spot' => $this->spot->uuid])));
 
     $png = $this->get(route('spots.qr-code', ['spot' => $this->spot->uuid, 'format' => 'png']))
         ->assertOk()

@@ -29,7 +29,7 @@ test('the pages render in every language without untranslated keys', function (s
     $this->withUnencryptedCookie('locale', $locale)->actingAs($this->member);
 
     $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.');
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Harbour')->assertSee(route('organizations.spots.create', ['organization' => $this->organization->uuid]), false);
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Harbour')->assertSee(route('organizations.spots.create', ['organization' => $this->organization->uuid]), false);
     $this->get(route('spots.index'))->assertOk()->assertDontSee('ui.')->assertSee('Harbour');
     $this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.');
     $this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Mike Member');
@@ -42,7 +42,7 @@ test('everyone can see the spots, but only members can edit them or see their cr
 
         $this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee('Harbour')->assertDontSee('Mike Member')
             ->assertDontSee(route('spots.edit', ['spot' => $this->spot->uuid]), false);
-        $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertSee('Harbour');
+        $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertSee('Harbour');
         $this->get('/spots')->assertOk()->assertSee('Harbour');
     }
 
@@ -445,7 +445,7 @@ test('the page of a spot says it was just scanned, only when opened from its red
 test('a member deletes a spot', function () {
     $this->actingAs($this->member)
         ->delete(route('spots.destroy', $this->spot))
-        ->assertRedirect(route('organizations.spots.index', ['organization' => $this->organization->uuid]))
+        ->assertRedirect(route('organizations.show', ['organization' => $this->organization->uuid]))
         ->assertSessionHas('success', __('ui.spots.feedback.spot_deleted'));
 
     expect(Spot::count())->toBe(0);

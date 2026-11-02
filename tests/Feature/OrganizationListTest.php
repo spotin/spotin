@@ -134,8 +134,8 @@ test('the number of spots of the organizations in the list and the API leaves ou
     Spot::factory()->for($this->organization)->count(2)->create();
     Spot::factory()->for($this->organization)->create(['is_hidden' => true]);
 
-    $this->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 2));
-    $this->actingAs($this->member)->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 3));
+    $this->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.common.spots', 2));
+    $this->actingAs($this->member)->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.common.spots', 3));
 
     expect(Organization::listed(null)->firstWhere('id', $this->organization->id)->spots_count)->toBe(2)
         ->and(Organization::listed($this->member)->firstWhere('id', $this->organization->id)->spots_count)->toBe(3);

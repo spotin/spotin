@@ -72,6 +72,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('organizations', [OrganizationController::class, 'store'])
         ->middleware('can:create,'.Organization::class)
         ->name('organizations.store');
+    Route::get('organizations/{organization:uuid}/qr-code.{format}', [OrganizationController::class, 'qrCode'])
+        ->whereIn('format', ['svg', 'png'])
+        ->middleware('can:manage,organization')
+        ->name('organizations.qr-code');
     Route::patch('organizations/{organization:uuid}', [OrganizationController::class, 'update'])
         ->middleware('can:update,organization')
         ->name('organizations.update');
