@@ -19,30 +19,30 @@ beforeEach(function () {
     $this->spot = Spot::factory()->for($this->organization)->create(['name' => 'Harbour', 'created_by' => $this->member->id]);
 });
 
-test('the spots of an organization are listed at /organizations/{uuid}/spots, with the filters', function () {
+test('the spots of an organization are listed on its page, /organizations/{uuid}, with the filters', function () {
     Spot::factory()->for($this->organization)->create(['name' => 'Lighthouse', 'created_by' => $this->member->id]);
     Spot::factory()->for($this->other)->create(['name' => 'Foreign']);
 
     $this->actingAs($this->member);
 
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertOk()
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()
         ->assertSee('Harbour')->assertSee('Lighthouse')->assertDontSee('Foreign');
 
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]).'?query=light')->assertOk()
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]).'?query=light')->assertOk()
         ->assertSee('Lighthouse')->assertDontSee('Harbour');
 
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]).'?mine=1')->assertOk()
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]).'?mine=1')->assertOk()
         ->assertSee('Harbour')->assertSee('Lighthouse');
 
     $this->get('/organizations/unknown/spots')->assertNotFound();
 
     // Guests can browse them as well.
     auth()->logout();
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertSee('Harbour');
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertSee('Harbour');
 });
 
 test('the filters stay on the page they are used on', function () {
-    $nested = route('organizations.spots.index', ['organization' => $this->organization->uuid]);
+    $nested = route('organizations.show', ['organization' => $this->organization->uuid]);
 
     $html = $this->actingAs($this->member)->get($nested.'?query=harb')->assertOk()->getContent();
 
@@ -60,16 +60,18 @@ test('the filters stay on the page they are used on', function () {
     $this->get(route('spots.index'))->assertOk()->assertDontSee(__('ui.common.filters.reset'));
 });
 
-test('only the members of an organization are offered to create a spot in it', function () {
+test('only the members of an organization are offered to create a spot in it, next to the heading of its spots', function () {
     $create = route('organizations.spots.create', ['organization' => $this->organization->uuid]);
 
-    $this->actingAs($this->member)->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertSee($create, false);
-    $this->actingAs($this->admin)->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertSee($create, false);
-    $this->actingAs($this->outsider)->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertDontSee($create, false);
+    $this->actingAs($this->member)->get(route('organizations.show', ['organization' => $this->organization->uuid]))
+        ->assertSeeInOrder(['<h1', 'id="spots"', __('ui.spots.index.title'), $create], false);
+    expect(substr_count($this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->getContent(), 'href="'.$create.'"'))->toBe(1);
+
+    $this->actingAs($this->admin)->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertSee($create, false);
+    $this->actingAs($this->outsider)->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertDontSee($create, false);
 
     auth()->logout();
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertDontSee($create, false);
-
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertDontSee($create, false);
 });
 
 test('the trail of the creation of a spot starts at the organizations, the lists of spots have none', function () {
@@ -86,8 +88,8 @@ test('the trail of the creation of a spot starts at the organizations, the lists
     // The trail is shown to the logged in users only
     $this->actingAs($this->member);
 
-    expect($crumbs($this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->getContent()))->toBe([])
-        ->and($crumbs($this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'Spots', 'New spot'])
+    expect($crumbs($this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->getContent()))->toBe([])
+        ->and($crumbs($this->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))->getContent()))->toBe(['Organizations', $this->organization->name, 'New spot'])
         ->and($crumbs($this->get(route('spots.index'))->getContent()))->toBe([]);
 });
 
@@ -195,7 +197,7 @@ test('hidden spots are only listed for the members of their organization and adm
     Spot::factory()->for($this->organization)->hidden()->create(['name' => 'Secret Cove']);
 
     $this->get(route('spots.index'))->assertOk()->assertSee('Harbour')->assertDontSee('Secret Cove');
-    $this->get(route('organizations.spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('Secret Cove');
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('Secret Cove');
     $this->get(route('spots.index', ['query' => 'Secret']))->assertOk()->assertDontSee('Secret Cove');
     $this->actingAs($this->outsider)->get(route('spots.index'))->assertOk()->assertDontSee('Secret Cove');
 
@@ -214,7 +216,7 @@ test('hidden spots are only listed for the members of their organization and adm
 test('the lists of spots show all their results on a map, with their filters but not their page', function () {
     $lists = [
         route('spots.index') => route('spots.map'),
-        route('organizations.spots.index', ['organization' => $this->organization->uuid]) => route('organizations.spots.map', ['organization' => $this->organization->uuid]),
+        route('organizations.show', ['organization' => $this->organization->uuid]) => route('organizations.spots.map', ['organization' => $this->organization->uuid]),
     ];
 
     foreach ($lists as $list => $map) {

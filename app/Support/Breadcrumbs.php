@@ -37,17 +37,6 @@ final class Breadcrumbs
     /**
      * @return list<array{label: string, url: string}>
      */
-    public static function organizationSpots(Organization $organization): array
-    {
-        return [
-            ...self::organization($organization),
-            ['label' => __('ui.spots.index.title'), 'url' => route('organizations.spots.index', ['organization' => $organization->uuid])],
-        ];
-    }
-
-    /**
-     * @return list<array{label: string, url: string}>
-     */
     public static function organizationInvitations(Organization $organization): array
     {
         return [

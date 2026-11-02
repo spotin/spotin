@@ -41,20 +41,19 @@ test('the pages render in every language without untranslated keys', function (s
     $this->get(($this->url)('organizations.members.index'))->assertOk()->assertDontSee('ui.');
 })->with(['en', 'fr']);
 
-test('the organization page links to its members in its details, without the role', function () {
+test('the members of an organization find its members in their box, without the role', function () {
     Invitation::factory()->for($this->organization)->create();
 
     $content = $this->actingAs($this->member)->get(($this->url)('organizations.show'))
         ->assertOk()
-        ->assertSee('Acme')
-        ->assertSee(trans_choice('ui.organizations.show.sections.members.summary', 2))
+        ->assertSeeInOrder([__('ui.organizations.show.manage.title_member'), trans_choice('ui.organizations.show.manage.members', 2), '<h1', 'Acme'])
+        ->assertDontSee(__('ui.organizations.show.manage.title'))
         ->assertDontSee('Your role')
         ->assertDontSee(($this->url)('organizations.invitations.index'), false)
         ->getContent();
 
-    // A single link, in the details: there is no separate button.
-    expect(substr_count($content, 'href="'.($this->url)('organizations.members.index').'"'))->toBe(1)
-        ->and($content)->not->toContain('btn btn-sm');
+    // A single link to the members
+    expect(substr_count($content, 'href="'.($this->url)('organizations.members.index').'"'))->toBe(1);
 });
 
 test('responsible users and admins also get a link to the invitations', function (string $user) {
@@ -62,7 +61,7 @@ test('responsible users and admins also get a link to the invitations', function
 
     $this->actingAs($this->$user)->get(($this->url)('organizations.show'))
         ->assertOk()
-        ->assertSee(trans_choice('ui.organizations.show.sections.invitations.summary', 2))
+        ->assertSee(trans_choice('ui.organizations.show.manage.invitations', 2))
         ->assertSee(($this->url)('organizations.invitations.index'), false);
 })->with(['responsible', 'admin']);
 
@@ -93,7 +92,7 @@ test('everyone, guests included, can discover the organizations and see an organ
         ->assertSee('<title>Acme - Spot in®</title>', false)
         ->assertSee('</footer>', false)
         ->assertDontSee('ui.')
-        ->assertSee(route('organizations.spots.index', ['organization' => $this->organization->uuid]), false)
+        ->assertSee(route('organizations.show', ['organization' => $this->organization->uuid]), false)
         ->assertDontSee(($this->url)('organizations.members.index'), false)
         ->assertDontSee(($this->url)('organizations.invitations.index'), false);
 
@@ -185,10 +184,10 @@ test('the number of spots of an organization leaves out the hidden spots, except
     Spot::factory()->for($this->organization)->create(['is_hidden' => true]);
 
     $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))
-        ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 2));
+        ->assertSee(trans_choice('ui.organizations.common.spots', 2));
 
     $this->actingAs($this->member)->get(route('organizations.show', ['organization' => $this->organization->uuid]))
-        ->assertSee(trans_choice('ui.organizations.show.sections.spots.summary', 3));
+        ->assertSee(trans_choice('ui.organizations.common.spots', 3));
 });
 
 test('the spots of an organization are given as GeoJSON for its map, without the hidden ones for the others than its members', function () {
@@ -218,7 +217,7 @@ test('the spots of an organization are given as GeoJSON for its map, without the
     $this->getJson('/organizations/unknown/spots.geojson')->assertNotFound();
 });
 
-test('the page of an organization shows the map of its spots across the page, then its details and the actions of its editors', function () {
+test('the page of an organization shows the map of its spots, the box of its members, then its name, its spots and the actions of its visitors', function () {
     $url = route('organizations.show', ['organization' => $this->organization->uuid]);
 
     // Without spots, there is no map: the details are in the page
@@ -232,25 +231,32 @@ test('the page of an organization shows the map of its spots across the page, th
     $map = 'data-map-spots="'.route('organizations.spots.map', ['organization' => $this->organization->uuid]).'"';
 
     $this->get($url)->assertOk()
-        ->assertSeeInOrder(['class="hero ', $map, '<main', '<article', '<h1', 'Acme', trans_choice('ui.organizations.show.sections.spots.summary', 2), $this->organization->created_at->isoFormat('LL')], false)
+        ->assertSeeInOrder([
+            'class="hero ', $map, '<main', '<article', '<h1', 'Acme', trans_choice('ui.organizations.common.spots', 2),
+            __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share'),
+        ], false)
         ->assertDontSee('hero-content', false)
-        // Everyone sees the actions to like, report and share it; the guests see neither the number of members nor the
-        // actions of the editors
-        ->assertSeeInOrder(['<footer', __('ui.common.actions.like'), __('ui.common.actions.report'), __('ui.common.actions.share')], false)
-        ->assertDontSee(trans_choice('ui.organizations.show.sections.members.summary', 2))
+        // The guests see neither the box of its members, nor the number of members, nor its creation date
+        ->assertDontSee(__('ui.organizations.show.manage.title_member'))
+        ->assertDontSee(trans_choice('ui.organizations.show.manage.members', 2))
+        ->assertDontSee($this->organization->created_at->isoFormat('LL'))
         ->assertDontSee(route('organizations.edit', ['organization' => $this->organization->uuid]), false);
+
+    $created = __('ui.organizations.show.manage.created', ['date' => $this->organization->created_at->isoFormat('LL')]);
 
     $this->actingAs($this->member)->get($url)
-        ->assertSee(trans_choice('ui.organizations.show.sections.members.summary', 2))
+        ->assertSeeInOrder([trans_choice('ui.organizations.show.manage.members', 2), $created, '<h1'], false)
         ->assertDontSee(route('organizations.edit', ['organization' => $this->organization->uuid]), false);
 
+    // The administrators get the edit button in the box, above the organization; its deletion is on its edit page
     $this->actingAs($this->admin)->get($url)
-        ->assertSeeInOrder(['class="hero ', '<footer', route('organizations.edit', ['organization' => $this->organization->uuid]), __('ui.organizations.show.actions.delete')], false);
+        ->assertSeeInOrder(['class="hero ', __('ui.organizations.show.manage.title'), route('organizations.edit', ['organization' => $this->organization->uuid]), '<h1'], false)
+        ->assertDontSee('delete-organization-', false);
 });
 
-test('the details of an organization lead to its spots, and to its members and invitations for those who can see them', function () {
+test('the details of an organization lead to its spots, below, and to its members and invitations for those who can see them', function () {
     $url = route('organizations.show', ['organization' => $this->organization->uuid]);
-    $spots = route('organizations.spots.index', ['organization' => $this->organization->uuid]);
+    $spots = '#spots';
     $members = route('organizations.members.index', ['organization' => $this->organization->uuid]);
     $invitations = route('organizations.invitations.index', ['organization' => $this->organization->uuid]);
 
@@ -260,6 +266,7 @@ test('the details of an organization lead to its spots, and to its members and i
 
     $this->actingAs($this->member)->get($url)->assertSee('href="'.$members.'"', false)->assertDontSee('href="'.$invitations.'"', false);
 
+    // The members and invitations in the box of its managers, above the organization and its spots
     $this->actingAs($this->responsible)->get($url)
-        ->assertSeeInOrder(['<h1', 'href="'.$spots.'"', 'href="'.$members.'"', 'href="'.$invitations.'"', '</header>'], false);
+        ->assertSeeInOrder(['href="'.$members.'"', 'href="'.$invitations.'"', '<h1', 'href="'.$spots.'"', 'id="spots"'], false);
 });

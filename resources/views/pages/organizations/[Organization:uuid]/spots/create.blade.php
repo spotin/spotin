@@ -19,7 +19,7 @@ render(function (View $view, Organization $organization) {
 
     Head::title(__('ui.organizations.spots.create.title').' - '.$organization->name)->description(__('ui.organizations.spots.create.description'));
 
-    $breadcrumbs = [...Breadcrumbs::organizationSpots($organization), ['label' => __('ui.organizations.spots.create.title')]];
+    $breadcrumbs = [...Breadcrumbs::organization($organization), ['label' => __('ui.organizations.spots.create.title')]];
 
     return $view->with('breadcrumbs', $breadcrumbs);
 });

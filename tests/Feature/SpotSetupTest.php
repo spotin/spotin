@@ -157,7 +157,7 @@ test('the members see the page of a spot that needs to be set up, with a note, a
 });
 
 test('the spots that need to be set up are only listed for the members of their organization, with a badge', function () {
-    $lists = [route('spots.index'), route('organizations.spots.index', ['organization' => $this->organization->uuid])];
+    $lists = [route('spots.index'), route('organizations.show', ['organization' => $this->organization->uuid])];
     $name = $this->spot->displayName();
 
     foreach ($lists as $list) {
