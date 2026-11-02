@@ -66,13 +66,13 @@ test('only members and admins can edit a spot or open the form to create one in 
     $this->actingAs($this->admin)->get('/organizations/unknown/spots/create')->assertNotFound();
 });
 
-test('the creation form is in the organization, in steps: the location, the details, and the website, with the submit button', function () {
+test('the creation form is in the organization, in steps: the name and description, the location, and the website, with the submit button', function () {
     $html = $this->actingAs($this->member)->get(route('organizations.spots.create', ['organization' => $this->organization->uuid]))
         ->assertOk()
         ->assertSee('<form method="POST" action="'.route('organizations.spots.store', ['organization' => $this->organization->uuid]).'"', false)
         ->assertSeeInOrder([
+            __('ui.spots.common.forms.steps.name_and_description'), 'name="name"', 'name="description"',
             __('ui.spots.common.forms.steps.location'), 'name="latitude"', 'name="longitude"',
-            __('ui.spots.common.forms.steps.details'), 'name="name"', 'name="description"',
             __('ui.spots.common.forms.steps.website'), 'name="website"', 'name="redirect_to_website"', 'name="is_hidden"', 'type="submit"',
         ], false)
         ->getContent();
@@ -136,14 +136,28 @@ test('the details of a spot are validated', function (array $overrides, string $
 
     expect(Spot::where('name', 'Lighthouse')->exists())->toBeFalse();
 })->with([
-    'no latitude' => [['latitude' => ''], 'latitude'],
+    'longitude without latitude' => [['latitude' => ''], 'latitude'],
     'latitude out of range' => [['latitude' => 91], 'latitude'],
-    'no longitude' => [['longitude' => ''], 'longitude'],
+    'latitude without longitude' => [['longitude' => ''], 'longitude'],
     'longitude out of range' => [['longitude' => -181], 'longitude'],
     'not a website' => [['website' => 'not a website'], 'website'],
     'website with an unsafe scheme' => [['website' => 'javascript:alert(1)'], 'website'],
     'too long description' => [['description' => str_repeat('a', 10001)], 'description'],
 ]);
+
+test('a spot can be created without a location, and its location removed', function () {
+    $this->actingAs($this->member)
+        ->post(route('organizations.spots.store', ['organization' => $this->organization->uuid]), spotData(['latitude' => '', 'longitude' => '']))
+        ->assertSessionHasNoErrors();
+
+    expect(Spot::firstWhere('name', 'Lighthouse'))->latitude->toBeNull()->longitude->toBeNull();
+
+    $this->actingAs($this->member)
+        ->patch(route('spots.update', $this->spot), ['latitude' => '', 'longitude' => ''])
+        ->assertSessionHasNoErrors();
+
+    expect($this->spot->fresh())->hasLocation()->toBeFalse();
+});
 
 test('a spot cannot redirect its visitors without a website', function () {
     $this->actingAs($this->member)
@@ -286,6 +300,16 @@ test('the page of a spot shows its location on a map, given in the page, and its
             'properties' => ['name' => 'Harbour'],
         ]],
     ]);
+});
+
+test('the page of a spot without a location has no map nor coordinates', function () {
+    $this->spot->update(['latitude' => null, 'longitude' => null]);
+
+    $this->get(route('spots.show', ['spot' => $this->spot->uuid]))
+        ->assertOk()
+        ->assertSee('Harbour')
+        ->assertDontSee('data-map=', false)
+        ->assertDontSee(__('ui.spots.show.fields.coordinates'));
 });
 
 test('the members are told when a spot is hidden from the public lists, the visitors are not', function () {

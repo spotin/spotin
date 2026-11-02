@@ -9,11 +9,7 @@
 
     {{-- An existing spot has all its fields filled: every step can be opened --}}
     <x-steps :complete="$spot !== null">
-        <x-steps.step :title="__('ui.spots.common.forms.steps.location')">
-            <x-map.picker id="spot-location" :latitude="$spot?->latitude" :longitude="$spot?->longitude" />
-        </x-steps.step>
-
-        <x-steps.step :title="__('ui.spots.common.forms.steps.details')">
+        <x-steps.step :title="__('ui.spots.common.forms.steps.name_and_description')">
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">{{ __('ui.spots.common.forms.fields.name.label') }}</legend>
                 <input
@@ -36,6 +32,10 @@
                 :placeholder="__('ui.spots.common.forms.fields.description.placeholder')"
                 :value="$spot?->description"
             />
+        </x-steps.step>
+
+        <x-steps.step :title="__('ui.spots.common.forms.steps.location')">
+            <x-map.picker id="spot-location" :latitude="$spot?->latitude" :longitude="$spot?->longitude" />
         </x-steps.step>
 
         <x-steps.step :title="__('ui.spots.common.forms.steps.website')">

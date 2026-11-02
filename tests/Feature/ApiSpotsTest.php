@@ -263,6 +263,16 @@ test('a PATCH only changes the fields it sends, and validates them', function ()
     $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['latitude' => 100, 'website' => 'ftp://example.com'])
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['latitude', 'website']);
+
+    // The kept longitude needs a latitude: the location is removed with both
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['latitude' => null])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['latitude']);
+
+    $this->patchJson('/api/v1/spots/'.$this->harbour->uuid, ['latitude' => null, 'longitude' => null])
+        ->assertOk()
+        ->assertJsonPath('data.attributes.latitude', null)
+        ->assertJsonPath('data.attributes.longitude', null);
 });
 
 test('hidden spots are only listed for the members of their organization and administrators, and stay reachable', function () {

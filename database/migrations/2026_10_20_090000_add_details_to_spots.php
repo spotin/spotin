@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('spots', function (Blueprint $table) {
             $table->text('description')->nullable()->after('name');
-            $table->decimal('latitude', 9, 6)->after('description');
-            $table->decimal('longitude', 9, 6)->after('latitude');
+            $table->decimal('latitude', 9, 6)->nullable()->after('description');
+            $table->decimal('longitude', 9, 6)->nullable()->after('latitude');
             $table->string('website', 2048)->nullable()->after('longitude');
             $table->boolean('redirect_to_website')->default(false)->after('website');
             $table->boolean('is_hidden')->default(false)->after('redirect_to_website');

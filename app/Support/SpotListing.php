@@ -63,6 +63,7 @@ final readonly class SpotListing
         return Spot::featureCollection(
             Spot::filtered($request->user(), $request->searchQuery(), $request->mine())
                 ->when($organization, fn ($query) => $query->whereBelongsTo($organization))
+                ->located()
                 ->get(['uuid', 'name', 'latitude', 'longitude']),
         );
     }

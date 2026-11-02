@@ -193,6 +193,8 @@ test('the spots of an organization are given as GeoJSON for its map, without the
     Spot::factory()->for($this->organization)->create(['name' => 'Harbour']);
     Spot::factory()->for($this->organization)->create(['name' => 'Secret cove', 'is_hidden' => true]);
     Spot::factory()->for($this->other)->create(['name' => 'Elsewhere']);
+    // Not on the map, which cannot show it
+    Spot::factory()->for($this->organization)->withoutLocation()->create(['name' => 'Nowhere']);
 
     $url = route('organizations.spots.map', ['organization' => $this->organization->uuid]);
     $names = fn ($response) => collect($response->json('features'))->pluck('properties.name')->sort()->values()->all();
@@ -219,7 +221,11 @@ test('the page of an organization shows the map of its spots across the page, th
     // Without spots, there is no map: the details are in the page
     $this->get($url)->assertOk()->assertDontSee('data-map-spots', false)->assertSeeInOrder(['<main', '<article', 'Acme'], false);
 
-    Spot::factory()->for($this->organization)->count(2)->create();
+    // Nor with spots without a location, which the map cannot show
+    Spot::factory()->for($this->organization)->withoutLocation()->create();
+    $this->get($url)->assertOk()->assertDontSee('data-map-spots', false);
+
+    Spot::factory()->for($this->organization)->create();
     $map = 'data-map-spots="'.route('organizations.spots.map', ['organization' => $this->organization->uuid]).'"';
 
     $this->get($url)->assertOk()

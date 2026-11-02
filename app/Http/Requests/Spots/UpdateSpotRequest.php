@@ -30,6 +30,14 @@ class UpdateSpotRequest extends StoreSpotRequest
     }
 
     /**
+     * The coordinate the spot will have: as sent, or the one it has now.
+     */
+    protected function coordinate(string $field): mixed
+    {
+        return $this->has($field) ? $this->input($field) : $this->route('spot')?->{$field};
+    }
+
+    /**
      * Whether the spot will redirect its visitors: as sent, or as it does now.
      */
     protected function redirects(): bool

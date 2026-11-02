@@ -17,21 +17,23 @@ render(function (View $view, Spot $spot) {
 ?>
 
 <x-default-layout>
-    <x-slot:hero>
-        {{-- The spot across the page, given in the page without a link to itself, and its coordinates under it --}}
-        <x-map.hero
-            :spots="App\Models\Spot::featureCollection([$spot], links: false)"
-            :label="__('ui.spots.show.map')"
-            class="max-lg:h-[40vh]"
-        />
-        {{-- Without JS, the map is hidden and the coordinates stay --}}
-        <p class="bg-base-200 flex items-center justify-center gap-1 px-4 py-2 text-xs">
-            <x-lucide-map-pin class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <span class="sr-only">{{ __('ui.spots.show.fields.coordinates') }}</span>
-            {{-- In their own element, without space around: copied as they are --}}
-            <span>{{ number_format($spot->latitude, 6, '.', '') }}, {{ number_format($spot->longitude, 6, '.', '') }}</span>
-        </p>
-    </x-slot:hero>
+    @if ($spot->hasLocation())
+        <x-slot:hero>
+            {{-- The spot across the page, given in the page without a link to itself, and its coordinates under it --}}
+            <x-map.hero
+                :spots="App\Models\Spot::featureCollection([$spot], links: false)"
+                :label="__('ui.spots.show.map')"
+                class="max-lg:h-[40vh]"
+            />
+            {{-- Without JS, the map is hidden and the coordinates stay --}}
+            <p class="bg-base-200 flex items-center justify-center gap-1 px-4 py-2 text-xs">
+                <x-lucide-map-pin class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span class="sr-only">{{ __('ui.spots.show.fields.coordinates') }}</span>
+                {{-- In their own element, without space around: copied as they are --}}
+                <span>{{ number_format($spot->latitude, 6, '.', '') }}, {{ number_format($spot->longitude, 6, '.', '') }}</span>
+            </p>
+        </x-slot:hero>
+    @endif
 
     <x-scanned :title="__('ui.spots.show.scanned')" />
 
