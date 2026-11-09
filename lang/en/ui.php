@@ -42,7 +42,6 @@ return [
             'share' => 'Share',
             'cancel' => 'Cancel',
             'close' => 'Close',
-            'see_all' => 'See all',
         ],
         'pagination' => [
             'page' => 'Page :current of :last',
@@ -261,13 +260,53 @@ return [
         'title' => 'Dashboard',
         'description' => 'Your organizations, spots and invitations.',
         'greeting' => 'Hello, :name!',
-        'organizations' => [
-            'title' => 'My organizations',
-            'empty' => 'You do not belong to any organization yet. Ask a responsible user of an organization to invite you.',
+        'overview' => 'Overview',
+        'quick_actions' => [
+            'title' => 'Quick actions',
+            'spot' => [
+                'title' => 'New spot',
+                'description' => 'Create a spot and its QR code, for a place or an entity.',
+            ],
+            'organization' => [
+                'title' => 'New organization',
+                'description' => 'Open the space of an institution and invite its responsible.',
+            ],
         ],
-        'spots' => [
-            'title' => 'My spots',
-            'empty' => 'You have not created any spot yet.',
+        'statistics' => [
+            'spots' => [
+                'title' => 'Spots',
+                'description' => 'In your organizations',
+            ],
+            'organizations' => [
+                'title' => 'Organizations',
+                'description' => 'You are a member of',
+            ],
+        ],
+        'getting_started' => [
+            'title' => 'Getting started',
+            'description' => 'The first steps to make the most of Spot in®.',
+            'completed' => 'All done, well done! You can now hide these steps.',
+            'progress' => ':completed of :total steps done',
+            'done' => 'Done:',
+            'hide' => 'Hide',
+            'hint' => 'You can show these steps again from your profile settings.',
+            'steps' => [
+                'organization' => [
+                    'label' => 'Join an organization, by the invitation of one of its responsible users.',
+                ],
+                'spot' => [
+                    'label' => 'Create your first spot.',
+                    'action' => 'Create a spot',
+                ],
+                'qr_code' => [
+                    'label' => 'Download its QR code, to print it.',
+                    'action' => 'Go to the spot',
+                ],
+                'invite' => [
+                    'label' => 'Invite a colleague to your organization.',
+                    'action' => 'Invite',
+                ],
+            ],
         ],
     ],
     'homepage' => [
@@ -396,6 +435,7 @@ return [
     'organizations' => [
         'common' => [
             'spots' => ':count spot|:count spots',
+            'members' => ':count member|:count members',
             'forms' => [
                 'fields' => [
                     'name' => [
@@ -650,6 +690,12 @@ return [
                 'profile_information_updated' => 'Your profile has been updated.',
             ],
             'form' => [
+                'fields' => [
+                    'show_getting_started' => [
+                        'legend' => 'Dashboard',
+                        'label' => 'Show the getting started steps',
+                    ],
+                ],
                 'actions' => [
                     'submit' => 'Save profile',
                 ],

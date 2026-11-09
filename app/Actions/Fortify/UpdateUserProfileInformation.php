@@ -15,7 +15,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     /**
      * Validate and update the given user's profile information.
      *
-     * @param  array<string, string>  $input
+     * Only the fields sent are updated: the profile form sends them all, the dashboard only whether to show the
+     * checklist of the first steps.
+     *
+     * @param  array<string, mixed>  $input
      *
      * @throws ValidationException
      */
@@ -26,44 +29,32 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $input['email'] = Str::lower($input['email']);
         }
 
-        Validator::make($input, [
-            'name' => ['required', 'string', 'min:2', 'max:50'],
+        $validated = Validator::make($input, [
+            'name' => ['sometimes', 'required', 'string', 'min:2', 'max:50'],
             'email' => [
+                'sometimes',
                 'required',
                 'string',
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
+            'show_getting_started' => ['sometimes', 'boolean'],
         ], [], array_map(Str::lcfirst(...), [
             'name' => __('ui.auth.common.forms.fields.name.label'),
             'email' => __('ui.auth.common.forms.fields.email.label'),
         ]))->validateWithBag('updateProfileInformation');
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
-            $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
-            ])->save();
+        $user->forceFill($validated);
+
+        // A new address has to be verified again
+        if ($user->isDirty('email') && $user instanceof MustVerifyEmail) {
+            $user->forceFill(['email_verified_at' => null])->save();
+            $user->sendEmailVerificationNotification();
+
+            return;
         }
-    }
 
-    /**
-     * Update the given verified user's profile information.
-     *
-     * @param  array<string, string>  $input
-     */
-    protected function updateVerifiedUser(User $user, array $input): void
-    {
-        $user->forceFill([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'email_verified_at' => null,
-        ])->save();
-
-        $user->sendEmailVerificationNotification();
+        $user->save();
     }
 }

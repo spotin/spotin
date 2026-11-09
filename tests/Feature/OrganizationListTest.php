@@ -147,3 +147,13 @@ test('the number of spots of the organizations in the list and the API leaves ou
         ->and(Organization::withSpotsCount($this->outsider)->find($this->organization->id)->spots_count)->toBe(2)
         ->and(Organization::listed($this->member)->firstWhere('id', $this->organization->id)->spots_count)->toBe(3);
 });
+
+test('the cards of the organizations show their number of members next to their number of spots, in every language', function (string $locale) {
+    Spot::factory()->for($this->organization)->count(2)->create();
+
+    $this->withUnencryptedCookie('locale', $locale)->actingAs($this->member)->get(route('organizations.index'))
+        ->assertOk()
+        ->assertSee(trans_choice('ui.organizations.common.spots', 2, locale: $locale).' · '.trans_choice('ui.organizations.common.members', 2, locale: $locale));
+
+    expect(Organization::listed($this->admin)->firstWhere('id', $this->other->id)->members_count)->toBe(1);
+})->with(['en', 'fr']);

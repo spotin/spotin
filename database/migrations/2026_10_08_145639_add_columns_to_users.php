@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->uuid('uuid')->unique()->after('id');
             $table->boolean('is_admin')->default(false)->after('password');
+            // The checklist of the first steps on the dashboard, until the user hides it or does them all
+            $table->boolean('show_getting_started')->default(true)->after('is_admin');
         });
     }
 
@@ -26,6 +28,7 @@ return new class extends Migration
             $table->dropUnique(['uuid']);
             $table->dropColumn('uuid');
             $table->dropColumn('is_admin');
+            $table->dropColumn('show_getting_started');
         });
     }
 };

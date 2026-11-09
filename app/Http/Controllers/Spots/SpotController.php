@@ -57,10 +57,13 @@ class SpotController extends Controller
     }
 
     /**
-     * Download the QR code of the spot, to print, as SVG or PNG.
+     * Download the QR code of the spot, to print, as SVG or PNG. The first download is recorded, without changing when the
+     * spot was last updated: it is not a change of the spot.
      */
     public function qrCode(Spot $spot, string $format): Response
     {
+        Spot::whereKey($spot->getKey())->whereNull('qr_code_downloaded_at')->toBase()->update(['qr_code_downloaded_at' => now()]);
+
         return QrCode::download(route('spots.redirect', ['spot' => $spot->uuid]), $spot->displayName(), $format);
     }
 

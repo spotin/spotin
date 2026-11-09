@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Invitation;
+use App\Models\Organization;
 use App\Models\Spot;
+use App\Support\GettingStarted;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
@@ -19,8 +21,21 @@ render(function (View $view) {
 
     return $view->with([
         'pendingInvitations' => Invitation::pendingFor($user)->count(),
-        'organizations' => $user->organizations()->withSpotsCount($user)->orderBy('organizations.name')->limit(6)->get(),
-        'spots' => Spot::mine($user)->with('organization')->latest('id')->limit(6)->get(),
+        'gettingStarted' => GettingStarted::for($user),
+        // The organizations, for the administrators; then the spots, for them and the members of an organization
+        'quickActions' => array_values(array_filter([
+            $user->can('create', Organization::class)
+                ? ['key' => 'organization', 'url' => route('organizations.create'), 'icon' => 'building-2']
+                : null,
+            $user->can('createAny', Spot::class)
+                ? ['key' => 'spot', 'url' => route('spots.create'), 'icon' => 'map-pin']
+                : null,
+        ])),
+        // The organizations the user is a member of, and all their spots
+        'statistics' => [
+            'organizations' => $user->organizations()->count(),
+            'spots' => Spot::whereIn('organization_id', $user->organizations()->select('organizations.id'))->count(),
+        ],
     ]);
 });
 ?>
@@ -42,47 +57,45 @@ render(function (View $view) {
 
     <p>{{ __('ui.dashboard.greeting', ['name' => auth()->user()->name]) }}</p>
 
-    <section aria-labelledby="dashboard-spots" class="mt-8">
-        <x-page-heading :level="2" id="dashboard-spots" baseline class="mb-4">
-            {{ __('ui.dashboard.spots.title') }}
+    @if ($gettingStarted->isVisible())
+        <x-dashboard.getting-started :checklist="$gettingStarted" />
+    @endif
 
-            <x-slot:action>
-                <a href="{{ route('spots.index', ['mine' => 1]) }}" class="text-sm">
-                    {{ __('ui.common.actions.see_all') }}
+    <section aria-labelledby="overview" class="mt-8">
+        <h2 id="overview">{{ __('ui.dashboard.overview') }}</h2>
+
+        {{-- Stacked on small screens, side by side on large ones; each leads to its list --}}
+        <div class="not-prose stats stats-vertical lg:stats-horizontal border-base-200 bg-base-100 w-full border">
+            @foreach (['spots' => ['spots.index', 'map-pin'], 'organizations' => ['organizations.index', 'building-2']] as $statistic => [$route, $icon])
+                <a href="{{ route($route) }}" class="stat hover:bg-base-200">
+                    <div class="stat-figure text-primary">
+                        <x-dynamic-component :component="'lucide-'.$icon" class="h-8 w-8" aria-hidden="true" />
+                    </div>
+                    <div class="stat-title">{{ __("ui.dashboard.statistics.$statistic.title") }}</div>
+                    <div class="stat-value text-primary">{{ $statistics[$statistic] }}</div>
+                    <div class="stat-desc">{{ __("ui.dashboard.statistics.$statistic.description") }}</div>
                 </a>
-            </x-slot:action>
-        </x-page-heading>
-
-        @if ($spots->isEmpty())
-            <p>{{ __('ui.dashboard.spots.empty') }}</p>
-        @else
-            <div class="not-prose grid grid-cols-1 gap-4 sm:grid-cols-2">
-                @foreach ($spots as $spot)
-                    <x-spots.card :spot="$spot" />
-                @endforeach
-            </div>
-        @endif
+            @endforeach
+        </div>
     </section>
 
-    <section aria-labelledby="dashboard-organizations" class="mt-8">
-        <x-page-heading :level="2" id="dashboard-organizations" baseline class="mb-4">
-            {{ __('ui.dashboard.organizations.title') }}
+    @if ($quickActions)
+        <section aria-labelledby="quick-actions" class="mt-8">
+            <h2 id="quick-actions">{{ __('ui.dashboard.quick_actions.title') }}</h2>
 
-            <x-slot:action>
-                <a href="{{ route('organizations.index') }}" class="text-sm">
-                    {{ __('ui.common.actions.see_all') }}
-                </a>
-            </x-slot:action>
-        </x-page-heading>
-
-        @if ($organizations->isEmpty())
-            <p>{{ __('ui.dashboard.organizations.empty') }}</p>
-        @else
             <div class="not-prose grid grid-cols-1 gap-4 sm:grid-cols-2">
-                @foreach ($organizations as $organization)
-                    <x-organizations.card :organization="$organization" :role="$organization->pivot->role->value" />
+                @foreach ($quickActions as $action)
+                    <x-link-card
+                        :href="$action['url']"
+                        :icon="$action['icon']"
+                        :title="__('ui.dashboard.quick_actions.'.$action['key'].'.title')"
+                        variant="action"
+                        :level="3"
+                    >
+                        <p class="text-sm opacity-70">{{ __("ui.dashboard.quick_actions.{$action['key']}.description") }}</p>
+                    </x-link-card>
                 @endforeach
             </div>
-        @endif
-    </section>
+        </section>
+    @endif
 </x-default-layout>

@@ -93,8 +93,8 @@ class Organization extends Model
 
     /**
      * Scope the query to what the list of organizations shows: the organizations the user belongs to, all of them for
-     * administrators, with their number of spots the user can find in the lists, sorted by name, optionally only the
-     * ones whose name contains the search query or that the user can manage.
+     * administrators, with their number of spots the user can find in the lists and of members, sorted by name,
+     * optionally only the ones whose name contains the search query or that the user can manage.
      *
      * @param  Builder<static>  $query
      */
@@ -102,6 +102,7 @@ class Organization extends Model
     {
         $query->ofMember($user)
             ->withSpotsCount($user)
+            ->withCount('users as members_count')
             ->search($searchQuery)
             ->when($mine, fn (Builder $query) => $query->manageableBy($user))
             ->orderBy('organizations.name');
