@@ -23,6 +23,6 @@ class ContactController extends Controller
             $request->validated('message'),
         ));
 
-        return redirect()->to(route('index').'#contact')->with('success', __('ui.contact.feedback.sent'));
+        return redirect()->route('contact')->with('success', __('ui.contact.feedback.sent'));
     }
 }

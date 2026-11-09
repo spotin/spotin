@@ -157,17 +157,12 @@ return [
         'register' => [
             'title' => 'Inscription',
             'description' => 'Créez un compte',
-            'invitation' => 'Vous créez un compte pour rejoindre :organization. Votre invitation a été envoyée à cette adresse e-mail, elle ne peut donc pas être modifiée.',
-            'steps' => [
-                'information' => [
-                    'title' => 'Information',
-                    'audience' => "Spot in® est conçu pour les administrations publiques et les organisations qui gèrent des spots. Il n'est pas destiné à un usage personnel.",
-                    'membership' => "L'inscription seule ne permet pas de créer des spots : une organisation doit d'abord vous inviter à la rejoindre. Seuls les membres d'une organisation peuvent créer ses spots.",
-                    'discover' => "Vous n'avez pas besoin de compte pour découvrir les spots.",
-                ],
-                'account' => [
-                    'title' => 'Compte',
-                ],
+            'invitation' => 'Vous créez un compte pour rejoindre :organization, que vous rejoindrez dès votre compte créé. Votre invitation a été envoyée à cette adresse e-mail, elle ne peut donc pas être modifiée.',
+            'invitation_only' => [
+                'title' => 'Les comptes sont créés sur invitation',
+                'text' => "Pour créer un compte, suivez le lien de l'invitation qu'une organisation vous a envoyée par e-mail. Vous n'avez pas besoin de compte pour découvrir les spots.",
+                'contact' => 'Votre institution souhaite utiliser Spot in® ? Contactez-nous.',
+                'required' => "Un compte ne peut être créé qu'en suivant une invitation, avec l'adresse e-mail à laquelle elle a été envoyée.",
             ],
             'form' => [
                 'actions' => [
@@ -187,9 +182,9 @@ return [
                 ],
             ],
             'forgot_your_password' => 'Mot de passe oublié ?',
-            'reset_your_password' => 'Réinitialisez votre mot de passe',
+            'reset_your_password' => 'Réinitialisez votre mot de passe.',
             'dont_have_an_account' => "Vous n'avez pas de compte ?",
-            'register' => "S'inscrire",
+            'contact' => 'Contactez-nous et nous pourrons vous inviter sur la plateforme.',
         ],
         'forgot_password' => [
             'title' => 'Mot de passe oublié ?',
@@ -284,6 +279,10 @@ return [
         'explore_spots' => 'Explorer les spots',
         'explore_organizations' => 'Parcourir les organisations',
         'dashboard' => 'Aller à mon tableau de bord',
+        'call_to_action' => [
+            'title' => 'Votre institution est intéressée ?',
+            'text' => 'Parlez-nous de vos besoins : nous créons votre organisation et vous accompagnons dans vos premiers pas.',
+        ],
         'advantages' => [
             'title' => 'Pourquoi Spot in®',
             'lasting' => [

@@ -38,20 +38,16 @@
                         </li>
                     @endauth
                     <li>
-                        <a href="{{ route('spots.index') }}">
-                            <x-lucide-map-pin class="h-4 w-4" />
-                            {{ __('ui.spots.index.title') }}
-                        </a>
+                        <a href="{{ route('spots.index') }}">{{ __('ui.spots.index.title') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('organizations.index') }}">
-                            <x-lucide-building-2 class="h-4 w-4" />
-                            {{ __('ui.organizations.index.title') }}
-                        </a>
+                        <a href="{{ route('organizations.index') }}">{{ __('ui.organizations.index.title') }}</a>
                     </li>
                     @guest
+                        <li>
+                            <a href="{{ route('contact') }}">{{ __('ui.contact.title') }}</a>
+                        </li>
                         <li><a href="{{ route('login') }}">{{ __('ui.auth.login.title') }}</a></li>
-                        <li><a href="{{ route('register') }}">{{ __('ui.auth.register.title') }}</a></li>
                     @endguest
                 </ul>
             </div>
@@ -83,10 +79,10 @@
                 </li>
                 @guest
                     <li>
-                        <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('ui.auth.login.title') }}</a>
+                        <a href="{{ route('contact') }}" class="btn btn-primary"> {{ __('ui.contact.title') }} </a>
                     </li>
                     <li>
-                        <a href="{{ route('register') }}" class="btn btn-primary">{{ __('ui.auth.register.title') }}</a>
+                        <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('ui.auth.login.title') }}</a>
                     </li>
                 @endguest
             </ul>
@@ -201,8 +197,7 @@
 
     <footer class="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
         <nav class="grid grid-flow-col gap-4">
-            <a class="link link-hover">About us</a>
-            <a href="{{ route('index') }}#contact" class="link link-hover">Contact</a>
+            <a href="{{ route('contact') }}" class="link link-hover">{{ __('ui.contact.title') }}</a>
             <a class="link link-hover">Privacy Policy</a>
             <a class="link link-hover">Terms of Service</a>
         </nav>

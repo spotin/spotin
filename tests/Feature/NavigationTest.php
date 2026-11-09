@@ -43,10 +43,21 @@ test('logged-in users get a dashboard link in both navigation menus, outside of 
     expect($menu[0])->not->toContain(route('dashboard'));
 });
 
-test('guests get the login and register links and no avatar menu', function () {
+test('guests get the login link, no register link, as accounts are created by invitation, and no avatar menu', function () {
     $this->get(route('login'))
         ->assertOk()
         ->assertDontSee('account-popover', false)
         ->assertDontSee(route('dashboard'), false)
-        ->assertSee(route('register'), false);
+        ->assertSee(route('login'), false)
+        ->assertDontSee(route('register'), false);
+});
+
+test('guests get a contact link in both navigation menus, as accounts are created for the institutions that get in touch', function () {
+    $link = 'href="'.route('contact').'"';
+
+    // In the mobile menu, in the desktop menu and in the footer.
+    expect(substr_count($this->get(route('spots.index'))->assertOk()->getContent(), $link))->toBe(3);
+
+    // Only in the footer for the logged-in users, already members of an institution.
+    expect(substr_count($this->actingAs(User::factory()->create())->get(route('spots.index'))->assertOk()->getContent(), $link))->toBe(1);
 });

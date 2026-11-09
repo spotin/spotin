@@ -25,14 +25,6 @@ class StoreContactRequest extends FormRequest
     }
 
     /**
-     * Go back to the form, at the bottom of the home page, to show its errors.
-     */
-    protected function getRedirectUrl(): string
-    {
-        return route('index').'#contact';
-    }
-
-    /**
      * Normalize the email address before it is validated.
      */
     protected function prepareForValidation(): void

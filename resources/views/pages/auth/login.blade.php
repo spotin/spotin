@@ -73,7 +73,7 @@ render(function (View $view) {
 
     <p class="text-center text-sm">
         {{ __('ui.auth.login.dont_have_an_account') }}
-        <a href="{{ route('register') }}"> {{ __('ui.auth.login.register') }} </a>
+        <a href="{{ route('contact') }}" class="link">{{ __('ui.auth.login.contact') }}</a>
     </p>
 
     <p class="text-center text-sm">
