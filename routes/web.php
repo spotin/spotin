@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::singleton('locale', LocaleController::class)->only(['update']);
 
-// The contact form of the home page, open to everyone: limited to a few messages per hour.
+// The contact form, open to everyone: limited to a few messages per hour.
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:contact')->name('contact.store');
 
 // The addresses of the QR codes.

@@ -15,6 +15,13 @@ test('the login page renders', function () {
         ->assertSee('name="password"', false);
 });
 
+test('the login page invites those without an account to get in touch, in every language', function (string $locale) {
+    $this->withUnencryptedCookie('locale', $locale)->get(route('login'))
+        ->assertOk()
+        ->assertDontSee('ui.')
+        ->assertSeeInOrder([__('ui.auth.login.dont_have_an_account', locale: $locale), 'href="'.route('contact').'"'], false);
+})->with(['en', 'fr']);
+
 test('users can log in with their email in any case', function (string $login) {
     $this->post(route('login.store'), ['email' => $login, 'password' => 'password'])
         ->assertRedirect(config('fortify.home'));

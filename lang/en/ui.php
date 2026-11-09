@@ -157,17 +157,12 @@ return [
         'register' => [
             'title' => 'Register',
             'description' => 'Create a new account',
-            'invitation' => 'You are creating an account to join :organization. Your invitation was sent to this email address, so it cannot be changed.',
-            'steps' => [
-                'information' => [
-                    'title' => 'Information',
-                    'audience' => 'Spot in® is made for public administrations and organizations that manage spots. It is not meant for personal use.',
-                    'membership' => 'Registering does not let you create spots on its own: an organization must first invite you to join it. Only the members of an organization can create its spots.',
-                    'discover' => 'To discover the spots, you do not need an account.',
-                ],
-                'account' => [
-                    'title' => 'Account',
-                ],
+            'invitation' => 'You are creating an account to join :organization, which you join as soon as your account is created. Your invitation was sent to this email address, so it cannot be changed.',
+            'invitation_only' => [
+                'title' => 'Accounts are created by invitation',
+                'text' => 'To create an account, follow the link of the invitation an organization sent you by email. To discover the spots, you do not need an account.',
+                'contact' => 'Your institution would like to use Spot in®? Contact us.',
+                'required' => 'An account can only be created by following an invitation, with the email address it was sent to.',
             ],
             'form' => [
                 'actions' => [
@@ -187,9 +182,9 @@ return [
                 ],
             ],
             'forgot_your_password' => 'Forgot your password?',
-            'reset_your_password' => 'Reset your password',
+            'reset_your_password' => 'Reset your password.',
             'dont_have_an_account' => "Don't have an account?",
-            'register' => 'Register',
+            'contact' => 'Contact us and we can invite you to the platform.',
         ],
         'forgot_password' => [
             'title' => 'Forgot your password?',
@@ -284,6 +279,10 @@ return [
         'explore_spots' => 'Explore the spots',
         'explore_organizations' => 'Browse the organizations',
         'dashboard' => 'Go to my dashboard',
+        'call_to_action' => [
+            'title' => 'Your institution is interested?',
+            'text' => 'Tell us about your needs: we create your organization and help you get started.',
+        ],
         'advantages' => [
             'title' => 'Why Spot in®',
             'lasting' => [

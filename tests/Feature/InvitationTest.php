@@ -7,7 +7,6 @@ use App\Models\Invitation;
 use App\Models\Organization;
 use App\Models\User;
 use App\Notifications\InvitationNotification;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
@@ -206,22 +205,6 @@ test('people with an unverified account are asked to verify it first', function 
         ->assertRedirect(route('verification.notice'));
 });
 
-test('the registration page keeps the invited address when an invitation is being followed', function () {
-    $token = invite('new@example.com');
-
-    $this->get(route('invitations.show', ['token' => $token]));
-
-    $this->get(route('register'))
-        ->assertOk()
-        ->assertSee('value="new@example.com"', false)
-        ->assertSee('readonly', false)
-        ->assertSee(__('ui.auth.register.invitation', ['organization' => 'Acme']));
-
-    $this->flushSession();
-
-    $this->get(route('register'))->assertOk()->assertDontSee('readonly', false);
-});
-
 test('people with an account are taken to their pending invitations, whoever the invitation is for', function (bool $invited) {
     $token = invite();
     $user = User::factory()->create($invited ? ['email' => 'jane@example.com'] : []);
@@ -241,53 +224,6 @@ test('people see a confirmation once they have accepted an invitation', function
         ->assertSee(__('ui.invitations.feedback.invitation_accepted'));
 
     expect($jane->belongsToOrganization($this->organization))->toBeTrue();
-});
-
-test('an invited person registers with the invited address, skips the verification email and accepts', function () {
-    $token = invite('new@example.com');
-
-    $this->get(route('invitations.show', ['token' => $token]));
-    $this->post(route('register.store'), [
-        'name' => 'New Person',
-        'email' => 'new@example.com',
-        'password' => 'a-long-enough-password',
-        'password_confirmation' => 'a-long-enough-password',
-    ])->assertRedirect(route('invitations.show', ['token' => $token]));
-
-    $user = User::where('email', 'new@example.com')->sole();
-
-    expect($user->hasVerifiedEmail())->toBeTrue();
-    Notification::assertNotSentTo($user, VerifyEmail::class);
-
-    $this->get(route('invitations.show', ['token' => $token]))
-        ->assertRedirect(route('invitations.index'));
-
-    $this->post(route('invitations.accept', ['invitation' => Invitation::sole()->id]))
-        ->assertRedirect(route('organizations.show', ['organization' => $this->organization->uuid]));
-
-    expect($user->belongsToOrganization($this->organization))->toBeTrue()
-        ->and(session()->has(Invitation::SESSION_KEY))->toBeFalse();
-});
-
-test('registering with another address still requires verification, even while following an invitation', function () {
-    $token = invite('new@example.com');
-
-    $this->get(route('invitations.show', ['token' => $token]));
-    $this->post(route('register.store'), [
-        'name' => 'Someone Else',
-        'email' => 'someone.else@example.com',
-        'password' => 'a-long-enough-password',
-        'password_confirmation' => 'a-long-enough-password',
-    ]);
-
-    $user = User::where('email', 'someone.else@example.com')->sole();
-
-    expect($user->hasVerifiedEmail())->toBeFalse();
-    Notification::assertSentTo($user, VerifyEmail::class);
-
-    $this->post(route('invitations.accept', ['invitation' => Invitation::sole()->id]))
-        ->assertRedirect(route('verification.notice'));
-    expect($user->belongsToOrganization($this->organization))->toBeFalse();
 });
 
 test('the invitations of the user live at /invitations', function () {
