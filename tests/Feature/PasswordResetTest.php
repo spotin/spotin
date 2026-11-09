@@ -80,3 +80,20 @@ test('the password cannot be reset with an invalid token', function () {
 
     expect(Hash::check('password', $user->fresh()->password))->toBeTrue();
 });
+
+test('the reset email is worded by the application', function (string $locale) {
+    Notification::fake();
+    $user = User::factory()->create();
+
+    $this->post(route('password.email'), ['email' => $user->email]);
+
+    app()->setLocale($locale);
+
+    Notification::assertSentTo($user, ResetPassword::class, function (ResetPassword $notification) use ($user) {
+        $mail = $notification->toMail($user);
+
+        return $mail->subject === __('mail.reset_password.subject')
+            && $mail->actionText === __('mail.reset_password.action')
+            && in_array(__('mail.reset_password.expires', ['count' => 60]), $mail->outroLines, true);
+    });
+})->with(['en', 'fr']);

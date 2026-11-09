@@ -231,6 +231,37 @@ return [
         ],
         'logout' => 'Logout',
     ],
+    'contact' => [
+        'title' => 'Contact us',
+        'description' => 'Your institution would like to use Spot in®? Write to us, we will get back to you quickly.',
+        'fields' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Enter your name',
+            ],
+            'email' => [
+                'label' => 'Email address',
+                'placeholder' => 'Enter your email address',
+            ],
+            'organization' => [
+                'label' => 'Institution',
+                'placeholder' => 'Enter the name of your institution',
+            ],
+            'message' => [
+                'label' => 'Message',
+                'placeholder' => 'Tell us more about your needs',
+            ],
+            'website' => [
+                'label' => 'Leave this field empty',
+            ],
+        ],
+        'actions' => [
+            'submit' => 'Send',
+        ],
+        'feedback' => [
+            'sent' => 'Thank you for your message! We will get back to you quickly.',
+        ],
+    ],
     'dashboard' => [
         'title' => 'Dashboard',
         'description' => 'Your organizations, spots and invitations.',
@@ -245,13 +276,79 @@ return [
         ],
     ],
     'homepage' => [
-        'title' => 'Welcome to Spot in®',
-        'description' => 'Discover locations and places of interest in your area.',
-        'introduction' => '"Spots" represent locations or places of interest in our physical world. Discover spots in your area and find new places to visit!',
+        'title' => 'QR codes that never expire',
+        'description' => 'The platform for public institutions to create and manage their QR codes.',
+        'contact' => 'Contact us',
+        'audience' => 'For municipalities, regions, museums, libraries and tourist offices.',
         'map' => 'Map of all the spots',
         'explore_spots' => 'Explore the spots',
         'explore_organizations' => 'Browse the organizations',
         'dashboard' => 'Go to my dashboard',
+        'advantages' => [
+            'title' => 'Why Spot in®',
+            'lasting' => [
+                'title' => 'Printed once, valid forever',
+                'text' => 'Your QR codes lead to Spot in®, and you change where they lead at any time, without reprinting anything. No more QR codes leading to pages that are gone.',
+            ],
+            'content' => [
+                'title' => 'Content you control',
+                'text' => 'Each QR code represents a place or an entity, with its own page, or redirects to the website of your choice.',
+            ],
+            'governance' => [
+                'title' => 'A clear framework',
+                'text' => 'You decide who creates and manages the QR codes of your organization, with the roles of responsible and member.',
+            ],
+        ],
+        'workflow' => [
+            'title' => 'How it works',
+            'organization' => [
+                'title' => 'We create your organization',
+                'text' => 'You contact us, we open the space of your institution, and you become its responsible.',
+            ],
+            'members' => [
+                'title' => 'You invite your colleagues',
+                'text' => 'As responsibles or as members.',
+            ],
+            'spots' => [
+                'title' => 'You create your spots',
+                'text' => 'A place, an entity or a redirect to your website, or a code to set up on site by the first person who scans it.',
+            ],
+            'print' => [
+                'title' => 'You print the QR codes',
+                'text' => 'As SVG or PNG.',
+            ],
+            'evolve' => [
+                'title' => 'You keep them up to date',
+                'text' => 'You change the content or the destination, without reprinting.',
+            ],
+        ],
+        'features' => [
+            'title' => 'Features',
+            'pages' => [
+                'title' => 'A page per place',
+                'text' => 'Each spot has its public page, with its map.',
+            ],
+            'descriptions' => [
+                'title' => 'Rich descriptions',
+                'text' => 'Headings, lists and links, written in Markdown.',
+            ],
+            'hidden' => [
+                'title' => 'Hidden spots',
+                'text' => 'Out of the lists and the map, but still reachable by their QR code.',
+            ],
+            'api' => [
+                'title' => 'An API',
+                'text' => 'To manage your spots from your own tools, with tokens.',
+            ],
+            'swiss_made' => [
+                'title' => 'Made in Switzerland',
+                'text' => 'Designed and developed in Switzerland.',
+            ],
+            'open_source' => [
+                'title' => 'Open source',
+                'text' => 'The code of Spot in® is public, under the AGPL-3.0 license.',
+            ],
+        ],
     ],
     'invitations' => [
         'common' => [
@@ -381,15 +478,6 @@ return [
             ],
         ],
         'invitations' => [
-            'common' => [
-                'mail' => [
-                    'subject' => 'You have been invited to join :organization',
-                    'line' => 'You have been invited to join :organization as :role.',
-                    'action' => 'View the invitation',
-                    'expires' => 'This invitation expires on :date.',
-                    'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
-                ],
-            ],
             'feedback' => [
                 'invitation_sent' => 'The invitation has been sent.',
                 'invitation_revoked' => 'The invitation has been revoked.',
