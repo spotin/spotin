@@ -8376,16 +8376,16 @@
         },
         {
             "name": "composer/semver",
-            "version": "3.4.4",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "198166618906cb2de69b95d7d47e5fa8aa1b2b95"
+                "reference": "d92543b7ede9c4ec6b59853cefb061e39866d2cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/198166618906cb2de69b95d7d47e5fa8aa1b2b95",
-                "reference": "198166618906cb2de69b95d7d47e5fa8aa1b2b95",
+                "url": "https://api.github.com/repos/composer/semver/zipball/d92543b7ede9c4ec6b59853cefb061e39866d2cf",
+                "reference": "d92543b7ede9c4ec6b59853cefb061e39866d2cf",
                 "shasum": ""
             },
             "require": {
@@ -8427,7 +8427,7 @@
                     "homepage": "http://robbast.nl"
                 }
             ],
-            "description": "Semver library that offers utilities, version constraint parsing and validation.",
+            "description": "Version comparison library that offers utilities, version constraint parsing and validation.",
             "keywords": [
                 "semantic",
                 "semver",
@@ -8437,7 +8437,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/semver/issues",
-                "source": "https://github.com/composer/semver/tree/3.4.4"
+                "source": "https://github.com/composer/semver/tree/3.6.0"
             },
             "funding": [
                 {
@@ -8449,7 +8449,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-20T19:15:30+00:00"
+            "time": "2026-10-29T09:13:34+00:00"
         },
         {
             "name": "dragon-code/contracts",
@@ -8513,6 +8513,7 @@
                     "type": "yoomoney"
                 }
             ],
+            "abandoned": true,
             "time": "2026-03-17T21:50:20+00:00"
         },
         {
@@ -8582,6 +8583,7 @@
                     "type": "yoomoney"
                 }
             ],
+            "abandoned": "symfony/var-exporter",
             "time": "2025-02-24T15:35:24+00:00"
         },
         {
@@ -8676,6 +8678,7 @@
                     "type": "yoomoney"
                 }
             ],
+            "abandoned": "illuminate/support",
             "time": "2026-04-03T15:06:29+00:00"
         },
         {
@@ -9064,16 +9067,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "15.36.0",
+            "version": "15.37.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "3d9ce39220c1172471b2ad05d09fba1c9663327f"
+                "reference": "a3a9ef9b039d10db442bfb3bed0a97c9b50f30a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/3d9ce39220c1172471b2ad05d09fba1c9663327f",
-                "reference": "3d9ce39220c1172471b2ad05d09fba1c9663327f",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/a3a9ef9b039d10db442bfb3bed0a97c9b50f30a7",
+                "reference": "a3a9ef9b039d10db442bfb3bed0a97c9b50f30a7",
                 "shasum": ""
             },
             "require": {
@@ -9134,7 +9137,7 @@
                     "type": "yoomoney"
                 }
             ],
-            "time": "2026-09-20T09:24:26+00:00"
+            "time": "2026-10-09T09:55:05+00:00"
         },
         {
             "name": "laravel-lang/locale-list",
