@@ -12,17 +12,29 @@ use App\Support\QrCode;
 use App\Support\SpotListing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class SpotController extends Controller
 {
     /**
-     * The spots as GeoJSON, for the map of the list of all the spots: the ones the user finds in it, with its filters.
+     * The spots as GeoJSON, for the map of the home page: all the ones the user can find in the lists, without the
+     * hidden ones for the others than the members of their organization.
      *
      * All of them at once: the map groups the close ones. Well beyond thousands of spots, the map would rather load
      * them by visible area, or as vector tiles.
      */
-    public function map(ListFiltersRequest $request): JsonResponse
+    public function map(Request $request): JsonResponse
+    {
+        return response()->json(Spot::featureCollection(
+            Spot::visibleTo($request->user())->located()->get(['uuid', 'name', 'latitude', 'longitude']),
+        ));
+    }
+
+    /**
+     * The spots as GeoJSON, for the map of the list of the spots the user can manage, with its filters.
+     */
+    public function manageableMap(ListFiltersRequest $request): JsonResponse
     {
         return response()->json(SpotListing::features($request));
     }

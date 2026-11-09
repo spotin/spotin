@@ -42,7 +42,7 @@ test('the dashboard shows the organizations and the spots of the user, with pend
         ->assertDontSee('Colleague Spot')
         ->assertDontSee('Foreign Spot')
         ->assertSee(__('ui.invitations.common.alert.action'))
-        ->assertSee(route('organizations.index', ['mine' => 1]), false)
+        ->assertSee('href="'.route('organizations.index').'"', false)
         ->assertSee(route('spots.index', ['mine' => 1]), false);
 })->with(['en', 'fr']);
 

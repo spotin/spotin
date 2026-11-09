@@ -82,9 +82,6 @@ test('the list of all the spots offers to create a spot to the users who create 
     }
 
     $this->actingAs(User::factory()->create())->get(route('spots.index'))->assertOk()->assertDontSee($create, false);
-
-    auth()->logout();
-    $this->get(route('spots.index'))->assertOk()->assertDontSee($create, false);
 });
 
 test('the trail of the creation of a spot starts at the spots, the lists of spots have none', function () {
@@ -106,8 +103,8 @@ test('the trail of the creation of a spot starts at the spots, the lists of spot
         ->and($crumbs($this->get(route('spots.index'))->getContent()))->toBe([]);
 });
 
-test('the spots can be filtered to those of the organizations the user belongs to, in every language', function (string $locale) {
-    Spot::factory()->for($this->other)->create(['name' => 'Foreign']);
+test('the spots can be filtered to the ones the user created, in every language', function (string $locale) {
+    Spot::factory()->for($this->organization)->create(['name' => 'Colleague']);
 
     $this->withUnencryptedCookie('locale', $locale)->actingAs($this->member);
 
@@ -115,14 +112,14 @@ test('the spots can be filtered to those of the organizations the user belongs t
         ->assertOk()
         ->assertDontSee('ui.')
         ->assertSee('Harbour')
-        ->assertDontSee('Foreign')
+        ->assertDontSee('Colleague')
         ->getContent();
 
-    $off = $this->get('/spots')->assertOk()->assertSee('Harbour')->assertSee('Foreign')
+    $off = $this->get('/spots')->assertOk()->assertSee('Harbour')->assertSee('Colleague')
         ->assertSee('>'.__('ui.spots.index.title').'</h1>', false)
         ->getContent();
 
-    expect(mineIsChecked($on))->toBeTrue()->and(mineIsChecked($off))->toBeFalse();
+    expect(filterIsChecked($on))->toBeTrue()->and(filterIsChecked($off))->toBeFalse();
 
     $this->get('/spots?mine=1')->assertSee('>'.__('ui.spots.index.title').'</h1>', false)->assertSee(__('ui.spots.index.filter.mine'));
 })->with(['en', 'fr']);
@@ -138,12 +135,19 @@ test('the spots of the user include the ones they created in organizations they 
         ->assertDontSee('Harbour');
 });
 
-test('the filter is empty for users without spots, and only offered to logged-in users', function () {
-    $this->actingAs(User::factory()->create())->get('/spots?mine=1')->assertOk()->assertDontSee('ui.')->assertDontSee('Harbour');
+test('the list of the spots is for the logged-in users only, and empty for the ones without organization', function () {
+    $this->get('/spots')->assertRedirect(route('login'));
 
-    auth()->logout();
-    $this->get('/spots')->assertOk()->assertDontSee('name="mine"', false)->assertSee('name="query"', false);
-    $this->get('/spots?mine=1')->assertOk()->assertSee('Harbour');
+    $this->actingAs(User::factory()->create())->get('/spots')->assertOk()->assertDontSee('ui.')->assertDontSee('Harbour')
+        ->assertSee(__('ui.spots.index.empty'));
+});
+
+test('the list of the spots shows the spots of the organizations of the user, all of them to administrators', function () {
+    Spot::factory()->for($this->other)->create(['name' => 'Foreign']);
+
+    $this->actingAs($this->member)->get('/spots')->assertOk()->assertSee('Harbour')->assertDontSee('Foreign');
+    $this->actingAs($this->outsider)->get('/spots')->assertOk()->assertSee('Foreign')->assertDontSee('Harbour');
+    $this->actingAs($this->admin)->get('/spots')->assertOk()->assertSee('Harbour')->assertSee('Foreign');
 });
 
 test('the filter survives pagination', function () {
@@ -156,7 +160,8 @@ test('the spots can be searched by name and by organization, with a count and a 
     Spot::factory()->for($this->organization)->create(['name' => 'Lighthouse']);
     Spot::factory()->for($this->other)->create(['name' => 'Harbour Two']);
 
-    $this->actingAs($this->member);
+    // Administrators list the spots of all the organizations
+    $this->actingAs($this->admin);
 
     $this->get('/spots')->assertOk()->assertSee(trans_choice('ui.spots.index.count', 3, ['count' => 3]))->assertDontSee(__('ui.common.filters.reset'));
 
@@ -209,10 +214,8 @@ test('my spots only lists the spots the user created, not the other ones of thei
 test('hidden spots are only listed for the members of their organization and administrators, and stay reachable', function () {
     Spot::factory()->for($this->organization)->hidden()->create(['name' => 'Secret Cove']);
 
-    $this->get(route('spots.index'))->assertOk()->assertSee('Harbour')->assertDontSee('Secret Cove');
-    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('Secret Cove');
-    $this->get(route('spots.index', ['query' => 'Secret']))->assertOk()->assertDontSee('Secret Cove');
-    $this->actingAs($this->outsider)->get(route('spots.index'))->assertOk()->assertDontSee('Secret Cove');
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertSee('Harbour')->assertDontSee('Secret Cove');
+    $this->actingAs($this->outsider)->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('Secret Cove');
 
     foreach ([$this->member, $this->admin] as $user) {
         $this->actingAs($user)->get(route('spots.index'))
@@ -228,9 +231,11 @@ test('hidden spots are only listed for the members of their organization and adm
 
 test('the lists of spots show all their results on a map, with their filters but not their page', function () {
     $lists = [
-        route('spots.index') => route('spots.map'),
+        route('spots.index') => route('spots.manageable.map'),
         route('organizations.show', ['organization' => $this->organization->uuid]) => route('organizations.spots.map', ['organization' => $this->organization->uuid]),
     ];
+
+    $this->actingAs($this->member);
 
     foreach ($lists as $list => $map) {
         // Across the page, above the list
@@ -242,7 +247,7 @@ test('the lists of spots show all their results on a map, with their filters but
     }
 });
 
-test('all the spots are given as GeoJSON for the map of their list, without the hidden ones for the others than the members of their organization', function () {
+test('all the spots are given as GeoJSON for the map of the home page, without the hidden ones for the others than the members of their organization', function () {
     Spot::factory()->for($this->other)->create(['name' => 'Lighthouse']);
     Spot::factory()->for($this->organization)->create(['name' => 'Secret cove', 'is_hidden' => true]);
 
@@ -250,6 +255,19 @@ test('all the spots are given as GeoJSON for the map of their list, without the 
         ->pluck('properties.name')->sort()->values()->all();
 
     expect($names($this->getJson(route('spots.map'))))->toBe(['Harbour', 'Lighthouse'])
-        ->and($names($this->actingAs($this->member)->getJson(route('spots.map'))))->toBe(['Harbour', 'Lighthouse', 'Secret cove'])
-        ->and($names($this->getJson(route('spots.map', ['query' => 'light']))))->toBe(['Lighthouse']);
+        ->and($names($this->actingAs($this->member)->getJson(route('spots.map'))))->toBe(['Harbour', 'Lighthouse', 'Secret cove']);
+});
+
+test('the spots the user can manage are given as GeoJSON for the map of their list, with its filters', function () {
+    Spot::factory()->for($this->other)->create(['name' => 'Lighthouse']);
+    Spot::factory()->for($this->organization)->create(['name' => 'Secret cove', 'is_hidden' => true]);
+
+    $names = fn ($response) => collect($response->assertOk()->assertJsonPath('type', 'FeatureCollection')->json('features'))
+        ->pluck('properties.name')->sort()->values()->all();
+
+    $this->getJson(route('spots.manageable.map'))->assertUnauthorized();
+
+    expect($names($this->actingAs($this->member)->getJson(route('spots.manageable.map'))))->toBe(['Harbour', 'Secret cove'])
+        ->and($names($this->getJson(route('spots.manageable.map', ['query' => 'secret']))))->toBe(['Secret cove'])
+        ->and($names($this->actingAs($this->admin)->getJson(route('spots.manageable.map'))))->toBe(['Harbour', 'Lighthouse', 'Secret cove']);
 });

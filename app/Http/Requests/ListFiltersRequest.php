@@ -53,8 +53,8 @@ class ListFiltersRequest extends FormRequest
     }
 
     /**
-     * Whether to keep only what belongs to the user: the organizations they are a member of, the spots they
-     * created. Visitors have nothing of their own.
+     * Whether to keep only what belongs to the user: the organizations they can manage, the spots they created.
+     * Visitors have nothing of their own.
      */
     public function mine(): bool
     {

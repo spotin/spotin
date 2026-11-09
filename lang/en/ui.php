@@ -276,8 +276,6 @@ return [
         'contact' => 'Contact us',
         'audience' => 'For municipalities, regions, museums, libraries and tourist offices.',
         'map' => 'Map of all the spots',
-        'explore_spots' => 'Explore the spots',
-        'explore_organizations' => 'Browse the organizations',
         'dashboard' => 'Go to my dashboard',
         'call_to_action' => [
             'title' => 'Your institution is interested?',
@@ -423,14 +421,14 @@ return [
         'index' => [
             'create' => 'New organization',
             'title' => 'Organizations',
-            'description' => 'Discover the organizations of the platform.',
+            'description' => 'The organizations you are a member of.',
             'empty' => 'No organization to show.',
             'count' => ':count organization|:count organizations',
             'no_result' => 'No organization matches your filters.',
             'filter' => [
                 'search' => 'Search an organization',
                 'label' => 'Filter the organizations',
-                'mine' => 'Only the organizations I belong to',
+                'mine' => 'Only the organizations I manage',
             ],
         ],
         'create' => [
@@ -733,7 +731,7 @@ return [
         ],
         'index' => [
             'title' => 'Spots',
-            'description' => 'Discover the spots of the platform.',
+            'description' => 'The spots of your organizations.',
             'empty' => 'No spot to show.',
             'count' => ':count spot|:count spots',
             'map' => 'Map of the spots',

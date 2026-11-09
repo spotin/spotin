@@ -5,9 +5,11 @@ use App\Support\OrganizationListing;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
 
+use function Laravel\Folio\middleware;
 use function Laravel\Folio\name;
 use function Laravel\Folio\render;
 
+middleware(['auth', 'verified']);
 name('organizations.index');
 
 render(function (View $view, ListFiltersRequest $request) {

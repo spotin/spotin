@@ -170,7 +170,7 @@ test('inviting requires a valid role and email', function () {
 test('members can leave an organization, the last responsible user cannot', function () {
     $this->actingAs($this->member)
         ->delete(route('organizations.leave', $this->organization))
-        ->assertRedirect(route('organizations.index', ['mine' => 1]))
+        ->assertRedirect(route('organizations.index'))
         ->assertSessionHas('success', __('ui.organizations.members.feedback.organization_left'));
 
     expect($this->member->belongsToOrganization($this->organization))->toBeFalse();

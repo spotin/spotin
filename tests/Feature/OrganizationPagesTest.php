@@ -81,11 +81,9 @@ test('outsiders and guests cannot see the members or the invitations of an organ
     $this->get(($this->url)($route))->assertRedirect(route('login'));
 })->with(['organizations.members.index', 'organizations.invitations.index', 'organizations.invitations.create']);
 
-test('everyone, guests included, can discover the organizations and see an organization with its spots', function (string $locale) {
+test('everyone, guests included, can see an organization with its spots', function (string $locale) {
     Spot::factory()->for($this->organization)->create(['name' => 'Harbour']);
     $this->withUnencryptedCookie('locale', $locale);
-
-    $this->get('/organizations')->assertOk()->assertDontSee('ui.')->assertSee('Acme')->assertSee('Globex');
 
     $this->get(($this->url)('organizations.show'))
         ->assertOk()
@@ -96,7 +94,7 @@ test('everyone, guests included, can discover the organizations and see an organ
         ->assertDontSee(($this->url)('organizations.members.index'), false)
         ->assertDontSee(($this->url)('organizations.invitations.index'), false);
 
-    $this->get(route('spots.index', ['organization' => $this->organization->uuid]))->assertOk()->assertDontSee('ui.')->assertSee('Harbour');
+    $this->get(($this->url)('organizations.show'))->assertSee('Harbour');
 
     $this->actingAs($this->outsider)->get(($this->url)('organizations.show'))->assertOk()
         ->assertDontSee(($this->url)('organizations.members.index'), false);

@@ -18,13 +18,15 @@ use Illuminate\Http\Response;
 class SpotController extends Controller
 {
     /**
-     * Get the spots.
+     * Get the spots of your organizations.
      *
-     * Use `filter[organization]` to only get the spots of an organization.
+     * The spots of the organizations you are a member of, or all of them for administrators. Use
+     * `filter[organization]` to only get the spots of one of them.
      */
     public function index(ApiSpotListFiltersRequest $request): AnonymousResourceCollection
     {
-        $spots = Spot::listed($request->user(), $request->searchQuery(), $request->mine())
+        $spots = Spot::manageableBy($request->user())
+            ->listed($request->user(), $request->searchQuery(), $request->mine())
             ->ofOrganization($request->organization())
             ->paginate(25)
             ->withQueryString();

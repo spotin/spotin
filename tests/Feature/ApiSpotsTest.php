@@ -25,7 +25,8 @@ beforeEach(function () {
 test('the spots are listed, sorted by name and paginated', function () {
     Spot::factory()->for($this->globex)->count(30)->create();
 
-    Sanctum::actingAs($this->member, ['spots:read']);
+    // Administrators list the spots of all the organizations
+    Sanctum::actingAs($this->admin, ['spots:read']);
 
     $this->getJson('/api/v1/spots')
         ->assertOk()
@@ -35,6 +36,18 @@ test('the spots are listed, sorted by name and paginated', function () {
         ->assertJsonMissingPath('data.0.relationships')
         ->assertJsonMissingPath('included');
 });
+
+test('the spots listed are the ones of the organizations of the user, all of them for administrators', function (string $user, array $names) {
+    Spot::factory()->for($this->acme)->hidden()->create(['name' => 'Secret cove']);
+
+    Sanctum::actingAs($this->$user, ['spots:read']);
+
+    expect(collect($this->getJson('/api/v1/spots')->assertOk()->json('data'))->pluck('attributes.name')->all())->toBe($names);
+})->with([
+    'member' => ['member', ['Harbour', 'Secret cove']],
+    'outsider' => ['outsider', []],
+    'admin' => ['admin', ['Harbour', 'Lighthouse', 'Secret cove']],
+]);
 
 test('the spots can be searched and filtered to the ones the user created', function () {
     Spot::factory()->for($this->acme)->create(['name' => 'Harbour Two']);
@@ -59,7 +72,7 @@ test('the spots can be filtered to the ones of an organization, with the other f
     $names = fn (string $url) => collect($this->getJson($url)->assertOk()->json('data'))->pluck('attributes.name')->all();
 
     expect($names('/api/v1/spots?filter[organization]='.$this->acme->uuid))->toBe(['Harbour', 'Harbour Two'])
-        ->and($names('/api/v1/spots?filter[organization]='.$this->globex->uuid))->toBe(['Lighthouse'])
+        ->and($names('/api/v1/spots?filter[organization]='.$this->globex->uuid))->toBe([])
         ->and($names('/api/v1/spots?filter[organization]='.$this->acme->uuid.'&filter[query]=two'))->toBe(['Harbour Two'])
         ->and($names('/api/v1/spots?filter[organization]='.$this->acme->uuid.'&filter[mine]=1'))->toBe(['Harbour']);
 
@@ -78,6 +91,8 @@ test('the organization and the creator of a spot can be included', function () {
         ->assertJsonPath('included.0.attributes.name', 'Acme')
         ->assertJsonPath('included.1.attributes.name', 'Mike Member');
 
+    Sanctum::actingAs($this->admin, ['spots:read']);
+
     $this->getJson('/api/v1/spots?include=organization')
         ->assertOk()
         ->assertJsonPath('data.0.relationships.organization.data.id', $this->acme->uuid)
@@ -91,12 +106,10 @@ test('the creator of a spot is only visible to the members of its organization a
     $this->getJson('/api/v1/spots/'.$this->lighthouse->uuid.'?include=creator')->assertOk()->assertJsonPath('data.relationships.creator.data', null);
 
     $this->getJson('/api/v1/spots?include=creator')->assertOk()
-        ->assertJsonPath('data.0.relationships.creator.data.id', $this->member->uuid)
-        ->assertJsonPath('data.1.relationships.creator.data', null);
+        ->assertJsonPath('data.0.relationships.creator.data.id', $this->member->uuid);
 
     Sanctum::actingAs($this->outsider, ['spots:read']);
     $this->getJson('/api/v1/spots/'.$this->harbour->uuid.'?include=creator')->assertOk()->assertJsonPath('data.relationships.creator.data', null)->assertJsonMissingPath('included');
-    $this->getJson('/api/v1/spots?include=creator')->assertOk()->assertJsonPath('data.0.relationships.creator.data', null)->assertJsonMissingPath('included');
 
     Sanctum::actingAs($this->admin, ['spots:read']);
     $this->getJson('/api/v1/spots/'.$this->harbour->uuid.'?include=creator')->assertOk()->assertJsonPath('data.relationships.creator.data.id', $this->member->uuid);

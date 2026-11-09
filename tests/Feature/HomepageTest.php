@@ -11,13 +11,13 @@ test('the home page renders with its title and description', function () {
         ->assertSee('2021-'.date('Y'), false);
 });
 
-test('the home page shows all the spots on a map, and invites guests to explore the platform, in every language', function (string $locale) {
+test('the home page shows all the spots on a map, without linking guests to the lists of the members, in every language', function (string $locale) {
     $this->withUnencryptedCookie('locale', $locale)->get(route('index'))
         ->assertOk()
         ->assertDontSee('ui.')
         ->assertSee('data-map-spots="'.route('spots.map').'"', false)
-        ->assertSee(route('spots.index'), false)
-        ->assertSee(route('organizations.index'), false)
+        ->assertDontSee('href="'.route('spots.index').'"', false)
+        ->assertDontSee('href="'.route('organizations.index').'"', false)
         ->assertDontSee(route('register'), false)
         ->assertDontSee(route('dashboard'), false);
 })->with(['en', 'fr']);
@@ -37,7 +37,7 @@ test('the home page is its hero, then a wide column for its sections', function 
         ->toContain('max-w-6xl');
 
     // The other pages keep their narrow column
-    $this->get(route('spots.index'))->assertOk()->assertSee('max-w-2xl', false)->assertDontSee('max-w-6xl', false);
+    $this->get(route('contact'))->assertOk()->assertSee('max-w-2xl', false)->assertDontSee('max-w-6xl', false);
 });
 
 test('the home page presents Spot in® to public institutions, with its advantages and how it works, and ends inviting them to get in touch', function () {

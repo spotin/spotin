@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * The list of organizations, with its filters.
+ * The list of the organizations of the user, all of them for administrators, with its filters.
  */
 final readonly class OrganizationListing
 {
@@ -35,11 +35,11 @@ final readonly class OrganizationListing
         return new self(
             mine: $request->mine(),
             searchQuery: $request->searchQuery(),
-            canCreate: $user?->can('create', Organization::class) === true,
+            canCreate: $user->can('create', Organization::class),
             organizations: Organization::listed($user, $request->searchQuery(), $request->mine())
                 ->paginate(25)
                 ->withQueryString(),
-            roles: $user?->organizations()->pluck('memberships.role', 'organizations.id') ?? collect(),
+            roles: $user->organizations()->pluck('memberships.role', 'organizations.id'),
             action: route('organizations.index'),
         );
     }

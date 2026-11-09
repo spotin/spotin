@@ -52,7 +52,7 @@ class Organization extends Model
     }
 
     /**
-     * The users that are responsible of the organization.
+     * The users that are responsible for the organization.
      *
      * @return BelongsToMany<User, $this, Membership>
      */
@@ -92,17 +92,31 @@ class Organization extends Model
     }
 
     /**
-     * Scope the query to what a list of organizations shows: with their number of spots the user can find in the lists,
-     * sorted by name, optionally only the organizations whose name contains the search query or that the user belongs to.
+     * Scope the query to what the list of organizations shows: the organizations the user belongs to, all of them for
+     * administrators, with their number of spots the user can find in the lists, sorted by name, optionally only the
+     * ones whose name contains the search query or that the user can manage.
      *
      * @param  Builder<static>  $query
      */
-    public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
+    public function scopeListed(Builder $query, User $user, string $searchQuery = '', bool $mine = false): void
     {
-        $query->withSpotsCount($user)
+        $query->ofMember($user)
+            ->withSpotsCount($user)
             ->search($searchQuery)
-            ->when($mine && $user, fn (Builder $query) => $query->mine($user))
+            ->when($mine, fn (Builder $query) => $query->manageableBy($user))
             ->orderBy('organizations.name');
+    }
+
+    /**
+     * Scope the query to the organizations the user belongs to, or to all of them for administrators.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeOfMember(Builder $query, User $user): void
+    {
+        if (! $user->isAdmin()) {
+            $query->mine($user);
+        }
     }
 
     /**
@@ -144,5 +158,22 @@ class Organization extends Model
     public function scopeMine(Builder $query, User $user): void
     {
         $query->whereIn('organizations.id', $user->organizations()->select('organizations.id'));
+    }
+
+    /**
+     * Scope the query to the organizations the user can manage: the ones they are responsible for, all of them for
+     * administrators, as `OrganizationPolicy::manage()` decides.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeManageableBy(Builder $query, User $user): void
+    {
+        if ($user->isAdmin()) {
+            return;
+        }
+
+        $query->whereIn('organizations.id', $user->organizations()
+            ->wherePivot('role', OrganizationRole::Responsible->value)
+            ->select('organizations.id'));
     }
 }

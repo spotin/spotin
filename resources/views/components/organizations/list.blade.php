@@ -22,7 +22,7 @@
     </x-slot:search>
 
     @auth
-        <x-filters.checkbox name="mine" :label="__('ui.organizations.index.filter.mine')" :checked="$listing->mine" />
+<x-filters.checkbox name="mine" :label="__('ui.organizations.index.filter.mine')" :checked="$listing->mine" />
     @endauth
 </x-filters>
 

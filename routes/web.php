@@ -27,8 +27,8 @@ Route::patch('spots/{spot:uuid}', [SpotController::class, 'update'])
     ->middleware('can:update,spot')
     ->name('spots.update');
 
-// The spots of the lists, for their maps: public as the lists, without the hidden ones for the others than the members of
-// their organization.
+// The spots of the maps of the home page and of the pages of the organizations: public, without the hidden ones for the
+// others than the members of their organization.
 Route::get('spots.geojson', [SpotController::class, 'map'])->name('spots.map');
 Route::get('organizations/{organization:uuid}/spots.geojson', [OrganizationSpotController::class, 'map'])->name('organizations.spots.map');
 
@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->whereNumber('token')
         ->name('settings.developer.tokens.destroy');
 
+    // The spots of the list of the spots the user can manage, for its map
+    Route::get('spots/manageable.geojson', [SpotController::class, 'manageableMap'])->name('spots.manageable.map');
     Route::post('spots', [SpotController::class, 'store'])->name('spots.store');
     Route::delete('spots/{spot:uuid}', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('spots.destroy');
     Route::get('spots/{spot:uuid}/qr-code.{format}', [SpotController::class, 'qrCode'])

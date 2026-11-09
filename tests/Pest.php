@@ -17,11 +17,11 @@ function emailHtml(string $email): string
 }
 
 /**
- * Whether the "mine" checkbox of a list page is checked.
+ * Whether a checkbox of the filters of a list page, such as "mine", is checked.
  */
-function mineIsChecked(string $html): bool
+function filterIsChecked(string $html, string $name = 'mine'): bool
 {
-    preg_match('/<input[^>]*name="mine"[^>]*>/s', $html, $input);
+    preg_match('/<input[^>]*name="'.$name.'"[^>]*>/s', $html, $input);
 
     return isset($input[0]) && preg_match('/\schecked(\s|=|>|\/)/', $input[0]) === 1;
 }

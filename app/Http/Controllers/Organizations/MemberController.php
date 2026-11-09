@@ -41,6 +41,6 @@ class MemberController extends Controller
     {
         $removeMember->remove($organization, $request->user());
 
-        return redirect()->route('organizations.index', ['mine' => 1])->with('success', __('ui.organizations.members.feedback.organization_left'));
+        return redirect()->route('organizations.index')->with('success', __('ui.organizations.members.feedback.organization_left'));
     }
 }

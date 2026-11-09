@@ -22,7 +22,8 @@ test('the organizations are listed with their spot count, sorted by name and pag
     Spot::factory()->for($this->acme)->count(2)->create();
     Organization::factory()->count(30)->create();
 
-    Sanctum::actingAs($this->member, ['organizations:read']);
+    // Administrators list all the organizations
+    Sanctum::actingAs($this->admin, ['organizations:read']);
 
     $this->getJson('/api/v1/organizations')
         ->assertOk()
@@ -40,7 +41,19 @@ test('the organizations are listed with their spot count, sorted by name and pag
         ->assertJsonPath('data.0.attributes.spots_count', 2);
 });
 
-test('the organizations can be filtered to the ones of the user', function (string $value, int $count) {
+test('the organizations listed are the ones of the user, all of them for administrators', function (string $user, array $names) {
+    Sanctum::actingAs($this->$user, ['organizations:read']);
+
+    expect(collect($this->getJson('/api/v1/organizations')->assertOk()->json('data'))->pluck('attributes.name')->all())->toBe($names);
+})->with([
+    'member' => ['member', ['Acme']],
+    'outsider' => ['outsider', []],
+    'admin' => ['admin', ['Acme', 'Globex']],
+]);
+
+test('the organizations can be filtered to the ones the user can manage', function (string $value, int $count) {
+    $this->globex->users()->attach($this->member, ['role' => OrganizationRole::Responsible]);
+
     Sanctum::actingAs($this->member, ['organizations:read']);
 
     $this->getJson('/api/v1/organizations?filter[mine]='.$value)
@@ -59,6 +72,7 @@ test('the list filters are validated', function () {
     $this->getJson('/api/v1/organizations?filter[query][]=x')->assertUnprocessable()->assertJsonValidationErrors('filter.query');
     $this->getJson('/api/v1/organizations?filter[query]='.str_repeat('a', 101))->assertUnprocessable()->assertJsonValidationErrors('filter.query');
     $this->getJson('/api/v1/organizations?filter[mine]=maybe')->assertUnprocessable()->assertJsonValidationErrors('filter.mine');
+    $this->getJson('/api/v1/organizations?filter[responsible]=1')->assertUnprocessable()->assertJsonValidationErrors('filter');
     $this->getJson('/api/v1/organizations?filter=acme')->assertUnprocessable()->assertJsonValidationErrors('filter');
 });
 
@@ -144,7 +158,11 @@ test('an organization counts the spots the user can find in the lists, as the li
 
     Sanctum::actingAs($this->$user, ['organizations:read']);
 
-    $this->getJson('/api/v1/organizations?filter[query]=acme')->assertOk()->assertJsonPath('data.0.attributes.spots_count', $count);
+    // Outsiders do not find it in their list, but can get it by its uuid
+    if ($user !== 'outsider') {
+        $this->getJson('/api/v1/organizations?filter[query]=acme')->assertOk()->assertJsonPath('data.0.attributes.spots_count', $count);
+    }
+
     $this->getJson('/api/v1/organizations/'.$this->acme->uuid)->assertOk()->assertJsonPath('data.attributes.spots_count', $count);
 })->with([
     'outsider' => ['outsider', 1],

@@ -18,7 +18,10 @@ use Illuminate\Http\Response;
 class OrganizationController extends Controller
 {
     /**
-     * Get the organizations.
+     * Get your organizations.
+     *
+     * The organizations you are a member of, or all of them for administrators. Use `filter[mine]` to only get the ones
+     * you can manage: the ones you are responsible for.
      */
     public function index(ApiListFiltersRequest $request): AnonymousResourceCollection
     {

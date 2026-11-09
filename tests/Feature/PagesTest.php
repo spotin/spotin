@@ -8,6 +8,8 @@ test('guests are redirected to the login page from protected pages', function (s
     $this->get($url)->assertRedirect(route('login'));
 })->with([
     'dashboard' => '/dashboard',
+    'spots' => '/spots',
+    'organizations' => '/organizations',
     'profile settings' => '/settings/profile',
     'security settings' => '/settings/security',
     'email verification notice' => '/auth/verify-email',

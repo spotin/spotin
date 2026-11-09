@@ -69,7 +69,7 @@ render(function (View $view) {
             {{ __('ui.dashboard.organizations.title') }}
 
             <x-slot:action>
-                <a href="{{ route('organizations.index', ['mine' => 1]) }}" class="text-sm">
+                <a href="{{ route('organizations.index') }}" class="text-sm">
                     {{ __('ui.common.actions.see_all') }}
                 </a>
             </x-slot:action>
