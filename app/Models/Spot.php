@@ -135,7 +135,7 @@ class Spot extends Model
 
     /**
      * Scope the query to what a list of spots shows: with their organization and creator, sorted by name, with the
-     * filters of the lists.
+     * filters of the lists. Which spots the list starts from is up to the query: `visibleTo()` or `manageableBy()`.
      *
      * @param  Builder<static>  $query
      */
@@ -147,16 +147,30 @@ class Spot extends Model
     }
 
     /**
-     * Scope the query to the spots the user can find in the lists, optionally only the ones whose name contains the
-     * search query or that the user created. Shared by the lists and the maps of spots.
+     * Scope the query to the spots whose name contains the search query and, optionally, that the user created. Shared
+     * by the lists and the maps of spots.
      *
      * @param  Builder<static>  $query
      */
     public function scopeFiltered(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
     {
-        $query->visibleTo($user)
-            ->search($searchQuery)
+        $query->search($searchQuery)
             ->when($mine && $user, fn (Builder $query) => $query->mine($user));
+    }
+
+    /**
+     * Scope the query to the spots the user can manage: the spots of their organizations, all of them for
+     * administrators. The list of all the spots only shows these ones.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeManageableBy(Builder $query, User $user): void
+    {
+        if ($user->isAdmin()) {
+            return;
+        }
+
+        $query->whereIn('organization_id', $user->organizations()->select('organizations.id'));
     }
 
     /**

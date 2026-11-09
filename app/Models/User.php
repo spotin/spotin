@@ -101,7 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Determine whether the user is responsible of the organization.
+     * Determine whether the user is responsible for the organization.
      */
     public function isResponsibleOf(Organization $organization): bool
     {

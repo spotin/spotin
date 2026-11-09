@@ -5,11 +5,15 @@ namespace App\Support;
 use App\Http\Requests\ListFiltersRequest;
 use App\Models\Organization;
 use App\Models\Spot;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 
 /**
  * The list of spots, with its filters, shared by /spots and the page of each organization, /organizations/{uuid}.
+ *
+ * /spots lists the spots the user can manage; the page of an organization, public, its spots the user can find in the
+ * lists.
  */
 final readonly class SpotListing
 {
@@ -41,8 +45,8 @@ final readonly class SpotListing
             canCreate: $organization !== null
                 ? $user?->can('create', [Spot::class, $organization]) === true
                 : $user?->can('createAny', Spot::class) === true,
-            spots: Spot::listed($user, $request->searchQuery(), $request->mine())
-                ->ofOrganization($organization)
+            spots: self::query($request, $organization)
+                ->listed($user, $request->searchQuery(), $request->mine())
                 ->paginate(25)
                 ->withQueryString(),
             action: $organization
@@ -51,7 +55,7 @@ final readonly class SpotListing
             // The map of all the results, with the filters of the list but not its page
             map: $organization
                 ? route('organizations.spots.map', ['organization' => $organization->uuid, ...Arr::except($request->query(), 'page')])
-                : route('spots.map', Arr::except($request->query(), 'page')),
+                : route('spots.manageable.map', Arr::except($request->query(), 'page')),
         );
     }
 
@@ -64,11 +68,24 @@ final readonly class SpotListing
     public static function features(ListFiltersRequest $request, ?Organization $organization = null): array
     {
         return Spot::featureCollection(
-            Spot::filtered($request->user(), $request->searchQuery(), $request->mine())
-                ->ofOrganization($organization)
+            self::query($request, $organization)
+                ->filtered($request->user(), $request->searchQuery(), $request->mine())
                 ->located()
                 ->get(['uuid', 'name', 'latitude', 'longitude']),
         );
+    }
+
+    /**
+     * The spots the list starts from: the ones of the organization the user can find in the lists, or all the ones
+     * they can manage.
+     *
+     * @return Builder<Spot>
+     */
+    private static function query(ListFiltersRequest $request, ?Organization $organization): Builder
+    {
+        return $organization
+            ? $organization->spots()->visibleTo($request->user())->getQuery()
+            : Spot::manageableBy($request->user());
     }
 
     /**

@@ -24,7 +24,7 @@ beforeEach(function () {
 test('users see only the organizations they belong to, as cards with their role', function () {
     $this->other->users()->attach($this->responsible);
 
-    $content = $this->actingAs($this->responsible)->get(route('organizations.index', ['mine' => 1]))
+    $content = $this->actingAs($this->responsible)->get(route('organizations.index'))
         ->assertOk()
         ->assertSee('Acme')
         ->assertSee('Globex')
@@ -38,7 +38,7 @@ test('users see only the organizations they belong to, as cards with their role'
         ->and($content)->toContain('class="card ')
         ->not->toContain('<table');
 
-    $this->actingAs($this->member)->get(route('organizations.index', ['mine' => 1]))
+    $this->actingAs($this->member)->get(route('organizations.index'))
         ->assertSee('Acme')
         ->assertDontSee('Globex');
 });
@@ -47,7 +47,7 @@ test('long organization names cannot make the cards overflow', function () {
     $name = 'Association-Internationale-des-Amis-du-Patrimoine-Culturel-et-Naturel-de-la-Region-Nord-Ouest';
     $this->member->organizations()->attach(Organization::factory()->create(['name' => $name]));
 
-    $content = $this->actingAs($this->member)->get(route('organizations.index', ['mine' => 1]))->assertOk()->getContent();
+    $content = $this->actingAs($this->member)->get(route('organizations.index'))->assertOk()->getContent();
 
     // The single column of the grid must be able to shrink below its content on phones,
     // and the title wraps on at most two lines instead of staying on one unbreakable line.
@@ -57,34 +57,39 @@ test('long organization names cannot make the cards overflow', function () {
         ->and($content)->not->toContain('truncate');
 });
 
-test('the organizations can be explored by anyone and filtered to the ones of the user', function () {
-    $this->get('/organizations')->assertOk()->assertSee('Acme')->assertSee('Globex')
-        ->assertDontSee('name="mine"', false)
-        ->assertSee('name="query"', false);
+test('the list of the organizations is for the logged-in users, and can be filtered to the ones they can manage', function () {
+    $this->get('/organizations')->assertRedirect(route('login'));
 
-    $this->get('/organizations?mine=1')->assertOk()->assertSee('Globex');
+    $this->other->users()->attach($this->responsible, ['role' => OrganizationRole::Member]);
 
-    $this->actingAs($this->member)->get('/organizations')->assertOk()->assertSee('Acme')->assertSee('Globex')
-        ->assertSee('>'.__('ui.organizations.index.title').'</h1>', false)
-        ->assertSee('name="mine"', false)
-        ->assertSee(__('ui.organizations.common.forms.fields.role.options.member'));
-
-    expect(mineIsChecked($this->get('/organizations')->getContent()))->toBeFalse()
-        ->and(mineIsChecked($this->get('/organizations?mine=1')->getContent()))->toBeTrue();
-
-    $this->get('/organizations?mine=1')->assertOk()
+    $this->actingAs($this->responsible)->get('/organizations')->assertOk()->assertSee('Acme')->assertSee('Globex')
         ->assertSee('>'.__('ui.organizations.index.title').'</h1>', false)
         ->assertSee('<title>'.__('ui.organizations.index.title').' - Spot in®</title>', false)
-        ->assertSee(__('ui.organizations.index.filter.mine'))
-        ->assertDontSee('Globex');
-    $this->get('/organizations?mine=true')->assertOk()->assertDontSee('Globex');
+        ->assertSee(__('ui.organizations.index.filter.mine'));
+
+    expect(filterIsChecked($this->get('/organizations')->getContent()))->toBeFalse()
+        ->and(filterIsChecked($this->get('/organizations?mine=1')->getContent()))->toBeTrue();
+
+    $this->get('/organizations?mine=1')->assertOk()->assertSee('Acme')->assertDontSee('Globex');
+    $this->get('/organizations?mine=true')->assertOk()->assertSee('Acme')->assertDontSee('Globex');
     $this->get('/organizations?mine=false')->assertOk()->assertSee('Globex');
+
+    $this->actingAs($this->member)->get('/organizations?mine=1')->assertOk()->assertSee(__('ui.organizations.index.no_result'));
+
+    // Administrators can manage all of them
+    $this->actingAs($this->admin)->get('/organizations?mine=1')->assertOk()->assertSee('Acme')->assertSee('Globex');
 });
 
-test('a user without organization sees an empty filtered list', function () {
-    $this->actingAs(User::factory()->create())->get(route('organizations.index', ['mine' => 1]))
+test('the list of the organizations shows the ones of the user, all of them to administrators', function () {
+    $this->actingAs($this->member)->get('/organizations')->assertOk()->assertSee('Acme')->assertDontSee('Globex');
+    $this->actingAs($this->outsider)->get('/organizations')->assertOk()->assertSee('Globex')->assertDontSee('Acme');
+    $this->actingAs($this->admin)->get('/organizations')->assertOk()->assertSee('Acme')->assertSee('Globex');
+});
+
+test('a user without organization sees an empty list', function () {
+    $this->actingAs(User::factory()->create())->get(route('organizations.index'))
         ->assertOk()
-        ->assertSee(__('ui.organizations.index.no_result'));
+        ->assertSee(__('ui.organizations.index.empty'));
 });
 
 test('leaving shows a confirmation on the list of organizations', function () {
@@ -111,11 +116,13 @@ test('the lists of organizations are paginated', function () {
     $user->organizations()->attach(Organization::factory()->count(30)->create());
     Organization::factory()->count(30)->create();
 
-    $this->actingAs($user)->get(route('organizations.index', ['mine' => 1]))->assertOk()->assertSee('page=2', false);
+    $this->actingAs($user)->get(route('organizations.index'))->assertOk()->assertSee('page=2', false);
     $this->actingAs($this->admin)->get(route('organizations.index'))->assertOk()->assertSee('page=2', false);
 });
 
 test('the organizations can be searched by name, with a count and a way to reset', function () {
+    $this->actingAs($this->admin);
+
     $this->get('/organizations')->assertOk()
         ->assertSee(trans_choice('ui.organizations.index.count', 2, ['count' => 2]))
         ->assertDontSee(__('ui.common.filters.reset'));
@@ -127,16 +134,16 @@ test('the organizations can be searched by name, with a count and a way to reset
 
     $this->get('/organizations?query=nothing-like-this')->assertOk()->assertSee(__('ui.organizations.index.no_result'));
 
-    $this->actingAs($this->member)->get('/organizations?query=globex&mine=1')->assertOk()->assertSee(__('ui.organizations.index.no_result'));
+    $this->actingAs($this->member)->get('/organizations?query=globex')->assertOk()->assertSee(__('ui.organizations.index.no_result'));
 });
 
 test('the number of spots of the organizations in the list and the API leaves out the hidden spots, except for their members', function () {
     Spot::factory()->for($this->organization)->count(2)->create();
     Spot::factory()->for($this->organization)->create(['is_hidden' => true]);
 
-    $this->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.common.spots', 2));
     $this->actingAs($this->member)->get(route('organizations.index'))->assertSee(trans_choice('ui.organizations.common.spots', 3));
 
-    expect(Organization::listed(null)->firstWhere('id', $this->organization->id)->spots_count)->toBe(2)
+    expect(Organization::withSpotsCount(null)->find($this->organization->id)->spots_count)->toBe(2)
+        ->and(Organization::withSpotsCount($this->outsider)->find($this->organization->id)->spots_count)->toBe(2)
         ->and(Organization::listed($this->member)->firstWhere('id', $this->organization->id)->spots_count)->toBe(3);
 });

@@ -43,7 +43,6 @@ test('everyone can see the spots, but only members can edit them or see their cr
         $this->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee('Harbour')->assertDontSee('Mike Member')
             ->assertDontSee(route('spots.edit', ['spot' => $this->spot->uuid]), false);
         $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))->assertOk()->assertSee('Harbour');
-        $this->get('/spots')->assertOk()->assertSee('Harbour');
     }
 
     $this->actingAs($this->member)->get(route('spots.show', ['spot' => $this->spot->uuid]))->assertOk()->assertSee('Mike Member');

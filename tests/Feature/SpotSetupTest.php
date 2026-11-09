@@ -157,15 +157,17 @@ test('the members see the page of a spot that needs to be set up, with a note, a
 });
 
 test('the spots that need to be set up are only listed for the members of their organization, with a badge', function () {
-    $lists = [route('spots.index'), route('organizations.show', ['organization' => $this->organization->uuid])];
+    $organization = route('organizations.show', ['organization' => $this->organization->uuid]);
     $name = $this->spot->displayName();
 
-    foreach ($lists as $list) {
-        $this->get($list)->assertOk()->assertDontSee($name);
-        $this->actingAs($this->outsider)->get($list)->assertOk()->assertDontSee($name);
+    $this->get($organization)->assertOk()->assertDontSee($name);
+    $this->actingAs($this->outsider)->get($organization)->assertOk()->assertDontSee($name);
+
+    foreach ([route('spots.index'), $organization] as $list) {
         $this->actingAs($this->member)->get($list)->assertOk()->assertSee($name)->assertSee(__('ui.spots.common.needs_setup'));
-        auth()->logout();
     }
+
+    auth()->logout();
 
     $this->spot->update(['latitude' => 46.5, 'longitude' => 6.6]);
     expect(collect($this->getJson(route('spots.map'))->json('features')))->toBeEmpty()

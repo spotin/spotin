@@ -36,13 +36,13 @@
                                 {{ __('ui.dashboard.title') }}
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('spots.index') }}">{{ __('ui.spots.index.title') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('organizations.index') }}">{{ __('ui.organizations.index.title') }}</a>
+                        </li>
                     @endauth
-                    <li>
-                        <a href="{{ route('spots.index') }}">{{ __('ui.spots.index.title') }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('organizations.index') }}">{{ __('ui.organizations.index.title') }}</a>
-                    </li>
                     @guest
                         <li>
                             <a href="{{ route('contact') }}">{{ __('ui.contact.title') }}</a>
@@ -64,19 +64,19 @@
                             {{ __('ui.dashboard.title') }}
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('spots.index') }}">
+                            <x-lucide-map-pin class="h-4 w-4" aria-hidden="true" />
+                            {{ __('ui.spots.index.title') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('organizations.index') }}">
+                            <x-lucide-building-2 class="h-4 w-4" aria-hidden="true" />
+                            {{ __('ui.organizations.index.title') }}
+                        </a>
+                    </li>
                 @endauth
-                <li>
-                    <a href="{{ route('spots.index') }}">
-                        <x-lucide-map-pin class="h-4 w-4" aria-hidden="true" />
-                        {{ __('ui.spots.index.title') }}
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('organizations.index') }}">
-                        <x-lucide-building-2 class="h-4 w-4" aria-hidden="true" />
-                        {{ __('ui.organizations.index.title') }}
-                    </a>
-                </li>
                 @guest
                     <li>
                         <a href="{{ route('contact') }}" class="btn btn-primary"> {{ __('ui.contact.title') }} </a>

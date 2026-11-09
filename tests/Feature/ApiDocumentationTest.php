@@ -53,7 +53,7 @@ test('each operation says which token ability it needs and who can do it', funct
         ->and($description('delete', '/spots/{spot}'))->toContain('`spots:delete`')
         ->and($description('post', '/organizations'))->toContain('`organizations:create`')->toContain('administrators')
         ->and($description('delete', '/organizations/{organization}'))->toContain('`organizations:delete`')->toContain('administrators')
-        ->and($description('get', '/organizations'))->toContain('`organizations:read`')->not->toContain('administrators')
+        ->and($description('get', '/organizations'))->toContain('`organizations:read`')->not->toContain('Only administrators can do it.')
         ->and($description('get', '/me'))->toContain('whatever its abilities');
 });
 

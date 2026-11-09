@@ -29,10 +29,6 @@ render(function (View $view) {
 
                     <div class="not-prose flex flex-wrap gap-2">
                         <a href="{{ route('contact') }}" class="btn btn-primary"> {{ __('ui.homepage.contact') }} </a>
-                        <a href="{{ route('spots.index') }}" class="btn"> {{ __('ui.homepage.explore_spots') }} </a>
-                        <a href="{{ route('organizations.index') }}" class="btn">
-                            {{ __('ui.homepage.explore_organizations') }}
-                        </a>
                     </div>
 
                     @auth

@@ -276,8 +276,6 @@ return [
         'contact' => 'Nous contacter',
         'audience' => 'Pour les communes, les régions, les musées, les bibliothèques et les offices du tourisme.',
         'map' => 'Carte de tous les spots',
-        'explore_spots' => 'Explorer les spots',
-        'explore_organizations' => 'Parcourir les organisations',
         'dashboard' => 'Aller à mon tableau de bord',
         'call_to_action' => [
             'title' => 'Votre institution est intéressée ?',
@@ -423,14 +421,14 @@ return [
         'index' => [
             'create' => 'Nouvelle organisation',
             'title' => 'Organisations',
-            'description' => 'Découvrez les organisations de la plateforme.',
+            'description' => 'Les organisations dont vous êtes membre.',
             'empty' => 'Aucune organisation à afficher.',
             'count' => ':count organisation|:count organisations',
             'no_result' => 'Aucune organisation ne correspond à vos filtres.',
             'filter' => [
                 'search' => 'Rechercher une organisation',
                 'label' => 'Filtrer les organisations',
-                'mine' => 'Uniquement les organisations dont je fais partie',
+                'mine' => 'Uniquement les organisations que je gère',
             ],
         ],
         'create' => [
@@ -733,7 +731,7 @@ return [
         ],
         'index' => [
             'title' => 'Spots',
-            'description' => 'Découvrez les spots de la plateforme.',
+            'description' => 'Les spots de vos organisations.',
             'empty' => 'Aucun spot à afficher.',
             'count' => ':count spot|:count spots',
             'map' => 'Carte des spots',
