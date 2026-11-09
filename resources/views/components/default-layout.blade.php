@@ -31,10 +31,7 @@
                 >
                     @auth
                         <li>
-                            <a href="{{ route('dashboard') }}">
-                                <x-lucide-columns-3-cog class="h-4 w-4" />
-                                {{ __('ui.dashboard.title') }}
-                            </a>
+                            <a href="{{ route('dashboard') }}">{{ __('ui.dashboard.title') }}</a>
                         </li>
                         <li>
                             <a href="{{ route('spots.index') }}">{{ __('ui.spots.index.title') }}</a>

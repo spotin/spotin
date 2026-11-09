@@ -42,7 +42,6 @@ return [
             'share' => 'Partager',
             'cancel' => 'Annuler',
             'close' => 'Fermer',
-            'see_all' => 'Tout voir',
         ],
         'pagination' => [
             'page' => 'Page :current sur :last',
@@ -261,13 +260,53 @@ return [
         'title' => 'Tableau de bord',
         'description' => 'Vos organisations, vos spots et vos invitations.',
         'greeting' => 'Bonjour, :name !',
-        'organizations' => [
-            'title' => 'Mes organisations',
-            'empty' => "Vous ne faites encore partie d'aucune organisation. Demandez à un responsable d'une organisation de vous inviter.",
+        'overview' => "Vue d'ensemble",
+        'quick_actions' => [
+            'title' => 'Actions rapides',
+            'spot' => [
+                'title' => 'Nouveau spot',
+                'description' => 'Créez un spot et son code QR, pour un lieu ou une entité.',
+            ],
+            'organization' => [
+                'title' => 'Nouvelle organisation',
+                'description' => "Ouvrez l'espace d'une institution et invitez son responsable.",
+            ],
         ],
-        'spots' => [
-            'title' => 'Mes spots',
-            'empty' => "Vous n'avez pas encore créé de spot.",
+        'statistics' => [
+            'spots' => [
+                'title' => 'Spots',
+                'description' => 'Dans vos organisations',
+            ],
+            'organizations' => [
+                'title' => 'Organisations',
+                'description' => 'Dont vous êtes membre',
+            ],
+        ],
+        'getting_started' => [
+            'title' => 'Premiers pas',
+            'description' => 'Les premières étapes pour tirer le meilleur de Spot in®.',
+            'completed' => 'Tout est fait, bravo ! Vous pouvez maintenant masquer ces étapes.',
+            'progress' => ':completed étapes sur :total terminées',
+            'done' => 'Terminé :',
+            'hide' => 'Masquer',
+            'hint' => 'Vous pouvez afficher à nouveau ces étapes depuis les paramètres de votre profil.',
+            'steps' => [
+                'organization' => [
+                    'label' => "Rejoindre une organisation, sur l'invitation d'un de ses responsables.",
+                ],
+                'spot' => [
+                    'label' => 'Créer votre premier spot.',
+                    'action' => 'Créer un spot',
+                ],
+                'qr_code' => [
+                    'label' => 'Télécharger son code QR, pour l\'imprimer.',
+                    'action' => 'Aller au spot',
+                ],
+                'invite' => [
+                    'label' => 'Inviter un collègue dans votre organisation.',
+                    'action' => 'Inviter',
+                ],
+            ],
         ],
     ],
     'homepage' => [
@@ -396,6 +435,7 @@ return [
     'organizations' => [
         'common' => [
             'spots' => ':count spot|:count spots',
+            'members' => ':count membre|:count membres',
             'forms' => [
                 'fields' => [
                     'name' => [
@@ -650,6 +690,12 @@ return [
                 'profile_information_updated' => 'Votre profil a été mis à jour.',
             ],
             'form' => [
+                'fields' => [
+                    'show_getting_started' => [
+                        'legend' => 'Tableau de bord',
+                        'label' => 'Afficher les premiers pas',
+                    ],
+                ],
                 'actions' => [
                     'submit' => 'Enregistrer le profil',
                 ],

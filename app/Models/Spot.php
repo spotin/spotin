@@ -44,6 +44,7 @@ class Spot extends Model
             'redirect_to_website' => 'boolean',
             'is_hidden' => 'boolean',
             'needs_setup' => 'boolean',
+            'qr_code_downloaded_at' => 'datetime',
         ];
     }
 
