@@ -226,12 +226,12 @@ test('an unverified member cannot edit a spot once set up, and only sets up the 
 test('the API creates a spot to set up on site, and sets it up for the others than its members', function () {
     Sanctum::actingAs($this->member, ['spots:create', 'spots:read']);
 
-    $this->postJson('/api/v1/organizations/'.$this->organization->uuid.'/spots', ['needs_setup' => true])
+    $this->postJson('/api/v1/spots', ['organization' => $this->organization->uuid, 'needs_setup' => true])
         ->assertCreated()
         ->assertJsonPath('data.attributes.name', null)
         ->assertJsonPath('data.attributes.needs_setup', true);
 
-    $this->postJson('/api/v1/organizations/'.$this->organization->uuid.'/spots', [])
+    $this->postJson('/api/v1/spots', ['organization' => $this->organization->uuid])
         ->assertUnprocessable()
         ->assertJsonValidationErrors('name');
 

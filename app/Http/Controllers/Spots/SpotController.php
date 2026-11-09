@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Spots;
 
+use App\Actions\Spots\CreateSpot;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListFiltersRequest;
-use App\Http\Requests\Spots\StoreSpotFromFormRequest;
+use App\Http\Requests\Spots\StoreSpotRequest;
 use App\Http\Requests\Spots\UpdateSpotRequest;
 use App\Models\Spot;
 use App\Support\QrCode;
@@ -54,12 +55,9 @@ class SpotController extends Controller
     /**
      * Create a spot in the organization chosen in its form, on behalf of the current user.
      */
-    public function store(StoreSpotFromFormRequest $request): RedirectResponse
+    public function store(StoreSpotRequest $request, CreateSpot $createSpot): RedirectResponse
     {
-        $spot = new Spot($request->safe()->except('organization'));
-        $spot->organization()->associate($request->organization());
-        $spot->creator()->associate($request->user());
-        $spot->save();
+        $spot = $createSpot->create($request->organization(), $request->safe()->except('organization'), $request->user());
 
         return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', __('ui.spots.feedback.spot_created'));
     }

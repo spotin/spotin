@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->middleware('can:leave,organization')
             ->name('organizations.leave');
 
-        Route::middleware('can:manageMembers,organization')->scopeBindings()->group(function () {
+        Route::middleware('can:manage,organization')->scopeBindings()->group(function () {
             Route::put('members/{user}', [MemberController::class, 'update'])
                 ->name('organizations.members.update');
             Route::delete('members/{user}', [MemberController::class, 'destroy'])

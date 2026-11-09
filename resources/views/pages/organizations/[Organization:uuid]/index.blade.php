@@ -17,7 +17,7 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
 
     return $view->with([
         'membersCount' => Gate::allows('viewMembers', $organization) ? $organization->users()->count() : null,
-        'invitationsCount' => Gate::allows('manageMembers', $organization) ? $organization->invitations()->count() : null,
+        'invitationsCount' => Gate::allows('manage', $organization) ? $organization->invitations()->count() : null,
         // The spots the user finds in the list of the organization, without the hidden ones for the others
         'spotsCount' => $organization->spots()->visibleTo(request()->user())->count(),
         // The map is only shown when one of these spots has a location
@@ -79,7 +79,7 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
                         class="link"
                     >{{ trans_choice('ui.organizations.show.manage.members', $membersCount) }}</a>
                     <span aria-hidden="true">·</span>
-                    @can('manageMembers', $organization)
+                    @can('manage', $organization)
                         <a
                             href="{{ route('organizations.invitations.index', ['organization' => $organization->uuid]) }}"
                             class="link"

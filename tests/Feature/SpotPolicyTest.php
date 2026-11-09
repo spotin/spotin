@@ -40,3 +40,11 @@ test('only members can manage the spots of their organization or see their creat
         ->and($this->outsider->can('update', $this->spot))->toBeFalse()
         ->and($this->outsider->can('delete', $this->spot))->toBeFalse();
 });
+
+test('only the members of an organization and the admins create spots in at least one of them', function () {
+    expect($this->admin->can('createAny', Spot::class))->toBeTrue()
+        ->and($this->member->can('createAny', Spot::class))->toBeTrue()
+        ->and($this->outsider->can('createAny', Spot::class))->toBeTrue()
+        ->and(User::factory()->create()->can('createAny', Spot::class))->toBeFalse()
+        ->and(Gate::forUser(null)->allows('createAny', Spot::class))->toBeFalse();
+});

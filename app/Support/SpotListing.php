@@ -40,9 +40,9 @@ final readonly class SpotListing
             // In the organization of the page, or in one of the organizations of the user on the list of all the spots
             canCreate: $organization !== null
                 ? $user?->can('create', [Spot::class, $organization]) === true
-                : $user !== null && ($user->isAdmin() || $user->organizations()->exists()),
+                : $user?->can('createAny', Spot::class) === true,
             spots: Spot::listed($user, $request->searchQuery(), $request->mine())
-                ->when($organization, fn ($query) => $query->whereBelongsTo($organization))
+                ->ofOrganization($organization)
                 ->paginate(25)
                 ->withQueryString(),
             action: $organization
@@ -65,7 +65,7 @@ final readonly class SpotListing
     {
         return Spot::featureCollection(
             Spot::filtered($request->user(), $request->searchQuery(), $request->mine())
-                ->when($organization, fn ($query) => $query->whereBelongsTo($organization))
+                ->ofOrganization($organization)
                 ->located()
                 ->get(['uuid', 'name', 'latitude', 'longitude']),
         );

@@ -99,10 +99,29 @@ class Organization extends Model
      */
     public function scopeListed(Builder $query, ?User $user, string $searchQuery = '', bool $mine = false): void
     {
-        $query->withCount(['spots' => fn (Builder $query) => $query->visibleTo($user)])
+        $query->withSpotsCount($user)
             ->search($searchQuery)
             ->when($mine && $user, fn (Builder $query) => $query->mine($user))
             ->orderBy('organizations.name');
+    }
+
+    /**
+     * Scope the query to count the spots of the organizations that the user can find in the lists, as `spots_count`.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeWithSpotsCount(Builder $query, ?User $user): void
+    {
+        $query->withCount(['spots' => fn (Builder $query) => $query->visibleTo($user)]);
+    }
+
+    /**
+     * Load the number of spots of the organization that the user can find in the lists, as `spots_count`: the same as
+     * the lists count.
+     */
+    public function loadSpotsCount(?User $user): static
+    {
+        return $this->loadCount(['spots' => fn (Builder $query) => $query->visibleTo($user)]);
     }
 
     /**

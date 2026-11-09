@@ -33,7 +33,8 @@ dependencies, as declared in `composer.json` (PHP) and `package.json`
   and tests. A controller sits in the domain of the URL it serves: the actions
   on the spots of an organization are in `Organizations\SpotController`, the
   ones on `/spots/{uuid}` in `Spots\SpotController`. The API has the same layout
-  under `Api\V1`.
+  under `Api\V1`, without nested URLs: the spots of an organization are a filter
+  of `/spots`, and a new spot names its organization in its body.
 - **Routes.** Pages (`GET`) are Folio pages in `resources/views/pages`, and name
   themselves with `name()`. Everything that changes data (`POST`, `PUT`,
   `PATCH`, `DELETE`) is a route of `routes/web.php`, and `routes/api.php` for
@@ -42,7 +43,9 @@ dependencies, as declared in `composer.json` (PHP) and `package.json`
   dynamic sibling would take its URL: then it is `create/index.blade.php`.
 - **Authorization.** Routes check abilities with the `can:` middleware, pages
   with `Gate::authorize()` in their render function, and controllers never
-  authorize. Public pages have no ability to check.
+  authorize. Public pages have no ability to check. A model chosen in the body
+  rather than the URL, such as the organization of a new spot, is checked by the
+  request instead, as a validation error on its field.
 - **Lists.** The filters (`query`, `mine`) are validated by `ListFiltersRequest`
   on the pages, and by its `ApiListFiltersRequest` subclass in the API. The
   query is in the `listed()` scope of the model, and the page is an

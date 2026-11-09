@@ -55,19 +55,10 @@ class OrganizationPolicy
     }
 
     /**
-     * Determine whether the user can manage the organization: its members, its invitations and its QR code. Its
-     * administrators also edit and delete it.
+     * Determine whether the user can manage the organization: invite people to it, revoke its invitations, change or
+     * remove its members, and download its QR code. Its administrators also edit and delete it.
      */
     public function manage(User $user, Organization $organization): bool
-    {
-        return $user->isResponsibleOf($organization);
-    }
-
-    /**
-     * Determine whether the user can invite people to the organization, revoke
-     * invitations, and change or remove members.
-     */
-    public function manageMembers(User $user, Organization $organization): bool
     {
         return $user->isResponsibleOf($organization);
     }

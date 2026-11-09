@@ -25,6 +25,14 @@ class SpotPolicy
     }
 
     /**
+     * Determine whether the user can create spots in at least one organization: the ones they belong to.
+     */
+    public function createAny(User $user): bool
+    {
+        return $user->organizations()->exists();
+    }
+
+    /**
      * Determine whether the user can create spots in the organization.
      */
     public function create(User $user, Organization $organization): bool
