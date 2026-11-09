@@ -94,7 +94,7 @@ The following prerequisites must be filled to run this project:
 To update the application, run the following commands:
 
 ```bash
-# Update the dependencies with npm
+# Check for outdated dependencies with npm
 npx npm-check-updates
 
 # Update the dependencies with npm
