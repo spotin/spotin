@@ -261,12 +261,6 @@ return [
         'feedback' => [
             'sent' => 'Merci pour votre message ! Nous vous répondons rapidement.',
         ],
-        'mail' => [
-            'subject' => 'Nouveau message de :organization',
-            'from' => 'De : :name (:email)',
-            'organization' => 'Institution : :organization',
-            'reply' => 'Répondez à cet e-mail pour lui répondre.',
-        ],
     ],
     'dashboard' => [
         'title' => 'Tableau de bord',
@@ -484,15 +478,6 @@ return [
             ],
         ],
         'invitations' => [
-            'common' => [
-                'mail' => [
-                    'subject' => 'Invitation à rejoindre :organization',
-                    'line' => 'Vous avez reçu une invitation à rejoindre :organization en tant que :role.',
-                    'action' => "Voir l'invitation",
-                    'expires' => 'Cette invitation expire le :date.',
-                    'ignore' => "Si vous n'attendiez pas cette invitation, vous pouvez ignorer cet e-mail.",
-                ],
-            ],
             'feedback' => [
                 'invitation_sent' => "L'invitation a été envoyée.",
                 'invitation_revoked' => "L'invitation a été révoquée.",

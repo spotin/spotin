@@ -58,3 +58,20 @@ test('users can request a new verification link', function () {
 
     Notification::assertSentTo($user, VerifyEmail::class);
 });
+
+test('the verification email is worded by the application', function (string $locale) {
+    Notification::fake();
+    $user = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->post(route('verification.send'));
+
+    app()->setLocale($locale);
+
+    Notification::assertSentTo($user, VerifyEmail::class, function (VerifyEmail $notification) use ($user) {
+        $mail = $notification->toMail($user);
+
+        return $mail->subject === __('mail.verify_email.subject')
+            && $mail->actionText === __('mail.verify_email.action')
+            && str_contains($mail->actionUrl, '/email/verify/');
+    });
+})->with(['en', 'fr']);

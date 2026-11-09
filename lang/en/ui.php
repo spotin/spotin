@@ -261,12 +261,6 @@ return [
         'feedback' => [
             'sent' => 'Thank you for your message! We will get back to you quickly.',
         ],
-        'mail' => [
-            'subject' => 'New message from :organization',
-            'from' => 'From: :name (:email)',
-            'organization' => 'Institution: :organization',
-            'reply' => 'Reply to this email to answer them.',
-        ],
     ],
     'dashboard' => [
         'title' => 'Dashboard',
@@ -484,15 +478,6 @@ return [
             ],
         ],
         'invitations' => [
-            'common' => [
-                'mail' => [
-                    'subject' => 'You have been invited to join :organization',
-                    'line' => 'You have been invited to join :organization as :role.',
-                    'action' => 'View the invitation',
-                    'expires' => 'This invitation expires on :date.',
-                    'ignore' => 'If you were not expecting this invitation, you can ignore this email.',
-                ],
-            ],
             'feedback' => [
                 'invitation_sent' => 'The invitation has been sent.',
                 'invitation_revoked' => 'The invitation has been revoked.',

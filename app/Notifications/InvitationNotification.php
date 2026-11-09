@@ -36,15 +36,15 @@ class InvitationNotification extends Notification
         $organization = $this->invitation->organization->name;
 
         return (new MailMessage)
-            ->subject(__('ui.organizations.invitations.common.mail.subject', ['organization' => $organization]))
-            ->line(__('ui.organizations.invitations.common.mail.line', [
+            ->subject(__('mail.invitation.subject', ['organization' => $organization]))
+            ->line(__('mail.invitation.line', [
                 'organization' => $organization,
                 'role' => __('ui.organizations.common.forms.fields.role.options.'.$this->invitation->role->value),
             ]))
-            ->action(__('ui.organizations.invitations.common.mail.action'), route('invitations.show', ['token' => $this->token]))
-            ->line(__('ui.organizations.invitations.common.mail.expires', [
+            ->action(__('mail.invitation.action'), route('invitations.show', ['token' => $this->token]))
+            ->line(__('mail.invitation.expires', [
                 'date' => $this->invitation->expires_at->isoFormat('LLL'),
             ]))
-            ->line(__('ui.organizations.invitations.common.mail.ignore'));
+            ->line(__('mail.invitation.ignore'));
     }
 }

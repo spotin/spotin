@@ -34,11 +34,11 @@ class ContactNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(__('ui.contact.mail.subject', ['organization' => $this->organization]))
+            ->subject(__('mail.contact.subject', ['organization' => $this->organization]))
             ->replyTo($this->email, $this->name)
-            ->line(__('ui.contact.mail.from', ['name' => $this->name, 'email' => $this->email]))
-            ->line(__('ui.contact.mail.organization', ['organization' => $this->organization]))
+            ->line(__('mail.contact.from', ['name' => $this->name, 'email' => $this->email]))
+            ->line(__('mail.contact.organization', ['organization' => $this->organization]))
             ->line($this->message)
-            ->line(__('ui.contact.mail.reply'));
+            ->line(__('mail.contact.reply'));
     }
 }
