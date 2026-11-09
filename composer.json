@@ -2,7 +2,7 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "spotin/spotin",
     "type": "project",
-    "description": "The main project for Spot in®.",
+    "description": "The platform for public institutions to create and manage QR codes that never expire.",
     "license": "AGPL-3.0-only",
     "require": {
         "php": "^8.3",

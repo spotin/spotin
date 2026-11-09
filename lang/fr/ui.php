@@ -231,6 +231,43 @@ return [
         ],
         'logout' => 'Se déconnecter',
     ],
+    'contact' => [
+        'title' => 'Nous contacter',
+        'description' => 'Votre institution souhaite utiliser Spot in® ? Écrivez-nous, nous vous répondons rapidement.',
+        'fields' => [
+            'name' => [
+                'label' => 'Nom',
+                'placeholder' => 'Saisissez votre nom',
+            ],
+            'email' => [
+                'label' => 'Adresse e-mail',
+                'placeholder' => 'Saisissez votre adresse e-mail',
+            ],
+            'organization' => [
+                'label' => 'Institution',
+                'placeholder' => 'Saisissez le nom de votre institution',
+            ],
+            'message' => [
+                'label' => 'Message',
+                'placeholder' => 'Dites-nous en plus sur vos besoins',
+            ],
+            'website' => [
+                'label' => 'Laissez ce champ vide',
+            ],
+        ],
+        'actions' => [
+            'submit' => 'Envoyer',
+        ],
+        'feedback' => [
+            'sent' => 'Merci pour votre message ! Nous vous répondons rapidement.',
+        ],
+        'mail' => [
+            'subject' => 'Nouveau message de :organization',
+            'from' => 'De : :name (:email)',
+            'organization' => 'Institution : :organization',
+            'reply' => 'Répondez à cet e-mail pour lui répondre.',
+        ],
+    ],
     'dashboard' => [
         'title' => 'Tableau de bord',
         'description' => 'Vos organisations, vos spots et vos invitations.',
@@ -245,13 +282,79 @@ return [
         ],
     ],
     'homepage' => [
-        'title' => 'Bienvenue sur Spot in®',
-        'description' => "Découvrez les lieux et les points d'intérêt près de chez vous.",
-        'introduction' => "Les « spots » représentent des lieux ou des points d'intérêt de notre monde physique. Découvrez les spots près de chez vous et trouvez de nouveaux endroits à visiter !",
+        'title' => 'Des codes QR qui ne périment jamais',
+        'description' => 'La plateforme des institutions publiques pour créer et gérer leurs codes QR.',
+        'contact' => 'Nous contacter',
+        'audience' => 'Pour les communes, les régions, les musées, les bibliothèques et les offices du tourisme.',
         'map' => 'Carte de tous les spots',
         'explore_spots' => 'Explorer les spots',
         'explore_organizations' => 'Parcourir les organisations',
         'dashboard' => 'Aller à mon tableau de bord',
+        'advantages' => [
+            'title' => 'Pourquoi Spot in®',
+            'lasting' => [
+                'title' => 'Imprimés une fois, valables pour toujours',
+                'text' => 'Vos codes QR mènent à Spot in®, et vous changez leur destination à tout moment, sans rien réimprimer. Fini les codes QR qui mènent à des pages disparues.',
+            ],
+            'content' => [
+                'title' => 'Un contenu que vous maîtrisez',
+                'text' => 'Chaque code QR représente un lieu ou une entité, avec sa propre page, ou redirige vers le site web de votre choix.',
+            ],
+            'governance' => [
+                'title' => 'Un cadre clair',
+                'text' => 'Vous décidez qui crée et gère les codes QR de votre organisation, grâce aux rôles de responsable et de membre.',
+            ],
+        ],
+        'workflow' => [
+            'title' => 'Comment ça marche',
+            'organization' => [
+                'title' => 'Nous créons votre organisation',
+                'text' => "Vous nous contactez, nous ouvrons l'espace de votre institution et vous en devenez responsable.",
+            ],
+            'members' => [
+                'title' => 'Vous invitez vos collègues',
+                'text' => 'Comme responsables ou comme membres.',
+            ],
+            'spots' => [
+                'title' => 'Vous créez vos spots',
+                'text' => 'Un lieu, une entité ou une redirection vers votre site, ou un code à mettre en place sur site par la première personne qui le scanne.',
+            ],
+            'print' => [
+                'title' => 'Vous imprimez les codes QR',
+                'text' => 'En SVG ou en PNG.',
+            ],
+            'evolve' => [
+                'title' => 'Vous les faites évoluer',
+                'text' => 'Vous changez le contenu ou la destination, sans réimprimer.',
+            ],
+        ],
+        'features' => [
+            'title' => 'Fonctionnalités',
+            'pages' => [
+                'title' => 'Une page par lieu',
+                'text' => 'Chaque spot a sa page publique, avec sa carte.',
+            ],
+            'descriptions' => [
+                'title' => 'Des descriptions riches',
+                'text' => 'Titres, listes et liens, rédigés en Markdown.',
+            ],
+            'hidden' => [
+                'title' => 'Des spots masqués',
+                'text' => 'Hors des listes et de la carte, mais toujours accessibles par leur code QR.',
+            ],
+            'api' => [
+                'title' => 'Une API',
+                'text' => 'Pour gérer vos spots depuis vos propres outils, avec des jetons.',
+            ],
+            'swiss_made' => [
+                'title' => 'Conçu en Suisse',
+                'text' => 'Conçu et développé en Suisse.',
+            ],
+            'open_source' => [
+                'title' => 'Open source',
+                'text' => 'Le code de Spot in® est public, sous licence AGPL-3.0.',
+            ],
+        ],
     ],
     'invitations' => [
         'common' => [

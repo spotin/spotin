@@ -1,5 +1,9 @@
-{{-- `manualSuccessMessage`: the page places the message of a successful action itself, instead of above the page --}}
-@props(['breadcrumbs' => [], 'manualSuccessMessage' => false])
+{{--
+    `manualSuccessMessage`: the page places the message of a successful action itself, instead of above the page. `wide`:
+    the page uses the width of the hero, for sections side by side such as the ones of the home page, instead of the
+    narrow column of the other pages.
+--}}
+@props(['breadcrumbs' => [], 'manualSuccessMessage' => false, 'wide' => false])
 
 @php
     $theme = in_array(request()->cookie('theme'), ['light', 'dark'], true) ? request()->cookie('theme') : null;
@@ -183,7 +187,7 @@
 
     {{-- Left out when there is nothing to show in it, such as on a page that is only a hero, which then fills the page --}}
     @if ($slot->hasActualContent() || $breadcrumbs || (session('success') && ! $manualSuccessMessage))
-        <main class="container mx-auto max-w-2xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
+        <main @class(['container mx-auto flex-grow px-4 py-8 sm:px-6 lg:px-8', 'max-w-6xl' => $wide, 'max-w-2xl' => ! $wide])>
             <x-breadcrumbs :items="$breadcrumbs" />
             <div class="prose max-w-none">
                 @unless ($manualSuccessMessage)
@@ -198,7 +202,7 @@
     <footer class="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
         <nav class="grid grid-flow-col gap-4">
             <a class="link link-hover">About us</a>
-            <a class="link link-hover">Contact</a>
+            <a href="{{ route('index') }}#contact" class="link link-hover">Contact</a>
             <a class="link link-hover">Privacy Policy</a>
             <a class="link link-hover">Terms of Service</a>
         </nav>

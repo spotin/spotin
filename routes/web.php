@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Invitations\InvitationController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Organizations\InvitationController as OrganizationInvitationController;
@@ -13,6 +14,9 @@ use App\Models\Spot;
 use Illuminate\Support\Facades\Route;
 
 Route::singleton('locale', LocaleController::class)->only(['update']);
+
+// The contact form of the home page, open to everyone: limited to a few messages per hour.
+Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:contact')->name('contact.store');
 
 // The addresses of the QR codes.
 Route::get('spots/{spot:uuid}/redirect', [SpotController::class, 'redirect'])->name('spots.redirect');
