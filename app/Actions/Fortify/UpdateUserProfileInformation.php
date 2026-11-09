@@ -45,7 +45,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'email' => __('ui.auth.common.forms.fields.email.label'),
         ]))->validateWithBag('updateProfileInformation');
 
-        $user->forceFill($validated);
+        $user->fill($validated);
 
         // A new address has to be verified again
         if ($user->isDirty('email') && $user instanceof MustVerifyEmail) {
