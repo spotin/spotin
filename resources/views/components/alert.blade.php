@@ -12,7 +12,8 @@
     as it needs JS. The notes that stay on a page are not closable.
 
     A paragraph, spaced as one in the text of a page: what it holds is inline, as a paragraph cannot hold blocks. Closable,
-    it makes room on its right for its button, round in its corner, as the one of a dialog.
+    it makes room on its right for its button, round: in its corner while it is stacked, on small screens, as the one of a
+    dialog; centered on its height once it is a row, as its actions, which can make it taller than a line.
 --}}
 <p role="{{ $role }}" data-alert {{ $attributes->class(['alert', $classes[$type], 'relative pr-12' => $closable]) }}>
     <x-dynamic-component :component="'lucide-'.($icon ?? $icons[$type])" class="h-6 w-6 shrink-0" aria-hidden="true" />
@@ -25,7 +26,7 @@
     @if ($closable)
         <button
             type="button"
-            class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2"
+            class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 sm:top-1/2 sm:-translate-y-1/2"
             aria-label="{{ __('ui.common.actions.close') }}"
             title="{{ __('ui.common.actions.close') }}"
             data-alert-close

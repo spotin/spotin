@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Organizations\DeleteOrganization;
 use App\Enums\OrganizationRole;
 use App\Models\Invitation;
 use App\Models\Membership;
@@ -72,16 +73,22 @@ test('the database rejects unknown roles', function () {
     ]))->toThrow(QueryException::class);
 });
 
-test('deleting an organization or a user removes the memberships and invitations', function () {
+test('deleting an organization keeps its memberships, to restore them, but removes its invitations; deleting a user removes their memberships', function () {
     $user = User::factory()->create();
     $organization = Organization::factory()->create();
     $organization->users()->attach($user);
     Invitation::factory()->for($organization)->create();
 
-    $organization->delete();
+    app(DeleteOrganization::class)->delete($organization);
 
-    expect(DB::table('memberships')->count())->toBe(0)
+    // The deleted organization is not one of the user anymore, until it is restored
+    expect(DB::table('memberships')->count())->toBe(1)
+        ->and($user->organizations()->count())->toBe(0)
         ->and(Invitation::count())->toBe(0);
+
+    $organization->forceDelete();
+
+    expect(DB::table('memberships')->count())->toBe(0);
 
     $other = Organization::factory()->create();
     $other->users()->attach($user);

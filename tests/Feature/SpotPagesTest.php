@@ -517,6 +517,9 @@ test('a member deletes a spot', function () {
         ->assertSessionHas('success', __('ui.spots.feedback.spot_deleted'));
 
     expect(Spot::count())->toBe(0);
+
+    // Kept, for its QR code and to restore it
+    $this->assertSoftDeleted($this->spot);
 });
 
 test('the edit page of a spot shows a trail starting at the spots, without the organization, the page of the spot has none', function () {

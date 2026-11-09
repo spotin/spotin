@@ -11,12 +11,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['name'])]
 class Organization extends Model
 {
     /** @use HasFactory<OrganizationFactory> */
-    use HasFactory, HasVersion4Uuids;
+    use HasFactory, HasVersion4Uuids, SoftDeletes;
 
     /**
      * Get the columns that should receive a unique identifier.
@@ -106,6 +107,36 @@ class Organization extends Model
             ->search($searchQuery)
             ->when($mine, fn (Builder $query) => $query->manageableBy($user))
             ->orderBy('organizations.name');
+    }
+
+    /**
+     * Determine whether the user can restore the organization, deleted: as the policy says.
+     */
+    public function isRestorableBy(?User $user): bool
+    {
+        return $user !== null && $user->can('restore', $this);
+    }
+
+    /**
+     * The spots deleted with the organization, which come back with it: the ones deleted at the same time or after it,
+     * as `DeleteOrganization` deletes it before them. The ones deleted before, one by one, stay deleted.
+     *
+     * @return HasMany<Spot, $this>
+     */
+    public function spotsDeletedWithIt(): HasMany
+    {
+        return $this->spots()->onlyTrashed()->where('deleted_at', '>=', $this->deleted_at);
+    }
+
+    /**
+     * Scope the query to the deleted organizations, to restore them, the most recently deleted first. Only the
+     * administrators restore them: the lists offer them to them only.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeRestorable(Builder $query): void
+    {
+        $query->onlyTrashed()->latest('deleted_at');
     }
 
     /**

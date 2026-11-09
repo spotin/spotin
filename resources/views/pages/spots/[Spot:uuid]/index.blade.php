@@ -6,10 +6,20 @@ use Laravel\Head\Facades\Head;
 
 use function Laravel\Folio\name;
 use function Laravel\Folio\render;
+use function Laravel\Folio\withTrashed;
 
 name('spots.show');
+// A deleted spot, for who can restore it; the others are told it was removed
+withTrashed();
 
 render(function (View $view, Spot $spot) {
+    if ($spot->trashed() && ! $spot->isRestorableBy(request()->user())) {
+        return response()->view('removed', [
+            'title' => __('ui.spots.removed.title'),
+            'text' => __('ui.spots.removed.text'),
+        ], 410);
+    }
+
     // Until it is set up, only who manages it sees its page: the others set it up
     if ($spot->needs_setup && request()->user()?->can('manage', $spot) !== true) {
         return redirect()->route('spots.edit', ['spot' => $spot->uuid]);
@@ -53,11 +63,18 @@ render(function (View $view, Spot $spot) {
                     <h2 id="manage-title" class="card-title">{{ __('ui.spots.show.manage.title') }}</h2>
 
                     <div class="card-actions">
+                        {{-- Deleted, its edit page restores it --}}
                         <a href="{{ route('spots.edit', ['spot' => $spot->uuid]) }}" class="btn btn-sm">
-                            <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
-                            {{ __('ui.spots.show.manage.actions.edit') }}
+                            @if ($spot->trashed())
+                                <x-lucide-archive-restore class="h-4 w-4" aria-hidden="true" />
+                                {{ __('ui.common.actions.restore') }}
+                            @else
+                                <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
+                                {{ __('ui.spots.show.manage.actions.edit') }}
+                            @endif
                         </a>
 
+                        {{-- Deleted too: its printed codes stay the same, and lead to it again once it is restored --}}
                         <x-qr-code-menu
                             :svg="route('spots.qr-code', ['spot' => $spot->uuid, 'format' => 'svg'])"
                             :png="route('spots.qr-code', ['spot' => $spot->uuid, 'format' => 'png'])"
@@ -71,8 +88,19 @@ render(function (View $view, Spot $spot) {
                     What visitors do not know about the spot, as quiet badges, below the actions: their full explanation
                     is in their tooltip, and read by screen readers. Focusable, so that the keyboard shows the tooltip too.
                 --}}
-                @if ($spot->needs_setup || $spot->redirectsVisitors() || $spot->is_hidden)
+                @if ($spot->trashed() || $spot->needs_setup || $spot->redirectsVisitors() || $spot->is_hidden)
                     <ul class="flex flex-wrap gap-2">
+                        @if ($spot->trashed())
+                            @php($deletedNote = __('ui.spots.show.manage.notes.deleted', ['date' => $spot->deleted_at->isoFormat('LL')]))
+                            <li class="tooltip" data-tip="{{ $deletedNote }}">
+                                <span tabindex="0" class="badge badge-sm badge-error badge-outline">
+                                    <x-lucide-trash-2 class="h-3 w-3" aria-hidden="true" />
+                                    {{ __('ui.spots.common.deleted') }}
+                                    <span class="sr-only">: {{ $deletedNote }}</span>
+                                </span>
+                            </li>
+                        @endif
+
                         @if ($spot->needs_setup)
                             <li class="tooltip" data-tip="{{ __('ui.spots.show.manage.notes.needs_setup') }}">
                                 <span tabindex="0" class="badge badge-sm badge-outline border-base-content/30">

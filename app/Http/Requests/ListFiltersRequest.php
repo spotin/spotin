@@ -19,21 +19,27 @@ class ListFiltersRequest extends FormRequest
         return [
             $this->filter('query') => ['nullable', 'string', 'max:100'],
             $this->filter('mine') => ['nullable', 'boolean'],
+            $this->filter('deleted') => ['nullable', 'boolean'],
         ];
     }
 
     /**
-     * Accept `true` and `false` for `mine`, which the `boolean` rule refuses as text, as a query string sends them.
+     * Accept `true` and `false` for `mine` and `deleted`, which the `boolean` rule refuses as text, as a query string
+     * sends them.
      */
     protected function prepareForValidation(): void
     {
         $query = $this->query->all();
-        $mine = data_get($query, $this->filter('mine'));
 
-        if (in_array($mine, ['true', 'false'], true)) {
-            data_set($query, $this->filter('mine'), $mine === 'true');
-            $this->query->replace($query);
+        foreach (['mine', 'deleted'] as $name) {
+            $value = data_get($query, $this->filter($name));
+
+            if (in_array($value, ['true', 'false'], true)) {
+                data_set($query, $this->filter($name), $value === 'true');
+            }
         }
+
+        $this->query->replace($query);
     }
 
     /**
@@ -59,5 +65,13 @@ class ListFiltersRequest extends FormRequest
     public function mine(): bool
     {
         return $this->user() !== null && $this->boolean($this->filter('mine'));
+    }
+
+    /**
+     * Whether to list only the deleted ones, to restore them. Visitors restore nothing.
+     */
+    public function deleted(): bool
+    {
+        return $this->user() !== null && $this->boolean($this->filter('deleted'));
     }
 }

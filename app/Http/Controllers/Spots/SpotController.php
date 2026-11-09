@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Spots;
 
 use App\Actions\Spots\CreateSpot;
+use App\Actions\Spots\RestoreSpot;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListFiltersRequest;
 use App\Http\Requests\Spots\StoreSpotRequest;
@@ -41,10 +42,18 @@ class SpotController extends Controller
 
     /**
      * The address of the QR code of the spot: everyone goes to its form while it needs to be set up, then straight to its
-     * website when the spot redirects its visitors, otherwise to its page. Both say it was just scanned.
+     * website when the spot redirects its visitors, otherwise to its page. Both say it was just scanned. Once the spot is
+     * deleted, a page that tells the code is no longer in use, as gone.
      */
-    public function redirect(Spot $spot): RedirectResponse
+    public function redirect(Spot $spot): RedirectResponse|Response
     {
+        if ($spot->trashed()) {
+            return response()->view('removed', [
+                'title' => __('ui.qr_codes.inactive.title'),
+                'text' => __('ui.qr_codes.inactive.spot'),
+            ], Response::HTTP_GONE);
+        }
+
         if ($spot->needs_setup) {
             return redirect()->route('spots.edit', ['spot' => $spot->uuid])->with('scanned', true);
         }
@@ -96,6 +105,18 @@ class SpotController extends Controller
     {
         $spot->delete();
 
-        return redirect()->route('organizations.show', ['organization' => $spot->organization->uuid])->with('success', __('ui.spots.feedback.spot_deleted'));
+        return redirect()->route('organizations.show', ['organization' => $spot->organization->uuid])
+            ->with('success', __('ui.spots.feedback.spot_deleted'))
+            ->with('undo', route('spots.restore', ['spot' => $spot->uuid]));
+    }
+
+    /**
+     * Restore the deleted spot: its QR code leads to it again.
+     */
+    public function restore(Spot $spot, RestoreSpot $restoreSpot): RedirectResponse
+    {
+        $restoreSpot->restore($spot);
+
+        return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', __('ui.spots.feedback.spot_restored'));
     }
 }

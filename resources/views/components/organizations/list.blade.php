@@ -22,9 +22,22 @@
     </x-slot:search>
 
     @auth
-<x-filters.checkbox name="mine" :label="__('ui.organizations.index.filter.mine')" :checked="$listing->mine" />
+        <x-filters.checkbox name="mine" :label="__('ui.organizations.index.filter.mine')" :checked="$listing->mine" />
+
+        {{-- The deleted organizations, to restore them: for the administrators only, as they delete them --}}
+        @if ($listing->canRestore)
+            <x-filters.checkbox
+                name="deleted"
+                :label="__('ui.organizations.index.filter.deleted')"
+                :checked="$listing->deleted"
+            />
+        @endif
     @endauth
 </x-filters>
+
+@error('restore')
+    <x-alert type="error" closable>{{ $message }}</x-alert>
+@enderror
 
 @if ($listing->organizations->isEmpty())
     <p>{{ $listing->isFiltered() ? __('ui.organizations.index.no_result') : __('ui.organizations.index.empty') }}</p>

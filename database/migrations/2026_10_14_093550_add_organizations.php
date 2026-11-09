@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('name')->unique();
+            // Unique among the organizations that are not deleted, as the validation checks: a deleted one does not keep its name
+            $table->string('name');
             $table->timestamps();
+            // Kept when deleted, for its QR code to tell it is no longer in use, and to restore it
+            $table->softDeletes();
         });
 
         Schema::create('memberships', function (Blueprint $table) {

@@ -34,6 +34,9 @@ return [
             'search' => 'Search',
             'reset' => 'Reset the filters',
         ],
+        'removed' => [
+            'home' => 'Go to the home page',
+        ],
         'breadcrumbs' => 'Breadcrumb',
         'actions' => [
             'label' => 'Actions',
@@ -42,6 +45,8 @@ return [
             'share' => 'Share',
             'cancel' => 'Cancel',
             'close' => 'Close',
+            'restore' => 'Restore',
+            'undo' => 'Undo',
         ],
         'pagination' => [
             'page' => 'Page :current of :last',
@@ -309,6 +314,13 @@ return [
             ],
         ],
     ],
+    'qr_codes' => [
+        'inactive' => [
+            'title' => 'This QR code is no longer in use',
+            'spot' => 'The spot it led to was removed.',
+            'organization' => 'The organization it led to was removed.',
+        ],
+    ],
     'homepage' => [
         'title' => 'QR codes that never expire',
         'description' => 'The platform for public institutions to create and manage their QR codes.',
@@ -433,9 +445,14 @@ return [
         ],
     ],
     'organizations' => [
+        'removed' => [
+            'title' => 'This organization was removed',
+            'text' => 'It was removed, with its spots.',
+        ],
         'common' => [
             'spots' => ':count spot|:count spots',
             'members' => ':count member|:count members',
+            'deleted' => 'Deleted',
             'forms' => [
                 'fields' => [
                     'name' => [
@@ -457,6 +474,8 @@ return [
             'organization_created' => 'The organization has been created.',
             'organization_updated' => 'The organization has been updated.',
             'organization_deleted' => 'The organization has been deleted.',
+            'organization_restored' => 'The organization has been restored, with its spots.',
+            'name_taken' => 'An organization named :name already exists. Rename it before restoring this one.',
         ],
         'index' => [
             'create' => 'New organization',
@@ -469,6 +488,7 @@ return [
                 'search' => 'Search an organization',
                 'label' => 'Filter the organizations',
                 'mine' => 'Only the organizations I manage',
+                'deleted' => 'Only the deleted organizations',
             ],
         ],
         'create' => [
@@ -484,10 +504,14 @@ return [
             'scanned' => 'You have just scanned an organization!',
             'map' => 'Spots of the organization',
             'description' => 'The spots, members and invitations of the organization.',
+            'spots_coming_back' => ':count spot will come back with it once restored|:count spots will come back with it once restored',
             'manage' => [
                 'title' => 'You can manage this organization',
                 'title_member' => 'You are a member of this organization',
                 'created' => 'Created on :date.',
+                'notes' => [
+                    'deleted' => 'Deleted on :date, with its spots: their QR codes show that they are no longer in use. Restore it from its edit page.',
+                ],
                 'members' => ':count member|:count members',
                 'invitations' => ':count invitation|:count invitations',
                 'actions' => [
@@ -498,6 +522,7 @@ return [
         'edit' => [
             'title' => 'Edit the organization',
             'description' => 'Edit or delete an organization.',
+            'deleted' => 'This organization was deleted on :date, with its spots: their QR codes show that they are no longer in use. Restore it to bring it back with its spots and its members.',
             'danger' => [
                 'title' => 'Danger zone',
             ],
@@ -509,7 +534,7 @@ return [
         ],
         'delete' => [
             'title' => 'Delete the organization',
-            'warning' => 'This permanently deletes the organization, its memberships and its pending invitations. This cannot be undone.',
+            'warning' => 'This deletes the organization with its spots, and its pending invitations for good. The QR codes of the organization and of its spots will show that they are no longer in use. The organization can be restored if needed from its edit page.',
             'actions' => [
                 'submit' => 'Delete the organization',
             ],
@@ -715,8 +740,13 @@ return [
         ],
     ],
     'spots' => [
+        'removed' => [
+            'title' => 'This spot was removed',
+            'text' => 'It is no longer available.',
+        ],
         'common' => [
             'hidden' => 'Hidden',
+            'deleted' => 'Deleted',
             'needs_setup' => 'Not set up yet',
             'unnamed' => 'Unnamed spot · :id',
             'forms' => [
@@ -774,6 +804,9 @@ return [
             'spot_updated' => 'The spot has been updated.',
             'spot_set_up' => 'Thank you! The spot is set up.',
             'spot_deleted' => 'The spot has been deleted.',
+            'spot_restored' => 'The spot has been restored: its QR codes lead to it again.',
+            'name_taken' => 'A spot named :name already exists in :organization. Rename it before restoring this one.',
+            'organization_deleted' => 'The organization of this spot is deleted: restore the organization, the spot comes back with it.',
         ],
         'index' => [
             'title' => 'Spots',
@@ -786,6 +819,7 @@ return [
                 'search' => 'Search a spot',
                 'label' => 'Filter the spots',
                 'mine' => 'Only the spots I created',
+                'deleted' => 'Only the deleted spots',
             ],
         ],
         'create' => [
@@ -824,6 +858,7 @@ return [
                     'redirect' => 'The visitors who scan this spot are redirected directly to :website.',
                     'needs_setup' => 'This spot is not set up yet: the first person who scans its code finishes setting it up. Only the members of its organization find it in the lists until then.',
                     'hidden' => 'This spot is hidden from the public lists: only the members of :organization find it in the lists. It stays reachable by its link.',
+                    'deleted' => 'Deleted on :date: its QR codes show that it is no longer in use. Restore it from its edit page.',
                 ],
             ],
         ],
@@ -839,6 +874,7 @@ return [
             'title' => 'Edit the spot',
             'description' => 'Edit or delete a spot.',
             'introduction' => 'You are editing the spot :spot in the organization :organization.',
+            'deleted' => 'This spot was deleted on :date: its QR codes show that it is no longer in use. Restore it to use and edit it again.',
             'danger' => [
                 'title' => 'Danger zone',
             ],
@@ -850,7 +886,7 @@ return [
         ],
         'delete' => [
             'title' => 'Delete the spot',
-            'warning' => 'Deleting the spot removes it for everyone, with all its details. Its printed QR codes will lead nowhere. This cannot be undone.',
+            'warning' => 'Deleting the spot removes it for everyone, with all its details. Its printed QR codes will show that it is no longer in use. The spot can be restored if needed from its edit page.',
             'actions' => [
                 'submit' => 'Delete the spot',
             ],

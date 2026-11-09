@@ -1,9 +1,9 @@
 <?php
 
+use App\Actions\Organizations\DeleteOrganization;
 use App\Models\Organization;
 use App\Models\Spot;
 use App\Models\User;
-use Illuminate\Database\QueryException;
 
 beforeEach(function () {
     $this->organization = Organization::factory()->create();
@@ -37,19 +37,16 @@ test('the creator leaving the organization keeps the spot and its creator', func
     expect($this->spot->fresh()->creator->is($this->creator))->toBeTrue();
 });
 
-test('deleting the organization deletes its spots', function () {
-    $this->organization->delete();
+test('deleting the organization deletes its spots, kept for their QR codes and to restore them', function () {
+    app(DeleteOrganization::class)->delete($this->organization);
 
-    expect(Spot::count())->toBe(0);
-});
+    expect(Spot::count())->toBe(0)
+        ->and(Spot::onlyTrashed()->count())->toBe(1);
 
-test('a spot name is unique within an organization only', function () {
-    expect(fn () => Spot::factory()->for($this->organization)->create(['name' => $this->spot->name]))
-        ->toThrow(QueryException::class);
+    // Deleted for good, the organization takes its spots with it
+    $this->organization->forceDelete();
 
-    Spot::factory()->create(['name' => $this->spot->name]);
-
-    expect(Spot::where('name', $this->spot->name)->count())->toBe(2);
+    expect(Spot::withTrashed()->count())->toBe(0);
 });
 
 test('a spot can be created without a creator', function () {

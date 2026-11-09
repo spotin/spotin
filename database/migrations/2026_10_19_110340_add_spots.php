@@ -28,8 +28,9 @@ return new class extends Migration
             // When a QR code of the spot was first downloaded, to print it
             $table->timestamp('qr_code_downloaded_at')->nullable();
             $table->timestamps();
-
-            $table->unique(['organization_id', 'name']);
+            // Kept when deleted, for its QR code to tell it is no longer in use, and to restore it. Its name is unique in its
+            // organization among the spots that are not deleted, as the validation checks.
+            $table->softDeletes();
         });
     }
 

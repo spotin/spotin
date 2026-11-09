@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 /**
- * The filters of the lists in the API, under `filter` as JSON:API recommends: `filter[query]` and `filter[mine]`.
+ * The filters of the lists in the API, under `filter` as JSON:API recommends: `filter[query]`, `filter[mine]`
+ * and `filter[deleted]`.
  */
 class ApiListFiltersRequest extends ListFiltersRequest
 {
@@ -15,7 +16,7 @@ class ApiListFiltersRequest extends ListFiltersRequest
     public function rules(): array
     {
         return [
-            'filter' => ['nullable', 'array:query,mine'],
+            'filter' => ['nullable', 'array:query,mine,deleted'],
             ...parent::rules(),
         ];
     }

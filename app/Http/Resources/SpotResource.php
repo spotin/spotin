@@ -38,6 +38,8 @@ class SpotResource extends JsonApiResource
             'needs_setup' => $this->needs_setup,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            // `null` while it is not deleted: the deleted ones are only listed with `filter[deleted]`, to restore them
+            'deleted_at' => $this->deleted_at,
         ];
     }
 

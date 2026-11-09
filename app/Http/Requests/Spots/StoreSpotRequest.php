@@ -91,11 +91,11 @@ class StoreSpotRequest extends FormRequest
     }
 
     /**
-     * The name is unique in the organization of the spot: here, the one it is created in.
+     * The name is unique among the spots of the organization that are not deleted: here, the one it is created in.
      */
     protected function uniqueName(): Unique
     {
-        return Rule::unique(Spot::class, 'name')->where('organization_id', $this->organization()?->getKey());
+        return Rule::unique(Spot::class, 'name')->where('organization_id', $this->organization()?->getKey())->withoutTrashed();
     }
 
     /**

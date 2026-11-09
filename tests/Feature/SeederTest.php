@@ -110,3 +110,22 @@ test('the development seeder creates named spots linked to the named users and o
         ->and(Spot::whereBelongsTo($organization)->whereNull('name')->where('needs_setup', true)->exists())->toBeTrue()
         ->and(Spot::count())->toBeGreaterThan(25);
 });
+
+test('the development seeder creates deleted spots and a deleted organization, to restore them', function () {
+    $this->seed(DevelopmentSeeder::class);
+
+    $organization = Organization::firstWhere('name', 'Organization');
+    $deleted = Organization::onlyTrashed()->firstWhere('name', 'Deleted Organization');
+    $spot = fn (string $name) => Spot::withTrashed()->where('name', $name);
+
+    expect($spot('Deleted Spot')->sole())->trashed()->toBeTrue()->hasLocation()->toBeTrue()
+        ->and($spot('Deleted Spot')->sole()->organization->is($organization))->toBeTrue()
+        // One deleted, one not: the deleted one cannot be restored as is
+        ->and($spot('Duplicate Spot')->onlyTrashed()->count())->toBe(1)
+        ->and(Spot::where('name', 'Duplicate Spot')->count())->toBe(1)
+        ->and($deleted)->not->toBeNull()
+        ->and($spot('Deleted Organization Spot')->sole()->trashed())->toBeTrue()
+        // Deleted before the organization, it does not come back with it
+        ->and($spot('Deleted Before Spot')->sole()->deleted_at->lt($deleted->deleted_at))->toBeTrue()
+        ->and(DB::table('memberships')->where('organization_id', $deleted->id)->count())->toBe(2);
+});

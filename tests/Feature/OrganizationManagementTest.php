@@ -135,6 +135,9 @@ test('deleting an organization removes everything linked to it', function () {
     expect(Organization::count())->toBe(0)
         ->and(Invitation::count())->toBe(0)
         ->and($this->user->fresh()->organizations)->toBeEmpty();
+
+    // Kept, for its QR code and to restore it
+    $this->assertSoftDeleted($this->organization);
 });
 
 test('admins get an edit button on the organization page, and the deletion in the danger zone of its edit page', function () {

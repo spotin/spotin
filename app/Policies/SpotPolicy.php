@@ -66,4 +66,13 @@ class SpotPolicy
     {
         return $user->belongsToOrganization($spot->organization_id);
     }
+
+    /**
+     * Determine whether the user can restore the deleted spot: as the ones who could delete it. The spots of a deleted
+     * organization come back with it only: its members do not belong to it anymore, as long as it is deleted.
+     */
+    public function restore(User $user, Spot $spot): bool
+    {
+        return $user->belongsToOrganization($spot->organization_id);
+    }
 }

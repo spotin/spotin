@@ -1,5 +1,6 @@
 @props(['organization', 'role' => null])
 
+{{-- Deleted, it still leads to its page, which only who can restore it reaches: to restore it from there --}}
 <x-link-card
     :href="route('organizations.show', ['organization' => $organization->uuid])"
     icon="building-2"
@@ -19,5 +20,14 @@
 
     @if ($role)
         <p class="text-sm opacity-70">{{ __('ui.organizations.common.forms.fields.role.options.' . $role) }}</p>
+    @endif
+
+    @if ($organization->trashed())
+        <div class="flex flex-wrap gap-1">
+            <span class="badge badge-sm badge-error badge-outline gap-1">
+                <x-lucide-trash-2 class="h-3 w-3" aria-hidden="true" />
+                {{ __('ui.organizations.common.deleted') }}
+            </span>
+        </div>
     @endif
 </x-link-card>
