@@ -30,7 +30,7 @@ render(function (View $view, Organization $organization) {
         'members' => $organization->users()->orderBy('name')->paginate(25),
         'lastResponsibleId' => $lastResponsibleId,
         'roles' => OrganizationRole::cases(),
-        'canManage' => auth()->user()->can('manageMembers', $organization),
+        'canManage' => auth()->user()->can('manage', $organization),
         'isLastResponsible' => $lastResponsibleId === auth()->id(),
     ]);
 });

@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\Api\V1\MeController;
 use App\Http\Controllers\Api\V1\Organizations\OrganizationController;
-use App\Http\Controllers\Api\V1\Organizations\SpotController as OrganizationSpotController;
 use App\Http\Controllers\Api\V1\Spots\SpotController;
 use App\Models\Organization;
-use App\Models\Spot;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->middleware(['auth:sanctum', 'verified', 'throttle:api'])->group(function () {
@@ -23,16 +21,13 @@ Route::prefix('v1')->name('api.v1.')->middleware(['auth:sanctum', 'verified', 't
             ->middleware(['abilities:organizations:update', 'can:update,organization'])->name('update');
         Route::delete('{organization:uuid}', [OrganizationController::class, 'destroy'])
             ->middleware(['abilities:organizations:delete', 'can:delete,organization'])->name('destroy');
-
-        Route::get('{organization:uuid}/spots', [OrganizationSpotController::class, 'index'])
-            ->middleware('abilities:spots:read')->name('spots.index');
-        Route::post('{organization:uuid}/spots', [OrganizationSpotController::class, 'store'])
-            ->middleware(['abilities:spots:create', 'can:create,'.Spot::class.',organization'])->name('spots.store');
     });
 
     Route::prefix('spots')->name('spots.')->group(function () {
         Route::get('/', [SpotController::class, 'index'])
             ->middleware('abilities:spots:read')->name('index');
+        Route::post('/', [SpotController::class, 'store'])
+            ->middleware('abilities:spots:create')->name('store');
         Route::get('{spot:uuid}', [SpotController::class, 'show'])
             ->middleware('abilities:spots:read')->name('show');
         Route::patch('{spot:uuid}', [SpotController::class, 'update'])

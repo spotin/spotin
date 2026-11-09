@@ -15,7 +15,7 @@ middleware(['auth', 'verified']);
 name('organizations.invitations.create');
 
 render(function (View $view, Organization $organization) {
-    Gate::authorize('manageMembers', $organization);
+    Gate::authorize('manage', $organization);
 
     Head::title(__('ui.organizations.invitations.create.title').' - '.$organization->name)
         ->description(__('ui.organizations.invitations.create.description'));

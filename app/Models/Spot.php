@@ -177,6 +177,18 @@ class Spot extends Model
     }
 
     /**
+     * Scope the query to the spots of the organization, or to the spots of all of them without one.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeOfOrganization(Builder $query, ?Organization $organization): void
+    {
+        if ($organization) {
+            $query->whereBelongsTo($organization);
+        }
+    }
+
+    /**
      * Scope the query to the spots that have a location, the only ones the maps can show.
      *
      * @param  Builder<static>  $query
@@ -228,7 +240,7 @@ class Spot extends Model
                 'type' => 'Feature',
                 'geometry' => [
                     'type' => 'Point',
-                    'coordinates' => [(float) $spot->longitude, (float) $spot->latitude],
+                    'coordinates' => [$spot->longitude, $spot->latitude],
                 ],
                 'properties' => [
                     'name' => $spot->displayName(),

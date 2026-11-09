@@ -10,6 +10,7 @@ use App\Http\Resources\OrganizationResource;
 use App\Models\Organization;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -31,9 +32,9 @@ class OrganizationController extends Controller
     /**
      * Get the specific organization.
      */
-    public function show(Organization $organization): OrganizationResource
+    public function show(Request $request, Organization $organization): OrganizationResource
     {
-        return new OrganizationResource($organization->loadCount('spots'));
+        return new OrganizationResource($organization->loadSpotsCount($request->user()));
     }
 
     /**
@@ -43,7 +44,7 @@ class OrganizationController extends Controller
     {
         $organization = Organization::create($request->validated());
 
-        return (new OrganizationResource($organization->loadCount('spots')))->response()->setStatusCode(Response::HTTP_CREATED);
+        return (new OrganizationResource($organization->loadSpotsCount($request->user())))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -53,7 +54,7 @@ class OrganizationController extends Controller
     {
         $organization->update($request->validated());
 
-        return new OrganizationResource($organization->loadCount('spots'));
+        return new OrganizationResource($organization->loadSpotsCount($request->user()));
     }
 
     /**

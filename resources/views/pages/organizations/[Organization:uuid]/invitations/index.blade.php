@@ -14,7 +14,7 @@ middleware(['auth', 'verified']);
 name('organizations.invitations.index');
 
 render(function (View $view, Organization $organization) {
-    Gate::authorize('manageMembers', $organization);
+    Gate::authorize('manage', $organization);
 
     Head::title(__('ui.organizations.invitations.index.title').' - '.$organization->name)
         ->description(__('ui.organizations.invitations.index.description'));

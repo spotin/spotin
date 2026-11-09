@@ -136,3 +136,18 @@ test('tokens are required', function () {
     $this->getJson('/api/v1/organizations')->assertUnauthorized();
     $this->postJson('/api/v1/organizations', ['name' => 'Initech'])->assertUnauthorized();
 });
+
+test('an organization counts the spots the user can find in the lists, as the list of organizations does', function (string $user, int $count) {
+    Spot::factory()->for($this->acme)->create();
+    Spot::factory()->for($this->acme)->hidden()->create();
+    Spot::factory()->for($this->acme)->create(['needs_setup' => true]);
+
+    Sanctum::actingAs($this->$user, ['organizations:read']);
+
+    $this->getJson('/api/v1/organizations?filter[query]=acme')->assertOk()->assertJsonPath('data.0.attributes.spots_count', $count);
+    $this->getJson('/api/v1/organizations/'.$this->acme->uuid)->assertOk()->assertJsonPath('data.attributes.spots_count', $count);
+})->with([
+    'outsider' => ['outsider', 1],
+    'member' => ['member', 3],
+    'admin' => ['admin', 3],
+]);

@@ -19,7 +19,7 @@ render(function (View $view) {
 
     return $view->with([
         'pendingInvitations' => Invitation::pendingFor($user)->count(),
-        'organizations' => $user->organizations()->withCount('spots')->orderBy('organizations.name')->limit(6)->get(),
+        'organizations' => $user->organizations()->withSpotsCount($user)->orderBy('organizations.name')->limit(6)->get(),
         'spots' => Spot::mine($user)->with('organization')->latest('id')->limit(6)->get(),
     ]);
 });

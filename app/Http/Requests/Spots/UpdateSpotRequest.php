@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Spots;
 
 use App\Models\Spot;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 
@@ -15,8 +16,11 @@ class UpdateSpotRequest extends StoreSpotRequest
      */
     public function rules(): array
     {
+        // The spot keeps its organization
+        $rules = Arr::except(parent::rules(), 'organization');
+
         // `sometimes`: a PATCH only changes the fields it sends
-        $rules = array_map(fn (array $rules) => ['sometimes', ...$rules], parent::rules());
+        $rules = array_map(fn (array $rules) => ['sometimes', ...$rules], $rules);
 
         // Whoever sets the spot up cannot hide it, nor leave it to be set up again: these belong to its members
         if ($this->settingUp()) {

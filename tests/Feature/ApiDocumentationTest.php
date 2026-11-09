@@ -48,7 +48,7 @@ test('each operation says which token ability it needs and who can do it', funct
     $description = fn (string $method, string $path) => $document->json("paths.$path.$method.description");
 
     expect($description('get', '/spots'))->toContain('`spots:read`')
-        ->and($description('post', '/organizations/{organization}/spots'))->toContain('`spots:create`')->toContain('members of the organization')
+        ->and($description('post', '/spots'))->toContain('`spots:create`')->toContain('members of the organization')
         ->and($description('patch', '/spots/{spot}'))->toContain('`spots:update`')
         ->and($description('delete', '/spots/{spot}'))->toContain('`spots:delete`')
         ->and($description('post', '/organizations'))->toContain('`organizations:create`')->toContain('administrators')
@@ -62,10 +62,9 @@ test('the lists document their filters and the creation of a spot its body', fun
 
     $parameters = fn (string $path) => collect($document->json("paths.$path.get.parameters"))->pluck('name')->all();
 
-    expect($parameters('/spots'))->toContain('filter[query]', 'filter[mine]', 'include')
-        ->and($parameters('/organizations'))->toContain('filter[query]', 'filter[mine]')
-        ->and($parameters('/organizations/{organization}/spots'))->toContain('filter[query]', 'filter[mine]', 'include')
-        ->and($document->json('components.schemas.StoreSpotRequest.required'))->toBeNull()
+    expect($parameters('/spots'))->toContain('filter[query]', 'filter[mine]', 'filter[organization]', 'include')
+        ->and($parameters('/organizations'))->toContain('filter[query]', 'filter[mine]')->not->toContain('filter[organization]')
+        ->and($document->json('components.schemas.StoreSpotRequest.required'))->toBe(['organization'])
         ->and($document->json('components.schemas.StoreSpotRequest.properties'))->toHaveKey('needs_setup');
 });
 

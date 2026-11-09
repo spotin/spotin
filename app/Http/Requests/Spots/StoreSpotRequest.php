@@ -4,14 +4,15 @@ namespace App\Http\Requests\Spots;
 
 use App\Models\Organization;
 use App\Models\Spot;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Validation\Validator;
 
-// The fields of a spot, created in the organization of the URL, as in the API. The source of the creation from the form,
-// which chooses the organization, and of the update of a spot, which changes what differs for an existing spot.
+// The fields of a spot, created in the organization it chooses among the ones the user creates spots in, from the form as
+// from the API. The source of the update of a spot, which changes what differs for an existing spot.
 // Not a doc comment: Scramble would show it in the API documentation.
 class StoreSpotRequest extends FormRequest
 {
@@ -23,6 +24,8 @@ class StoreSpotRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // `bail`: only an existing organization is checked by `organizationAllowsCreation()`
+            'organization' => ['bail', 'required', 'uuid', Rule::exists(Organization::class, 'uuid'), $this->organizationAllowsCreation(...)],
             // Needed once the spot is set up, checked by `nameIsGiven()`
             'name' => ['nullable', 'string', 'min:2', 'max:100', $this->uniqueName()],
             'description' => ['nullable', 'string', 'max:10000'],
@@ -59,6 +62,7 @@ class StoreSpotRequest extends FormRequest
     public function attributes(): array
     {
         return array_map(Str::lcfirst(...), [
+            'organization' => __('ui.spots.common.forms.fields.organization.label'),
             'name' => __('ui.spots.common.forms.fields.name.label'),
             'description' => __('ui.spots.common.forms.fields.description.label'),
             'latitude' => __('ui.common.map.fields.latitude.label'),
@@ -68,11 +72,22 @@ class StoreSpotRequest extends FormRequest
     }
 
     /**
-     * The organization the spot is created in: the one of the URL.
+     * The organization the spot is created in: the one chosen, if it exists.
      */
     public function organization(): ?Organization
     {
-        return $this->route('organization');
+        return Organization::firstWhere('uuid', $this->input('organization'));
+    }
+
+    /**
+     * Reject an organization the user does not create spots in. A validation error rather than a refusal of the request:
+     * the organization is a field like the others.
+     */
+    protected function organizationAllowsCreation(string $attribute, mixed $value, Closure $fail): void
+    {
+        if ($this->user()?->cannot('create', [Spot::class, $this->organization()])) {
+            $fail(__('ui.spots.common.forms.fields.organization.not_allowed'));
+        }
     }
 
     /**

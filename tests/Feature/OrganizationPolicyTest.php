@@ -20,7 +20,7 @@ beforeEach(function () {
 
 test('admins can manage every organization', function (string $ability) {
     expect($this->admin->can($ability, $this->organization))->toBeTrue();
-})->with(['update', 'delete', 'manageMembers']);
+})->with(['update', 'delete', 'manage']);
 
 test('admins can create organizations', function () {
     expect($this->admin->can('create', Organization::class))->toBeTrue();
@@ -40,10 +40,10 @@ test('only the members of an organization and the admins see its members', funct
 });
 
 test('only responsible users manage the members of their own organization', function () {
-    expect($this->responsible->can('manageMembers', $this->organization))->toBeTrue()
-        ->and($this->responsible->can('manageMembers', $this->other))->toBeFalse()
-        ->and($this->member->can('manageMembers', $this->organization))->toBeFalse()
-        ->and($this->outsider->can('manageMembers', $this->organization))->toBeFalse();
+    expect($this->responsible->can('manage', $this->organization))->toBeTrue()
+        ->and($this->responsible->can('manage', $this->other))->toBeFalse()
+        ->and($this->member->can('manage', $this->organization))->toBeFalse()
+        ->and($this->outsider->can('manage', $this->organization))->toBeFalse();
 });
 
 test('members and responsible users can leave, admins and outsiders cannot', function () {
