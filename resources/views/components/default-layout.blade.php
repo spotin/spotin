@@ -19,7 +19,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex min-h-screen flex-col">
-    <header class="navbar bg-base-100 shadow-sm">
+    <header class="navbar bg-base-100 sticky top-0 z-10 shadow-sm">
         <div class="flex flex-1 items-center">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
