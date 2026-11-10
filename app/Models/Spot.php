@@ -170,6 +170,21 @@ class Spot extends Model
     }
 
     /**
+     * Scope the query to the spots deleted with their organization, which come back with it: the ones deleted at the same
+     * time as it or after it, as `DeleteOrganization` deletes it before them. The ones deleted before, one by one, stay
+     * deleted.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeDeletedWithItsOrganization(Builder $query): void
+    {
+        $query->onlyTrashed()->whereHas(
+            'organization',
+            fn (Builder $query) => $query->onlyTrashed()->whereColumn('organizations.deleted_at', '<=', 'spots.deleted_at'),
+        );
+    }
+
+    /**
      * Scope the query to the deleted spots the user can restore: the ones they could manage, without the spots of the
      * deleted organizations, which come back with their organization only. The most recently deleted first.
      *

@@ -97,12 +97,22 @@ class Organization extends Model
      * administrators, with their number of spots the user can find in the lists and of members, sorted by name,
      * optionally only the ones whose name contains the search query or that the user can manage.
      *
+     * With `$deleted`, the deleted ones instead, to restore them, the most recently deleted first, with the number of
+     * spots that come back with them. Only the administrators find them: a deleted organization is not one of its
+     * members' anymore.
+     *
      * @param  Builder<static>  $query
      */
-    public function scopeListed(Builder $query, User $user, string $searchQuery = '', bool $mine = false): void
+    public function scopeListed(Builder $query, User $user, string $searchQuery = '', bool $mine = false, bool $deleted = false): void
     {
         $query->ofMember($user)
-            ->withSpotsCount($user)
+            ->when(
+                $deleted,
+                fn (Builder $query) => $query->onlyTrashed()
+                    ->withCount(['spots' => fn (Builder $query) => $query->deletedWithItsOrganization()])
+                    ->latest('deleted_at'),
+                fn (Builder $query) => $query->withSpotsCount($user),
+            )
             ->withCount('users as members_count')
             ->search($searchQuery)
             ->when($mine, fn (Builder $query) => $query->manageableBy($user))
@@ -125,18 +135,7 @@ class Organization extends Model
      */
     public function spotsDeletedWithIt(): HasMany
     {
-        return $this->spots()->onlyTrashed()->where('deleted_at', '>=', $this->deleted_at);
-    }
-
-    /**
-     * Scope the query to the deleted organizations, to restore them, the most recently deleted first. Only the
-     * administrators restore them: the lists offer them to them only.
-     *
-     * @param  Builder<static>  $query
-     */
-    public function scopeRestorable(Builder $query): void
-    {
-        $query->onlyTrashed()->latest('deleted_at');
+        return $this->spots()->deletedWithItsOrganization();
     }
 
     /**
@@ -163,11 +162,13 @@ class Organization extends Model
 
     /**
      * Load the number of spots of the organization that the user can find in the lists, as `spots_count`: the same as
-     * the lists count.
+     * the lists count. Deleted, the ones that come back with it.
      */
     public function loadSpotsCount(?User $user): static
     {
-        return $this->loadCount(['spots' => fn (Builder $query) => $query->visibleTo($user)]);
+        return $this->loadCount(['spots' => fn (Builder $query) => $this->trashed()
+            ? $query->deletedWithItsOrganization()
+            : $query->visibleTo($user)]);
     }
 
     /**

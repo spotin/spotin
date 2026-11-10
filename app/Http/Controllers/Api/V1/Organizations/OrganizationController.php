@@ -11,7 +11,6 @@ use App\Http\Requests\Organizations\UpdateOrganizationRequest;
 use App\Http\Resources\OrganizationResource;
 use App\Models\Organization;
 use Dedoc\Scramble\Attributes\Group;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection;
@@ -30,8 +29,7 @@ class OrganizationController extends Controller
     public function index(ApiListFiltersRequest $request): AnonymousResourceCollection
     {
         $organizations = Organization::query()
-            ->when($request->deleted(), fn (Builder $query) => $query->restorable())
-            ->listed($request->user(), $request->searchQuery(), $request->mine())
+            ->listed($request->user(), $request->searchQuery(), $request->mine(), $request->deleted())
             ->paginate(25)
             ->withQueryString();
 

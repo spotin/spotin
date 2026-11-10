@@ -344,3 +344,23 @@ test('the buttons of the alerts are in them, their forms out of them, as a parag
     app(DeleteOrganization::class)->delete($this->organization);
     expect($inAlert($this->actingAs($this->admin)->get(route('organizations.edit', ['organization' => $this->organization->uuid]))->getContent(), 'restore-form'))->toBeTrue();
 });
+
+test('a deleted organization counts the spots that come back with it, in its list, on its page and in the API', function () {
+    Spot::factory()->for($this->organization)->create(['name' => 'Lighthouse']);
+    $before = Spot::factory()->for($this->organization)->create(['name' => 'Deleted before']);
+    $before->delete();
+    $this->travel(1)->minute();
+    app(DeleteOrganization::class)->delete($this->organization);
+
+    // Harbour and Lighthouse, not the one deleted before
+    $this->actingAs($this->admin)->get(route('organizations.index', ['deleted' => 1]))
+        ->assertOk()
+        ->assertSee(trans_choice('ui.organizations.common.spots', 2));
+
+    $this->get(route('organizations.show', ['organization' => $this->organization->uuid]))
+        ->assertSee(trans_choice('ui.organizations.show.spots_coming_back', 2));
+
+    Sanctum::actingAs($this->admin, ['organizations:read']);
+    $this->getJson('/api/v1/organizations?filter[deleted]=1')->assertJsonPath('data.0.attributes.spots_count', 2);
+    $this->getJson('/api/v1/organizations/'.$this->organization->uuid)->assertJsonPath('data.attributes.spots_count', 2);
+});

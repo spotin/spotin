@@ -4,7 +4,6 @@ namespace App\Support;
 
 use App\Http\Requests\ListFiltersRequest;
 use App\Models\Organization;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -45,8 +44,7 @@ final readonly class OrganizationListing
             // The deleted ones the user can restore, as the deleted spots: among the organizations of the list, which a
             // deleted organization is not one of for its members, the administrators only find them
             organizations: Organization::query()
-                ->when($request->deleted(), fn (Builder $query) => $query->restorable())
-                ->listed($user, $request->searchQuery(), $request->mine())
+                ->listed($user, $request->searchQuery(), $request->mine(), $request->deleted())
                 ->paginate(25)
                 ->withQueryString(),
             roles: $user->organizations()->pluck('memberships.role', 'organizations.id'),
