@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\SpotFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
 use League\CommonMark\Extension\NormalizeHeadings\NormalizeHeadingsExtension;
 
-#[Fillable(['name', 'description', 'latitude', 'longitude', 'website', 'redirect_to_website', 'is_hidden', 'needs_setup'])]
+#[Fillable(['name', 'description', 'latitude', 'longitude', 'website', 'redirect_to_website', 'is_hidden', 'needs_setup', 'custom_data'])]
 class Spot extends Model
 {
     /** @use HasFactory<SpotFactory> */
@@ -47,6 +48,21 @@ class Spot extends Model
             'needs_setup' => 'boolean',
             'qr_code_downloaded_at' => 'datetime',
         ];
+    }
+
+    /**
+     * The JSON object of the developers, for their own applications, kept as an object, `{}` included, its nested
+     * objects as well: decoded as arrays, they would come back as lists. An empty one is no data, stored as `null`.
+     *
+     * @return Attribute<object|null, mixed>
+     */
+    protected function customData(): Attribute
+    {
+        // Read again from what is stored rather than kept as given: `{}` is stored as `null`
+        return Attribute::make(
+            get: fn (?string $value) => $value === null ? null : json_decode($value),
+            set: fn (mixed $value) => blank($value) || $value == (object) [] ? null : json_encode($value),
+        )->withoutObjectCaching();
     }
 
     /**

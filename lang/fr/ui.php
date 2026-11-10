@@ -410,6 +410,8 @@ return [
             ],
         ],
         'feedback' => [
+            'custom_data_object' => 'Les :attribute doivent être un objet JSON, de valeurs nommées.',
+            'custom_data_too_large' => 'Les :attribute ne peuvent pas dépasser :max caractères une fois encodées.',
             'invitation_accepted' => "Vous avez rejoint l'organisation.",
             'invitation_declined' => "L'invitation a été refusée.",
             'invalid_invitation' => 'Cette invitation est invalide, a expiré ou a été envoyée à une autre adresse e-mail.',
@@ -459,6 +461,10 @@ return [
             'deleted' => 'Supprimée',
             'forms' => [
                 'fields' => [
+                    // In the messages of the errors of the API: the forms do not have it
+                    'custom_data' => [
+                        'label' => 'Données personnalisées',
+                    ],
                     'name' => [
                         'label' => 'Nom',
                         'placeholder' => "Saisissez le nom de l'organisation",

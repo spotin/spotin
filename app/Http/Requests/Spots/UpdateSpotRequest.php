@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Spots;
 
 use App\Models\Spot;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 
@@ -16,19 +15,42 @@ class UpdateSpotRequest extends StoreSpotRequest
      */
     public function rules(): array
     {
-        // The spot keeps its organization
-        $rules = Arr::except(parent::rules(), 'organization');
+        $rules = parent::rules();
 
         // `sometimes`: a PATCH only changes the fields it sends
-        $rules = array_map(fn (array $rules) => ['sometimes', ...$rules], $rules);
+        $sometimes = fn (string $field) => ['sometimes', ...$rules[$field]];
 
-        // Whoever sets the spot up cannot hide it, nor leave it to be set up again: these belong to its members
-        if ($this->settingUp()) {
-            $rules['is_hidden'] = ['prohibited'];
-            $rules['needs_setup'] = ['prohibited'];
-        }
+        // Whoever sets the spot up cannot hide it, nor leave it to be set up again, nor give it custom data: these belong
+        // to its members
+        $membersOnly = fn (string $field) => $this->settingUp() ? ['prohibited'] : $sometimes($field);
 
-        return $rules;
+        // Written out, without the organization, which the spot keeps: the comments are the descriptions of the fields
+        // in the documentation of the API, as for the creation
+        return [
+            // Unique among the spots of its organization. Required once the spot is set up.
+            'name' => $sometimes('name'),
+            // In Markdown.
+            'description' => $sometimes('description'),
+            // The location is optional, but given with both `latitude` and `longitude`.
+            'latitude' => $sometimes('latitude'),
+            // Given with `latitude`.
+            'longitude' => $sometimes('longitude'),
+            // An `http` or `https` address, linked from the page of the spot.
+            'website' => $sometimes('website'),
+            // Sends who scans the spot straight to its `website`, which it then needs.
+            'redirect_to_website' => $sometimes('redirect_to_website'),
+            // Hidden spots are only listed for the members of the organization, but stay reachable by their link.
+            'is_hidden' => $membersOnly('is_hidden'),
+            // To be set up on site, by the first person who scans the spot.
+            'needs_setup' => $membersOnly('needs_setup'),
+            /**
+             * A JSON object of your own, for your applications, such as `{"floor": 2}`: up to 10,000 characters once
+             * encoded. `null` or `{}` removes it. Only returned to who manages the spot.
+             *
+             * @var array<string, mixed>|null
+             */
+            'custom_data' => $membersOnly('custom_data'),
+        ];
     }
 
     /**
@@ -59,7 +81,7 @@ class UpdateSpotRequest extends StoreSpotRequest
      */
     public function fields(): array
     {
-        return [...$this->validated(), ...($this->settingUp() ? ['needs_setup' => false] : [])];
+        return [...parent::fields(), ...($this->settingUp() ? ['needs_setup' => false] : [])];
     }
 
     /**

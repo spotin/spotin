@@ -1,3 +1,5 @@
+[Spot in® Documentation](../README.md) > How-to guides
+
 # How-to guides
 
 This document provides a series of how-to guides to assist you in performing

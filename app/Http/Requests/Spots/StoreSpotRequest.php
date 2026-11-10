@@ -17,28 +17,45 @@ use Illuminate\Validation\Validator;
 class StoreSpotRequest extends FormRequest
 {
     /**
+     * The longest custom data, in characters once encoded.
+     */
+    public const CUSTOM_DATA_MAX = 10000;
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
      */
     public function rules(): array
     {
+        // The comments are the descriptions of the fields in the documentation of the API: for its users
         return [
-            // `bail`: only an existing organization is checked by `organizationAllowsCreation()`
+            // The UUID of the organization of the spot, one you are a member of. It cannot be changed afterwards.
             'organization' => ['bail', 'required', 'uuid', Rule::exists(Organization::class, 'uuid'), $this->organizationAllowsCreation(...)],
-            // Needed once the spot is set up, checked by `nameIsGiven()`
+            // Required, unless the spot is set up on site (`needs_setup`): the first person who scans it names it then.
+            // Unique among the spots of its organization.
             'name' => ['nullable', 'string', 'min:2', 'max:100', $this->uniqueName()],
+            // In Markdown.
             'description' => ['nullable', 'string', 'max:10000'],
-            // The location is optional, but both coordinates are given together, checked by `locationIsComplete()`
+            // The location is optional, but given with both `latitude` and `longitude`.
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            // Given with `latitude`.
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            // An `http` or `https` address, linked from the page of the spot.
             'website' => ['nullable', 'url:http,https', 'max:2048'],
-            // Needs a website, checked by `redirectNeedsWebsite()`
+            // Sends who scans the spot straight to its `website`, which it then needs.
             'redirect_to_website' => ['boolean'],
-            // Hidden spots are only listed for the members of the organization, but stay reachable by their link
+            // Hidden spots are only listed for the members of the organization, but stay reachable by their link.
             'is_hidden' => ['boolean'],
-            // To be set up on site, by the first person who scans the spot
+            // To be set up on site, by the first person who scans the spot.
             'needs_setup' => ['boolean'],
+            /**
+             * A JSON object of your own, for your applications, such as `{"floor": 2}`: up to 10,000 characters once
+             * encoded. `null` or `{}` removes it. Only returned to who manages the spot.
+             *
+             * @var array<string, mixed>|null
+             */
+            'custom_data' => ['nullable', 'array', $this->customDataIsObject(...), $this->customDataFits(...)],
         ];
     }
 
@@ -68,7 +85,25 @@ class StoreSpotRequest extends FormRequest
             'latitude' => __('ui.common.map.fields.latitude.label'),
             'longitude' => __('ui.common.map.fields.longitude.label'),
             'website' => __('ui.spots.common.forms.fields.website.label'),
+            'custom_data' => __('ui.spots.common.forms.fields.custom_data.label'),
         ]);
+    }
+
+    /**
+     * The validated fields to save: the custom data as sent, read again from the JSON body, where an empty object stays
+     * an object rather than an empty list.
+     *
+     * @return array<string, mixed>
+     */
+    public function fields(): array
+    {
+        $fields = $this->validated();
+
+        if (array_key_exists('custom_data', $fields) && $this->isJson()) {
+            $fields['custom_data'] = json_decode($this->getContent())->custom_data;
+        }
+
+        return $fields;
     }
 
     /**
@@ -81,12 +116,33 @@ class StoreSpotRequest extends FormRequest
 
     /**
      * Reject an organization the user does not create spots in. A validation error rather than a refusal of the request:
-     * the organization is a field like the others.
+     * the organization is a field like the others. Only checked for an existing organization, thanks to `bail`.
      */
     protected function organizationAllowsCreation(string $attribute, mixed $value, Closure $fail): void
     {
         if ($this->user()?->cannot('create', [Spot::class, $this->organization()])) {
             $fail(__('ui.spots.common.forms.fields.organization.not_allowed'));
+        }
+    }
+
+    /**
+     * Reject a list, such as `[1, 2]`: the custom data are an object, of named values. `{}` and `[]` are the same once
+     * decoded, and both remove them.
+     */
+    protected function customDataIsObject(string $attribute, mixed $value, Closure $fail): void
+    {
+        if (is_array($value) && $value !== [] && array_is_list($value)) {
+            $fail(__('ui.spots.feedback.custom_data_object'));
+        }
+    }
+
+    /**
+     * Reject custom data longer than 10,000 characters once encoded, as stored.
+     */
+    protected function customDataFits(string $attribute, mixed $value, Closure $fail): void
+    {
+        if (mb_strlen((string) json_encode($value)) > self::CUSTOM_DATA_MAX) {
+            $fail(__('ui.spots.feedback.custom_data_too_large', ['max' => self::CUSTOM_DATA_MAX]));
         }
     }
 

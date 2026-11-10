@@ -189,6 +189,8 @@ class DevelopmentSeeder extends Seeder
             ['Hidden Spot', $organization, $member, ['is_hidden' => true]],
             ['Redirecting Spot', $organization, $member, ['website' => 'https://www.myswitzerland.com', 'redirect_to_website' => true]],
             ['Markdown Spot', $organization, $responsible, ['description' => self::MARKDOWN_DESCRIPTION, 'website' => 'https://www.jungfrau.ch']],
+            // Seen through the API only
+            ['Custom Data Spot', $organization, $member, ['custom_data' => ['floor' => 2, 'tags' => ['entrance'], 'opening' => ['from' => '08:00', 'to' => '18:00']]]],
         ];
 
         // Known places, so that the spots are easy to find on the map
@@ -201,6 +203,7 @@ class DevelopmentSeeder extends Seeder
             ['Rhine Falls', 47.677778, 8.615278],
             ['Matterhorn', 45.976389, 7.658333],
             ['Aletsch Glacier', 46.500000, 8.033333],
+            ['Oeschinen Lake', 46.498611, 7.726389],
         ];
 
         foreach ($spots as $index => [$name, $spotOrganization, $creator, $attributes]) {

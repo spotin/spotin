@@ -77,3 +77,30 @@ test('the resources are documented in the JSON:API format, with their relationsh
         ->and(array_keys($document->json('components.schemas.UserResource.properties.attributes.properties')))->toBe(['name'])
         ->and(array_keys($document->json('components.schemas.MeResource.properties.meta.properties')))->toBe(['token']);
 });
+
+test('the custom data of the spots are documented as an object, in the requests and in the responses', function () {
+    $document = $this->getJson('/api.json')->assertOk();
+
+    $isObject = fn (?array $schema) => collect([$schema, ...($schema['anyOf'] ?? [])])
+        ->contains(fn (?array $schema) => in_array('object', (array) ($schema['type'] ?? []), true));
+
+    foreach (['StoreSpotRequest', 'UpdateSpotRequest'] as $request) {
+        expect($isObject($document->json("components.schemas.{$request}.properties.custom_data")))->toBeTrue();
+    }
+
+    expect($isObject($document->json('components.schemas.SpotResource.properties.attributes.properties.custom_data')))->toBeTrue();
+});
+
+test('the fields of the spots are described for the users of the API, for their creation as for their update', function () {
+    $schemas = $this->getJson('/api.json')->assertOk()->json('components.schemas');
+
+    foreach (['StoreSpotRequest', 'UpdateSpotRequest'] as $request) {
+        foreach ($schemas[$request]['properties'] as $field => $schema) {
+            // Each field described, without the names of the methods of the code that checks it
+            expect($schema['description'] ?? '')->not->toBeEmpty("{$request}.{$field} has no description")
+                ->not->toMatch('/\w+\(\)|`bail`/');
+        }
+    }
+
+    expect(array_keys($schemas['UpdateSpotRequest']['properties']))->not->toContain('organization');
+});
