@@ -25,6 +25,7 @@ test('responsible users see the members with their emails and the management for
         ->assertOk()
         ->assertSee('Rita Responsible')
         ->assertSee(emailHtml('mike@example.com'), false)
+        ->assertSee('href="mailto:mike@example.com"', false)
         ->getContent();
 
     $memberUrl = route('organizations.members.destroy', ['organization' => $this->organization->uuid, 'user' => $this->member->id]);

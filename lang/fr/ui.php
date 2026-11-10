@@ -286,6 +286,10 @@ return [
                 'title' => 'Organisations',
                 'description' => 'Dont vous êtes membre',
             ],
+            'users' => [
+                'title' => 'Utilisateurs',
+                'description' => 'Sur la plateforme',
+            ],
         ],
         'getting_started' => [
             'title' => 'Premiers pas',
@@ -889,6 +893,40 @@ return [
             'warning' => "Supprimer le spot le retire pour tout le monde, avec tous ses détails. Ses codes QR imprimés indiqueront qu'il n'est plus utilisé. Le spot peut être restauré si besoin depuis sa page de modification.",
             'actions' => [
                 'submit' => 'Supprimer le spot',
+            ],
+        ],
+    ],
+    'users' => [
+        'common' => [
+            'roles' => [
+                'user' => 'Utilisateur',
+                'admin' => 'Administrateur',
+            ],
+        ],
+        'feedback' => [
+            'role_updated' => 'Le rôle a été mis à jour.',
+            'last_admin' => 'La plateforme doit conserver au moins un administrateur.',
+        ],
+        'index' => [
+            'title' => 'Utilisateurs',
+            'description' => 'Les utilisateurs de la plateforme et leurs rôles.',
+            'filter' => [
+                'label' => 'Rechercher les utilisateurs',
+                'search' => 'Rechercher par nom ou adresse e-mail',
+            ],
+            'no_result' => 'Aucun utilisateur ne correspond à votre recherche.',
+            'last_admin' => 'Vous êtes le seul administrateur de la plateforme. Nommez un autre utilisateur administrateur avant de pouvoir renoncer à ce rôle.',
+            'table' => [
+                'you' => 'Vous',
+                'columns' => [
+                    'name' => 'Nom',
+                    'organizations' => 'Organisations',
+                    'role' => 'Rôle',
+                    'actions' => 'Actions',
+                ],
+                'actions' => [
+                    'save' => 'Enregistrer',
+                ],
             ],
         ],
     ],

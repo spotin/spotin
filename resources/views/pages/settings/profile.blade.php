@@ -68,7 +68,9 @@ render(function (View $view) {
         {{-- The administrators never get the checklist of the first steps: there is nothing to show or hide --}}
         @unless (auth()->user()->isAdmin())
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">{{ __('ui.settings.profile.form.fields.show_getting_started.legend') }}</legend>
+                <legend class="fieldset-legend">
+                    {{ __('ui.settings.profile.form.fields.show_getting_started.legend') }}
+                </legend>
                 {{-- Sent when unchecked, which a checkbox is not --}}
                 <input type="hidden" name="show_getting_started" value="0" />
                 <label class="label">

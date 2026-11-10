@@ -3,6 +3,7 @@
 use App\Models\Invitation;
 use App\Models\Organization;
 use App\Models\Spot;
+use App\Models\User;
 use App\Support\GettingStarted;
 use Illuminate\View\View;
 use Laravel\Head\Facades\Head;
@@ -31,17 +32,31 @@ render(function (View $view) {
                 ? ['key' => 'spot', 'url' => route('spots.create'), 'icon' => 'map-pin']
                 : null,
         ])),
-        // The organizations the user is a member of, and all their spots
-        'statistics' => [
-            'organizations' => $user->organizations()->count(),
-            'spots' => Spot::whereIn('organization_id', $user->organizations()->select('organizations.id'))->count(),
-        ],
+        // The organizations the user is a member of, and all their spots; for the administrators, the users of the
+        // platform too. Each one leads to its list, with its icon
+        'statistics' => array_filter([
+            'spots' => [
+                'count' => Spot::whereIn('organization_id', $user->organizations()->select('organizations.id'))->count(),
+                'url' => route('spots.index'),
+                'icon' => 'map-pin',
+            ],
+            'organizations' => [
+                'count' => $user->organizations()->count(),
+                'url' => route('organizations.index'),
+                'icon' => 'building-2',
+            ],
+            'users' => $user->can('viewAny', User::class)
+                ? ['count' => User::count(), 'url' => route('users.index'), 'icon' => 'users']
+                : null,
+        ]),
     ]);
 });
 ?>
 
 <x-default-layout>
     <h1>{{ __('ui.dashboard.title') }}</h1>
+
+    <p>{{ __('ui.dashboard.greeting', ['name' => auth()->user()->name]) }}</p>
 
     @if ($pendingInvitations > 0)
         <x-alert type="info" icon="mail" class="alert-vertical sm:alert-horizontal">
@@ -55,8 +70,6 @@ render(function (View $view) {
         </x-alert>
     @endif
 
-    <p>{{ __('ui.dashboard.greeting', ['name' => auth()->user()->name]) }}</p>
-
     @if ($gettingStarted->isVisible())
         <x-dashboard.getting-started :checklist="$gettingStarted" />
     @endif
@@ -64,16 +77,17 @@ render(function (View $view) {
     <section aria-labelledby="overview" class="mt-8">
         <h2 id="overview">{{ __('ui.dashboard.overview') }}</h2>
 
-        {{-- Stacked on small screens, side by side on large ones; each leads to its list --}}
         <div class="not-prose stats stats-vertical lg:stats-horizontal border-base-200 bg-base-100 w-full border">
-            @foreach (['spots' => ['spots.index', 'map-pin'], 'organizations' => ['organizations.index', 'building-2']] as $statistic => [$route, $icon])
-                <a href="{{ route($route) }}" class="stat hover:bg-base-200">
+            @foreach ($statistics as $statistic => ['count' => $count, 'url' => $url, 'icon' => $icon])
+                <a href="{{ $url }}" class="stat hover:bg-base-200">
                     <div class="stat-figure text-primary">
                         <x-dynamic-component :component="'lucide-'.$icon" class="h-8 w-8" aria-hidden="true" />
                     </div>
-                    <div class="stat-title">{{ __("ui.dashboard.statistics.$statistic.title") }}</div>
-                    <div class="stat-value text-primary">{{ $statistics[$statistic] }}</div>
-                    <div class="stat-desc">{{ __("ui.dashboard.statistics.$statistic.description") }}</div>
+                    <div class="stat-title whitespace-normal">{{ __("ui.dashboard.statistics.$statistic.title") }}</div>
+                    <div class="stat-value text-primary">{{ $count }}</div>
+                    <div class="stat-desc whitespace-normal">
+                        {{ __("ui.dashboard.statistics.$statistic.description") }}
+                    </div>
                 </a>
             @endforeach
         </div>
@@ -92,7 +106,9 @@ render(function (View $view) {
                         variant="action"
                         :level="3"
                     >
-                        <p class="text-sm opacity-70">{{ __("ui.dashboard.quick_actions.{$action['key']}.description") }}</p>
+                        <p class="text-sm opacity-70">
+                            {{ __("ui.dashboard.quick_actions.{$action['key']}.description") }}
+                        </p>
                     </x-link-card>
                 @endforeach
             </div>

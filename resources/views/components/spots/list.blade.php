@@ -29,7 +29,11 @@
 
         {{-- The deleted spots, to restore them: for who can --}}
         @if ($listing->canRestore)
-            <x-filters.checkbox name="deleted" :label="__('ui.spots.index.filter.deleted')" :checked="$listing->deleted" />
+            <x-filters.checkbox
+                name="deleted"
+                :label="__('ui.spots.index.filter.deleted')"
+                :checked="$listing->deleted"
+            />
         @endif
     @endauth
 </x-filters>

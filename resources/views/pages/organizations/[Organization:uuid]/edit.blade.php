@@ -51,7 +51,14 @@ render(function (View $view, Organization $organization) {
         </x-alert>
 
         {{-- Out of the alert, a paragraph, which cannot hold a form: its button sends it by its id --}}
-        <form id="restore-form" method="POST" action="{{ route('organizations.restore', ['organization' => $organization->uuid]) }}" hidden>@csrf</form>
+        <form
+            id="restore-form"
+            method="POST"
+            action="{{ route('organizations.restore', ['organization' => $organization->uuid]) }}"
+            hidden
+        >
+            @csrf
+        </form>
     @else
         <form method="POST" action="{{ route('organizations.update', $organization) }}">
             @csrf
@@ -74,13 +81,17 @@ render(function (View $view, Organization $organization) {
             </fieldset>
 
             <footer class="mt-4">
-                <button type="submit" class="btn btn-block">{{ __('ui.organizations.edit.form.actions.submit') }}</button>
+                <button type="submit" class="btn btn-block">
+                    {{ __('ui.organizations.edit.form.actions.submit') }}
+                </button>
             </footer>
         </form>
 
         @can('delete', $organization)
             <section aria-labelledby="danger-title" class="border-error/30 rounded-box not-prose mt-10 border p-4">
-                <h2 id="danger-title" class="text-error font-semibold">{{ __('ui.organizations.edit.danger.title') }}</h2>
+                <h2 id="danger-title" class="text-error font-semibold">
+                    {{ __('ui.organizations.edit.danger.title') }}
+                </h2>
                 <p class="mt-1 mb-4 text-sm">{{ __('ui.organizations.delete.warning') }}</p>
                 <x-confirm-modal
                     :id="'delete-organization-'.$organization->uuid.'-modal'"

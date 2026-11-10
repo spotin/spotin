@@ -31,7 +31,9 @@
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="show_getting_started" value="0" />
-                <button type="submit" class="btn btn-ghost btn-sm">{{ __('ui.dashboard.getting_started.hide') }}</button>
+                <button type="submit" class="btn btn-ghost btn-sm">
+                    {{ __('ui.dashboard.getting_started.hide') }}
+                </button>
             </form>
         </header>
 
