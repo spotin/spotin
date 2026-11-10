@@ -1,3 +1,5 @@
+[Spot in® Documentation](../README.md) > Reference
+
 # Reference
 
 This document provides a comprehensive reference for the project to assist you
@@ -35,12 +37,13 @@ dependencies, as declared in `composer.json` (PHP) and `package.json`
   ones on `/spots/{uuid}` in `Spots\SpotController`. The API has the same layout
   under `Api\V1`, without nested URLs: the spots of an organization are a filter
   of `/spots`, and a new spot names its organization in its body.
-- **Routes.** Pages (`GET`) are Folio pages in `resources/views/pages`, and name
-  themselves with `name()`. Everything that changes data (`POST`, `PUT`,
-  `PATCH`, `DELETE`) is a route of `routes/web.php`, and `routes/api.php` for
-  the API. The pages of a public domain (organizations, spots) need no login. A
-  page that is not under a dynamic segment is `create.blade.php`, unless a
-  dynamic sibling would take its URL: then it is `create/index.blade.php`.
+- **Routes.** Pages (`GET`) are [Folio](https://laravel.com/docs/folio) pages in
+  `resources/views/pages`, and name themselves with `name()`. Everything that
+  changes data (`POST`, `PUT`, `PATCH`, `DELETE`) is a route of
+  `routes/web.php`, and `routes/api.php` for the API. The pages of a public
+  domain (organizations, spots) need no login. A page that is not under a
+  dynamic segment is `create.blade.php`, unless a dynamic sibling would take its
+  URL: then it is `create/index.blade.php`.
 - **Authorization.** Routes check abilities with the `can:` middleware, pages
   with `Gate::authorize()` in their render function, and controllers never
   authorize. Public pages have no ability to check. A model chosen in the body

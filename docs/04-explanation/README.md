@@ -1,3 +1,5 @@
+[Spot in® Documentation](../README.md) > Explanations
+
 # Explanations
 
 This document provides explanations for various aspects of the project,
