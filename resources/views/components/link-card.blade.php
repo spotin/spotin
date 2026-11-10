@@ -9,13 +9,11 @@
     href="{{ $href }}"
     {{ $attributes->class('card card-border card-side bg-base-100 hover:bg-base-200 focus-visible:outline-primary items-center transition-colors focus-visible:outline-2') }}
 >
-    <div
-        @class([
-            'ml-4 shrink-0 rounded-full p-3',
-            'bg-primary text-primary-content' => $variant === 'action',
-            'bg-base-200' => $variant === 'item',
-        ])
-    >
+    <div @class([
+        'ml-4 shrink-0 rounded-full p-3',
+        'bg-primary text-primary-content' => $variant === 'action',
+        'bg-base-200' => $variant === 'item',
+    ])>
         <x-dynamic-component :component="'lucide-'.$icon" class="h-6 w-6" aria-hidden="true" />
     </div>
     <div class="card-body min-w-0 p-4">

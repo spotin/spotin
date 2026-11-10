@@ -39,6 +39,11 @@
                         <li>
                             <a href="{{ route('organizations.index') }}">{{ __('ui.organizations.index.title') }}</a>
                         </li>
+                        @can('viewAny', App\Models\User::class)
+                            <li>
+                                <a href="{{ route('users.index') }}">{{ __('ui.users.index.title') }}</a>
+                            </li>
+                        @endcan
                     @endauth
                     @guest
                         <li>
@@ -73,6 +78,14 @@
                             {{ __('ui.organizations.index.title') }}
                         </a>
                     </li>
+                    @can('viewAny', App\Models\User::class)
+                        <li>
+                            <a href="{{ route('users.index') }}">
+                                <x-lucide-users class="h-4 w-4" aria-hidden="true" />
+                                {{ __('ui.users.index.title') }}
+                            </a>
+                        </li>
+                    @endcan
                 @endauth
                 @guest
                     <li>

@@ -9,8 +9,10 @@ use App\Http\Controllers\Organizations\OrganizationController;
 use App\Http\Controllers\Organizations\SpotController as OrganizationSpotController;
 use App\Http\Controllers\Settings\TokenController;
 use App\Http\Controllers\Spots\SpotController;
+use App\Http\Controllers\Users\UserController;
 use App\Models\Organization;
 use App\Models\Spot;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::singleton('locale', LocaleController::class)->only(['update']);
@@ -57,6 +59,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('invitations.accept');
     Route::delete('invitations/{invitation}', [InvitationController::class, 'decline'])
         ->name('invitations.decline');
+
+    // The administrators of the platform, named by the administrators
+    Route::put('users/{user}', [UserController::class, 'update'])
+        ->middleware('can:updateRole,'.User::class)
+        ->name('users.update');
 
     Route::post('settings/developer/tokens', [TokenController::class, 'store'])->name('settings.developer.tokens.store');
     Route::delete('settings/developer/tokens/{token}', [TokenController::class, 'destroy'])

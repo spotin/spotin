@@ -286,6 +286,10 @@ return [
                 'title' => 'Organizations',
                 'description' => 'You are a member of',
             ],
+            'users' => [
+                'title' => 'Users',
+                'description' => 'On the platform',
+            ],
         ],
         'getting_started' => [
             'title' => 'Getting started',
@@ -889,6 +893,40 @@ return [
             'warning' => 'Deleting the spot removes it for everyone, with all its details. Its printed QR codes will show that it is no longer in use. The spot can be restored if needed from its edit page.',
             'actions' => [
                 'submit' => 'Delete the spot',
+            ],
+        ],
+    ],
+    'users' => [
+        'common' => [
+            'roles' => [
+                'user' => 'User',
+                'admin' => 'Administrator',
+            ],
+        ],
+        'feedback' => [
+            'role_updated' => 'The role has been updated.',
+            'last_admin' => 'The platform must keep at least one administrator.',
+        ],
+        'index' => [
+            'title' => 'Users',
+            'description' => 'The users of the platform and their roles.',
+            'filter' => [
+                'label' => 'Search the users',
+                'search' => 'Search by name or email address',
+            ],
+            'no_result' => 'No user matches your search.',
+            'last_admin' => 'You are the only administrator of the platform. Make another user an administrator before you can give up this role.',
+            'table' => [
+                'you' => 'You',
+                'columns' => [
+                    'name' => 'Name',
+                    'organizations' => 'Organizations',
+                    'role' => 'Role',
+                    'actions' => 'Actions',
+                ],
+                'actions' => [
+                    'save' => 'Save',
+                ],
             ],
         ],
     ],

@@ -29,6 +29,7 @@ test('the invitations page lists the invitations and links to the invitation for
     $this->actingAs($this->responsible)->get(($this->url)('organizations.invitations.index'))
         ->assertOk()
         ->assertSee(emailHtml('pending@example.com'), false)
+        ->assertSee('href="mailto:pending@example.com"', false)
         ->assertSee(emailHtml('old@example.com'), false)
         ->assertSee(__('ui.organizations.invitations.index.table.expired'))
         ->assertDontSee('elsewhere@example.com')

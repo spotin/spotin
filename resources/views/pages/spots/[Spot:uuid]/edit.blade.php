@@ -81,7 +81,9 @@ render(function (View $view, Spot $spot) {
         </x-alert>
 
         {{-- Out of the alert, a paragraph, which cannot hold a form: its button sends it by its id --}}
-        <form id="restore-form" method="POST" action="{{ route('spots.restore', ['spot' => $spot->uuid]) }}" hidden>@csrf</form>
+        <form id="restore-form" method="POST" action="{{ route('spots.restore', ['spot' => $spot->uuid]) }}" hidden>
+            @csrf
+        </form>
     @else
         <x-spots.form
             :action="route('spots.update', $spot)"
