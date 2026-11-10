@@ -34,7 +34,7 @@ class StoreSpotRequest extends FormRequest
             'organization' => ['bail', 'required', 'uuid', Rule::exists(Organization::class, 'uuid'), $this->organizationAllowsCreation(...)],
             // Required, unless the spot is set up on site (`needs_setup`): the first person who scans it names it then.
             // Unique among the spots of its organization.
-            'name' => ['nullable', 'string', 'min:2', 'max:100', $this->uniqueName()],
+            'name' => ['nullable', 'string', 'min:2', 'max:255', $this->uniqueName()],
             // In Markdown.
             'description' => ['nullable', 'string', 'max:10000'],
             // The location is optional, but given with both `latitude` and `longitude`.

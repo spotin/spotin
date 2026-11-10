@@ -27,3 +27,6 @@ Thumbs.db
 
 # Folder config file
 [Dd]esktop.ini
+
+# The exported tables of the previous application, with the hashes of its passwords
+/legacy

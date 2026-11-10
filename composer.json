@@ -17,6 +17,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "league/commonmark": "^2.10",
+        "league/html-to-markdown": "^5.2",
         "mallardduck/blade-lucide-icons": "^2.0",
         "ublabs/blade-simple-icons": "^0.215.0"
     },
@@ -67,7 +68,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "docker compose up --detach mailpit",
+            "docker compose up --detach mailpit mariadb phpmyadmin",
             "@php artisan dev"
         ],
         "test": [

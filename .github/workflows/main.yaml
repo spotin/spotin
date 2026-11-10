@@ -35,6 +35,9 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v7
 
+            - name: Start MariaDB
+              run: docker compose up --detach --wait mariadb
+
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
@@ -104,6 +107,9 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v7
+
+            - name: Start MariaDB
+              run: docker compose up --detach --wait mariadb
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2

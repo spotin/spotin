@@ -184,13 +184,26 @@ const showSpots = (map, { dataset }, recenter) => {
         }
     });
 
+    // A group opens on all its spots, not only the ones around its middle, which spread far from it when zoomed out: no
+    // closer than where it splits, as they would be out of the map. When they cannot be closer than they are, to where it
+    // splits, around its middle.
     map.on("click", "spot-groups", async ({ features: [group] }) => {
-        map.easeTo({
-            center: group.geometry.coordinates,
-            zoom: await map
-                .getSource("spots")
-                .getClusterExpansionZoom(group.properties.cluster_id),
+        const source = map.getSource("spots");
+        const { cluster_id: id, point_count: count } = group.properties;
+        const [spots, splits] = await Promise.all([
+            source.getClusterLeaves(id, count, 0),
+            source.getClusterExpansionZoom(id),
+        ]);
+        const camera = map.cameraForBounds(boundsOf({ features: spots }), {
+            padding: fitting.padding,
+            maxZoom: splits,
         });
+
+        map.easeTo(
+            camera && camera.zoom > map.getZoom()
+                ? camera
+                : { center: group.geometry.coordinates, zoom: splits },
+        );
     });
 
     map.on("click", "spot-points", ({ features: [spot] }) => {

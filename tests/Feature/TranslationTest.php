@@ -29,3 +29,17 @@ test('pages show no untranslated keys', function (string $locale, string $route,
     'developer settings' => ['settings.developer', true],
     'new developer token' => ['settings.developer.tokens.create', true],
 ]);
+
+test('every interface string the code uses exists', function () {
+    $strings = require lang_path('en/ui.php');
+
+    // The keys written out in the code and the views, not the ones built from a variable
+    $used = collect([...glob(app_path('{,*/,*/*/,*/*/*/,*/*/*/*/}*.php'), GLOB_BRACE), ...glob(resource_path('views/{,*/,*/*/,*/*/*/,*/*/*/*/}*.php'), GLOB_BRACE)])
+        ->flatMap(fn (string $file) => preg_match_all('/[\'"]ui\.([a-z0-9_.]+[a-z0-9_])[\'"]/', file_get_contents($file), $matches) ? $matches[1] : [])
+        ->unique()
+        ->values();
+
+    expect($used)->not->toBeEmpty()
+        // A group too, such as a list of strings the view goes through
+        ->and($used->reject(fn (string $key) => Arr::has($strings, $key))->values()->all())->toBe([]);
+});

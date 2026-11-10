@@ -1,5 +1,11 @@
 name: Spot in®
 
+configs:
+    mariadb-testing:
+        content: |
+            CREATE DATABASE IF NOT EXISTS testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+            GRANT ALL PRIVILEGES ON testing.* TO 'username'@'%';
+
 volumes:
     mariadb_data:
 
@@ -19,6 +25,9 @@ services:
             - MARIADB_USER=username
             - MARIADB_PASSWORD=password
             - MARIADB_DATABASE=my_database
+        configs:
+            - source: mariadb-testing
+              target: /docker-entrypoint-initdb.d/testing.sql
         ports:
             - 3306:3306
         volumes:
