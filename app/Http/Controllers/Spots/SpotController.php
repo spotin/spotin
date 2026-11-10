@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 
 class SpotController extends Controller
 {
@@ -81,7 +82,7 @@ class SpotController extends Controller
      */
     public function store(StoreSpotRequest $request, CreateSpot $createSpot): RedirectResponse
     {
-        $spot = $createSpot->create($request->organization(), $request->safe()->except('organization'), $request->user());
+        $spot = $createSpot->create($request->organization(), Arr::except($request->fields(), 'organization'), $request->user());
 
         return redirect()->route('spots.show', ['spot' => $spot->uuid])->with('success', __('ui.spots.feedback.spot_created'));
     }

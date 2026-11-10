@@ -25,6 +25,8 @@ return new class extends Migration
             $table->boolean('redirect_to_website')->default(false);
             $table->boolean('is_hidden')->default(false);
             $table->boolean('needs_setup')->default(false);
+            // A JSON object of the developers, for their own applications: managed through the API only
+            $table->json('custom_data')->nullable();
             // When a QR code of the spot was first downloaded, to print it
             $table->timestamp('qr_code_downloaded_at')->nullable();
             $table->timestamps();

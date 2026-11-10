@@ -36,6 +36,12 @@ class SpotResource extends JsonApiResource
             'redirect_to_website' => $this->redirect_to_website,
             'is_hidden' => $this->is_hidden,
             'needs_setup' => $this->needs_setup,
+            /**
+             * A JSON object of your own, for your applications, or `null`: only returned to who manages the spot.
+             *
+             * @var array<string, mixed>|null
+             */
+            'custom_data' => $this->when($this->canManage($request), $this->custom_data),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             // `null` while it is not deleted: the deleted ones are only listed with `filter[deleted]`, to restore them
@@ -64,5 +70,13 @@ class SpotResource extends JsonApiResource
     private function canViewCreator(Request $request): bool
     {
         return $request->user()->loadMissing('organizations')->can('viewCreator', $this->resource);
+    }
+
+    /**
+     * Whether the user manages the spot, to get its custom data: with the organizations loaded once, as above.
+     */
+    private function canManage(Request $request): bool
+    {
+        return $request->user()->loadMissing('organizations')->can('manage', $this->resource);
     }
 }

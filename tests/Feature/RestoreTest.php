@@ -333,7 +333,7 @@ test('the buttons of the alerts are in them, their forms out of them, as a parag
 
         $alert = collect($alerts[0])->first(fn (string $alert) => str_contains($alert, 'form="'.$form.'"'));
 
-        return $alert !== null && ! str_contains($alert, '<form') && str_contains($html, '<form id="'.$form.'"');
+        return $alert !== null && ! str_contains($alert, '<form') && preg_match('/<form\s+id="'.$form.'"/', $html) === 1;
     };
 
     $html = $this->actingAs($this->member)->followingRedirects()->delete(route('spots.destroy', $this->spot))->getContent();

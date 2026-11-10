@@ -237,6 +237,8 @@ test('the spot input is validated', function () {
 
     // The same name is allowed in another organization.
     $this->member->organizations()->attach($this->globex);
+    // As a new request would: the responses load the organizations of the user once, before this one
+    Sanctum::actingAs($this->member->fresh(), $this->abilities);
     $this->postJson('/api/v1/spots', spotData(['organization' => $this->globex->uuid, 'name' => 'Harbour']))->assertCreated();
 });
 
@@ -337,4 +339,76 @@ test('a spot keeps its organization when updated', function () {
         ->assertJsonPath('data.attributes.name', 'Marina');
 
     expect($this->harbour->fresh()->organization->is($this->acme))->toBeTrue();
+});
+
+test('a spot keeps the custom data it is given as a JSON object, nested ones included, and loses them with null or {}', function () {
+    Sanctum::actingAs($this->member, $this->abilities);
+
+    $customData = ['floor' => 2, 'tags' => ['entrance'], 'opening' => ['from' => '08:00'], 'empty' => (object) []];
+
+    $uuid = $this->postJson('/api/v1/spots', ['organization' => $this->acme->uuid, 'name' => 'Pier', 'custom_data' => $customData])
+        ->assertCreated()
+        ->json('data.id');
+
+    // Objects stay objects, the empty ones inside included, never lists
+    expect($this->getJson("/api/v1/spots/{$uuid}")->assertOk()->getContent())
+        ->toContain('"custom_data":{"floor":2,"tags":["entrance"],"opening":{"from":"08:00"},"empty":{}}');
+
+    // A PATCH without them keeps them, a PATCH with them replaces them
+    $this->patchJson("/api/v1/spots/{$uuid}", ['name' => 'Long pier'])->assertOk()->assertJsonPath('data.attributes.custom_data.floor', 2);
+    $this->patchJson("/api/v1/spots/{$uuid}", ['custom_data' => ['floor' => 3]])->assertOk()->assertJsonPath('data.attributes.custom_data', ['floor' => 3]);
+
+    foreach ([null, (object) []] as $nothing) {
+        $this->patchJson("/api/v1/spots/{$uuid}", ['custom_data' => ['floor' => 3]])->assertOk();
+        $this->patchJson("/api/v1/spots/{$uuid}", ['custom_data' => $nothing])->assertOk()->assertJsonPath('data.attributes.custom_data', null);
+
+        expect(DB::table('spots')->where('uuid', $uuid)->value('custom_data'))->toBeNull();
+    }
+
+    // Stored as sent: an empty object inside stays one
+    $this->patchJson("/api/v1/spots/{$uuid}", ['custom_data' => ['nested' => (object) []]])->assertOk();
+    expect(DB::table('spots')->where('uuid', $uuid)->value('custom_data'))->toBe('{"nested":{}}');
+});
+
+test('the custom data are a JSON object of at most 10,000 characters', function (mixed $customData) {
+    Sanctum::actingAs($this->member, $this->abilities);
+
+    $this->patchJson("/api/v1/spots/{$this->harbour->uuid}", ['custom_data' => $customData])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('custom_data');
+})->with([
+    'a list' => [[1, 2]],
+    'a string' => ['{"floor": 2}'],
+    'a number' => [2],
+    'too long' => [['text' => str_repeat('a', 10000)]],
+]);
+
+test('the custom data are only returned to who manages the spot', function (string $user, bool $returned) {
+    $this->harbour->update(['custom_data' => ['floor' => 2]]);
+
+    Sanctum::actingAs($this->$user, ['spots:read']);
+
+    $show = $this->getJson("/api/v1/spots/{$this->harbour->uuid}")->assertOk();
+    $list = $this->getJson('/api/v1/spots')->assertOk();
+
+    if ($returned) {
+        $show->assertJsonPath('data.attributes.custom_data', ['floor' => 2]);
+        $list->assertJsonPath('data.0.attributes.custom_data', ['floor' => 2]);
+    } else {
+        $show->assertJsonMissingPath('data.attributes.custom_data');
+    }
+})->with([
+    'member' => ['member', true],
+    'admin' => ['admin', true],
+    'outsider' => ['outsider', false],
+]);
+
+test('saving the web form of a spot keeps its custom data', function () {
+    $this->harbour->update(['custom_data' => ['floor' => 2]]);
+
+    $this->actingAs($this->member)
+        ->patch(route('spots.update', $this->harbour), ['name' => 'Harbour', 'description' => 'By the sea.', 'is_hidden' => '0'])
+        ->assertSessionHasNoErrors();
+
+    expect($this->harbour->fresh()->custom_data)->toEqual((object) ['floor' => 2]);
 });

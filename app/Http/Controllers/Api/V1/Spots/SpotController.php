@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 
 #[Group('Spots')]
 class SpotController extends Controller
@@ -58,13 +59,15 @@ class SpotController extends Controller
      */
     public function store(StoreSpotRequest $request, CreateSpot $createSpot): JsonResponse
     {
-        $spot = $createSpot->create($request->organization(), $request->safe()->except('organization'), $request->user());
+        $spot = $createSpot->create($request->organization(), Arr::except($request->fields(), 'organization'), $request->user());
 
         return (new SpotResource($spot))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
      * Update a specific spot.
+     *
+     * Only the fields sent are changed. The spot keeps its organization.
      */
     public function update(UpdateSpotRequest $request, Spot $spot): SpotResource
     {

@@ -114,10 +114,11 @@ test('anyone who scans the spot sets it up, which keeps it in its organization a
     $this->patch(route('spots.update', $this->spot), ['name' => 'Again'])->assertForbidden();
 })->with([null, 'outsider']);
 
-test('setting a spot up needs a name, and cannot hide it nor leave it to be set up', function () {
+test('setting a spot up needs a name, and cannot hide it, leave it to be set up nor give it custom data', function () {
     $this->patch(route('spots.update', $this->spot), ['name' => ''])->assertSessionHasErrors('name');
     $this->patch(route('spots.update', $this->spot), ['name' => 'Bench', 'is_hidden' => '1'])->assertSessionHasErrors('is_hidden');
     $this->patch(route('spots.update', $this->spot), ['name' => 'Bench', 'needs_setup' => '1'])->assertSessionHasErrors('needs_setup');
+    $this->patch(route('spots.update', $this->spot), ['name' => 'Bench', 'custom_data' => ['floor' => 2]])->assertSessionHasErrors('custom_data');
 
     expect($this->spot->fresh())->name->toBeNull()->needs_setup->toBeTrue();
 });
