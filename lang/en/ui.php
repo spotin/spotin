@@ -410,8 +410,6 @@ return [
             ],
         ],
         'feedback' => [
-            'custom_data_object' => 'The :attribute must be a JSON object, of named values.',
-            'custom_data_too_large' => 'The :attribute may not be longer than :max characters once encoded.',
             'invitation_accepted' => 'You have joined the organization.',
             'invitation_declined' => 'The invitation has been declined.',
             'invalid_invitation' => 'This invitation is invalid, has expired, or was sent to another email address.',
@@ -461,10 +459,6 @@ return [
             'deleted' => 'Deleted',
             'forms' => [
                 'fields' => [
-                    // In the messages of the errors of the API: the forms do not have it
-                    'custom_data' => [
-                        'label' => 'Custom data',
-                    ],
                     'name' => [
                         'label' => 'Name',
                         'placeholder' => 'Enter the organization name',
@@ -761,6 +755,10 @@ return [
             'unnamed' => 'Unnamed spot · :id',
             'forms' => [
                 'fields' => [
+                    // In the messages of the errors of the API: the forms do not have it
+                    'custom_data' => [
+                        'label' => 'Custom data',
+                    ],
                     'organization' => [
                         // In the messages of the errors; the form asks the question
                         'label' => 'Organization',
@@ -810,6 +808,8 @@ return [
             ],
         ],
         'feedback' => [
+            'custom_data_object' => 'The :attribute must be a JSON object, of named values.',
+            'custom_data_too_large' => 'The :attribute may not be longer than :max characters once encoded.',
             'spot_created' => 'The spot has been created.',
             'spot_updated' => 'The spot has been updated.',
             'spot_set_up' => 'Thank you! The spot is set up.',

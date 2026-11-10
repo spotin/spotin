@@ -35,6 +35,12 @@ specific tasks and achieving particular goals within the project.
 - [Set up GitHub Actions for automatic deployment](#set-up-github-actions-for-automatic-deployment)
   - [Create an environment in the GitHub repository](#create-an-environment-in-the-github-repository)
   - [Run the deployment workflow](#run-the-deployment-workflow)
+- [Migrate the data of the previous application](#migrate-the-data-of-the-previous-application)
+  - [Export the tables of the previous application](#export-the-tables-of-the-previous-application)
+  - [Map the users to their organizations](#map-the-users-to-their-organizations)
+  - [Rehearse the import](#rehearse-the-import)
+  - [Import the data](#import-the-data)
+  - [Checklist](#checklist-2)
 
 ## Set up a development environment on your local machine
 
@@ -80,6 +86,10 @@ The following prerequisites must be filled to run this project:
 2. Run the following commands to set up and start the application:
 
    ```bash
+   # Start the services: MariaDB, as in production, the mail server and
+   # phpMyAdmin
+   docker compose up --detach
+
    # Setup the development environment
    composer setup
 
@@ -89,7 +99,12 @@ The following prerequisites must be filled to run this project:
 
 3. The application is accessible at <http://localhost:8000>. The Vite
    development server is accessible at <http://localhost:5173>. The mail server
-   interface is accessible at <http://localhost:8025>.
+   interface is accessible at <http://localhost:8025>. phpMyAdmin is accessible
+   at <http://localhost:9090>.
+
+The application uses the `my_database` database of MariaDB, and the tests the
+`testing` one, created with the MariaDB volume (see `compose.yaml`), so that
+they do not empty the data of the development.
 
 ### Update the application
 
@@ -389,3 +404,134 @@ Two deployment jobs are defined in this workflow:
 2. The `deploy-production` job is triggered when you push changes to the `main`
    branch. It runs `composer setup-prod` and applies the pending migrations
    (`php artisan migrate --force`). The database is not seeded.
+
+## Migrate the data of the previous application
+
+The previous Spot in® application, a NestJS one on PostgreSQL (last commit
+`d463ba11e814f3d3fca1a0b9f99916609870d2cf`), had users and spots, but no
+organizations. The `spotin:import-legacy` command imports its users and spots,
+with the organizations you give them in a mapping.
+
+The spots keep their UUID, which their printed QR codes hold: the QR codes keep
+working, as long as the application is served at the same address as the
+previous one (`APP_URL` must be the former `SPOT_IN_BASE_URL`). The deleted
+spots are imported as deleted: their QR codes tell they are no longer in use.
+
+The API tokens are not imported: their applications have to use the new API with
+new tokens anyway.
+
+### Export the tables of the previous application
+
+Export the `users` and `spots` tables as JSON, in a new directory:
+
+```sh
+mkdir legacy
+
+psql "$SPOT_IN_DATABASE_URL" -At -c "SELECT COALESCE(json_agg(t), '[]') FROM users t" > legacy/users.json
+psql "$SPOT_IN_DATABASE_URL" -At -c "SELECT COALESCE(json_agg(t), '[]') FROM spots t" > legacy/spots.json
+```
+
+These files hold the hashes of the passwords: keep them private, and delete them
+once the import is done and checked.
+
+### Map the users to their organizations
+
+Create the `legacy/organizations.csv` file, with one line per user and
+organization:
+
+```csv
+email,organization,role
+
+# Museum
+alice@example.com,Museum,responsible
+bob@example.com,Museum,member
+former@example.com,Museum,skip-user
+
+# Library
+bob@example.com,Library,responsible
+
+# Administrators
+root@example.com,,
+
+# Accounts created by bots
+spam@example.com,,skip
+```
+
+- Every user of the previous application must be in it: the import stops
+  otherwise, and lists the missing ones.
+- The `role` is `responsible` or `member`. Each organization needs at least one
+  responsible user.
+- The spots of a user go to their first organization in the file.
+- A user without spots, such as an administrator, can have no organization:
+  leave `organization` and `role` empty.
+- A user can be left out of the import:
+  - with the role `skip` and no organization, with their spots, if any, such as
+    an account created by a bot through the former open registration. The QR
+    codes of their spots lead to a page not found: only skip spots that were
+    never printed, such as tests;
+  - with the role `skip-user` and the organization of their spots, which are
+    imported without a creator, such as someone who left an institution whose
+    spots are still in use. Their QR codes keep working, and the members of the
+    organization manage them.
+- The organizations are created by their name, or found if one already has it.
+- Blank lines and lines starting with `#` are ignored: use them to split the
+  file into parts. The errors tell the line of the file they are about.
+
+### Rehearse the import
+
+Run the import without importing anything, on a copy of the production database
+first:
+
+```sh
+php artisan spotin:import-legacy legacy --dry-run
+```
+
+It lists the problems that stop the import (users missing from the mapping,
+email addresses that are the same once lowercased, organizations without a
+responsible user), or tells what it would create, with what to check afterwards:
+
+- the disabled and deleted users of the previous application, who are imported
+  and can log in;
+- the payloads of the spots that are not JSON objects, left out (the payloads
+  become the custom data of the spots, in the API only);
+- the spots that have the name of another spot of their organization: the names
+  must be unique in an organization, so they are numbered, such as
+  `Fitnessraum (1)` and `Fitnessraum (2)`, in the order they were created. Their
+  members rename them to tell what they are;
+- the spots that had a single coordinate, such as a latitude without a
+  longitude, imported without a location: their members can set it on the map;
+- the websites without a scheme, such as `www.example.com`, which get
+  `https://`: their QR codes would lead to a page of this application otherwise;
+- the spots set up without a name, shown as unnamed: their form asks for one.
+
+### Import the data
+
+1. Stop the previous application, or make it read-only, so that nothing changes
+   after the export.
+2. Export the tables again, as above.
+3. Import them:
+
+   ```sh
+   php artisan spotin:import-legacy legacy
+   ```
+
+   The import can be run again: what already exists is left as it is (users
+   found by their UUID or email address, organizations by their name, spots by
+   their UUID). An existing account, such as the administrator of the production
+   seeder, keeps its password and becomes an administrator if the previous one
+   was.
+
+4. Point the domain of the previous application to this one.
+
+The users log in with their former email address and password. Their password is
+hashed again with the options of this application at their first login.
+
+### Checklist
+
+- [ ] The tables are exported after the previous application was stopped.
+- [ ] The dry run reports no problem, and its warnings are understood.
+- [ ] `APP_URL` is the former `SPOT_IN_BASE_URL`, with the same scheme.
+- [ ] A few printed QR codes lead where they did, including the one of a deleted
+      spot and the one of a spot not set up yet.
+- [ ] A former user logs in with their former password.
+- [ ] The exported files are deleted.

@@ -229,6 +229,8 @@ test('the spot input is validated', function () {
 
     $this->postJson('/api/v1/spots', [])->assertUnprocessable()->assertJsonValidationErrors(['organization', 'name']);
     $this->postJson('/api/v1/spots', spotData(['organization' => $this->acme->uuid, 'name' => 'A']))->assertUnprocessable()->assertJsonValidationErrors('name');
+    $this->postJson('/api/v1/spots', spotData(['organization' => $this->acme->uuid, 'name' => str_repeat('a', 256)]))->assertUnprocessable()->assertJsonValidationErrors('name');
+    $this->postJson('/api/v1/spots', spotData(['organization' => $this->acme->uuid, 'name' => str_repeat('a', 255)]))->assertCreated();
     $this->postJson('/api/v1/spots', spotData(['organization' => $this->acme->uuid, 'name' => 'Harbour']))->assertUnprocessable()->assertJsonValidationErrors('name');
     $this->postJson('/api/v1/spots', spotData(['organization' => 'unknown', 'name' => 'Pier']))->assertUnprocessable()->assertJsonValidationErrors('organization');
     $this->postJson('/api/v1/spots', spotData(['organization' => fake()->uuid(), 'name' => 'Pier']))->assertUnprocessable()->assertJsonValidationErrors('organization');
