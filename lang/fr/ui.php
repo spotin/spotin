@@ -34,6 +34,9 @@ return [
             'search' => 'Rechercher',
             'reset' => 'Réinitialiser les filtres',
         ],
+        'removed' => [
+            'home' => "Aller à la page d'accueil",
+        ],
         'breadcrumbs' => "Fil d'Ariane",
         'actions' => [
             'label' => 'Actions',
@@ -42,6 +45,8 @@ return [
             'share' => 'Partager',
             'cancel' => 'Annuler',
             'close' => 'Fermer',
+            'restore' => 'Restaurer',
+            'undo' => 'Annuler',
         ],
         'pagination' => [
             'page' => 'Page :current sur :last',
@@ -309,6 +314,13 @@ return [
             ],
         ],
     ],
+    'qr_codes' => [
+        'inactive' => [
+            'title' => "Ce code QR n'est plus utilisé",
+            'spot' => 'Le spot vers lequel il menait a été supprimé.',
+            'organization' => "L'organisation vers laquelle il menait a été supprimée.",
+        ],
+    ],
     'homepage' => [
         'title' => 'Des codes QR qui ne périment jamais',
         'description' => 'La plateforme des institutions publiques pour créer et gérer leurs codes QR.',
@@ -433,9 +445,14 @@ return [
         ],
     ],
     'organizations' => [
+        'removed' => [
+            'title' => 'Cette organisation a été supprimée',
+            'text' => 'Elle a été supprimée, avec ses spots.',
+        ],
         'common' => [
             'spots' => ':count spot|:count spots',
             'members' => ':count membre|:count membres',
+            'deleted' => 'Supprimée',
             'forms' => [
                 'fields' => [
                     'name' => [
@@ -457,6 +474,8 @@ return [
             'organization_created' => "L'organisation a été créée.",
             'organization_updated' => "L'organisation a été mise à jour.",
             'organization_deleted' => "L'organisation a été supprimée.",
+            'organization_restored' => "L'organisation a été restaurée, avec ses spots.",
+            'name_taken' => 'Une organisation nommée :name existe déjà. Renommez-la avant de restaurer celle-ci.',
         ],
         'index' => [
             'create' => 'Nouvelle organisation',
@@ -469,6 +488,7 @@ return [
                 'search' => 'Rechercher une organisation',
                 'label' => 'Filtrer les organisations',
                 'mine' => 'Uniquement les organisations que je gère',
+                'deleted' => 'Uniquement les organisations supprimées',
             ],
         ],
         'create' => [
@@ -484,10 +504,14 @@ return [
             'scanned' => 'Vous venez de scanner une organisation !',
             'map' => "Spots de l'organisation",
             'description' => "Les spots, les membres et les invitations de l'organisation.",
+            'spots_coming_back' => ':count spot reviendra avec elle une fois restaurée|:count spots reviendront avec elle une fois restaurée',
             'manage' => [
                 'title' => 'Vous pouvez gérer cette organisation',
                 'title_member' => 'Vous êtes membre de cette organisation',
                 'created' => 'Créée le :date.',
+                'notes' => [
+                    'deleted' => "Supprimée le :date, avec ses spots : leurs codes QR indiquent qu'ils ne sont plus utilisés. Restaurez-la depuis sa page de modification.",
+                ],
                 'members' => ':count membre|:count membres',
                 'invitations' => ':count invitation|:count invitations',
                 'actions' => [
@@ -498,6 +522,7 @@ return [
         'edit' => [
             'title' => "Modifier l'organisation",
             'description' => 'Modifiez ou supprimez une organisation.',
+            'deleted' => "Cette organisation a été supprimée le :date, avec ses spots : leurs codes QR indiquent qu'ils ne sont plus utilisés. Restaurez-la pour la retrouver avec ses spots et ses membres.",
             'danger' => [
                 'title' => 'Zone de danger',
             ],
@@ -509,7 +534,7 @@ return [
         ],
         'delete' => [
             'title' => "Supprimer l'organisation",
-            'warning' => "Cette action supprime définitivement l'organisation, ses appartenances et ses invitations en attente. Elle est irréversible.",
+            'warning' => "Cette action supprime l'organisation avec ses spots, et définitivement ses invitations en attente. Les codes QR de l'organisation et de ses spots indiqueront qu'ils ne sont plus utilisés. L'organisation peut être restaurée si besoin depuis sa page de modification.",
             'actions' => [
                 'submit' => "Supprimer l'organisation",
             ],
@@ -715,8 +740,13 @@ return [
         ],
     ],
     'spots' => [
+        'removed' => [
+            'title' => 'Ce spot a été supprimé',
+            'text' => "Il n'est plus disponible.",
+        ],
         'common' => [
             'hidden' => 'Masqué',
+            'deleted' => 'Supprimé',
             'needs_setup' => 'Pas encore configuré',
             'unnamed' => 'Spot sans nom · :id',
             'forms' => [
@@ -774,6 +804,9 @@ return [
             'spot_updated' => 'Le spot a été mis à jour.',
             'spot_set_up' => 'Merci ! Le spot est configuré.',
             'spot_deleted' => 'Le spot a été supprimé.',
+            'spot_restored' => 'Le spot a été restauré : ses codes QR y mènent à nouveau.',
+            'name_taken' => 'Un spot nommé :name existe déjà dans :organization. Renommez-le avant de restaurer celui-ci.',
+            'organization_deleted' => "L'organisation de ce spot est supprimée : restaurez l'organisation, le spot revient avec elle.",
         ],
         'index' => [
             'title' => 'Spots',
@@ -786,6 +819,7 @@ return [
                 'search' => 'Rechercher un spot',
                 'label' => 'Filtrer les spots',
                 'mine' => "Uniquement les spots que j'ai créés",
+                'deleted' => 'Uniquement les spots supprimés',
             ],
         ],
         'create' => [
@@ -824,6 +858,7 @@ return [
                     'redirect' => 'Les visiteurs qui scannent ce spot sont redirigés directement vers :website.',
                     'needs_setup' => "Ce spot n'est pas encore configuré : la première personne qui scanne son code finit de le configurer. D'ici là, seuls les membres de son organisation le trouvent dans les listes.",
                     'hidden' => 'Ce spot est masqué des listes publiques : seuls les membres de :organization le trouvent dans les listes. Il reste accessible par son lien.',
+                    'deleted' => "Supprimé le :date : ses codes QR indiquent qu'il n'est plus utilisé. Restaurez-le depuis sa page de modification.",
                 ],
             ],
         ],
@@ -839,6 +874,7 @@ return [
             'title' => 'Modifier le spot',
             'description' => 'Modifiez ou supprimez un spot.',
             'introduction' => "Vous modifiez le spot :spot de l'organisation :organization.",
+            'deleted' => "Ce spot a été supprimé le :date : ses codes QR indiquent qu'il n'est plus utilisé. Restaurez-le pour l'utiliser et le modifier à nouveau.",
             'danger' => [
                 'title' => 'Zone de danger',
             ],
@@ -850,7 +886,7 @@ return [
         ],
         'delete' => [
             'title' => 'Supprimer le spot',
-            'warning' => 'Supprimer le spot le retire pour tout le monde, avec tous ses détails. Ses codes QR imprimés ne mèneront plus nulle part. Cette action est irréversible.',
+            'warning' => "Supprimer le spot le retire pour tout le monde, avec tous ses détails. Ses codes QR imprimés indiqueront qu'il n'est plus utilisé. Le spot peut être restauré si besoin depuis sa page de modification.",
             'actions' => [
                 'submit' => 'Supprimer le spot',
             ],

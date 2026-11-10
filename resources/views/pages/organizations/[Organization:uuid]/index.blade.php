@@ -9,21 +9,40 @@ use Laravel\Head\Facades\Head;
 
 use function Laravel\Folio\name;
 use function Laravel\Folio\render;
+use function Laravel\Folio\withTrashed;
 
 name('organizations.show');
+// A deleted organization, for who can restore it; the others are told it was removed
+withTrashed();
 
 render(function (View $view, Organization $organization, ListFiltersRequest $request) {
+    if ($organization->trashed() && ! $organization->isRestorableBy(request()->user())) {
+        return response()->view('removed', [
+            'title' => __('ui.organizations.removed.title'),
+            'text' => __('ui.organizations.removed.text'),
+        ], 410);
+    }
+
     Head::title($organization->name)->description(__('ui.organizations.show.description'));
+
+    // Its spots, as in the list of all the spots: with the filters, page by page
+    $listing = SpotListing::for($request, $organization);
 
     return $view->with([
         'membersCount' => Gate::allows('viewMembers', $organization) ? $organization->users()->count() : null,
         'invitationsCount' => Gate::allows('manage', $organization) ? $organization->invitations()->count() : null,
-        // The spots the user finds in the list of the organization, without the hidden ones for the others
-        'spotsCount' => $organization->spots()->visibleTo(request()->user())->count(),
-        // The map is only shown when one of these spots has a location
-        'hasMap' => $organization->spots()->visibleTo(request()->user())->located()->exists(),
-        // Its spots, as in the list of all the spots: with the filters, page by page
-        'listing' => SpotListing::for($request, $organization),
+        // The spots the user finds in the list of the organization, without the hidden ones for the others; deleted, the
+        // ones that come back with it
+        'spotsCount' => $organization->trashed()
+            ? $organization->spotsDeletedWithIt()->count()
+            : $organization->spots()->visibleTo(request()->user())->count(),
+        // The map is only shown when one of the spots of the list, deleted ones included, has a location; deleted, its
+        // spots have no page until it is restored
+        'hasMap' => ! $organization->trashed()
+            && ($listing->deleted ? $organization->spots()->onlyTrashed() : $organization->spots()->visibleTo(request()->user()))
+                ->located()
+                ->exists(),
+        'listing' => $listing,
     ]);
 });
 ?>
@@ -56,8 +75,14 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
                                     href="{{ route('organizations.edit', ['organization' => $organization->uuid]) }}"
                                     class="btn btn-sm"
                                 >
-                                    <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
-                                    {{ __('ui.organizations.show.manage.actions.edit') }}
+                                    {{-- Deleted, its edit page restores it --}}
+                                    @if ($organization->trashed())
+                                        <x-lucide-archive-restore class="h-4 w-4" aria-hidden="true" />
+                                        {{ __('ui.common.actions.restore') }}
+                                    @else
+                                        <x-lucide-pencil class="h-4 w-4" aria-hidden="true" />
+                                        {{ __('ui.organizations.show.manage.actions.edit') }}
+                                    @endif
                                 </a>
                             @endcan
 
@@ -73,19 +98,36 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
                     @endcanany
                 </div>
 
+                {{-- Deleted, as a quiet badge as the ones of the spots: its explanation in its tooltip, read by screen readers --}}
+                @if ($organization->trashed())
+                    @php($deletedNote = __('ui.organizations.show.manage.notes.deleted', ['date' => $organization->deleted_at->isoFormat('LL')]))
+                    <ul class="flex flex-wrap gap-2">
+                        <li class="tooltip" data-tip="{{ $deletedNote }}">
+                            <span tabindex="0" class="badge badge-sm badge-error badge-outline">
+                                <x-lucide-trash-2 class="h-3 w-3" aria-hidden="true" />
+                                {{ __('ui.organizations.common.deleted') }}
+                                <span class="sr-only">: {{ $deletedNote }}</span>
+                            </span>
+                        </li>
+                    </ul>
+                @endif
+
                 <p class="text-sm opacity-70">
-                    <a
-                        href="{{ route('organizations.members.index', ['organization' => $organization->uuid]) }}"
-                        class="link"
-                    >{{ trans_choice('ui.organizations.show.manage.members', $membersCount) }}</a>
-                    <span aria-hidden="true">·</span>
-                    @can('manage', $organization)
+                    {{-- Its members and invitations are managed again once it is restored --}}
+                    @unless ($organization->trashed())
                         <a
-                            href="{{ route('organizations.invitations.index', ['organization' => $organization->uuid]) }}"
+                            href="{{ route('organizations.members.index', ['organization' => $organization->uuid]) }}"
                             class="link"
-                        >{{ trans_choice('ui.organizations.show.manage.invitations', $invitationsCount) }}</a>
+                        >{{ trans_choice('ui.organizations.show.manage.members', $membersCount) }}</a>
                         <span aria-hidden="true">·</span>
-                    @endcan
+                        @can('manage', $organization)
+                            <a
+                                href="{{ route('organizations.invitations.index', ['organization' => $organization->uuid]) }}"
+                                class="link"
+                            >{{ trans_choice('ui.organizations.show.manage.invitations', $invitationsCount) }}</a>
+                            <span aria-hidden="true">·</span>
+                        @endcan
+                    @endunless
                     {{ __('ui.organizations.show.manage.created', ['date' => $organization->created_at->isoFormat('LL')]) }}
                 </p>
             </div>
@@ -98,9 +140,15 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
             <h1>{{ $organization->name }}</h1>
 
             <div class="not-prose flex flex-wrap items-center justify-between gap-2">
-                <a href="#spots" class="link link-hover text-sm opacity-80">
-                    {{ trans_choice('ui.organizations.common.spots', $spotsCount) }}
-                </a>
+                @if ($organization->trashed())
+                    <p class="text-sm opacity-80">
+                        {{ trans_choice('ui.organizations.show.spots_coming_back', $spotsCount) }}
+                    </p>
+                @else
+                    <a href="#spots" class="link link-hover text-sm opacity-80">
+                        {{ trans_choice('ui.organizations.common.spots', $spotsCount) }}
+                    </a>
+                @endif
 
                 <div role="group" aria-label="{{ __('ui.common.actions.label') }}" class="flex flex-wrap gap-1">
                     {{-- TODO: Like, report and share the organization --}}
@@ -121,7 +169,10 @@ render(function (View $view, Organization $organization, ListFiltersRequest $req
         </header>
     </article>
 
-    <section id="spots" class="mt-10">
-        <x-spots.list :listing="$listing" nested />
-    </section>
+    {{-- Deleted, its spots come back with it: their number is said under its name --}}
+    @unless ($organization->trashed())
+        <section id="spots" class="mt-10">
+            <x-spots.list :listing="$listing" nested />
+        </section>
+    @endunless
 </x-default-layout>

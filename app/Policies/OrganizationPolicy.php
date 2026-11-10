@@ -70,4 +70,12 @@ class OrganizationPolicy
     {
         return $user->belongsToOrganization($organization);
     }
+
+    /**
+     * Determine whether the user can restore the deleted organization: only the administrators, as they delete them.
+     */
+    public function restore(User $user, Organization $organization): bool
+    {
+        return false;
+    }
 }

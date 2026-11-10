@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkExtension;
 use League\CommonMark\Extension\NormalizeHeadings\NormalizeHeadingsExtension;
@@ -17,7 +18,7 @@ use League\CommonMark\Extension\NormalizeHeadings\NormalizeHeadingsExtension;
 class Spot extends Model
 {
     /** @use HasFactory<SpotFactory> */
-    use HasFactory, HasVersion4Uuids;
+    use HasFactory, HasVersion4Uuids, SoftDeletes;
 
     /**
      * Get the columns that should receive a unique identifier.
@@ -157,6 +158,44 @@ class Spot extends Model
     {
         $query->search($searchQuery)
             ->when($mine && $user, fn (Builder $query) => $query->mine($user));
+    }
+
+    /**
+     * Determine whether the user can restore the spot, deleted: as the policy says, while its organization is not
+     * deleted, as the spots of a deleted organization come back with it only.
+     */
+    public function isRestorableBy(?User $user): bool
+    {
+        return $user !== null && $this->organization !== null && $user->can('restore', $this);
+    }
+
+    /**
+     * Scope the query to the spots deleted with their organization, which come back with it: the ones deleted at the same
+     * time as it or after it, as `DeleteOrganization` deletes it before them. The ones deleted before, one by one, stay
+     * deleted.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeDeletedWithItsOrganization(Builder $query): void
+    {
+        $query->onlyTrashed()->whereHas(
+            'organization',
+            fn (Builder $query) => $query->onlyTrashed()->whereColumn('organizations.deleted_at', '<=', 'spots.deleted_at'),
+        );
+    }
+
+    /**
+     * Scope the query to the deleted spots the user can restore: the ones they could manage, without the spots of the
+     * deleted organizations, which come back with their organization only. The most recently deleted first.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeRestorableBy(Builder $query, User $user): void
+    {
+        $query->onlyTrashed()
+            ->manageableBy($user)
+            ->whereHas('organization')
+            ->latest('deleted_at');
     }
 
     /**

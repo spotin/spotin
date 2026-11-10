@@ -40,10 +40,10 @@ class StoreOrganizationRequest extends FormRequest
     }
 
     /**
-     * The name is unique among the organizations.
+     * The name is unique among the organizations that are not deleted.
      */
     protected function uniqueName(): Unique
     {
-        return Rule::unique(Organization::class, 'name');
+        return Rule::unique(Organization::class, 'name')->withoutTrashed();
     }
 }

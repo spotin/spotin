@@ -11,10 +11,10 @@ use Illuminate\Validation\Rules\Unique;
 class UpdateOrganizationRequest extends StoreOrganizationRequest
 {
     /**
-     * The name is unique among the organizations, which keeps its own name.
+     * The name is unique among the organizations that are not deleted, the organization keeping its own name.
      */
     protected function uniqueName(): Unique
     {
-        return Rule::unique(Organization::class, 'name')->ignore($this->route('organization'));
+        return Rule::unique(Organization::class, 'name')->ignore($this->route('organization'))->withoutTrashed();
     }
 }

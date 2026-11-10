@@ -23,6 +23,8 @@ final readonly class SpotListing
     public function __construct(
         public ?Organization $organization,
         public bool $mine,
+        public bool $deleted,
+        public bool $canRestore,
         public string $searchQuery,
         public bool $canCreate,
         public LengthAwarePaginator $spots,
@@ -40,6 +42,8 @@ final readonly class SpotListing
         return new self(
             organization: $organization,
             mine: $request->mine(),
+            deleted: self::deleted($request, $organization),
+            canRestore: self::canRestore($request, $organization),
             searchQuery: $request->searchQuery(),
             // In the organization of the page, or in one of the organizations of the user on the list of all the spots
             canCreate: $organization !== null
@@ -77,15 +81,48 @@ final readonly class SpotListing
 
     /**
      * The spots the list starts from: the ones of the organization the user can find in the lists, or all the ones
-     * they can manage.
+     * they can manage, or the deleted ones they can restore.
      *
      * @return Builder<Spot>
      */
     private static function query(ListFiltersRequest $request, ?Organization $organization): Builder
     {
-        return $organization
-            ? $organization->spots()->visibleTo($request->user())->getQuery()
-            : Spot::manageableBy($request->user());
+        $deleted = self::deleted($request, $organization);
+
+        return match (true) {
+            $organization !== null && $deleted => $organization->spots()->onlyTrashed()->latest('deleted_at')->getQuery(),
+            $organization !== null => $organization->spots()->visibleTo($request->user())->getQuery(),
+            $deleted => Spot::restorableBy($request->user()),
+            default => Spot::manageableBy($request->user()),
+        };
+    }
+
+    /**
+     * Whether the user can restore the deleted spots of the list: of the organization of the page, its members and the
+     * administrators; of the list of all the spots, any user, who restores the ones they could manage.
+     */
+    private static function canRestore(ListFiltersRequest $request, ?Organization $organization): bool
+    {
+        $user = $request->user();
+
+        if ($user === null) {
+            return false;
+        }
+
+        // The spots of a deleted organization come back with it only
+        if ($organization?->trashed()) {
+            return false;
+        }
+
+        return $organization === null || $user->isAdmin() || $user->belongsToOrganization($organization);
+    }
+
+    /**
+     * Whether to list the deleted spots, to restore them, when the user can.
+     */
+    private static function deleted(ListFiltersRequest $request, ?Organization $organization): bool
+    {
+        return $request->deleted() && self::canRestore($request, $organization);
     }
 
     /**
@@ -93,6 +130,6 @@ final readonly class SpotListing
      */
     public function isFiltered(): bool
     {
-        return $this->mine || $this->searchQuery !== '';
+        return $this->mine || $this->deleted || $this->searchQuery !== '';
     }
 }

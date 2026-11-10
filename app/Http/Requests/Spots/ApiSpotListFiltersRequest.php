@@ -20,7 +20,7 @@ class ApiSpotListFiltersRequest extends ApiListFiltersRequest
     {
         return [
             ...parent::rules(),
-            'filter' => ['nullable', 'array:query,mine,organization'],
+            'filter' => ['nullable', 'array:query,mine,organization,deleted'],
             // An unknown organization is an error rather than an empty list, so that a mistyped uuid does not look like no spots
             $this->filter('organization') => ['nullable', 'uuid', Rule::exists(Organization::class, 'uuid')],
         ];

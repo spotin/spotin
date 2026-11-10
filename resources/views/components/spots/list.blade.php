@@ -26,8 +26,17 @@
 
     @auth
         <x-filters.checkbox name="mine" :label="__('ui.spots.index.filter.mine')" :checked="$listing->mine" />
+
+        {{-- The deleted spots, to restore them: for who can --}}
+        @if ($listing->canRestore)
+            <x-filters.checkbox name="deleted" :label="__('ui.spots.index.filter.deleted')" :checked="$listing->deleted" />
+        @endif
     @endauth
 </x-filters>
+
+@error('restore')
+    <x-alert type="error" closable>{{ $message }}</x-alert>
+@enderror
 
 @if ($listing->spots->isEmpty())
     <p>{{ $listing->isFiltered() ? __('ui.spots.index.no_result') : __('ui.spots.index.empty') }}</p>

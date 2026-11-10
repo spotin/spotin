@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Organizations;
 
+use App\Actions\Organizations\DeleteOrganization;
+use App\Actions\Organizations\RestoreOrganization;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Organizations\StoreOrganizationRequest;
 use App\Http\Requests\Organizations\UpdateOrganizationRequest;
@@ -13,10 +15,18 @@ use Illuminate\Http\Response;
 class OrganizationController extends Controller
 {
     /**
-     * The address of the QR code of the organization: its page, which says it was just scanned.
+     * The address of the QR code of the organization: its page, which says it was just scanned. Once the organization
+     * is deleted, a page that tells the code is no longer in use, as gone.
      */
-    public function redirect(Organization $organization): RedirectResponse
+    public function redirect(Organization $organization): RedirectResponse|Response
     {
+        if ($organization->trashed()) {
+            return response()->view('removed', [
+                'title' => __('ui.qr_codes.inactive.title'),
+                'text' => __('ui.qr_codes.inactive.organization'),
+            ], Response::HTTP_GONE);
+        }
+
         return redirect()->route('organizations.show', ['organization' => $organization->uuid])->with('scanned', true);
     }
 
@@ -51,10 +61,22 @@ class OrganizationController extends Controller
     /**
      * Permanently delete the organization.
      */
-    public function destroy(Organization $organization): RedirectResponse
+    public function destroy(Organization $organization, DeleteOrganization $deleteOrganization): RedirectResponse
     {
-        $organization->delete();
+        $deleteOrganization->delete($organization);
 
-        return redirect()->route('organizations.index')->with('success', __('ui.organizations.feedback.organization_deleted'));
+        return redirect()->route('organizations.index')
+            ->with('success', __('ui.organizations.feedback.organization_deleted'))
+            ->with('undo', route('organizations.restore', ['organization' => $organization->uuid]));
+    }
+
+    /**
+     * Restore the deleted organization, with the spots deleted with it.
+     */
+    public function restore(Organization $organization, RestoreOrganization $restoreOrganization): RedirectResponse
+    {
+        $restoreOrganization->restore($organization);
+
+        return redirect()->route('organizations.show', ['organization' => $organization->uuid])->with('success', __('ui.organizations.feedback.organization_restored'));
     }
 }

@@ -43,13 +43,13 @@ class UpdateSpotRequest extends StoreSpotRequest
     }
 
     /**
-     * The name is unique in the organization of the spot, which keeps its own name.
+     * The name is unique among the spots of its organization that are not deleted, the spot keeping its own name.
      */
     protected function uniqueName(): Unique
     {
         $spot = $this->route('spot');
 
-        return Rule::unique(Spot::class, 'name')->where('organization_id', $spot?->organization_id)->ignore($spot);
+        return Rule::unique(Spot::class, 'name')->where('organization_id', $spot?->organization_id)->ignore($spot)->withoutTrashed();
     }
 
     /**

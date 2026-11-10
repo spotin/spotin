@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Spots;
 
 use App\Actions\Spots\CreateSpot;
+use App\Actions\Spots\RestoreSpot;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Spots\ApiSpotListFiltersRequest;
 use App\Http\Requests\Spots\StoreSpotRequest;
@@ -11,6 +12,7 @@ use App\Http\Resources\SpotResource;
 use App\Models\Spot;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -21,11 +23,12 @@ class SpotController extends Controller
      * Get the spots of your organizations.
      *
      * The spots of the organizations you are a member of, or all of them for administrators. Use
-     * `filter[organization]` to only get the spots of one of them.
+     * `filter[organization]` to only get the spots of one of them, and `filter[deleted]` to get the deleted ones
+     * instead, to restore them, the most recently deleted first.
      */
     public function index(ApiSpotListFiltersRequest $request): AnonymousResourceCollection
     {
-        $spots = Spot::manageableBy($request->user())
+        $spots = ($request->deleted() ? Spot::restorableBy($request->user()) : Spot::manageableBy($request->user()))
             ->listed($request->user(), $request->searchQuery(), $request->mine())
             ->ofOrganization($request->organization())
             ->paginate(25)
@@ -36,9 +39,14 @@ class SpotController extends Controller
 
     /**
      * Get a specific spot.
+     *
+     * A deleted spot, with its `deleted_at`, for who can restore it: the members of its organization and the
+     * administrators; `410 Gone` for the others.
      */
-    public function show(Spot $spot): SpotResource
+    public function show(Request $request, Spot $spot): SpotResource
     {
+        abort_if($spot->trashed() && ! $spot->isRestorableBy($request->user()), Response::HTTP_GONE);
+
         return new SpotResource($spot);
     }
 
@@ -73,5 +81,17 @@ class SpotController extends Controller
         $spot->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * Restore a deleted spot.
+     *
+     * Its QR code leads to it again. The spots of a deleted organization come back with their organization only.
+     */
+    public function restore(Spot $spot, RestoreSpot $restoreSpot): SpotResource
+    {
+        $restoreSpot->restore($spot);
+
+        return new SpotResource($spot);
     }
 }

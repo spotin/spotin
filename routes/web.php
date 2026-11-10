@@ -18,9 +18,9 @@ Route::singleton('locale', LocaleController::class)->only(['update']);
 // The contact form, open to everyone: limited to a few messages per hour.
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:contact')->name('contact.store');
 
-// The addresses of the QR codes.
-Route::get('spots/{spot:uuid}/redirect', [SpotController::class, 'redirect'])->name('spots.redirect');
-Route::get('organizations/{organization:uuid}/redirect', [OrganizationController::class, 'redirect'])->name('organizations.redirect');
+// The addresses of the QR codes, which tell when they are no longer in use: the deleted spots and organizations are kept.
+Route::get('spots/{spot:uuid}/redirect', [SpotController::class, 'redirect'])->withTrashed()->name('spots.redirect');
+Route::get('organizations/{organization:uuid}/redirect', [OrganizationController::class, 'redirect'])->withTrashed()->name('organizations.redirect');
 
 // Open to everyone while the spot needs to be set up, by the first person who scans it: then, to its members only
 Route::patch('spots/{spot:uuid}', [SpotController::class, 'update'])
@@ -67,7 +67,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('spots/manageable.geojson', [SpotController::class, 'manageableMap'])->name('spots.manageable.map');
     Route::post('spots', [SpotController::class, 'store'])->name('spots.store');
     Route::delete('spots/{spot:uuid}', [SpotController::class, 'destroy'])->middleware('can:delete,spot')->name('spots.destroy');
+    Route::post('spots/{spot:uuid}/restore', [SpotController::class, 'restore'])
+        ->withTrashed()
+        ->middleware('can:restore,spot')
+        ->name('spots.restore');
+    // Deleted too, for the page of a deleted spot, to who can manage it: its code is the same once it is restored
     Route::get('spots/{spot:uuid}/qr-code.{format}', [SpotController::class, 'qrCode'])
+        ->withTrashed()
         ->whereIn('format', ['svg', 'png'])
         ->middleware('can:manage,spot')
         ->name('spots.qr-code');
@@ -75,7 +81,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('organizations', [OrganizationController::class, 'store'])
         ->middleware('can:create,'.Organization::class)
         ->name('organizations.store');
+    // Deleted too, for the page of a deleted organization: its code is the same once it is restored
     Route::get('organizations/{organization:uuid}/qr-code.{format}', [OrganizationController::class, 'qrCode'])
+        ->withTrashed()
         ->whereIn('format', ['svg', 'png'])
         ->middleware('can:manage,organization')
         ->name('organizations.qr-code');
@@ -85,4 +93,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('organizations/{organization:uuid}', [OrganizationController::class, 'destroy'])
         ->middleware('can:delete,organization')
         ->name('organizations.destroy');
+    Route::post('organizations/{organization:uuid}/restore', [OrganizationController::class, 'restore'])
+        ->withTrashed()
+        ->middleware('can:restore,organization')
+        ->name('organizations.restore');
 });

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Actions\Organizations\DeleteOrganization;
 use App\Enums\OrganizationRole;
 use App\Models\Invitation;
 use App\Models\Organization;
@@ -134,6 +135,40 @@ class DevelopmentSeeder extends Seeder
 
         // Seed named spots, linked to the named users and organization
         $this->seedNamedSpots($organization, $responsible, $member);
+
+        // Seed deleted spots and a deleted organization, to restore them
+        $this->seedDeleted($organization, $responsible, $member);
+    }
+
+    /**
+     * Deleted ones with a known name for testing, deleted as the application does: a spot of the named organization,
+     * another whose name was taken meanwhile, which cannot be restored as is, and an organization deleted with its spots
+     * and its members, but one of its spots deleted before it, which does not come back with it.
+     */
+    private function seedDeleted(Organization $organization, User $responsible, User $member): void
+    {
+        Spot::factory()->for($organization)->create([
+            'name' => 'Deleted Spot',
+            'description' => 'A deleted spot, seeded for testing: its QR code tells it is no longer in use.',
+            'latitude' => 46.804722,
+            'longitude' => 9.836944,
+            'created_by' => $member->id,
+        ])->delete();
+
+        Spot::factory()->for($organization)->create(['name' => 'Duplicate Spot', 'created_by' => $member->id])->delete();
+        Spot::factory()->for($organization)->create(['name' => 'Duplicate Spot', 'created_by' => $responsible->id]);
+
+        $deleted = Organization::factory()->create(['name' => 'Deleted Organization']);
+        $deleted->users()->attach($responsible, ['role' => OrganizationRole::Responsible]);
+        $deleted->users()->attach($member, ['role' => OrganizationRole::Member]);
+
+        Spot::factory()->for($deleted)->count(2)->sequence(['name' => 'Deleted Organization Spot'], ['name' => 'Deleted Organization Other Spot'])->create(['created_by' => $member->id]);
+
+        $before = Spot::factory()->for($deleted)->create(['name' => 'Deleted Before Spot', 'created_by' => $member->id]);
+        $before->delete();
+        $before->forceFill(['deleted_at' => now()->subDay()])->save();
+
+        app(DeleteOrganization::class)->delete($deleted);
     }
 
     /**
