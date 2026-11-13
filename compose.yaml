@@ -13,7 +13,7 @@ services:
 
     mariadb:
         container_name: mariadb
-        image: mariadb:10.11.19
+        image: mariadb:13.0.2
         environment:
             - MARIADB_RANDOM_ROOT_PASSWORD=yes
             - MARIADB_USER=username
