@@ -20,7 +20,7 @@
         "daisyui": "^5.7.50",
         "fontaine": "^1.0.3",
         "laravel-vite-plugin": "^3.2",
-        "prettier": "^3.9.10",
+        "prettier": "^3.10.1",
         "maplibre-gl": "^6.17.0",
         "prettier-plugin-blade": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.8.1",
