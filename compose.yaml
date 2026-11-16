@@ -44,6 +44,6 @@ services:
             - 9090:80
 
     plantuml:
-        image: plantuml/plantuml-server:v1.2026.9
+        image: plantuml/plantuml-server:v1.2026.10
         ports:
             - 8080:8080
